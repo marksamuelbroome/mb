@@ -1,0 +1,2142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Codec PSA — Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy:#1B2A4A; --teal:#00A9CE; --teal-light:#e6f7fb;
+    --bg:#F5F7FA; --white:#fff; --border:#E2E8F0;
+    --text:#1B2A4A; --muted:#718096; --success:#38A169;
+    --warning:#D69E2E; --error:#E53E3E; --info:#3182CE;
+    --drawer:260px; --appbar:64px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px;}
+
+  /* ── Shell ── */
+  .shell{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+  .appbar{height:var(--appbar);background:var(--navy);display:flex;align-items:center;
+    padding:0 16px;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,.25);z-index:100;flex-shrink:0;}
+  .appbar .logo-box{width:36px;height:36px;background:linear-gradient(135deg,#2a3f6e,var(--teal));
+    border-radius:8px;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-weight:700;font-size:18px;letter-spacing:-1px;}
+  .appbar .app-name{color:#fff;font-size:1.1rem;font-weight:600;letter-spacing:.04em;}
+  .appbar .app-sub{color:rgba(255,255,255,.5);font-size:.75rem;font-weight:300;}
+  .appbar .spacer{flex:1;}
+  .appbar .user-btn{background:rgba(255,255,255,.1);border:none;color:#fff;
+    border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:16px;display:flex;
+    align-items:center;justify-content:center;}
+  .appbar .notif-btn{background:none;border:none;color:rgba(255,255,255,.7);
+    cursor:pointer;font-size:18px;padding:4px;}
+
+  .body-row{display:flex;flex:1;overflow:hidden;}
+
+  /* ── Drawer ── */
+  .drawer{width:var(--drawer);background:var(--navy);overflow-y:auto;flex-shrink:0;
+    padding:8px 0 24px;}
+  .drawer .section-label{font-size:.6rem;font-weight:700;letter-spacing:.12em;
+    color:rgba(255,255,255,.35);padding:16px 20px 6px;text-transform:uppercase;}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;
+    color:rgba(255,255,255,.7);font-size:.82rem;font-weight:500;transition:all .15s;
+    border-left:3px solid transparent;}
+  .nav-item:hover{background:rgba(255,255,255,.06);color:#fff;}
+  .nav-item.active{background:rgba(0,169,206,.15);color:var(--teal);border-left-color:var(--teal);}
+  .nav-item .ico{font-size:16px;width:20px;text-align:center;opacity:.8;}
+  .nav-group{padding:9px 20px;cursor:pointer;color:rgba(255,255,255,.7);font-size:.82rem;font-weight:500;}
+  .nav-sub{padding:7px 20px 7px 50px;cursor:pointer;color:rgba(255,255,255,.55);
+    font-size:.78rem;transition:all .15s;}
+  .nav-sub:hover{color:rgba(255,255,255,.85);}
+
+  /* ── Main ── */
+  .main{flex:1;overflow-y:auto;padding:24px;}
+
+  /* ── Pages ── */
+  .page{display:none;} .page.active{display:block;}
+
+  /* ── Shared ── */
+  h5{font-size:1.1rem;font-weight:600;margin-bottom:4px;}
+  .sub{color:var(--muted);font-size:.78rem;margin-bottom:20px;}
+  .grid{display:grid;gap:16px;}
+  .g4{grid-template-columns:repeat(4,1fr);}
+  .g3{grid-template-columns:repeat(3,1fr);}
+  .g2{grid-template-columns:repeat(2,1fr);}
+  .g21{grid-template-columns:2fr 1fr;}
+  .g12{grid-template-columns:1fr 2fr;}
+  @media(max-width:900px){.g4,.g3{grid-template-columns:repeat(2,1fr)}.g2,.g21,.g12{grid-template-columns:1fr}}
+
+  .card{background:var(--white);border-radius:10px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+  .kpi-card{border-left:4px solid var(--teal);}
+  .kpi-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;}
+  .kpi-value{font-size:1.9rem;font-weight:700;color:var(--navy);line-height:1.1;}
+  .kpi-sub{font-size:.72rem;color:var(--muted);margin-top:4px;}
+
+  .chip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:12px;
+    font-size:.72rem;font-weight:600;white-space:nowrap;}
+  .chip-success{background:#C6F6D5;color:#276749;}
+  .chip-warning{background:#FEFCBF;color:#744210;}
+  .chip-error{background:#FED7D7;color:#9B2C2C;}
+  .chip-info{background:#BEE3F8;color:#2A4365;}
+  .chip-default{background:#EDF2F7;color:#4A5568;}
+  .chip-teal{background:var(--teal-light);color:#006080;}
+
+  table{width:100%;border-collapse:collapse;}
+  th{text-align:left;padding:10px 12px;font-size:.72rem;font-weight:700;text-transform:uppercase;
+    letter-spacing:.08em;color:var(--muted);border-bottom:2px solid var(--border);}
+  td{padding:11px 12px;border-bottom:1px solid var(--border);font-size:.83rem;}
+  tr:last-child td{border-bottom:none;}
+  tr:hover td{background:#FAFBFC;}
+  .tr{text-align:right;}
+
+  .progress-bar{height:6px;background:#EDF2F7;border-radius:3px;overflow:hidden;}
+  .progress-fill{height:100%;border-radius:3px;}
+
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;
+    font-size:.82rem;font-weight:600;cursor:pointer;border:none;transition:all .15s;}
+  .btn-primary{background:var(--navy);color:#fff;}
+  .btn-primary:hover{background:#2a3f6e;}
+  .btn-teal{background:var(--teal);color:#fff;}
+  .btn-teal:hover{background:#0090b0;}
+  .btn-outline{background:#fff;color:var(--navy);border:1.5px solid var(--border);}
+  .btn-outline:hover{border-color:var(--navy);}
+  .btn-ghost{background:none;color:var(--teal);border:none;cursor:pointer;
+    font-size:.82rem;font-weight:600;padding:6px 0;}
+
+  .badge{display:inline-flex;align-items:center;justify-content:center;
+    width:20px;height:20px;border-radius:50%;background:var(--error);color:#fff;
+    font-size:.65rem;font-weight:700;}
+
+  .divider{border:none;border-top:1px solid var(--border);margin:16px 0;}
+
+  /* ── Login ── */
+  .login-bg{min-height:100vh;background:linear-gradient(135deg,var(--navy) 0%,#2a3f6e 50%,var(--teal) 100%);
+    display:flex;align-items:center;justify-content:center;}
+  .login-card{background:#fff;border-radius:16px;padding:48px 52px;text-align:center;
+    box-shadow:0 24px 60px rgba(0,0,0,.3);width:400px;}
+  .login-logo{width:72px;height:72px;background:linear-gradient(135deg,var(--navy),var(--teal));
+    border-radius:16px;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:32px;font-weight:700;margin:0 auto 24px;}
+  .login-title{font-size:1.5rem;font-weight:700;color:var(--navy);margin-bottom:6px;}
+  .login-sub{color:var(--muted);font-size:.85rem;margin-bottom:32px;}
+  .ms-btn{width:100%;padding:14px;background:var(--teal);color:#fff;border:none;
+    border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:12px;transition:background .2s;}
+  .ms-btn:hover{background:#0090b0;}
+  .ms-squares{display:flex;gap:2px;flex-shrink:0;}
+  .ms-sq{width:10px;height:10px;border-radius:1px;}
+
+  /* ── Availability heatmap ── */
+  .hm-table{width:100%;border-collapse:separate;border-spacing:0;}
+  .hm-th{padding:8px;text-align:center;font-size:.7rem;font-weight:600;
+    color:var(--muted);border-bottom:2px solid var(--border);}
+  .hm-td-name{padding:6px 12px;font-size:.8rem;font-weight:500;white-space:nowrap;}
+  .hm-td-role{padding:6px 8px;font-size:.72rem;color:var(--muted);}
+  .hm-cell{padding:4px;text-align:center;}
+  .hm-dot{width:36px;height:36px;border-radius:6px;display:inline-flex;
+    align-items:center;justify-content:center;font-size:.65rem;font-weight:700;
+    cursor:pointer;transition:transform .1s;}
+  .hm-dot:hover{transform:scale(1.15);}
+  .hm-av{background:#C6F6D5;color:#276749;}
+  .hm-pa{background:#FEFCBF;color:#744210;}
+  .hm-bk{background:#FED7D7;color:#9B2C2C;}
+  .hm-lv{background:#BEE3F8;color:#2A4365;}
+
+  /* ── Timesheet grid ── */
+  .ts-input{width:64px;border:1.5px solid var(--border);border-radius:6px;
+    padding:5px;text-align:center;font-size:.83rem;font-weight:500;outline:none;}
+  .ts-input:focus{border-color:var(--teal);}
+  .ts-input.today{border-color:var(--teal);background:var(--teal-light);}
+  .ts-total{font-weight:700;color:var(--navy);}
+  .ts-foot td{background:var(--bg);font-weight:600;border-top:2px solid var(--border);}
+
+  /* ── Pipeline funnel ── */
+  .funnel-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .funnel-label{width:110px;font-size:.8rem;font-weight:600;color:var(--text);}
+  .funnel-bar-bg{flex:1;height:28px;background:#EDF2F7;border-radius:6px;overflow:hidden;}
+  .funnel-bar{height:100%;border-radius:6px;display:flex;align-items:center;
+    padding-left:10px;font-size:.75rem;font-weight:600;color:#fff;white-space:nowrap;}
+  .funnel-val{width:80px;text-align:right;font-size:.8rem;font-weight:600;color:var(--navy);}
+
+  /* ── Resource request card ── */
+  .rr-card{background:#fff;border-radius:10px;padding:16px 20px;
+    box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid var(--teal);
+    margin-bottom:12px;cursor:pointer;transition:box-shadow .15s;}
+  .rr-card:hover{box-shadow:0 4px 16px rgba(0,169,206,.15);}
+  .rr-title{font-size:.9rem;font-weight:600;margin-bottom:4px;}
+  .rr-meta{font-size:.75rem;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap;}
+
+  /* ── Finance card ── */
+  .fin-row{display:flex;justify-content:space-between;align-items:center;
+    padding:10px 0;border-bottom:1px solid var(--border);}
+  .fin-row:last-child{border-bottom:none;}
+
+  /* ── Nav tabs ── */
+  .tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:20px;gap:4px;}
+  .tab{padding:8px 16px;font-size:.82rem;font-weight:500;cursor:pointer;
+    border-bottom:2px solid transparent;margin-bottom:-2px;color:var(--muted);}
+  .tab.active{color:var(--teal);border-bottom-color:var(--teal);font-weight:600;}
+
+  /* ── Modal ── */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:2000;
+    display:flex;align-items:center;justify-content:center;opacity:0;
+    pointer-events:none;transition:opacity .2s;}
+  .modal-overlay.open{opacity:1;pointer-events:all;}
+  .modal{background:#fff;border-radius:14px;padding:28px 32px;width:520px;max-width:95vw;
+    max-height:85vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.3);
+    transform:translateY(20px);transition:transform .2s;}
+  .modal-overlay.open .modal{transform:translateY(0);}
+  .modal-title{font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:20px;
+    display:flex;align-items:center;justify-content:space-between;}
+  .modal-close{background:none;border:none;font-size:1.3rem;cursor:pointer;
+    color:var(--muted);line-height:1;padding:2px 6px;border-radius:4px;}
+  .modal-close:hover{background:var(--bg);}
+  .form-row{margin-bottom:16px;}
+  .form-row label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
+  .form-input{width:100%;padding:9px 12px;border:1.5px solid var(--border);
+    border-radius:8px;font-size:.88rem;font-family:inherit;outline:none;
+    color:var(--text);background:#fff;transition:border-color .15s;}
+  .form-input:focus{border-color:var(--teal);}
+  .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:24px;
+    padding-top:16px;border-top:1px solid var(--border);}
+
+  /* ── Toast ── */
+  .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:3000;
+    display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+  .toast{background:var(--navy);color:#fff;padding:12px 18px;border-radius:10px;
+    font-size:.85rem;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.2);
+    display:flex;align-items:center;gap:10px;opacity:0;transform:translateX(40px);
+    transition:all .25s;pointer-events:none;min-width:260px;}
+  .toast.show{opacity:1;transform:translateX(0);}
+  .toast.success{border-left:4px solid var(--success);}
+  .toast.error{border-left:4px solid var(--error);}
+  .toast.info{border-left:4px solid var(--teal);}
+
+  /* ── Inline edit ── */
+  .editable-input{border:1.5px solid var(--teal);border-radius:6px;
+    padding:4px 8px;font-size:.83rem;width:90px;font-family:inherit;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════ LOGIN ═══ -->
+<div id="pg-login" class="page active" style="position:fixed;inset:0;z-index:999;background:#fff;">
+  <div class="login-bg" style="min-height:100vh;">
+    <div class="login-card">
+      <div class="login-logo">C</div>
+      <div class="login-title">Codec PSA</div>
+      <div class="login-sub">Professional Services Accounting<br/>Sign in with your Codec Microsoft account</div>
+      <button class="ms-btn" onclick="showApp()">
+        <div class="ms-squares">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;">
+            <div class="ms-sq" style="background:#f25022;"></div>
+            <div class="ms-sq" style="background:#7fba00;"></div>
+            <div class="ms-sq" style="background:#00a4ef;"></div>
+            <div class="ms-sq" style="background:#ffb900;"></div>
+          </div>
+        </div>
+        Sign in with Microsoft
+      </button>
+      <p style="color:#cbd5e0;font-size:.72rem;margin-top:24px;">© 2026 Codec. All rights reserved.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ APP SHELL ═══ -->
+<div id="app-shell" style="display:none;">
+<div class="shell">
+
+  <!-- Appbar -->
+  <div class="appbar">
+    <div class="logo-box">C</div>
+    <span class="app-name">Codec</span>
+    <span class="app-sub">PSA</span>
+    <div class="spacer"></div>
+    <span style="color:rgba(255,255,255,.5);font-size:.72rem;margin-right:12px;">Professional Services Accounting</span>
+    <button class="notif-btn" title="Notifications">🔔</button>
+    <button class="user-btn" title="Sarah Murphy" onclick="showPage('pg-my-dashboard')">SM</button>
+  </div>
+
+  <div class="body-row">
+    <!-- Drawer -->
+    <div class="drawer">
+      <div class="section-label">My Workspace</div>
+      <div class="nav-item" id="nav-my-dash" onclick="showPage('pg-my-dashboard')"><span class="ico">⬛</span> My Dashboard</div>
+      <div class="nav-item" id="nav-timesheet" onclick="showPage('pg-timesheet')"><span class="ico">⏱</span> My Timesheet</div>
+      <div class="nav-item" id="nav-my-assign" onclick="showPage('pg-my-assignments')"><span class="ico">📋</span> My Assignments</div>
+      <div class="nav-item" id="nav-expenses" onclick="showPage('pg-my-expenses')"><span class="ico">🧾</span> My Expenses</div>
+      <div class="nav-item" id="nav-leave" onclick="showPage('pg-my-leave')"><span class="ico">🌴</span> My Leave</div>
+
+      <div class="section-label">Operations</div>
+      <div class="nav-item active" id="nav-exec" onclick="showPage('pg-executive')"><span class="ico">📊</span> Executive Dashboard</div>
+      <div class="nav-item" id="nav-avail" onclick="showPage('pg-availability')"><span class="ico">👥</span> Availability</div>
+      <div class="nav-item" id="nav-consultants" onclick="showPage('pg-consultants')"><span class="ico">🧑‍💼</span> Consultants</div>
+      <div class="nav-item" id="nav-approval" onclick="showPage('pg-approval')"><span class="ico">✅</span> Timesheet Approval</div>
+      <div class="nav-item" id="nav-health" onclick="showPage('pg-health')"><span class="ico">🎯</span> Project Health</div>
+
+      <div class="section-label">Engagements</div>
+      <div class="nav-item" id="nav-customers" onclick="showPage('pg-customers')"><span class="ico">🏢</span> Customers</div>
+      <div class="nav-item" id="nav-projects" onclick="showPage('pg-projects')"><span class="ico">📁</span> Projects</div>
+      <div class="nav-item" id="nav-pipeline" onclick="showPage('pg-pipeline')"><span class="ico">📈</span> Pipeline</div>
+
+      <div class="section-label">Resourcing</div>
+      <div class="nav-item" id="nav-resourcing" onclick="showPage('pg-resourcing')"><span class="ico">🔍</span> Resource Requests</div>
+
+      <div class="section-label">Finance</div>
+      <div class="nav-group">💰 Accounts Receivable</div>
+      <div class="nav-sub" id="nav-invoices" onclick="showPage('pg-invoices')">Invoices</div>
+      <div class="nav-sub" onclick="showPage('pg-ar-aging')">AR Aging</div>
+      <div class="nav-group">💸 Accounts Payable</div>
+      <div class="nav-sub" onclick="showPage('pg-suppliers')">Suppliers</div>
+      <div class="nav-sub" onclick="showPage('pg-purchase-orders')">Purchase Orders</div>
+      <div class="nav-sub" id="nav-cashflow" onclick="showPage('pg-cashflow')">Cash Forecast</div>
+      <div class="nav-group">🧾 Expenses</div>
+      <div class="nav-sub" onclick="showPage('pg-expense-approval')">Expense Approval</div>
+
+      <div class="section-label">Admin</div>
+      <div class="nav-item" id="nav-roles" onclick="showPage('pg-roles')"><span class="ico">⚙️</span> Roles & Rates</div>
+      <div class="nav-item" id="nav-database" onclick="showPage('pg-database')"><span class="ico">🗄️</span> Database Explorer</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+
+      <!-- ══ EXECUTIVE DASHBOARD ══ -->
+      <div id="pg-executive" class="page active">
+        <h5>Executive Dashboard</h5>
+        <div class="sub">Wednesday, 5 March 2026</div>
+        <div class="grid g4" style="margin-bottom:20px;">
+          <div class="card kpi-card">
+            <div class="kpi-label">Revenue This Month</div>
+            <div class="kpi-value">£412,800</div>
+            <div class="kpi-sub">From approved timesheets</div>
+          </div>
+          <div class="card kpi-card">
+            <div class="kpi-label">Outstanding AR</div>
+            <div class="kpi-value" style="color:var(--error)">£218,500</div>
+            <div class="kpi-sub">4 overdue invoices</div>
+          </div>
+          <div class="card kpi-card">
+            <div class="kpi-label">Avg Chargeability</div>
+            <div class="kpi-value" style="color:var(--success)">78%</div>
+            <div class="kpi-sub">Target: 75%</div>
+          </div>
+          <div class="card kpi-card">
+            <div class="kpi-label">Active Projects</div>
+            <div class="kpi-value">47</div>
+            <div class="kpi-sub">Across 23 customers</div>
+          </div>
+        </div>
+        <div class="grid g21" style="margin-bottom:20px;">
+          <div class="card">
+            <div style="font-size:.9rem;font-weight:600;margin-bottom:14px;">Project Budget Utilisation</div>
+            <table>
+              <thead><tr><th>Project</th><th>Customer</th><th class="tr">Budget</th><th class="tr">Billed</th><th style="min-width:120px">Usage</th></tr></thead>
+              <tbody>
+                <tr><td><strong>ERP Implementation</strong></td><td>AIB Group</td><td class="tr">£480,000</td><td class="tr">£312,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:65%;background:var(--warning);"></div></div><small style="color:var(--muted)">65%</small></td></tr>
+                <tr><td><strong>Cloud Migration</strong></td><td>CRH plc</td><td class="tr">£350,000</td><td class="tr">£294,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:84%;background:var(--error);"></div></div><small style="color:var(--muted)">84%</small></td></tr>
+                <tr><td><strong>Analytics Platform</strong></td><td>Ryanair</td><td class="tr">£220,000</td><td class="tr">£88,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:40%;background:var(--success);"></div></div><small style="color:var(--muted)">40%</small></td></tr>
+                <tr><td><strong>CRM Rollout</strong></td><td>Bank of Ireland</td><td class="tr">£195,000</td><td class="tr">£176,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:90%;background:var(--error);"></div></div><small style="color:var(--muted)">90%</small></td></tr>
+                <tr><td><strong>Data Warehouse</strong></td><td>Glanbia</td><td class="tr">£310,000</td><td class="tr">£155,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:50%;background:var(--success);"></div></div><small style="color:var(--muted)">50%</small></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div style="font-size:.9rem;font-weight:600;margin-bottom:14px;">Sales Pipeline</div>
+            <div class="funnel-row"><div class="funnel-label">Qualification</div><div class="funnel-bar-bg"><div class="funnel-bar" style="width:95%;background:#3182CE;">£1.2M</div></div></div>
+            <div class="funnel-row"><div class="funnel-label">Proposal</div><div class="funnel-bar-bg"><div class="funnel-bar" style="width:70%;background:#00A9CE;">£890K</div></div></div>
+            <div class="funnel-row"><div class="funnel-label">Negotiation</div><div class="funnel-bar-bg"><div class="funnel-bar" style="width:45%;background:var(--warning);">£570K</div></div></div>
+            <div class="funnel-row"><div class="funnel-label">Won</div><div class="funnel-bar-bg"><div class="funnel-bar" style="width:30%;background:var(--success);">£380K</div></div></div>
+            <hr class="divider"/>
+            <div style="display:flex;justify-content:space-between;"><span style="font-size:.82rem;">Weighted Total</span><strong style="color:var(--teal);">£742K</strong></div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size:.9rem;font-weight:600;margin-bottom:14px;">Recent Invoices</div>
+          <table>
+            <thead><tr><th>Invoice #</th><th>Customer</th><th>Project</th><th>Due</th><th class="tr">Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><a style="color:var(--teal);cursor:pointer" onclick="showPage('pg-invoices')">INV-00023</a></td><td>AIB Group</td><td>ERP Implementation</td><td>28 Feb</td><td class="tr"><strong>£48,200</strong></td><td><span class="chip chip-error">Overdue</span></td></tr>
+              <tr><td><a style="color:var(--teal);">INV-00024</a></td><td>CRH plc</td><td>Cloud Migration</td><td>15 Mar</td><td class="tr"><strong>£62,400</strong></td><td><span class="chip chip-info">Sent</span></td></tr>
+              <tr><td><a style="color:var(--teal);">INV-00025</a></td><td>Ryanair</td><td>Analytics Platform</td><td>22 Mar</td><td class="tr"><strong>£31,800</strong></td><td><span class="chip chip-default">Draft</span></td></tr>
+              <tr><td><a style="color:var(--teal);">INV-00022</a></td><td>Bank of Ireland</td><td>CRM Rollout</td><td>10 Feb</td><td class="tr"><strong>£55,600</strong></td><td><span class="chip chip-success">Paid</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ AVAILABILITY ══ -->
+      <div id="pg-availability" class="page">
+        <h5>Consultant Availability</h5>
+        <div class="sub">Week of 2 Mar – 6 Mar 2026</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+          <button class="btn btn-outline">◀</button>
+          <button class="btn btn-outline">Today</button>
+          <button class="btn btn-outline">▶</button>
+          <div style="flex:1;"></div>
+          <input style="padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:.82rem;width:220px;" placeholder="🔍  Search consultant…"/>
+          <div style="display:flex;gap:8px;align-items:center;font-size:.75rem;">
+            <div class="hm-dot hm-av" style="width:20px;height:20px;border-radius:4px;"></div>Available
+            <div class="hm-dot hm-pa" style="width:20px;height:20px;border-radius:4px;"></div>Partial
+            <div class="hm-dot hm-bk" style="width:20px;height:20px;border-radius:4px;"></div>Booked
+            <div class="hm-dot hm-lv" style="width:20px;height:20px;border-radius:4px;"></div>Leave
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <table class="hm-table">
+            <thead>
+              <tr>
+                <th style="text-align:left;padding:12px 16px;min-width:180px;">Consultant</th>
+                <th style="text-align:left;padding:12px 8px;min-width:140px;">Role</th>
+                <th class="hm-th">Mon 2</th><th class="hm-th">Tue 3</th><th class="hm-th">Wed 4</th><th class="hm-th">Thu 5</th><th class="hm-th">Fri 6</th>
+                <th class="hm-th">Wk %</th>
+              </tr>
+            </thead>
+            <tbody id="hm-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ MY DASHBOARD ══ -->
+      <div id="pg-my-dashboard" class="page">
+        <h5>Welcome back, Sarah 👋</h5>
+        <div class="sub">Here's your snapshot for this week</div>
+        <div class="grid g4" style="margin-bottom:20px;">
+          <div class="card kpi-card"><div class="kpi-label">This Week Hours</div><div class="kpi-value">31.5</div><div class="kpi-sub">of 40 target</div></div>
+          <div class="card kpi-card"><div class="kpi-label">This Month</div><div class="kpi-value">124.0</div><div class="kpi-sub">hrs logged</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Chargeability</div><div class="kpi-value" style="color:var(--success);">82%</div><div class="kpi-sub">target: 75%</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Assignments</div><div class="kpi-value">3</div><div class="kpi-sub">active projects</div></div>
+        </div>
+        <div class="grid g2">
+          <div class="card">
+            <div style="font-size:.9rem;font-weight:600;margin-bottom:12px;">Timesheet Status</div>
+            <div style="background:#FEFCBF;border:1px solid #D69E2E;border-radius:8px;padding:10px 14px;font-size:.82rem;color:#744210;margin-bottom:12px;">
+              ⚠️ You have 3 unsubmitted entries this week
+            </div>
+            <div class="fin-row"><span>Mon 2 Mar — 8hrs (ERP Implementation)</span><span class="chip chip-success">Approved</span></div>
+            <div class="fin-row"><span>Tue 3 Mar — 7.5hrs (ERP Implementation)</span><span class="chip chip-info">Submitted</span></div>
+            <div class="fin-row"><span>Wed 4 Mar — 8hrs (Analytics Platform)</span><span class="chip chip-default">Draft</span></div>
+            <div class="fin-row"><span>Thu 5 Mar — 8hrs (Analytics Platform)</span><span class="chip chip-default">Draft</span></div>
+            <button class="btn-ghost" onclick="showPage('pg-timesheet')" style="margin-top:8px;">Go to Timesheet →</button>
+          </div>
+          <div class="card">
+            <div style="font-size:.9rem;font-weight:600;margin-bottom:12px;">My Assignments</div>
+            <div class="fin-row"><div><div style="font-weight:600;font-size:.85rem;">ERP Implementation</div><div style="font-size:.72rem;color:var(--muted);">AIB Group · 32hrs/wk · Jan–Jun 2026</div></div></div>
+            <div class="fin-row"><div><div style="font-weight:600;font-size:.85rem;">Analytics Platform</div><div style="font-size:.72rem;color:var(--muted);">Ryanair · 16hrs/wk · Feb–Aug 2026</div></div></div>
+            <div class="fin-row"><div><div style="font-weight:600;font-size:.85rem;">CRM Discovery</div><div style="font-size:.72rem;color:var(--muted);">Glanbia · 8hrs/wk · Mar 2026 (Pre-sales)</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ TIMESHEET ══ -->
+      <div id="pg-timesheet" class="page">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+          <h5 style="margin:0;">My Timesheet</h5>
+          <div style="flex:1;"></div>
+          <button class="btn btn-outline">◀</button>
+          <span style="font-size:.9rem;font-weight:500;min-width:220px;text-align:center;">2 Mar – 8 Mar 2026</span>
+          <button class="btn btn-outline">▶</button>
+          <button class="btn btn-outline">Today</button>
+        </div>
+        <div class="card" style="padding:0;overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th style="min-width:200px;">Engagement</th>
+                <th style="min-width:110px;">Activity</th>
+                <th style="width:80px;text-align:center;">Mon</th>
+                <th style="width:80px;text-align:center;">Tue</th>
+                <th style="width:80px;text-align:center;background:#EBF8FF;">Wed ★</th>
+                <th style="width:80px;text-align:center;">Thu</th>
+                <th style="width:80px;text-align:center;">Fri</th>
+                <th style="width:80px;text-align:center;background:#F7FAFC;">Sat</th>
+                <th style="width:80px;text-align:center;background:#F7FAFC;">Sun</th>
+                <th style="width:70px;text-align:right;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>ERP Implementation</strong><br/><small style="color:var(--muted);">AIB Group</small></td>
+                <td><select style="border:1.5px solid var(--border);border-radius:6px;padding:4px;font-size:.78rem;"><option>Billable</option><option>Non-Billable</option></select></td>
+                <td style="text-align:center;"><input class="ts-input" value="8" /></td>
+                <td style="text-align:center;"><input class="ts-input" value="7.5" /></td>
+                <td style="text-align:center;background:#EBF8FF;"><input class="ts-input today" value="8" /></td>
+                <td style="text-align:center;"><input class="ts-input" value="8" /></td>
+                <td style="text-align:center;"><input class="ts-input" value="" /></td>
+                <td style="background:#F7FAFC;"></td><td style="background:#F7FAFC;"></td>
+                <td class="ts-total tr">31.5</td>
+              </tr>
+              <tr>
+                <td><strong>Analytics Platform</strong><br/><small style="color:var(--muted);">Ryanair</small></td>
+                <td><select style="border:1.5px solid var(--border);border-radius:6px;padding:4px;font-size:.78rem;"><option>Billable</option></select></td>
+                <td style="text-align:center;"><input class="ts-input" value="" /></td>
+                <td style="text-align:center;"><input class="ts-input" value="" /></td>
+                <td style="text-align:center;background:#EBF8FF;"><input class="ts-input today" value="" /></td>
+                <td style="text-align:center;"><input class="ts-input" value="" /></td>
+                <td style="text-align:center;"><input class="ts-input" value="7" /></td>
+                <td style="background:#F7FAFC;"></td><td style="background:#F7FAFC;"></td>
+                <td class="ts-total tr">7.0</td>
+              </tr>
+              <tr>
+                <td><strong>CRM Discovery</strong><br/><small style="color:var(--muted);"><span class="chip chip-teal" style="font-size:.65rem;">Pre-Sales</span> Glanbia</small></td>
+                <td><select style="border:1.5px solid var(--border);border-radius:6px;padding:4px;font-size:.78rem;"><option>Pre-Sales</option></select></td>
+                <td style="text-align:center;"><input class="ts-input" value="" /></td>
+                <td style="text-align:center;"><input class="ts-input" value="0.5" /></td>
+                <td style="text-align:center;background:#EBF8FF;"><input class="ts-input today" value="" /></td>
+                <td style="text-align:center;"><input class="ts-input" value="" /></td>
+                <td style="text-align:center;"><input class="ts-input" value="1" /></td>
+                <td style="background:#F7FAFC;"></td><td style="background:#F7FAFC;"></td>
+                <td class="ts-total tr">1.5</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="ts-foot">
+                <td colspan="2" style="padding:10px 12px;font-weight:600;">Daily Total</td>
+                <td style="text-align:center;">8.0</td>
+                <td style="text-align:center;">8.0</td>
+                <td style="text-align:center;background:#EBF8FF;">8.0</td>
+                <td style="text-align:center;">8.0</td>
+                <td style="text-align:center;">8.0</td>
+                <td style="background:#F7FAFC;"></td><td style="background:#F7FAFC;"></td>
+                <td style="text-align:right;font-weight:700;">40.0</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:16px;align-items:center;">
+          <button class="btn btn-outline">+ Add Engagement</button>
+          <div style="flex:1;"></div>
+          <button class="btn btn-outline" onclick="saveTimesheet()">💾 Save Draft</button>
+          <button class="btn btn-teal" onclick="submitTimesheet()">📤 Submit for Approval</button>
+        </div>
+      </div>
+
+      <!-- ══ TIMESHEET APPROVAL ══ -->
+      <div id="pg-approval" class="page">
+        <h5>Timesheet Approval Queue</h5>
+        <div class="sub">18 entries awaiting review</div>
+        <div class="card" style="padding:0;">
+          <div style="display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);align-items:center;">
+            <input style="padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:.82rem;width:260px;" placeholder="🔍  Search consultant or project…"/>
+            <div style="flex:1;"></div>
+            <button class="btn btn-teal" onclick="bulkApprove()">✓ Approve Selected</button>
+            <button class="btn btn-outline" style="color:var(--error);border-color:var(--error);" onclick="bulkReject()">✕ Reject Selected</button>
+          </div>
+          <table>
+            <thead><tr><th><input type="checkbox"/></th><th>Consultant</th><th>Role</th><th>Engagement</th><th>Date</th><th>Hours</th><th>Activity</th><th>Submitted</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td><input type="checkbox" checked/></td><td><strong>Ciarán O'Brien</strong></td><td>Senior Developer</td><td>ERP Implementation</td><td>3 Mar</td><td>8.0</td><td><span class="chip chip-teal">Billable</span></td><td>4 Mar 09:12</td><td><button class="btn btn-teal" style="padding:4px 10px;font-size:.75rem;">✓</button> <button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;color:var(--error);">✕</button></td></tr>
+              <tr><td><input type="checkbox" checked/></td><td><strong>Ciarán O'Brien</strong></td><td>Senior Developer</td><td>ERP Implementation</td><td>4 Mar</td><td>7.5</td><td><span class="chip chip-teal">Billable</span></td><td>4 Mar 09:12</td><td><button class="btn btn-teal" style="padding:4px 10px;font-size:.75rem;">✓</button> <button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;color:var(--error);">✕</button></td></tr>
+              <tr><td><input type="checkbox"/></td><td><strong>Aoife Walsh</strong></td><td>Business Analyst</td><td>Cloud Migration</td><td>3 Mar</td><td>8.0</td><td><span class="chip chip-teal">Billable</span></td><td>4 Mar 10:30</td><td><button class="btn btn-teal" style="padding:4px 10px;font-size:.75rem;">✓</button> <button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;color:var(--error);">✕</button></td></tr>
+              <tr><td><input type="checkbox" checked/></td><td><strong>Aoife Walsh</strong></td><td>Business Analyst</td><td>Cloud Migration</td><td>4 Mar</td><td>8.0</td><td><span class="chip chip-teal">Billable</span></td><td>4 Mar 10:30</td><td><button class="btn btn-teal" style="padding:4px 10px;font-size:.75rem;">✓</button> <button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;color:var(--error);">✕</button></td></tr>
+              <tr><td><input type="checkbox"/></td><td><strong>Fionnuala Burke</strong></td><td>Project Manager</td><td>CRM Rollout</td><td>3 Mar</td><td>8.0</td><td><span class="chip chip-default">Non-Billable</span></td><td>4 Mar 14:05</td><td><button class="btn btn-teal" style="padding:4px 10px;font-size:.75rem;">✓</button> <button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;color:var(--error);">✕</button></td></tr>
+              <tr><td><input type="checkbox" checked/></td><td><strong>Seán Gallagher</strong></td><td>Solution Architect</td><td>Data Warehouse</td><td>4 Mar</td><td>7.0</td><td><span class="chip chip-teal">Billable</span></td><td>4 Mar 17:00</td><td><button class="btn btn-teal" style="padding:4px 10px;font-size:.75rem;">✓</button> <button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;color:var(--error);">✕</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ CUSTOMERS ══ -->
+      <div id="pg-customers" class="page">
+        <div style="display:flex;align-items:center;margin-bottom:20px;">
+          <h5 style="margin:0;">Customers</h5><div style="flex:1;"></div>
+          <button class="btn btn-teal" onclick="openAddCustomer()">+ New Customer</button>
+        </div>
+        <div class="card" style="padding:0;">
+          <table>
+            <thead><tr><th>Customer</th><th>Industry</th><th>Account Manager</th><th class="tr">Active Projects</th><th class="tr">Revenue YTD</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr onclick="showPage('pg-customer-detail')" style="cursor:pointer;"><td><strong>AIB Group</strong><br/><small style="color:var(--muted);">aiib.ie</small></td><td>Financial Services</td><td>Seán Gallagher</td><td class="tr">4</td><td class="tr"><strong>£312,000</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr onclick="showPage('pg-customer-detail')" style="cursor:pointer;"><td><strong>CRH plc</strong></td><td>Manufacturing</td><td>Aoife Walsh</td><td class="tr">3</td><td class="tr"><strong>£294,000</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr onclick="showPage('pg-customer-detail')" style="cursor:pointer;"><td><strong>Ryanair</strong></td><td>Technology</td><td>Sarah Murphy</td><td class="tr">2</td><td class="tr"><strong>£196,000</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr onclick="showPage('pg-customer-detail')" style="cursor:pointer;"><td><strong>Bank of Ireland</strong></td><td>Financial Services</td><td>Fionnuala Burke</td><td class="tr">3</td><td class="tr"><strong>£176,000</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr onclick="showPage('pg-customer-detail')" style="cursor:pointer;"><td><strong>Glanbia</strong></td><td>Manufacturing</td><td>Ciarán O'Brien</td><td class="tr">2</td><td class="tr"><strong>£155,000</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ CUSTOMER DETAIL ══ -->
+      <div id="pg-customer-detail" class="page">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <button class="btn-ghost" onclick="showPage('pg-customers')" style="font-size:.8rem;">← Customers</button>
+        </div>
+        <h5>AIB Group <span class="chip chip-success" style="vertical-align:middle;">Active</span></h5>
+        <div class="sub">Financial Services · Account Manager: Seán Gallagher</div>
+        <div class="grid g4" style="margin-bottom:20px;">
+          <div class="card kpi-card"><div class="kpi-label">Revenue YTD</div><div class="kpi-value">£312,000</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Active Projects</div><div class="kpi-value">4</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Pipeline Value</div><div class="kpi-value">£480,000</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Outstanding AR</div><div class="kpi-value" style="color:var(--error);">£48,200</div></div>
+        </div>
+        <div class="tabs">
+          <div class="tab active">Programmes</div>
+          <div class="tab">Projects (4)</div>
+          <div class="tab">Pipeline (2)</div>
+          <div class="tab">Invoices</div>
+          <div class="tab">Contacts</div>
+        </div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <strong>Digital Transformation Programme</strong>
+            <span class="chip chip-success">Active</span>
+          </div>
+          <div style="font-size:.82rem;color:var(--muted);margin-bottom:14px;">Jan 2026 – Dec 2027 · Strategic multi-year initiative</div>
+          <table>
+            <thead><tr><th>Project</th><th>Code</th><th>Status</th><th class="tr">Budget</th><th class="tr">Billed</th><th>Team Size</th></tr></thead>
+            <tbody>
+              <tr><td><strong>ERP Implementation</strong></td><td>PRJ-0001</td><td><span class="chip chip-success">Active</span></td><td class="tr">£480,000</td><td class="tr">£312,000</td><td>8 consultants</td></tr>
+              <tr><td><strong>Data Migration</strong></td><td>PRJ-0012</td><td><span class="chip chip-success">Active</span></td><td class="tr">£95,000</td><td class="tr">£42,000</td><td>3 consultants</td></tr>
+              <tr><td><strong>User Training</strong></td><td>PRJ-0018</td><td><span class="chip chip-warning">On Hold</span></td><td class="tr">£45,000</td><td class="tr">£12,000</td><td>2 consultants</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ PROJECTS ══ -->
+      <div id="pg-projects" class="page">
+        <div style="display:flex;align-items:center;margin-bottom:20px;gap:12px;">
+          <h5 style="margin:0;">Projects</h5>
+          <div style="flex:1;"></div>
+          <select style="padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:.82rem;"><option>All Statuses</option><option>Active</option><option>Completed</option></select>
+          <button class="btn btn-teal">+ New Project</button>
+        </div>
+        <div class="card" style="padding:0;">
+          <table>
+            <thead><tr><th>Project</th><th>Customer</th><th>Programme</th><th>Code</th><th class="tr">Budget</th><th>Usage</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>ERP Implementation</strong></td><td>AIB Group</td><td>Digital Transformation</td><td>PRJ-0001</td><td class="tr">£480,000</td><td><div class="progress-bar" style="width:100px;display:inline-block;"><div class="progress-fill" style="width:65%;background:var(--warning);"></div></div><small> 65%</small></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>Cloud Migration</strong></td><td>CRH plc</td><td>—</td><td>PRJ-0002</td><td class="tr">£350,000</td><td><div class="progress-bar" style="width:100px;display:inline-block;"><div class="progress-fill" style="width:84%;background:var(--error);"></div></div><small> 84%</small></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>Analytics Platform</strong></td><td>Ryanair</td><td>—</td><td>PRJ-0003</td><td class="tr">£220,000</td><td><div class="progress-bar" style="width:100px;display:inline-block;"><div class="progress-fill" style="width:40%;background:var(--success);"></div></div><small> 40%</small></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>CRM Rollout</strong></td><td>Bank of Ireland</td><td>Core Banking Upgrade</td><td>PRJ-0004</td><td class="tr">£195,000</td><td><div class="progress-bar" style="width:100px;display:inline-block;"><div class="progress-fill" style="width:90%;background:var(--error);"></div></div><small> 90%</small></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>Data Warehouse</strong></td><td>Glanbia</td><td>—</td><td>PRJ-0005</td><td class="tr">£310,000</td><td><div class="progress-bar" style="width:100px;display:inline-block;"><div class="progress-fill" style="width:50%;background:var(--success);"></div></div><small> 50%</small></td><td><span class="chip chip-success">Active</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ PIPELINE ══ -->
+      <div id="pg-pipeline" class="page">
+        <h5>Sales Pipeline</h5>
+        <div class="sub">15 engagements · Weighted value: £742K</div>
+        <div class="grid g4" style="margin-bottom:20px;">
+          <div class="card kpi-card"><div class="kpi-label">Qualification</div><div class="kpi-value" style="color:var(--info);">£1.2M</div><div class="kpi-sub">4 engagements</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Proposal</div><div class="kpi-value" style="color:var(--teal);">£890K</div><div class="kpi-sub">3 engagements</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Negotiation</div><div class="kpi-value" style="color:var(--warning);">£570K</div><div class="kpi-sub">4 engagements</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Won (this qtr)</div><div class="kpi-value" style="color:var(--success);">£380K</div><div class="kpi-sub">4 engagements</div></div>
+        </div>
+        <div class="card" style="padding:0;">
+          <table>
+            <thead><tr><th>Engagement</th><th>Customer</th><th>Stage</th><th>Owner</th><th class="tr">Est. Value</th><th class="tr">Probability</th><th class="tr">Weighted</th><th>Expected Start</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Digital Workplace Suite</strong></td><td>ESB Networks</td><td><span class="chip chip-info">Proposal</span></td><td>Seán Gallagher</td><td class="tr">£420,000</td><td class="tr">70%</td><td class="tr"><strong>£294,000</strong></td><td>May 2026</td></tr>
+              <tr><td><strong>Finance System Upgrade</strong></td><td>Kingspan</td><td><span class="chip" style="background:#e9d8fd;color:#553c9a;">Negotiation</span></td><td>Sarah Murphy</td><td class="tr">£280,000</td><td class="tr">85%</td><td class="tr"><strong>£238,000</strong></td><td>Apr 2026</td></tr>
+              <tr><td><strong>HR Platform Implementation</strong></td><td>Kerry Group</td><td><span class="chip chip-info">Qualification</span></td><td>Aoife Walsh</td><td class="tr">£175,000</td><td class="tr">40%</td><td class="tr"><strong>£70,000</strong></td><td>Jun 2026</td></tr>
+              <tr><td><strong>Cybersecurity Assessment</strong></td><td>Permanent TSB</td><td><span class="chip chip-success">Won</span></td><td>Fionnuala Burke</td><td class="tr">£95,000</td><td class="tr">100%</td><td class="tr"><strong>£95,000</strong></td><td>Mar 2026</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ RESOURCING ══ -->
+      <div id="pg-resourcing" class="page">
+        <div style="display:flex;align-items:center;margin-bottom:16px;">
+          <h5 style="margin:0;">Resource Requests</h5><div style="flex:1;"></div>
+          <button class="btn btn-teal" onclick="openNewRequest()">+ New Request</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+          <span class="chip chip-info" style="cursor:pointer;padding:5px 14px;">New (6)</span>
+          <span class="chip chip-warning" style="cursor:pointer;padding:5px 14px;">In Review (4)</span>
+          <span class="chip chip-success" style="cursor:pointer;padding:5px 14px;">Fulfilled (12)</span>
+          <span class="chip chip-error" style="cursor:pointer;padding:5px 14px;">Rejected (2)</span>
+          <span class="chip chip-default" style="cursor:pointer;padding:5px 14px;">All (24)</span>
+        </div>
+        <div class="rr-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div class="rr-title">Senior Developer needed — ERP Implementation (AIB)</div><span class="chip chip-error">Critical</span></div><div class="rr-meta"><span>📅 Start: 16 Mar 2026</span><span>⏱ 40hrs/wk</span><span>👤 Raised by: Fionnuala Burke</span><span>🕐 2 days ago</span><span>💬 3 comments</span></div><div style="margin-top:10px;display:flex;gap:8px;"><span class="chip chip-info">New</span><button class="btn btn-teal" style="padding:4px 12px;font-size:.75rem;">Review →</button></div></div>
+        <div class="rr-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div class="rr-title">Business Analyst — Finance System Upgrade (Kingspan)</div><span class="chip chip-warning">High</span></div><div class="rr-meta"><span>📅 Start: 1 Apr 2026</span><span>⏱ 32hrs/wk</span><span>👤 Raised by: Seán Gallagher</span><span>🕐 1 day ago</span><span>💬 1 comment</span></div><div style="margin-top:10px;display:flex;gap:8px;"><span class="chip chip-warning">In Review</span><button class="btn btn-teal" style="padding:4px 12px;font-size:.75rem;">Review →</button></div></div>
+        <div class="rr-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div class="rr-title">Solution Architect — HR Platform (Kerry Group)</div><span class="chip chip-default">Medium</span></div><div class="rr-meta"><span>📅 Start: 15 Jun 2026</span><span>⏱ 24hrs/wk</span><span>👤 Raised by: Aoife Walsh</span><span>🕐 5 days ago</span><span>💬 0 comments</span></div><div style="margin-top:10px;display:flex;gap:8px;"><span class="chip chip-info">New</span><button class="btn btn-teal" style="padding:4px 12px;font-size:.75rem;">Review →</button></div></div>
+      </div>
+
+      <!-- ══ INVOICES ══ -->
+      <div id="pg-invoices" class="page">
+        <div style="display:flex;align-items:center;margin-bottom:20px;">
+          <h5 style="margin:0;">Invoices</h5><div style="flex:1;"></div>
+          <button class="btn btn-teal" onclick="openGenerateInvoice()">⚡ Generate Invoice</button>
+        </div>
+        <div class="grid g4" style="margin-bottom:20px;">
+          <div class="card kpi-card"><div class="kpi-label">Total Outstanding</div><div class="kpi-value">£218,500</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Overdue</div><div class="kpi-value" style="color:var(--error);">£48,200</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Paid This Month</div><div class="kpi-value" style="color:var(--success);">£110,600</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Draft</div><div class="kpi-value">3</div></div>
+        </div>
+        <div class="card" style="padding:0;">
+          <table>
+            <thead><tr><th>Invoice #</th><th>Customer</th><th>Project</th><th>Issued</th><th>Due</th><th class="tr">Total</th><th class="tr">Outstanding</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td><strong>INV-00023</strong></td><td>AIB Group</td><td>ERP Implementation</td><td>1 Feb</td><td>28 Feb</td><td class="tr">£48,200</td><td class="tr" style="color:var(--error);">£48,200</td><td><span class="chip chip-error">Overdue</span></td><td><button class="btn btn-teal" style="padding:4px 10px;font-size:.75rem;">Mark Paid</button></td></tr>
+              <tr><td><strong>INV-00024</strong></td><td>CRH plc</td><td>Cloud Migration</td><td>14 Feb</td><td>15 Mar</td><td class="tr">£62,400</td><td class="tr">£62,400</td><td><span class="chip chip-info">Sent</span></td><td><button class="btn btn-teal" style="padding:4px 10px;font-size:.75rem;">Mark Paid</button></td></tr>
+              <tr><td><strong>INV-00025</strong></td><td>Ryanair</td><td>Analytics Platform</td><td>5 Mar</td><td>4 Apr</td><td class="tr">£31,800</td><td class="tr">£31,800</td><td><span class="chip chip-default">Draft</span></td><td><button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;">Send</button></td></tr>
+              <tr><td><strong>INV-00022</strong></td><td>Bank of Ireland</td><td>CRM Rollout</td><td>11 Jan</td><td>10 Feb</td><td class="tr">£55,600</td><td class="tr" style="color:var(--success);">£0</td><td><span class="chip chip-success">Paid</span></td><td>—</td></tr>
+              <tr><td><strong>INV-00021</strong></td><td>Glanbia</td><td>Data Warehouse</td><td>15 Jan</td><td>14 Feb</td><td class="tr">£41,200</td><td class="tr">£41,200</td><td><span class="chip chip-info">Sent</span></td><td><button class="btn btn-teal" style="padding:4px 10px;font-size:.75rem;">Mark Paid</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ CASH FORECAST ══ -->
+      <div id="pg-cashflow" class="page">
+        <h5>13-Week Rolling Cash Forecast</h5>
+        <div class="sub">Generated 5 Mar 2026 · Based on AR/AP pipeline + payroll estimates</div>
+        <div class="grid g3" style="margin-bottom:20px;">
+          <div class="card kpi-card"><div class="kpi-label">Current Cash Position</div><div class="kpi-value" style="color:var(--success);">£1.24M</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Forecast 4 Weeks</div><div class="kpi-value" style="color:var(--success);">£1.08M</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Forecast 13 Weeks</div><div class="kpi-value" style="color:var(--warning);">£820K</div></div>
+        </div>
+        <div class="card" style="padding:0;">
+          <table>
+            <thead><tr><th>Week</th><th class="tr">AR Receipts</th><th class="tr">AP Payments</th><th class="tr">Payroll</th><th class="tr">Expenses</th><th class="tr">Net</th><th class="tr">Closing Balance</th></tr></thead>
+            <tbody>
+              <tr style="background:#EBF8FF;"><td><strong>Wk 10 (3 Mar)</strong> ★ Current</td><td class="tr" style="color:var(--success);">+£48,200</td><td class="tr" style="color:var(--error);">-£12,400</td><td class="tr" style="color:var(--error);">-£186,000</td><td class="tr" style="color:var(--error);">-£8,200</td><td class="tr"><strong>-£158,400</strong></td><td class="tr"><strong>£1,238,600</strong></td></tr>
+              <tr><td>Wk 11 (10 Mar)</td><td class="tr" style="color:var(--success);">+£62,400</td><td class="tr" style="color:var(--error);">-£18,700</td><td class="tr">—</td><td class="tr" style="color:var(--error);">-£5,100</td><td class="tr"><strong>+£38,600</strong></td><td class="tr"><strong>£1,277,200</strong></td></tr>
+              <tr><td>Wk 12 (17 Mar)</td><td class="tr" style="color:var(--success);">+£31,800</td><td class="tr" style="color:var(--error);">-£9,200</td><td class="tr">—</td><td class="tr" style="color:var(--error);">-£3,400</td><td class="tr"><strong>+£19,200</strong></td><td class="tr"><strong>£1,296,400</strong></td></tr>
+              <tr><td>Wk 13 (24 Mar)</td><td class="tr" style="color:var(--success);">+£41,200</td><td class="tr" style="color:var(--error);">-£22,100</td><td class="tr" style="color:var(--error);">-£186,000</td><td class="tr" style="color:var(--error);">-£6,800</td><td class="tr"><strong style="color:var(--error);">-£173,700</strong></td><td class="tr"><strong>£1,122,700</strong></td></tr>
+              <tr><td>Wk 14 (31 Mar)</td><td class="tr" style="color:var(--success);">+£55,600</td><td class="tr" style="color:var(--error);">-£14,300</td><td class="tr">—</td><td class="tr" style="color:var(--error);">-£4,200</td><td class="tr"><strong>+£37,100</strong></td><td class="tr"><strong>£1,159,800</strong></td></tr>
+              <tr><td style="color:var(--muted);" colspan="7">… 8 more weeks</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ CONSULTANTS ══ -->
+      <div id="pg-consultants" class="page">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+          <h5 style="margin:0;">Consultants <span style="font-size:.8rem;color:var(--muted);font-weight:400;">(300)</span></h5>
+          <div style="flex:1;"></div>
+          <input style="padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:.82rem;width:240px;" placeholder="🔍  Search name, role…"/>
+          <button class="btn btn-teal" onclick="openAddConsultant()">+ Add Consultant</button>
+        </div>
+        <div class="card" style="padding:0;">
+          <table>
+            <thead><tr><th>Name</th><th>Role</th><th>Department</th><th>Email</th><th class="tr">Chargeability</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Ciarán O'Brien</strong></td><td><span class="chip chip-teal">Senior Developer</span></td><td>Technology</td><td>ciaran.obrien@codec.ie</td><td class="tr"><strong style="color:var(--success);">84%</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>Aoife Walsh</strong></td><td><span class="chip chip-teal">Business Analyst</span></td><td>Consulting</td><td>aoife.walsh@codec.ie</td><td class="tr"><strong style="color:var(--success);">79%</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>Fionnuala Burke</strong></td><td><span class="chip chip-teal">Project Manager</span></td><td>Delivery</td><td>fionnuala.burke@codec.ie</td><td class="tr"><strong style="color:var(--warning);">71%</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>Seán Gallagher</strong></td><td><span class="chip chip-teal">Solution Architect</span></td><td>Technology</td><td>sean.gallagher@codec.ie</td><td class="tr"><strong style="color:var(--success);">91%</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>Niamh Ryan</strong></td><td><span class="chip chip-teal">QA Engineer</span></td><td>Technology</td><td>niamh.ryan@codec.ie</td><td class="tr"><strong style="color:var(--error);">58%</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>Pádraig Kelly</strong></td><td><span class="chip chip-default">Support Staff</span></td><td>Operations</td><td>padraig.kelly@codec.ie</td><td class="tr"><span style="color:var(--muted);">N/A</span></td><td><span class="chip chip-success">Active</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ MY ASSIGNMENTS ══ -->
+      <div id="pg-my-assignments" class="page">
+        <h5>My Assignments</h5>
+        <div class="sub">Sarah Murphy · Business Analyst · Technology Practice</div>
+        <div class="grid g2">
+          <div class="card" style="border-left:4px solid var(--teal);">
+            <div style="display:flex;justify-content:space-between;"><strong>ERP Implementation</strong><span class="chip chip-success">Active</span></div>
+            <div style="font-size:.82rem;color:var(--muted);margin:6px 0;">AIB Group · PRJ-0001</div>
+            <div style="font-size:.82rem;">📅 Jan 2026 – Jun 2026 &nbsp;·&nbsp; ⏱ 32 hrs/wk &nbsp;·&nbsp; 👤 Business Analyst</div>
+            <hr class="divider"/>
+            <div style="font-size:.8rem;display:flex;gap:16px;"><span>Billed this month: <strong>£8,800</strong></span><span>My hours: <strong>80hrs</strong></span></div>
+          </div>
+          <div class="card" style="border-left:4px solid var(--teal);">
+            <div style="display:flex;justify-content:space-between;"><strong>Analytics Platform</strong><span class="chip chip-success">Active</span></div>
+            <div style="font-size:.82rem;color:var(--muted);margin:6px 0;">Ryanair · PRJ-0003</div>
+            <div style="font-size:.82rem;">📅 Feb 2026 – Aug 2026 &nbsp;·&nbsp; ⏱ 16 hrs/wk &nbsp;·&nbsp; 👤 Business Analyst</div>
+            <hr class="divider"/>
+            <div style="font-size:.8rem;display:flex;gap:16px;"><span>Billed this month: <strong>£4,400</strong></span><span>My hours: <strong>44hrs</strong></span></div>
+          </div>
+          <div class="card" style="border-left:4px solid var(--warning);">
+            <div style="display:flex;justify-content:space-between;"><strong>CRM Discovery</strong><span class="chip chip-teal">Pre-Sales</span></div>
+            <div style="font-size:.82rem;color:var(--muted);margin:6px 0;">Glanbia · Pipeline</div>
+            <div style="font-size:.82rem;">📅 Mar 2026 &nbsp;·&nbsp; ⏱ 8 hrs/wk &nbsp;·&nbsp; 👤 BA (Pre-sales)</div>
+            <hr class="divider"/>
+            <div style="font-size:.8rem;color:var(--muted);">Time tracked for internal costing — not invoiced until Won</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ROLES ══ -->
+      <div id="pg-roles" class="page">
+        <div style="display:flex;align-items:center;margin-bottom:20px;">
+          <h5 style="margin:0;">Roles & Rate Card</h5><div style="flex:1;"></div>
+          <button class="btn btn-teal" onclick="openAddRole()">+ Add Role</button>
+        </div>
+        <div class="card" style="padding:0;">
+          <table>
+            <thead><tr><th>Role Name</th><th>Category</th><th>Chargeable</th><th class="tr">Hourly Rate</th><th class="tr">Daily Rate</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td><strong>QA Engineer</strong></td><td><span class="chip chip-teal">Technical</span></td><td><span style="color:var(--success);">✓ Billable</span></td><td class="tr">£85</td><td class="tr">£680</td><td><span class="chip chip-success">Active</span></td><td><button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;" onclick="editRoleRow(this)">Edit</button></td></tr>
+              <tr><td><strong>Developer</strong></td><td><span class="chip chip-teal">Technical</span></td><td><span style="color:var(--success);">✓ Billable</span></td><td class="tr">£95</td><td class="tr">£760</td><td><span class="chip chip-success">Active</span></td><td><button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;" onclick="editRoleRow(this)">Edit</button></td></tr>
+              <tr><td><strong>Senior Developer</strong></td><td><span class="chip chip-teal">Technical</span></td><td><span style="color:var(--success);">✓ Billable</span></td><td class="tr">£130</td><td class="tr">£1,040</td><td><span class="chip chip-success">Active</span></td><td><button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;" onclick="editRoleRow(this)">Edit</button></td></tr>
+              <tr><td><strong>Solution Architect</strong></td><td><span class="chip chip-teal">Technical</span></td><td><span style="color:var(--success);">✓ Billable</span></td><td class="tr">£175</td><td class="tr">£1,400</td><td><span class="chip chip-success">Active</span></td><td><button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;" onclick="editRoleRow(this)">Edit</button></td></tr>
+              <tr><td><strong>Business Analyst</strong></td><td><span class="chip" style="background:#e9d8fd;color:#553c9a;">Consulting</span></td><td><span style="color:var(--success);">✓ Billable</span></td><td class="tr">£110</td><td class="tr">£880</td><td><span class="chip chip-success">Active</span></td><td><button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;" onclick="editRoleRow(this)">Edit</button></td></tr>
+              <tr><td><strong>Functional Analyst</strong></td><td><span class="chip" style="background:#e9d8fd;color:#553c9a;">Consulting</span></td><td><span style="color:var(--success);">✓ Billable</span></td><td class="tr">£105</td><td class="tr">£840</td><td><span class="chip chip-success">Active</span></td><td><button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;" onclick="editRoleRow(this)">Edit</button></td></tr>
+              <tr><td><strong>Project Manager</strong></td><td><span class="chip chip-info">Delivery</span></td><td><span style="color:var(--success);">✓ Billable</span></td><td class="tr">£140</td><td class="tr">£1,120</td><td><span class="chip chip-success">Active</span></td><td><button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;" onclick="editRoleRow(this)">Edit</button></td></tr>
+              <tr style="background:#FFF5F5;"><td><strong>Support Staff</strong></td><td><span class="chip chip-default">Operations</span></td><td><span style="color:var(--error);">✗ Non-billable</span></td><td class="tr" style="color:var(--muted);">—</td><td class="tr" style="color:var(--muted);">—</td><td><span class="chip chip-success">Active</span></td><td><button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;" onclick="editRoleRow(this)">Edit</button></td></tr>
+              <tr style="background:#FFF5F5;"><td><strong>Admin</strong></td><td><span class="chip chip-default">Operations</span></td><td><span style="color:var(--error);">✗ Non-billable</span></td><td class="tr" style="color:var(--muted);">—</td><td class="tr" style="color:var(--muted);">—</td><td><span class="chip chip-success">Active</span></td><td><button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;" onclick="editRoleRow(this)">Edit</button></td></tr>
+              <tr style="background:#FFF5F5;"><td><strong>Head of Business</strong></td><td><span class="chip chip-default">Leadership</span></td><td><span style="color:var(--error);">✗ Non-billable</span></td><td class="tr" style="color:var(--muted);">—</td><td class="tr" style="color:var(--muted);">—</td><td><span class="chip chip-success">Active</span></td><td><button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;" onclick="editRoleRow(this)">Edit</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ MY EXPENSES ══ -->
+      <div id="pg-my-expenses" class="page">
+        <div style="display:flex;align-items:center;margin-bottom:20px;">
+          <div><h5 style="margin:0;">My Expenses</h5><div class="sub" style="margin:0;">Sarah Murphy · March 2026</div></div>
+          <div style="flex:1;"></div>
+          <button class="btn btn-teal" onclick="openNewClaim()">+ New Claim</button>
+        </div>
+        <div class="grid g4" style="margin-bottom:20px;">
+          <div class="card kpi-card"><div class="kpi-label">Submitted</div><div class="kpi-value">£342</div><div class="kpi-sub">2 claims awaiting approval</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Approved (MTD)</div><div class="kpi-value" style="color:var(--success)">£1,180</div><div class="kpi-sub">Paid to bank account</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Rejected</div><div class="kpi-value" style="color:var(--error)">£85</div><div class="kpi-sub">1 claim rejected</div></div>
+          <div class="card kpi-card"><div class="kpi-label">YTD Total</div><div class="kpi-value">£4,260</div><div class="kpi-sub">Jan – Mar 2026</div></div>
+        </div>
+        <div class="card" style="padding:0;">
+          <table>
+            <thead><tr><th>Claim #</th><th>Description</th><th>Project</th><th>Date</th><th>Category</th><th class="tr">Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>EXP-0042</strong></td><td>Client dinner — AIB stakeholders</td><td>ERP Implementation</td><td>4 Mar</td><td><span class="chip chip-info">Entertainment</span></td><td class="tr"><strong>£186</strong></td><td><span class="chip chip-warning">Submitted</span></td></tr>
+              <tr><td><strong>EXP-0041</strong></td><td>Rail travel Dublin–Cork</td><td>Analytics Platform</td><td>3 Mar</td><td><span class="chip chip-default">Travel</span></td><td class="tr"><strong>£156</strong></td><td><span class="chip chip-warning">Submitted</span></td></tr>
+              <tr><td><strong>EXP-0039</strong></td><td>Taxi to client site x3</td><td>ERP Implementation</td><td>28 Feb</td><td><span class="chip chip-default">Travel</span></td><td class="tr"><strong>£94</strong></td><td><span class="chip chip-success">Approved</span></td></tr>
+              <tr><td><strong>EXP-0037</strong></td><td>Hotel 2 nights — Cork</td><td>CRM Rollout</td><td>24 Feb</td><td><span class="chip chip-teal">Accommodation</span></td><td class="tr"><strong>£380</strong></td><td><span class="chip chip-success">Approved</span></td></tr>
+              <tr><td><strong>EXP-0034</strong></td><td>Parking fines (personal)</td><td>—</td><td>18 Feb</td><td><span class="chip chip-default">Other</span></td><td class="tr"><strong>£85</strong></td><td><span class="chip chip-error">Rejected</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ MY LEAVE ══ -->
+      <div id="pg-my-leave" class="page">
+        <div style="display:flex;align-items:center;margin-bottom:20px;">
+          <div><h5 style="margin:0;">My Leave</h5><div class="sub" style="margin:0;">Sarah Murphy · Leave Entitlements 2026</div></div>
+          <div style="flex:1;"></div>
+          <button class="btn btn-teal" onclick="openRequestLeave()">+ Request Leave</button>
+        </div>
+        <div class="grid g4" style="margin-bottom:20px;">
+          <div class="card kpi-card"><div class="kpi-label">Annual Leave</div><div class="kpi-value">12 <span style="font-size:1rem;font-weight:400;color:var(--muted)">/ 25</span></div><div class="kpi-sub">Days remaining</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Sick Leave</div><div class="kpi-value">2</div><div class="kpi-sub">Days taken YTD</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Pending Requests</div><div class="kpi-value" style="color:var(--warning)">1</div><div class="kpi-sub">Awaiting manager approval</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Next Leave</div><div class="kpi-value" style="font-size:1.2rem;">21 Apr</div><div class="kpi-sub">Easter Bank Holiday</div></div>
+        </div>
+        <div class="card" style="padding:0;">
+          <table>
+            <thead><tr><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Notes</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><span class="chip chip-info">Annual Leave</span></td><td>7 Apr 2026</td><td>11 Apr 2026</td><td>5</td><td>Easter break</td><td><span class="chip chip-warning">Pending</span></td></tr>
+              <tr><td><span class="chip chip-info">Annual Leave</span></td><td>16 Feb 2026</td><td>20 Feb 2026</td><td>5</td><td>Family holiday</td><td><span class="chip chip-success">Approved</span></td></tr>
+              <tr><td><span class="chip chip-default">Sick Leave</span></td><td>10 Feb 2026</td><td>11 Feb 2026</td><td>2</td><td>Flu</td><td><span class="chip chip-success">Approved</span></td></tr>
+              <tr><td><span class="chip chip-info">Annual Leave</span></td><td>2 Jan 2026</td><td>3 Jan 2026</td><td>2</td><td>New Year</td><td><span class="chip chip-success">Approved</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ AR AGING ══ -->
+      <div id="pg-ar-aging" class="page">
+        <h5>AR Aging Report</h5>
+        <div class="sub">Outstanding receivables by age — as at 6 March 2026</div>
+        <div class="grid g4" style="margin-bottom:20px;">
+          <div class="card kpi-card"><div class="kpi-label">Current (0–30 days)</div><div class="kpi-value" style="color:var(--success)">£94,200</div><div class="kpi-sub">3 invoices</div></div>
+          <div class="card kpi-card"><div class="kpi-label">31–60 days</div><div class="kpi-value" style="color:var(--warning)">£62,400</div><div class="kpi-sub">2 invoices</div></div>
+          <div class="card kpi-card"><div class="kpi-label">61–90 days</div><div class="kpi-value" style="color:var(--error)">£48,200</div><div class="kpi-sub">1 invoice</div></div>
+          <div class="card kpi-card"><div class="kpi-label">90+ days</div><div class="kpi-value" style="color:var(--error)">£13,700</div><div class="kpi-sub">1 invoice — escalate</div></div>
+        </div>
+        <div class="card" style="padding:0;">
+          <table>
+            <thead><tr><th>Invoice</th><th>Customer</th><th>Invoice Date</th><th>Due Date</th><th class="tr">Amount</th><th class="tr">Outstanding</th><th>Age</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td><strong>INV-00025</strong></td><td>Ryanair</td><td>14 Feb</td><td>16 Mar</td><td class="tr">£31,800</td><td class="tr"><strong>£31,800</strong></td><td><span class="chip chip-success">Current</span></td><td><button class="btn btn-outline" style="padding:3px 8px;font-size:.72rem;" onclick="chaseInvoice(this)">Send Reminder</button></td></tr>
+              <tr><td><strong>INV-00024</strong></td><td>CRH plc</td><td>13 Feb</td><td>15 Mar</td><td class="tr">£62,400</td><td class="tr"><strong>£62,400</strong></td><td><span class="chip chip-success">Current</span></td><td><button class="btn btn-outline" style="padding:3px 8px;font-size:.72rem;" onclick="chaseInvoice(this)">Send Reminder</button></td></tr>
+              <tr><td><strong>INV-00023</strong></td><td>AIB Group</td><td>29 Jan</td><td>28 Feb</td><td class="tr">£48,200</td><td class="tr"><strong>£48,200</strong></td><td><span class="chip chip-error">6 days overdue</span></td><td><button class="btn btn-teal" style="padding:3px 8px;font-size:.72rem;" onclick="chaseInvoice(this)">Chase Now</button></td></tr>
+              <tr><td><strong>INV-00019</strong></td><td>Glanbia</td><td>5 Jan</td><td>4 Feb</td><td class="tr">£13,700</td><td class="tr"><strong>£13,700</strong></td><td><span class="chip chip-error">30 days overdue</span></td><td><button class="btn btn-teal" style="padding:3px 8px;font-size:.72rem;" onclick="chaseInvoice(this)">Escalate</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ SUPPLIERS ══ -->
+      <div id="pg-suppliers" class="page">
+        <div style="display:flex;align-items:center;margin-bottom:20px;">
+          <h5 style="margin:0;">Suppliers</h5><div style="flex:1;"></div>
+          <button class="btn btn-teal" onclick="openAddSupplier()">+ Add Supplier</button>
+        </div>
+        <div class="card" style="padding:0;">
+          <table>
+            <thead><tr><th>Supplier</th><th>Category</th><th>Contact</th><th>Payment Terms</th><th class="tr">Open POs</th><th class="tr">Outstanding AP</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Microsoft Ireland</strong></td><td><span class="chip chip-teal">Software</span></td><td>licensing@microsoft.ie</td><td>Net 30</td><td class="tr">2</td><td class="tr"><strong>£24,800</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>AWS EMEA</strong></td><td><span class="chip chip-teal">Cloud</span></td><td>billing@aws.amazon.com</td><td>Monthly</td><td class="tr">1</td><td class="tr"><strong>£8,200</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>Hays Recruitment</strong></td><td><span class="chip chip-info">Contractors</span></td><td>ireland@hays.com</td><td>Net 14</td><td class="tr">3</td><td class="tr"><strong>£41,500</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>BDO Ireland</strong></td><td><span class="chip chip-default">Professional Services</span></td><td>accounts@bdo.ie</td><td>Net 30</td><td class="tr">0</td><td class="tr"><strong>£12,000</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>Regus Dublin</strong></td><td><span class="chip chip-default">Facilities</span></td><td>dublin@regus.com</td><td>Monthly</td><td class="tr">1</td><td class="tr"><strong>£6,500</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>Fastway Couriers</strong></td><td><span class="chip chip-default">Logistics</span></td><td>accounts@fastway.ie</td><td>Net 30</td><td class="tr">0</td><td class="tr"><strong>£320</strong></td><td><span class="chip chip-warning">On Hold</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ PURCHASE ORDERS ══ -->
+      <div id="pg-purchase-orders" class="page">
+        <div style="display:flex;align-items:center;margin-bottom:20px;">
+          <h5 style="margin:0;">Purchase Orders</h5><div style="flex:1;"></div>
+          <button class="btn btn-teal" onclick="openRaisePO()">+ Raise PO</button>
+        </div>
+        <div class="grid g4" style="margin-bottom:20px;">
+          <div class="card kpi-card"><div class="kpi-label">Open POs</div><div class="kpi-value">7</div><div class="kpi-sub">Total value £94,800</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Pending Approval</div><div class="kpi-value" style="color:var(--warning)">3</div><div class="kpi-sub">Awaiting sign-off</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Invoiced This Month</div><div class="kpi-value">£38,200</div><div class="kpi-sub">Against open POs</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Overdue Deliveries</div><div class="kpi-value" style="color:var(--error)">1</div><div class="kpi-sub">Follow up required</div></div>
+        </div>
+        <div class="card" style="padding:0;">
+          <table>
+            <thead><tr><th>PO #</th><th>Supplier</th><th>Description</th><th>Raised</th><th class="tr">Value</th><th class="tr">Invoiced</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>PO-00031</strong></td><td>Hays Recruitment</td><td>Contract Developer x2 — Mar</td><td>1 Mar</td><td class="tr">£24,000</td><td class="tr">£0</td><td><span class="chip chip-warning">Pending Approval</span></td></tr>
+              <tr><td><strong>PO-00030</strong></td><td>Microsoft Ireland</td><td>Azure EA renewal Q1</td><td>28 Feb</td><td class="tr">£18,400</td><td class="tr">£18,400</td><td><span class="chip chip-success">Fully Invoiced</span></td></tr>
+              <tr><td><strong>PO-00029</strong></td><td>AWS EMEA</td><td>Reserved instances — prod</td><td>1 Feb</td><td class="tr">£8,200</td><td class="tr">£8,200</td><td><span class="chip chip-success">Fully Invoiced</span></td></tr>
+              <tr><td><strong>PO-00028</strong></td><td>Hays Recruitment</td><td>QA Contractor — Feb–Apr</td><td>27 Jan</td><td class="tr">£17,500</td><td class="tr">£9,800</td><td><span class="chip chip-info">Part Invoiced</span></td></tr>
+              <tr><td><strong>PO-00027</strong></td><td>Regus Dublin</td><td>Office space Q1 2026</td><td>2 Jan</td><td class="tr">£6,500</td><td class="tr">£6,500</td><td><span class="chip chip-success">Fully Invoiced</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ EXPENSE APPROVAL ══ -->
+      <div id="pg-expense-approval" class="page">
+        <div style="display:flex;align-items:center;margin-bottom:20px;">
+          <h5 style="margin:0;">Expense Approval</h5><div style="flex:1;"></div>
+          <button class="btn btn-teal" style="margin-right:8px;" onclick="approveExpense(this); document.querySelectorAll('#pg-expense-approval input:checked').forEach(c=>{const r=c.closest('tr');const ch=r.querySelector('.chip');if(ch){ch.className='chip chip-success';ch.textContent='Approved';}c.checked=false;})">✓ Approve Selected</button>
+          <button class="btn btn-outline" onclick="document.querySelectorAll('#pg-expense-approval input:checked').forEach(c=>{const r=c.closest('tr');const ch=r.querySelector('.chip');if(ch){ch.className='chip chip-error';ch.textContent='Rejected';}c.checked=false;}); toast('Selected expenses rejected','error')">✗ Reject Selected</button>
+        </div>
+        <div class="grid g4" style="margin-bottom:20px;">
+          <div class="card kpi-card"><div class="kpi-label">Awaiting Approval</div><div class="kpi-value" style="color:var(--warning)">12</div><div class="kpi-sub">£4,820 total value</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Approved This Month</div><div class="kpi-value" style="color:var(--success)">£8,340</div><div class="kpi-sub">34 claims</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Rejected This Month</div><div class="kpi-value">£620</div><div class="kpi-sub">4 claims</div></div>
+          <div class="card kpi-card"><div class="kpi-label">Avg Processing Time</div><div class="kpi-value">1.4 <span style="font-size:1rem;font-weight:400">days</span></div><div class="kpi-sub">SLA target: 2 days</div></div>
+        </div>
+        <div class="card" style="padding:0;">
+          <table>
+            <thead><tr><th><input type="checkbox"/></th><th>Consultant</th><th>Description</th><th>Project</th><th>Date</th><th>Category</th><th class="tr">Amount</th><th>Receipt</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td><input type="checkbox"/></td><td><strong>Sarah Murphy</strong></td><td>Client dinner — AIB</td><td>ERP Implementation</td><td>4 Mar</td><td><span class="chip chip-info">Entertainment</span></td><td class="tr"><strong>£186</strong></td><td><span style="color:var(--teal);cursor:pointer;">📎 View</span></td><td><button class="btn btn-outline" style="padding:3px 8px;font-size:.72rem;margin-right:4px;" onclick="approveExpense(this)">✓</button><button class="btn btn-outline" style="padding:3px 8px;font-size:.72rem;" onclick="rejectExpense(this)">✗</button></td></tr>
+              <tr><td><input type="checkbox"/></td><td><strong>Ciarán O'Brien</strong></td><td>Rail Dublin–Cork</td><td>Analytics Platform</td><td>3 Mar</td><td><span class="chip chip-default">Travel</span></td><td class="tr"><strong>£156</strong></td><td><span style="color:var(--teal);cursor:pointer;">📎 View</span></td><td><button class="btn btn-outline" style="padding:3px 8px;font-size:.72rem;margin-right:4px;" onclick="approveExpense(this)">✓</button><button class="btn btn-outline" style="padding:3px 8px;font-size:.72rem;" onclick="rejectExpense(this)">✗</button></td></tr>
+              <tr><td><input type="checkbox"/></td><td><strong>Aoife Walsh</strong></td><td>Hotel 2 nights — Cork</td><td>CRM Rollout</td><td>28 Feb</td><td><span class="chip chip-teal">Accommodation</span></td><td class="tr"><strong>£380</strong></td><td><span style="color:var(--teal);cursor:pointer;">📎 View</span></td><td><button class="btn btn-outline" style="padding:3px 8px;font-size:.72rem;margin-right:4px;" onclick="approveExpense(this)">✓</button><button class="btn btn-outline" style="padding:3px 8px;font-size:.72rem;" onclick="rejectExpense(this)">✗</button></td></tr>
+              <tr><td><input type="checkbox"/></td><td><strong>Seán Gallagher</strong></td><td>Conference registration</td><td>Internal</td><td>26 Feb</td><td><span class="chip chip-default">Training</span></td><td class="tr"><strong>£650</strong></td><td><span style="color:var(--teal);cursor:pointer;">📎 View</span></td><td><button class="btn btn-outline" style="padding:3px 8px;font-size:.72rem;margin-right:4px;" onclick="approveExpense(this)">✓</button><button class="btn btn-outline" style="padding:3px 8px;font-size:.72rem;" onclick="rejectExpense(this)">✗</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══ DATABASE EXPLORER ══ -->
+      <div id="pg-database" class="page">
+        <div style="display:flex;align-items:center;margin-bottom:4px;">
+          <h5 style="margin:0;">🗄️ Database Explorer</h5>
+          <div style="flex:1;"></div>
+          <span class="chip chip-success" style="margin-right:8px;">● Connected</span>
+          <span style="font-size:.78rem;color:var(--muted);">Azure SQL · CodecPSA · northeurope</span>
+        </div>
+        <div class="sub">Read-only view of live database tables and row counts</div>
+
+        <div style="display:flex;gap:16px;">
+          <!-- Table list sidebar -->
+          <div style="width:220px;flex-shrink:0;">
+            <div class="card" style="padding:8px 0;">
+              <div style="padding:6px 14px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);">Tables</div>
+              <div id="db-table-list"></div>
+            </div>
+          </div>
+          <!-- Table data -->
+          <div style="flex:1;">
+            <div id="db-content"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ PROJECT HEALTH ══ -->
+      <div id="pg-health" class="page">
+        <div style="display:flex;align-items:center;margin-bottom:4px;">
+          <div>
+            <h5 style="margin:0;">🎯 Project Health &amp; Risk Intelligence</h5>
+            <div class="sub" style="margin:0;">Live scoring across budget, timeline, resourcing, chargeability and AR — updated daily</div>
+          </div>
+          <div style="flex:1;"></div>
+          <select id="health-filter" class="form-input" style="width:160px;padding:7px 10px;" onchange="renderHealth()">
+            <option value="all">All Projects</option>
+            <option value="red">🔴 Critical Only</option>
+            <option value="amber">🟡 At Risk Only</option>
+            <option value="green">🟢 On Track Only</option>
+          </select>
+        </div>
+
+        <!-- Summary banner -->
+        <div id="health-summary" style="display:flex;gap:12px;margin:16px 0;flex-wrap:wrap;"></div>
+
+        <!-- Main grid: heatmap + insights -->
+        <div style="display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start;" id="health-main">
+          <!-- Heatmap -->
+          <div>
+            <div class="card" style="padding:0;overflow:hidden;">
+              <div style="padding:14px 20px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+                <strong style="font-size:.9rem;">Project Health Heatmap</strong>
+                <div style="flex:1;"></div>
+                <div style="display:flex;gap:10px;font-size:.75rem;align-items:center;">
+                  <span><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#C6F6D5;margin-right:4px;"></span>On Track</span>
+                  <span><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#FEFCBF;margin-right:4px;"></span>At Risk</span>
+                  <span><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#FED7D7;margin-right:4px;"></span>Critical</span>
+                </div>
+              </div>
+              <div id="health-heatmap" style="overflow-x:auto;"></div>
+            </div>
+          </div>
+
+          <!-- Insights panel -->
+          <div>
+            <div class="card" style="padding:0;overflow:hidden;">
+              <div style="padding:14px 20px 10px;border-bottom:1px solid var(--border);">
+                <strong style="font-size:.9rem;">🔍 Risk Insights</strong>
+                <div style="font-size:.72rem;color:var(--muted);margin-top:2px;">Auto-generated flags requiring attention</div>
+              </div>
+              <div id="health-insights" style="padding:12px 16px;max-height:480px;overflow-y:auto;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project score cards -->
+        <div style="margin-top:16px;">
+          <div style="font-size:.9rem;font-weight:600;margin-bottom:12px;">Project Score Cards</div>
+          <div id="health-cards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;"></div>
+        </div>
+      </div>
+
+    </div><!-- /main -->
+  </div><!-- /body-row -->
+</div><!-- /shell -->
+</div><!-- /app-shell -->
+
+<script>
+// ── Availability heatmap data ──────────────────────────────
+const consultants = [
+  {name:'Ciarán O\'Brien', role:'Senior Developer', days:[8,8,8,8,0], leave:[]},
+  {name:'Aoife Walsh', role:'Business Analyst', days:[8,8,8,6,0], leave:[]},
+  {name:'Fionnuala Burke', role:'Project Manager', days:[0,0,0,0,8], leave:[]},
+  {name:'Seán Gallagher', role:'Solution Architect', days:[8,8,8,8,8], leave:[]},
+  {name:'Niamh Ryan', role:'QA Engineer', days:[4,4,4,4,4], leave:[]},
+  {name:'Pádraig Kelly', role:'Support Staff', days:[0,0,0,0,0], leave:[2]},
+  {name:'Aisling Murphy', role:'Developer', days:[8,8,8,0,0], leave:[]},
+  {name:'Donal Byrne', role:'Functional Analyst', days:[6,6,6,6,6], leave:[]},
+  {name:'Caoimhe Fitzgerald', role:'Solution Architect', days:[8,0,8,8,8], leave:[]},
+  {name:'Ronan McCarthy', role:'Project Manager', days:[8,8,8,8,8], leave:[]},
+  {name:'Sinéad Doyle', role:'Developer', days:[0,0,0,0,0], leave:[0,1,2,3,4]},
+  {name:'Éamonn Brennan', role:'Business Analyst', days:[4,8,8,8,4], leave:[]},
+];
+
+function buildHeatmap(){
+  const tbody = document.getElementById('hm-body');
+  tbody.innerHTML = '';
+  consultants.forEach(c => {
+    const tr = document.createElement('tr');
+    tr.style.borderBottom = '1px solid #EDF2F7';
+    let cells = `<td class="hm-td-name">${c.name}</td><td class="hm-td-role">${c.role}</td>`;
+    let weekTotal = 0;
+    c.days.forEach((hrs,i) => {
+      const onLeave = c.leave.includes(i);
+      let cls = onLeave ? 'hm-lv' : hrs>=8 ? 'hm-bk' : hrs>0 ? 'hm-pa' : 'hm-av';
+      let label = onLeave ? '🌴' : hrs>0 ? hrs : '';
+      weekTotal += hrs;
+      cells += `<td class="hm-cell"><div class="hm-dot ${cls}" title="${hrs}hrs booked">${label}</div></td>`;
+    });
+    const pct = Math.round(weekTotal/40*100);
+    const chipCol = pct>=100?'chip-error':pct>=75?'chip-warning':'chip-success';
+    cells += `<td class="hm-cell"><span class="chip ${chipCol}">${pct}%</span></td>`;
+    tr.innerHTML = cells;
+    tbody.appendChild(tr);
+  });
+}
+
+// ── Navigation ──────────────────────────────────────────────
+const navMap = {
+  'pg-executive':'nav-exec','pg-availability':'nav-avail','pg-consultants':'nav-consultants',
+  'pg-health':'nav-health','pg-approval':'nav-approval','pg-customers':'nav-customers','pg-projects':'nav-projects',
+  'pg-pipeline':'nav-pipeline','pg-resourcing':'nav-resourcing','pg-invoices':'nav-invoices',
+  'pg-cashflow':'nav-cashflow','pg-roles':'nav-roles','pg-database':'nav-database',
+  'pg-my-dashboard':'nav-my-dash','pg-timesheet':'nav-timesheet',
+  'pg-my-assignments':'nav-my-assign','pg-my-expenses':'nav-expenses','pg-my-leave':'nav-leave',
+};
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const page = document.getElementById(id);
+  if(page){ page.classList.add('active'); page.scrollTop=0; }
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const navId = navMap[id];
+  if(navId) document.getElementById(navId)?.classList.add('active');
+  if(id==='pg-database') buildDatabase('Consultants');
+  if(id==='pg-health') renderHealth();
+  window.scrollTo(0,0);
+}
+
+function showApp(){
+  document.getElementById('pg-login').style.display='none';
+  document.getElementById('app-shell').style.display='block';
+  buildHeatmap();
+  showPage('pg-executive');
+}
+
+// ── Database Explorer ────────────────────────────────────────
+const dbTables = {
+  'Consultants': {
+    cols:['Id','FullName','Email','Role','Department','StartDate','IsActive'],
+    rows:[
+      ['1','Ciarán O\'Brien','ciaran.obrien@codec.ie','Senior Developer','Technology','2021-03-15','✅'],
+      ['2','Aoife Walsh','aoife.walsh@codec.ie','Business Analyst','Consulting','2020-09-01','✅'],
+      ['3','Fionnuala Burke','fionnuala.burke@codec.ie','Project Manager','Delivery','2019-06-10','✅'],
+      ['4','Seán Gallagher','sean.gallagher@codec.ie','Solution Architect','Technology','2018-01-22','✅'],
+      ['5','Niamh Ryan','niamh.ryan@codec.ie','QA Engineer','Technology','2022-05-03','✅'],
+      ['...','...','...','...','...','...',''],
+      ['300','— (300 total rows) —','','','','',''],
+    ]
+  },
+  'Roles': {
+    cols:['Id','Name','Category','IsChargeable','HourlyRate','DailyRate','IsActive'],
+    rows:[
+      ['1','Developer','Technical','✅','£95','£760','✅'],
+      ['2','Senior Developer','Technical','✅','£130','£1,040','✅'],
+      ['3','Solution Architect','Technical','✅','£175','£1,400','✅'],
+      ['4','Business Analyst','Consulting','✅','£110','£880','✅'],
+      ['5','Project Manager','Delivery','✅','£140','£1,120','✅'],
+      ['6','QA Engineer','Technical','✅','£85','£680','✅'],
+      ['7','Support Staff','Operations','❌','—','—','✅'],
+      ['8','Admin','Operations','❌','—','—','✅'],
+      ['9','Head of Business','Leadership','❌','—','—','✅'],
+      ['10','Functional Analyst','Consulting','✅','£105','£840','✅'],
+    ]
+  },
+  'Customers': {
+    cols:['Id','Name','Industry','ContactEmail','AccountManager','IsActive'],
+    rows:[
+      ['1','AIB Group','Financial Services','procurement@aib.ie','Seán Gallagher','✅'],
+      ['2','CRH plc','Construction','it@crh.com','Fionnuala Burke','✅'],
+      ['3','Ryanair','Aviation','vendor@ryanair.com','Ciarán O\'Brien','✅'],
+      ['4','Bank of Ireland','Financial Services','suppliers@boi.ie','Aoife Walsh','✅'],
+      ['5','Glanbia','Food & Nutrition','procurement@glanbia.ie','Seán Gallagher','✅'],
+      ['...','...','...','...','...',''],
+      ['25','— (25 total rows) —','','','',''],
+    ]
+  },
+  'Projects': {
+    cols:['Id','Name','Code','Customer','Status','Budget','BilledToDate'],
+    rows:[
+      ['1','ERP Implementation','PRJ-0001','AIB Group','Active','£480,000','£312,000'],
+      ['2','Cloud Migration','PRJ-0002','CRH plc','Active','£350,000','£294,000'],
+      ['3','Analytics Platform','PRJ-0003','Ryanair','Active','£220,000','£88,000'],
+      ['4','CRM Rollout','PRJ-0004','Bank of Ireland','Active','£195,000','£176,000'],
+      ['5','Data Warehouse','PRJ-0005','Glanbia','Active','£310,000','£155,000'],
+      ['...','...','...','...','...','...','...'],
+      ['62','— (62 total rows) —','','','','',''],
+    ]
+  },
+  'TimesheetEntries': {
+    cols:['Id','Consultant','Project','Date','Hours','Activity','Status'],
+    rows:[
+      ['1','Ciarán O\'Brien','ERP Implementation','2026-03-03','8','Development','Approved'],
+      ['2','Aoife Walsh','Analytics Platform','2026-03-03','6','Analysis','Approved'],
+      ['3','Fionnuala Burke','Cloud Migration','2026-03-03','8','PM','Submitted'],
+      ['4','Seán Gallagher','CRM Rollout','2026-03-04','8','Architecture','Approved'],
+      ['5','Niamh Ryan','ERP Implementation','2026-03-04','4','Testing','Draft'],
+      ['...','...','...','...','...','...',''],
+      ['~12,480','— (8 weeks × 300 consultants) —','','','','',''],
+    ]
+  },
+  'Invoices': {
+    cols:['Id','Number','Customer','Project','Amount','Status','DueDate'],
+    rows:[
+      ['1','INV-00023','AIB Group','ERP Implementation','£48,200','Overdue','2026-02-28'],
+      ['2','INV-00024','CRH plc','Cloud Migration','£62,400','Sent','2026-03-15'],
+      ['3','INV-00025','Ryanair','Analytics Platform','£31,800','Draft','2026-03-22'],
+      ['4','INV-00022','Bank of Ireland','CRM Rollout','£55,600','Paid','2026-02-10'],
+      ['5','INV-00021','Glanbia','Data Warehouse','£38,400','Paid','2026-01-31'],
+      ['...','...','...','...','...','...',''],
+      ['15','— (15 total rows) —','','','','',''],
+    ]
+  },
+  'SalesEngagements': {
+    cols:['Id','Name','Customer','Stage','EstValue','Probability','WeightedValue'],
+    rows:[
+      ['1','CRM Discovery','Glanbia','Qualification','£180,000','40%','£72,000'],
+      ['2','Cloud Strategy','Kerry Group','Proposal','£320,000','60%','£192,000'],
+      ['3','ERP Phase 2','AIB Group','Negotiation','£540,000','80%','£432,000'],
+      ['4','Data Platform','Smurfit Kappa','Qualification','£210,000','30%','£63,000'],
+      ['5','HR Transformation','ESB','Proposal','£280,000','55%','£154,000'],
+      ['...','...','...','...','...','...',''],
+      ['15','— (15 total rows) —','','','','',''],
+    ]
+  },
+  'ResourceRequests': {
+    cols:['Id','RequestedBy','Role','Project','Priority','Status','StartDate'],
+    rows:[
+      ['1','Fionnuala Burke','Senior Developer','ERP Implementation','High','Open','2026-03-17'],
+      ['2','Ronan McCarthy','Business Analyst','Cloud Migration','Medium','In Review','2026-04-01'],
+      ['3','Seán Gallagher','QA Engineer','Analytics Platform','Low','Fulfilled','2026-02-01'],
+      ['4','Ciarán O\'Brien','Project Manager','CRM Rollout','High','Open','2026-03-24'],
+    ]
+  },
+  'Expenses': {
+    cols:['Id','Consultant','Description','Project','Amount','Category','Status'],
+    rows:[
+      ['42','Sarah Murphy','Client dinner — AIB','ERP Implementation','£186','Entertainment','Submitted'],
+      ['41','Sarah Murphy','Rail Dublin–Cork','Analytics Platform','£156','Travel','Submitted'],
+      ['40','Ciarán O\'Brien','Hotel 2 nights','Cloud Migration','£380','Accommodation','Approved'],
+      ['39','Aoife Walsh','Taxi to client x3','ERP Implementation','£94','Travel','Approved'],
+    ]
+  },
+  'Suppliers': {
+    cols:['Id','Name','Category','PaymentTerms','IsActive'],
+    rows:[
+      ['1','Microsoft Ireland','Software','Net 30','✅'],
+      ['2','AWS EMEA','Cloud','Monthly','✅'],
+      ['3','Hays Recruitment','Contractors','Net 14','✅'],
+      ['4','BDO Ireland','Professional Services','Net 30','✅'],
+      ['5','Regus Dublin','Facilities','Monthly','✅'],
+    ]
+  },
+};
+
+function buildDatabase(tableName){
+  // Build table list
+  const list = document.getElementById('db-table-list');
+  list.innerHTML = Object.keys(dbTables).map(t=>
+    `<div onclick="buildDatabase('${t}')" style="padding:8px 14px;font-size:.8rem;cursor:pointer;
+     border-left:3px solid ${t===tableName?'var(--teal)':'transparent'};
+     background:${t===tableName?'rgba(0,169,206,.07)':'transparent'};
+     color:${t===tableName?'var(--teal)':'var(--text)'};font-weight:${t===tableName?'600':'400'};
+     transition:all .1s;" onmouseover="this.style.background='rgba(0,169,206,.05)'"
+     onmouseout="this.style.background='${t===tableName?'rgba(0,169,206,.07)':'transparent'}'">
+      🗂 ${t}
+    </div>`
+  ).join('');
+
+  const data = dbTables[tableName];
+  const content = document.getElementById('db-content');
+  content.innerHTML = `
+    <div class="card" style="margin-bottom:12px;padding:14px 20px;display:flex;align-items:center;gap:16px;">
+      <div><strong style="font-size:1rem;">${tableName}</strong>
+      <span style="font-size:.78rem;color:var(--muted);margin-left:8px;">${data.rows.length - (data.rows.at(-1)[0].includes('total')?1:0)} rows shown</span></div>
+      <div style="flex:1;"></div>
+      <input style="padding:6px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:.8rem;width:200px;" placeholder="🔍 Filter rows…"/>
+      <button class="btn btn-outline" style="font-size:.78rem;padding:6px 12px;">Export CSV</button>
+    </div>
+    <div class="card" style="padding:0;overflow-x:auto;">
+      <table>
+        <thead><tr>${data.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead>
+        <tbody>${data.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+}
+</script>
+
+<!-- ══ MODAL OVERLAY ══ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOnBg(event)">
+  <div class="modal" id="modal-box">
+    <div class="modal-title">
+      <span id="modal-title-text"></span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<!-- ══ TOAST CONTAINER ══ -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+// ══ TOAST ══════════════════════════════════════════════════
+function toast(msg, type='success'){
+  const wrap = document.getElementById('toast-wrap');
+  const t = document.createElement('div');
+  const icons = {success:'✅',error:'❌',info:'ℹ️'};
+  t.className = `toast ${type}`;
+  t.innerHTML = `<span>${icons[type]||'✅'}</span> ${msg}`;
+  wrap.appendChild(t);
+  requestAnimationFrame(()=>{ requestAnimationFrame(()=>t.classList.add('show')); });
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); }, 3200);
+}
+
+// ══ MODAL ══════════════════════════════════════════════════
+function openModal(title, bodyHtml, buttons){
+  document.getElementById('modal-title-text').textContent = title;
+  document.getElementById('modal-body').innerHTML = bodyHtml;
+  const footer = document.getElementById('modal-footer');
+  footer.innerHTML = `<button class="btn btn-outline" onclick="closeModal()">Cancel</button>`;
+  buttons.forEach(b=>{
+    const btn = document.createElement('button');
+    btn.className = `btn ${b.cls||'btn-teal'}`;
+    btn.textContent = b.label;
+    btn.onclick = b.action;
+    footer.appendChild(btn);
+  });
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); }
+function closeModalOnBg(e){ if(e.target===document.getElementById('modal-overlay')) closeModal(); }
+
+// ══ SHARED FORM HELPERS ════════════════════════════════════
+function fv(id){ return document.getElementById(id)?.value || ''; }
+function sel(options, id, placeholder='Select…'){
+  return `<select class="form-input" id="${id}"><option value="">${placeholder}</option>${options.map(o=>`<option>${o}</option>`).join('')}</select>`;
+}
+
+// ══ MY EXPENSES — New Claim ════════════════════════════════
+function openNewClaim(){
+  openModal('New Expense Claim',`
+    <div class="form-row"><label>Description</label><input class="form-input" id="exp-desc" placeholder="e.g. Client dinner at AIB"/></div>
+    <div class="form-row-2">
+      <div class="form-row"><label>Date</label><input class="form-input" id="exp-date" type="date" value="2026-03-06"/></div>
+      <div class="form-row"><label>Amount (£)</label><input class="form-input" id="exp-amount" type="number" placeholder="0.00"/></div>
+    </div>
+    <div class="form-row"><label>Category</label>${sel(['Travel','Accommodation','Entertainment','Training','Equipment','Other'],'exp-cat','Select category…')}</div>
+    <div class="form-row"><label>Project</label>${sel(['ERP Implementation – AIB Group','Cloud Migration – CRH plc','Analytics Platform – Ryanair','CRM Rollout – Bank of Ireland','Internal'],'exp-proj','Select project…')}</div>
+    <div class="form-row"><label>Notes</label><textarea class="form-input" id="exp-notes" rows="2" placeholder="Additional details…"></textarea></div>
+    <div class="form-row"><label>Receipt</label><input class="form-input" id="exp-receipt" type="file" accept="image/*,.pdf"/></div>
+  `,[{label:'Submit Claim', action:()=>{
+    if(!fv('exp-desc')||!fv('exp-amount')){ toast('Please fill in all required fields','error'); return; }
+    const tbody = document.querySelector('#pg-my-expenses table tbody');
+    const next = 43 + Math.floor(Math.random()*10);
+    const cat = fv('exp-cat')||'Other';
+    const catChip = {Travel:'chip-default',Accommodation:'chip-teal',Entertainment:'chip-info',Training:'chip-default',Equipment:'chip-default',Other:'chip-default'}[cat]||'chip-default';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><strong>EXP-0${next}</strong></td><td>${fv('exp-desc')}</td><td>${(fv('exp-proj')||'Internal').split('–')[0].trim()}</td><td>${fv('exp-date').split('-').slice(1).join(' ').replace('-',' ')}</td><td><span class="chip ${catChip}">${cat}</span></td><td class="tr"><strong>£${parseFloat(fv('exp-amount')).toFixed(0)}</strong></td><td><span class="chip chip-warning">Submitted</span></td>`;
+    tbody.prepend(tr);
+    closeModal(); toast('Expense claim submitted for approval');
+  }}]);
+}
+
+// ══ MY LEAVE — Request Leave ═══════════════════════════════
+function openRequestLeave(){
+  openModal('Request Leave',`
+    <div class="form-row"><label>Leave Type</label>${sel(['Annual Leave','Sick Leave','Parental Leave','Bereavement','Study Leave'],'lv-type','Select type…')}</div>
+    <div class="form-row-2">
+      <div class="form-row"><label>From</label><input class="form-input" id="lv-from" type="date" value="2026-03-20"/></div>
+      <div class="form-row"><label>To</label><input class="form-input" id="lv-to" type="date" value="2026-03-24"/></div>
+    </div>
+    <div class="form-row"><label>Notes (optional)</label><textarea class="form-input" id="lv-notes" rows="2" placeholder="Reason or details…"></textarea></div>
+    <div style="background:var(--teal-light);border-radius:8px;padding:12px;font-size:.82rem;color:#006080;">
+      ℹ️ You have <strong>12 days</strong> annual leave remaining. This request uses <strong>5 days</strong>.
+    </div>
+  `,[{label:'Submit Request', action:()=>{
+    if(!fv('lv-type')||!fv('lv-from')||!fv('lv-to')){ toast('Please fill in all fields','error'); return; }
+    const tbody = document.querySelector('#pg-my-leave table tbody');
+    const tr = document.createElement('tr');
+    const fmt = d => { const [y,m,day]=d.split('-'); return `${day} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1]} ${y}`; };
+    tr.innerHTML = `<td><span class="chip chip-info">${fv('lv-type')}</span></td><td>${fmt(fv('lv-from'))}</td><td>${fmt(fv('lv-to'))}</td><td>5</td><td>${fv('lv-notes')||'—'}</td><td><span class="chip chip-warning">Pending</span></td>`;
+    tbody.prepend(tr);
+    closeModal(); toast('Leave request submitted to your manager');
+  }}]);
+}
+
+// ══ SUPPLIERS — Add Supplier ═══════════════════════════════
+function openAddSupplier(){
+  openModal('Add Supplier',`
+    <div class="form-row"><label>Supplier Name</label><input class="form-input" id="sup-name" placeholder="e.g. Accenture Ireland"/></div>
+    <div class="form-row-2">
+      <div class="form-row"><label>Category</label>${sel(['Software','Cloud','Contractors','Professional Services','Facilities','Logistics','Other'],'sup-cat')}</div>
+      <div class="form-row"><label>Payment Terms</label>${sel(['Net 14','Net 30','Net 60','Monthly','Immediate'],'sup-terms')}</div>
+    </div>
+    <div class="form-row"><label>Contact Email</label><input class="form-input" id="sup-email" type="email" placeholder="accounts@supplier.com"/></div>
+    <div class="form-row"><label>VAT Number (optional)</label><input class="form-input" id="sup-vat" placeholder="IE1234567A"/></div>
+  `,[{label:'Add Supplier', action:()=>{
+    if(!fv('sup-name')||!fv('sup-email')){ toast('Name and email are required','error'); return; }
+    const tbody = document.querySelector('#pg-suppliers table tbody');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><strong>${fv('sup-name')}</strong></td><td><span class="chip chip-teal">${fv('sup-cat')||'Other'}</span></td><td>${fv('sup-email')}</td><td>${fv('sup-terms')||'Net 30'}</td><td class="tr">0</td><td class="tr"><strong>£0</strong></td><td><span class="chip chip-success">Active</span></td>`;
+    tbody.appendChild(tr);
+    closeModal(); toast(`Supplier "${fv('sup-name')}" added`);
+  }}]);
+}
+
+// ══ PURCHASE ORDERS — Raise PO ═════════════════════════════
+function openRaisePO(){
+  openModal('Raise Purchase Order',`
+    <div class="form-row"><label>Supplier</label>${sel(['Microsoft Ireland','AWS EMEA','Hays Recruitment','BDO Ireland','Regus Dublin'],'po-sup')}</div>
+    <div class="form-row"><label>Description</label><input class="form-input" id="po-desc" placeholder="e.g. Contract Developer – April"/></div>
+    <div class="form-row-2">
+      <div class="form-row"><label>Value (£)</label><input class="form-input" id="po-value" type="number" placeholder="0"/></div>
+      <div class="form-row"><label>Required By</label><input class="form-input" id="po-date" type="date" value="2026-04-01"/></div>
+    </div>
+    <div class="form-row"><label>Project / Cost Centre</label>${sel(['ERP Implementation','Cloud Migration','Analytics Platform','CRM Rollout','Internal / Overhead'],'po-proj')}</div>
+    <div class="form-row"><label>Notes</label><textarea class="form-input" id="po-notes" rows="2" placeholder="Justification or details…"></textarea></div>
+  `,[{label:'Submit for Approval', action:()=>{
+    if(!fv('po-desc')||!fv('po-value')){ toast('Description and value required','error'); return; }
+    const tbody = document.querySelector('#pg-purchase-orders table tbody');
+    const num = 32 + Math.floor(Math.random()*10);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><strong>PO-000${num}</strong></td><td>${fv('po-sup')||'TBC'}</td><td>${fv('po-desc')}</td><td>Today</td><td class="tr">£${parseInt(fv('po-value')).toLocaleString()}</td><td class="tr">£0</td><td><span class="chip chip-warning">Pending Approval</span></td>`;
+    tbody.prepend(tr);
+    closeModal(); toast('PO submitted for approval');
+  }}]);
+}
+
+// ══ ROLES — Add Role ═══════════════════════════════════════
+function openAddRole(){
+  openModal('Add New Role',`
+    <div class="form-row"><label>Role Name</label><input class="form-input" id="role-name" placeholder="e.g. DevOps Engineer"/></div>
+    <div class="form-row"><label>Category</label>${sel(['Technical','Consulting','Delivery','Operations','Leadership'],'role-cat')}</div>
+    <div class="form-row-2">
+      <div class="form-row"><label>Hourly Rate (£)</label><input class="form-input" id="role-hourly" type="number" placeholder="0"/></div>
+      <div class="form-row"><label>Daily Rate (£)</label><input class="form-input" id="role-daily" type="number" placeholder="0"/></div>
+    </div>
+    <div class="form-row" style="display:flex;align-items:center;gap:10px;">
+      <input type="checkbox" id="role-chargeable" checked style="width:16px;height:16px;accent-color:var(--teal);"/>
+      <label style="text-transform:none;letter-spacing:0;font-size:.88rem;margin:0;">This role is chargeable to clients</label>
+    </div>
+  `,[{label:'Add Role', action:()=>{
+    if(!fv('role-name')){ toast('Role name is required','error'); return; }
+    const tbody = document.querySelector('#pg-roles table tbody');
+    const chargeable = document.getElementById('role-chargeable').checked;
+    const catChips = {Technical:'chip-teal',Consulting:'chip-info',Delivery:'chip-info',Operations:'chip-default',Leadership:'chip-default'};
+    const cat = fv('role-cat')||'Technical';
+    const tr = document.createElement('tr');
+    tr.style.background = chargeable?'':'#FFF5F5';
+    tr.innerHTML = `<td><strong>${fv('role-name')}</strong></td><td><span class="chip ${catChips[cat]||'chip-default'}">${cat}</span></td><td><span style="color:${chargeable?'var(--success)':'var(--error)'};">${chargeable?'✓ Billable':'✗ Non-billable'}</span></td><td class="tr">${fv('role-hourly')?'£'+fv('role-hourly'):'—'}</td><td class="tr">${fv('role-daily')?'£'+fv('role-daily'):'—'}</td><td><span class="chip chip-success">Active</span></td><td><button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;" onclick="editRoleRow(this)">Edit</button></td>`;
+    tbody.appendChild(tr);
+    closeModal(); toast(`Role "${fv('role-name')}" created`);
+  }}]);
+}
+
+// ══ ROLES — Edit inline ════════════════════════════════════
+function editRoleRow(btn){
+  const tr = btn.closest('tr');
+  const cells = tr.querySelectorAll('td');
+  const name = cells[0].querySelector('strong')?.textContent || '';
+  const hourly = cells[3].textContent.replace('£','').trim();
+  const daily = cells[4].textContent.replace('£','').trim();
+  cells[0].innerHTML = `<input class="editable-input" style="width:140px;" value="${name}" id="edit-role-name"/>`;
+  cells[3].innerHTML = `<input class="editable-input" type="number" value="${hourly==='—'?'':hourly}" id="edit-role-hourly"/>`;
+  cells[4].innerHTML = `<input class="editable-input" type="number" value="${daily==='—'?'':daily}" id="edit-role-daily"/>`;
+  btn.textContent = 'Save';
+  btn.className = 'btn btn-teal';
+  btn.style = 'padding:4px 10px;font-size:.75rem;';
+  btn.onclick = ()=>saveRoleRow(btn, cells);
+}
+function saveRoleRow(btn, cells){
+  const name = document.getElementById('edit-role-name')?.value||'';
+  const hourly = document.getElementById('edit-role-hourly')?.value;
+  const daily = document.getElementById('edit-role-daily')?.value;
+  cells[0].innerHTML = `<strong>${name}</strong>`;
+  cells[3].textContent = hourly?`£${hourly}`:'—';
+  cells[4].textContent = daily?`£${daily}`:'—';
+  btn.textContent = 'Edit';
+  btn.className = 'btn btn-outline';
+  btn.onclick = ()=>editRoleRow(btn);
+  toast('Role updated successfully');
+}
+
+// ══ RESOURCE REQUESTS — New Request ════════════════════════
+function openNewRequest(){
+  openModal('New Resource Request',`
+    <div class="form-row"><label>Role Required</label>${sel(['Developer','Senior Developer','Solution Architect','Business Analyst','Project Manager','QA Engineer','Functional Analyst'],'rr-role')}</div>
+    <div class="form-row"><label>Project / Engagement</label>${sel(['ERP Implementation – AIB Group','Cloud Migration – CRH plc','Analytics Platform – Ryanair','CRM Discovery – Glanbia (Pipeline)'],'rr-proj')}</div>
+    <div class="form-row-2">
+      <div class="form-row"><label>Start Date</label><input class="form-input" id="rr-start" type="date" value="2026-03-17"/></div>
+      <div class="form-row"><label>End Date</label><input class="form-input" id="rr-end" type="date" value="2026-06-30"/></div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-row"><label>Hours / Week</label><input class="form-input" id="rr-hrs" type="number" value="40" min="8" max="40"/></div>
+      <div class="form-row"><label>Priority</label>${sel(['Low','Medium','High','Critical'],'rr-priority')}</div>
+    </div>
+    <div class="form-row"><label>Skills / Notes</label><textarea class="form-input" id="rr-notes" rows="2" placeholder="e.g. Azure experience required, Agile background…"></textarea></div>
+  `,[{label:'Submit Request', action:()=>{
+    if(!fv('rr-role')||!fv('rr-proj')){ toast('Role and project are required','error'); return; }
+    toast('Resource request submitted to Resourcing team');
+    closeModal();
+  }}]);
+}
+
+// ══ CONSULTANTS — Add Consultant ═══════════════════════════
+function openAddConsultant(){
+  openModal('Add Consultant',`
+    <div class="form-row-2">
+      <div class="form-row"><label>First Name</label><input class="form-input" id="con-first" placeholder="Seán"/></div>
+      <div class="form-row"><label>Last Name</label><input class="form-input" id="con-last" placeholder="Murphy"/></div>
+    </div>
+    <div class="form-row"><label>Email (@codec.ie)</label><input class="form-input" id="con-email" type="email" placeholder="sean.murphy@codec.ie"/></div>
+    <div class="form-row"><label>Role</label>${sel(['Developer','Senior Developer','Solution Architect','Business Analyst','Project Manager','QA Engineer','Functional Analyst','Support Staff','Admin','Head of Business'],'con-role')}</div>
+    <div class="form-row-2">
+      <div class="form-row"><label>Department</label>${sel(['Technology','Consulting','Delivery','Operations','Leadership'],'con-dept')}</div>
+      <div class="form-row"><label>Start Date</label><input class="form-input" id="con-start" type="date" value="2026-03-17"/></div>
+    </div>
+  `,[{label:'Add Consultant', action:()=>{
+    if(!fv('con-first')||!fv('con-last')||!fv('con-email')){ toast('Name and email are required','error'); return; }
+    toast(`${fv('con-first')} ${fv('con-last')} added — Azure AD invite will be sent`,'info');
+    closeModal();
+  }}]);
+}
+
+// ══ CUSTOMERS — Add Customer ═══════════════════════════════
+function openAddCustomer(){
+  openModal('Add Customer',`
+    <div class="form-row"><label>Company Name</label><input class="form-input" id="cust-name" placeholder="e.g. Musgrave Group"/></div>
+    <div class="form-row-2">
+      <div class="form-row"><label>Industry</label>${sel(['Financial Services','Retail','Technology','Healthcare','Construction','Food & Nutrition','Aviation','Energy','Other'],'cust-industry')}</div>
+      <div class="form-row"><label>VAT Number</label><input class="form-input" id="cust-vat" placeholder="IE1234567A"/></div>
+    </div>
+    <div class="form-row"><label>Primary Contact Name</label><input class="form-input" id="cust-contact" placeholder="Mary O'Brien"/></div>
+    <div class="form-row"><label>Contact Email</label><input class="form-input" id="cust-email" type="email" placeholder="procurement@customer.ie"/></div>
+    <div class="form-row"><label>Account Manager</label>${sel(['Seán Gallagher','Fionnuala Burke','Ciarán O\'Brien','Aoife Walsh'],'cust-am')}</div>
+  `,[{label:'Add Customer', action:()=>{
+    if(!fv('cust-name')){ toast('Company name is required','error'); return; }
+    toast(`Customer "${fv('cust-name')}" added`);
+    closeModal();
+  }}]);
+}
+
+// ══ APPROVE / REJECT helpers ═══════════════════════════════
+function approveRow(btn, successLabel='Approved'){
+  const td = btn.closest('td');
+  // find status chip in same row
+  const row = btn.closest('tr');
+  const chip = row.querySelector('.chip-warning, .chip-error, .chip-default, .chip-info');
+  if(chip){ chip.className='chip chip-success'; chip.textContent=successLabel; }
+  td.innerHTML = `<span style="color:var(--success);font-size:.8rem;font-weight:600;">✓ ${successLabel}</span>`;
+  toast(`${successLabel} successfully`);
+}
+function rejectRow(btn, label='Rejected'){
+  const row = btn.closest('tr');
+  const chip = row.querySelector('.chip-warning, .chip-success, .chip-default, .chip-info');
+  if(chip){ chip.className='chip chip-error'; chip.textContent='Rejected'; }
+  const td = btn.closest('td');
+  td.innerHTML = `<span style="color:var(--error);font-size:.8rem;font-weight:600;">✗ Rejected</span>`;
+  toast('Item rejected','error');
+}
+
+// ══ TIMESHEET — Save / Submit ══════════════════════════════
+function saveTimesheet(){
+  toast('Timesheet draft saved','info');
+}
+function submitTimesheet(){
+  openModal('Submit Timesheet for Approval',`
+    <p style="font-size:.9rem;line-height:1.6;">You are about to submit your timesheet for the week of <strong>2–6 Mar 2026</strong>.</p>
+    <div style="background:var(--bg);border-radius:8px;padding:14px;margin:14px 0;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:.85rem;"><span>Total hours logged:</span><strong>38.5 hrs</strong></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:.85rem;"><span>Chargeable hours:</span><strong style="color:var(--success);">32 hrs</strong></div>
+      <div style="display:flex;justify-content:space-between;font-size:.85rem;"><span>Non-chargeable:</span><strong>6.5 hrs</strong></div>
+    </div>
+    <p style="font-size:.82rem;color:var(--muted);">Once submitted, you cannot edit entries until approved or returned by your manager.</p>
+  `,[{label:'Submit for Approval', action:()=>{
+    closeModal(); toast('Timesheet submitted to your manager for approval');
+  }}]);
+}
+
+// ══ INVOICES — Generate Invoice ════════════════════════════
+function openGenerateInvoice(){
+  openModal('Generate Invoice',`
+    <div class="form-row"><label>Project</label>${sel(['ERP Implementation – AIB Group','Cloud Migration – CRH plc','Analytics Platform – Ryanair','CRM Rollout – Bank of Ireland','Data Warehouse – Glanbia'],'inv-proj')}</div>
+    <div class="form-row-2">
+      <div class="form-row"><label>From Date</label><input class="form-input" id="inv-from" type="date" value="2026-02-01"/></div>
+      <div class="form-row"><label>To Date</label><input class="form-input" id="inv-to" type="date" value="2026-02-28"/></div>
+    </div>
+    <div class="form-row"><label>Payment Terms</label>${sel(['Net 30','Net 14','Net 60','Due on Receipt'],'inv-terms')}</div>
+    <div style="background:var(--teal-light);border-radius:8px;padding:12px;font-size:.82rem;color:#006080;">
+      ℹ️ Invoice will include all <strong>approved, billable timesheet entries</strong> in the selected date range. Non-chargeable roles are excluded.
+    </div>
+  `,[{label:'Generate Invoice', action:()=>{
+    if(!fv('inv-proj')){ toast('Please select a project','error'); return; }
+    closeModal(); toast('Invoice INV-00026 generated as Draft — ready to review');
+  }}]);
+}
+
+// ══ APPROVAL QUEUE — Bulk actions ══════════════════════════
+function bulkApprove(){
+  const checked = document.querySelectorAll('#pg-approval input[type=checkbox]:checked');
+  if(!checked.length){ toast('Select at least one entry to approve','error'); return; }
+  checked.forEach(cb=>{
+    const row = cb.closest('tr');
+    const chip = row.querySelector('.chip');
+    if(chip){ chip.className='chip chip-success'; chip.textContent='Approved'; }
+  });
+  toast(`${checked.length} timesheet ${checked.length===1?'entry':'entries'} approved`);
+}
+function bulkReject(){
+  const checked = document.querySelectorAll('#pg-approval input[type=checkbox]:checked');
+  if(!checked.length){ toast('Select at least one entry to reject','error'); return; }
+  checked.forEach(cb=>{
+    const row = cb.closest('tr');
+    const chip = row.querySelector('.chip');
+    if(chip){ chip.className='chip chip-error'; chip.textContent='Rejected'; }
+  });
+  toast(`${checked.length} ${checked.length===1?'entry':'entries'} rejected`,'error');
+}
+
+// ══ EXPENSE APPROVAL — Approve/Reject single ═══════════════
+function approveExpense(btn){ approveRow(btn, 'Approved'); }
+function rejectExpense(btn){ rejectRow(btn); }
+
+// ══ PROJECT HEALTH ENGINE ══════════════════════════════════
+
+const healthDimensions = [
+  { key:'budget',       label:'Budget',        icon:'💰' },
+  { key:'timeline',     label:'Timeline',      icon:'📅' },
+  { key:'resourcing',   label:'Resourcing',    icon:'👥' },
+  { key:'chargeability',label:'Chargeability', icon:'⏱' },
+  { key:'ar',           label:'AR / Invoicing',icon:'🧾' },
+  { key:'scope',        label:'Scope',         icon:'📋' },
+];
+
+const projectHealthData = [
+  {
+    id:'P001', name:'ERP Implementation', customer:'AIB Group', code:'PRJ-0001',
+    pm:'Fionnuala Burke', value:480000, startDate:'Jan 2026', endDate:'Jun 2026',
+    pctComplete:65, daysElapsed:64, totalDays:182,
+    scores:{ budget:52, timeline:68, resourcing:30, chargeability:72, ar:25, scope:60 },
+    flags:[
+      {
+        sev:'red', dim:'ar',
+        msg:'INV-00023 is 6 days overdue — £48,200 outstanding from AIB Group',
+        impact:'Cash flow impact of £48,200. Risk of further delays if not escalated this week.',
+        owner:'Seán Gallagher (Account Manager)',
+        by:'Today',
+        actions:[
+          'Call AIB Group accounts payable directly: +353 1 660 0311 — ref INV-00023',
+          'Send formal overdue notice email from Finance to procurement@aib.ie with invoice attached',
+          'Escalate to Account Manager Seán Gallagher to contact the AIB project sponsor',
+          'If no response within 48hrs, engage Codec legal team re payment terms clause',
+          'Log all contact attempts in the AR system for audit trail',
+        ]
+      },
+      {
+        sev:'red', dim:'resourcing',
+        msg:'2 open resource requests blocking Phase 3 delivery (Senior Dev + QA Engineer)',
+        impact:'Phase 3 cannot start until roles filled. Current gap puts June go-live at risk.',
+        owner:'Resourcing Manager',
+        by:'By end of week',
+        actions:[
+          'Contact Hays Recruitment today — request CVs for Senior .NET Developer (min 5 yrs), start date Mar 17',
+          'Check internal availability: review consultant bench report for any Senior Devs completing projects by Mar 14',
+          'Post QA Engineer requirement on LinkedIn and internal job board immediately',
+          'Consider promoting Niamh Ryan (current QA) to lead — backfill with contractor',
+          'Hold emergency resourcing call with Fionnuala Burke (PM) to agree interim workaround for Phase 3 start',
+        ]
+      },
+      {
+        sev:'amber', dim:'budget',
+        msg:'Burn rate 12% ahead of schedule — forecast overrun of ~£22K at current pace',
+        impact:'If unchecked, project will exceed £480K budget by approximately £22K by June.',
+        owner:'Fionnuala Burke (PM)',
+        by:'This week',
+        actions:[
+          'Run weekly budget review — identify which workstreams are consuming most hours',
+          'Freeze all non-critical activity until burn rate is back in line with plan',
+          'Review timesheet entries for last 2 weeks — check for misallocated hours from other projects',
+          'Present revised forecast to AIB Group sponsor and request budget uplift approval if overrun is confirmed',
+          'Identify scope items that can be deferred to Phase 2 to reduce remaining burn',
+        ]
+      },
+      {
+        sev:'amber', dim:'scope',
+        msg:'3 change requests pending sign-off — estimated +£18K and +2 weeks impact',
+        impact:'Unsigned CRs mean team may be doing unpriced work. £18K revenue at risk.',
+        owner:'Fionnuala Burke (PM)',
+        by:'By Mar 10',
+        actions:[
+          'Send all 3 CRs to AIB Group project sponsor for formal written approval this week',
+          'Do not commence any CR work until signed approval is received',
+          'If AIB declines CRs, descope from current sprint and log as Phase 2 items',
+          'Update project plan to reflect +2 weeks if CRs are approved',
+          'Raise interim invoice for any CR work already completed without written approval',
+        ]
+      },
+    ]
+  },
+  {
+    id:'P002', name:'Cloud Migration', customer:'CRH plc', code:'PRJ-0002',
+    pm:'Ciarán O\'Brien', value:350000, startDate:'Nov 2025', endDate:'Apr 2026',
+    pctComplete:84, daysElapsed:118, totalDays:152,
+    scores:{ budget:22, timeline:35, resourcing:75, chargeability:80, ar:88, scope:30 },
+    flags:[
+      {
+        sev:'red', dim:'budget',
+        msg:'84% budget consumed but only 78% deliverables complete — £29K overrun risk',
+        impact:'Project is on track to overrun by ~£29K. Client relationship and margin at risk.',
+        owner:'Ciarán O\'Brien (PM) + Finance',
+        by:'Immediately',
+        actions:[
+          'Schedule emergency budget review meeting with CRH plc sponsor by Mar 8',
+          'Prepare a formal Change Request for the additional £29K — do not absorb internally',
+          'Identify which deliverables can be descoped, deferred or simplified to bring back within budget',
+          'Freeze discretionary spend (travel, overtime) on this project immediately',
+          'Alert Finance Director — this may require a provision in March accounts if overrun is confirmed',
+        ]
+      },
+      {
+        sev:'red', dim:'timeline',
+        msg:'Project is 18 days behind plan — go-live at risk, no buffer remaining',
+        impact:'April go-live at serious risk. Delay penalty clause in contract activates after 30 days.',
+        owner:'Ciarán O\'Brien (PM)',
+        by:'By Mar 9',
+        actions:[
+          'Convene a recovery planning workshop with the full project team by end of this week',
+          'Identify the 3 critical path items causing delay — assign a dedicated owner to each',
+          'Request CRH plc waive non-critical UAT items to accelerate sign-off',
+          'Propose a phased go-live: core functionality by Apr deadline, remaining features by May 15',
+          'Increase daily standups to twice daily until delay is recovered',
+          'Formally notify CRH plc of revised timeline in writing — do not let this be a surprise',
+        ]
+      },
+      {
+        sev:'red', dim:'scope',
+        msg:'Scope creep detected: 7 unpriced change requests totalling estimated £42K',
+        impact:'Team may be delivering £42K of free work. This is the primary cause of budget overrun.',
+        owner:'Ciarán O\'Brien (PM)',
+        by:'This week',
+        actions:[
+          'Stop all work on any task not explicitly in the original SOW immediately',
+          'Document all 7 CRs with time spent to date — calculate cost already incurred',
+          'Present CRs to CRH plc with full pricing — minimum £42K additional contract value',
+          'Retrospectively invoice for any CR work already delivered without approval',
+          'Implement a formal change control gate: nothing outside SOW starts without a signed CR',
+          'Add scope change process to weekly status report going forward',
+        ]
+      },
+      {
+        sev:'amber', dim:'resourcing',
+        msg:'Lead architect booked on 2 concurrent projects — capacity conflict from Apr 1',
+        impact:'Risk of key person departure from project at critical go-live phase.',
+        owner:'Resourcing Manager',
+        by:'By Mar 14',
+        actions:[
+          'Meet with Seán Gallagher (Lead Architect) to confirm availability for April critical path work',
+          'Identify a backup architect who can shadow for knowledge transfer starting now',
+          'Negotiate with ESB HR Transformation PM to delay architect\'s start on that project by 2 weeks',
+          'Create architecture decision records (ADRs) immediately to reduce key-person dependency',
+        ]
+      },
+    ]
+  },
+  {
+    id:'P003', name:'Analytics Platform', customer:'Ryanair', code:'PRJ-0003',
+    pm:'Seán Gallagher', value:220000, startDate:'Feb 2026', endDate:'Aug 2026',
+    pctComplete:40, daysElapsed:33, totalDays:181,
+    scores:{ budget:85, timeline:88, resourcing:90, chargeability:92, ar:95, scope:82 },
+    flags:[
+      {
+        sev:'amber', dim:'timeline',
+        msg:'Dependency on Ryanair data team — handover milestone due Mar 14, not confirmed',
+        impact:'If data handover slips, sprint 4 cannot start — risk of 1-2 week delay downstream.',
+        owner:'Seán Gallagher (PM)',
+        by:'By Mar 10',
+        actions:[
+          'Email Ryanair data team lead today to confirm Mar 14 handover date — get written confirmation',
+          'Request a brief call with Ryanair\'s data architect to review readiness of the data extract',
+          'Prepare a contingency plan: if data is not ready by Mar 14, what mock data can be used to progress?',
+          'Escalate to Ryanair project sponsor if no confirmation received by Mar 10',
+          'Flag in weekly status report — do not let this slip without client awareness',
+        ]
+      },
+    ]
+  },
+  {
+    id:'P004', name:'CRM Rollout', customer:'Bank of Ireland', code:'PRJ-0004',
+    pm:'Aoife Walsh', value:195000, startDate:'Sep 2025', endDate:'Mar 2026',
+    pctComplete:90, daysElapsed:178, totalDays:182,
+    scores:{ budget:18, timeline:20, resourcing:65, chargeability:70, ar:78, scope:25 },
+    flags:[
+      {
+        sev:'red', dim:'budget',
+        msg:'90% budget used — only £19,500 remaining with ~10% work still outstanding',
+        impact:'Project will exhaust budget before completion. Codec absorbs loss without a CR.',
+        owner:'Aoife Walsh (PM) + Finance Director',
+        by:'Today',
+        actions:[
+          'Raise an emergency Change Request to BOI for the remaining 10% work — estimated £18,000–22,000',
+          'Do not perform any more work until CR is agreed in writing',
+          'Present options to BOI: (a) fund remaining scope, (b) descope to fit remaining budget',
+          'Finance Director to review whether a provision needs to be raised for current period',
+          'Identify exactly which tasks remain and calculate hours required — use this as CR justification',
+          'If BOI refuses CR, formally document descoped items and get client sign-off on reduced delivery',
+        ]
+      },
+      {
+        sev:'red', dim:'timeline',
+        msg:'End date is 6 Mar 2026 — project is 2 weeks behind on final UAT sign-off',
+        impact:'Contract end date has passed. Legal exposure if project not formally closed out.',
+        owner:'Aoife Walsh (PM)',
+        by:'Immediately',
+        actions:[
+          'Request a formal 2-week extension from BOI in writing — do not continue work on expired contract',
+          'Arrange daily UAT review session with BOI testing team to accelerate sign-off',
+          'Assign 2 developers exclusively to defect resolution — no other project work until UAT is cleared',
+          'Prepare a project closure plan with hard deadlines for each remaining defect',
+          'Legal: check contract terms for delay — notify account manager of exposure immediately',
+        ]
+      },
+      {
+        sev:'red', dim:'scope',
+        msg:'UAT defect backlog: 14 open items, 3 classified as severity 1 (show-stoppers)',
+        impact:'Severity 1 defects will block go-live sign-off. System cannot go live with these open.',
+        owner:'Aoife Walsh (PM) + Tech Lead',
+        by:'Sev 1 by Mar 9, rest by Mar 13',
+        actions:[
+          'Assign both senior developers full-time to the 3 severity 1 defects starting today',
+          'Hold a defect triage call with BOI QA team this afternoon to agree severity classification',
+          'Challenge any severity 1 classifications that can be safely deferred to post-go-live patch',
+          'Create a defect resolution tracker shared with BOI — update twice daily',
+          'Agree a formal go-live date with BOI once severity 1 issues are resolved',
+          'For severity 2–3 defects: agree with BOI which can be accepted as known issues at go-live',
+        ]
+      },
+      {
+        sev:'amber', dim:'ar',
+        msg:'Final invoice £38,400 cannot be raised until project formally signed off',
+        impact:'£38,400 revenue at risk if sign-off is not obtained. Cash flow impact in March.',
+        owner:'Finance + Aoife Walsh (PM)',
+        by:'By Mar 13',
+        actions:[
+          'Agree with BOI on a conditional sign-off once severity 1 defects are resolved',
+          'Raise invoice immediately upon receiving written acceptance — do not wait for full defect resolution',
+          'Finance to chase BOI accounts payable proactively — payment within 14 days required for March close',
+          'If sign-off delayed beyond Mar 15, consider raising a partial invoice for accepted deliverables',
+        ]
+      },
+    ]
+  },
+  {
+    id:'P005', name:'Data Warehouse', customer:'Glanbia', code:'PRJ-0005',
+    pm:'Ronan McCarthy', value:310000, startDate:'Dec 2025', endDate:'Jul 2026',
+    pctComplete:50, daysElapsed:67, totalDays:212,
+    scores:{ budget:78, timeline:80, resourcing:72, chargeability:76, ar:70, scope:84 },
+    flags:[
+      {
+        sev:'amber', dim:'resourcing',
+        msg:'1 open resource request for Functional Analyst — needed from Apr 7',
+        impact:'Sprint 5 (Apr 7) will be under-resourced if not filled. Risk of 1-week delay.',
+        owner:'Resourcing Manager',
+        by:'By Mar 20',
+        actions:[
+          'Post Functional Analyst requirement on internal job board and LinkedIn today',
+          'Contact Hays Recruitment with role spec — target start date Apr 7',
+          'Check if any current Functional Analysts are rolling off projects before Apr 7',
+          'Confirm with Ronan McCarthy (PM): will a junior analyst suffice, or is senior experience required?',
+        ]
+      },
+      {
+        sev:'amber', dim:'ar',
+        msg:'Feb invoice £32,000 raised — 12 days to payment terms expiry',
+        impact:'Invoice becomes overdue on Mar 18. Proactive chase now avoids a late payment.',
+        owner:'Finance Team',
+        by:'By Mar 12',
+        actions:[
+          'Send a polite payment reminder to Glanbia accounts payable by Mar 12 (6 days before due)',
+          'Confirm Glanbia has the correct invoice (check PO number reference is on the invoice)',
+          'Ask Glanbia to confirm expected payment date in their next payment run',
+          'If no response by Mar 15, escalate to Ronan McCarthy to contact Glanbia sponsor directly',
+        ]
+      },
+    ]
+  },
+  {
+    id:'P006', name:'HR Transformation', customer:'ESB', code:'PRJ-0006',
+    pm:'Fionnuala Burke', value:280000, startDate:'Mar 2026', endDate:'Oct 2026',
+    pctComplete:5, daysElapsed:6, totalDays:245,
+    scores:{ budget:90, timeline:92, resourcing:55, chargeability:60, ar:100, scope:88 },
+    flags:[
+      {
+        sev:'amber', dim:'resourcing',
+        msg:'Kick-off requires 3 BAs — only 1 confirmed, 2 still being sourced',
+        impact:'Project will start under-staffed. Risk to sprint 1 delivery if not resolved by Mar 17.',
+        owner:'Resourcing Manager',
+        by:'By Mar 13',
+        actions:[
+          'Identify 2 Business Analysts available from Mar 17 — check internal bench and upcoming rollovers',
+          'If no internal resource: engage Hays Recruitment immediately for 2 contract BAs',
+          'Discuss with ESB PM whether sprint 1 scope can be reduced to match 1 BA availability',
+          'Fionnuala Burke (PM) to confirm resourcing plan to ESB sponsor by Mar 13 at latest',
+          'Consider temporarily assigning Aoife Walsh post-CRM rollout sign-off (~Mar 13)',
+        ]
+      },
+      {
+        sev:'amber', dim:'chargeability',
+        msg:'Onboarding week — low chargeability is expected, should normalise by week 3',
+        impact:'Low chargeability in onboarding is acceptable but should be tracked against plan.',
+        owner:'Fionnuala Burke (PM)',
+        by:'Monitor weekly',
+        actions:[
+          'No immediate action needed — this is expected during kick-off week',
+          'Set a chargeability target of ≥75% from week 3 (Mar 23) onwards',
+          'Ensure all onboarding hours are coded correctly to internal overhead codes, not client project',
+          'Review chargeability again in the week 2 report — escalate if below 50% by then',
+        ]
+      },
+    ]
+  },
+];
+
+function scoreToRag(score){
+  if(score >= 75) return 'green';
+  if(score >= 45) return 'amber';
+  return 'red';
+}
+function ragColor(rag){ return {green:'#C6F6D5',amber:'#FEFCBF',red:'#FED7D7'}[rag]||'#EDF2F7'; }
+function ragText(rag){ return {green:'#276749',amber:'#744210',red:'#9B2C2C'}[rag]||'#4A5568'; }
+function ragLabel(rag){ return {green:'On Track',amber:'At Risk',red:'Critical'}[rag]; }
+function ragEmoji(rag){ return {green:'🟢',amber:'🟡',red:'🔴'}[rag]; }
+function overallScore(p){ return Math.round(Object.values(p.scores).reduce((a,b)=>a+b,0)/Object.values(p.scores).length); }
+
+function renderHealth(){
+  const filter = document.getElementById('health-filter')?.value || 'all';
+  const projects = filter==='all' ? projectHealthData :
+    projectHealthData.filter(p => scoreToRag(overallScore(p)) === filter);
+
+  // ── Summary banner ──────────────────────────────────────
+  const counts = {red:0,amber:0,green:0};
+  projectHealthData.forEach(p => counts[scoreToRag(overallScore(p))]++);
+  const totalFlags = projectHealthData.flatMap(p=>p.flags).length;
+  const critFlags  = projectHealthData.flatMap(p=>p.flags).filter(f=>f.sev==='red').length;
+  const avgScore   = Math.round(projectHealthData.reduce((a,p)=>a+overallScore(p),0)/projectHealthData.length);
+
+  document.getElementById('health-summary').innerHTML = `
+    <div class="card kpi-card" style="flex:1;min-width:140px;padding:14px 18px;">
+      <div class="kpi-label">Critical Projects</div>
+      <div class="kpi-value" style="color:#E53E3E;font-size:1.6rem;">${counts.red}</div>
+      <div class="kpi-sub">Immediate action required</div>
+    </div>
+    <div class="card kpi-card" style="flex:1;min-width:140px;padding:14px 18px;">
+      <div class="kpi-label">At Risk</div>
+      <div class="kpi-value" style="color:#D69E2E;font-size:1.6rem;">${counts.amber}</div>
+      <div class="kpi-sub">Monitor closely</div>
+    </div>
+    <div class="card kpi-card" style="flex:1;min-width:140px;padding:14px 18px;">
+      <div class="kpi-label">On Track</div>
+      <div class="kpi-value" style="color:#38A169;font-size:1.6rem;">${counts.green}</div>
+      <div class="kpi-sub">Healthy delivery</div>
+    </div>
+    <div class="card kpi-card" style="flex:1;min-width:140px;padding:14px 18px;">
+      <div class="kpi-label">Avg Health Score</div>
+      <div class="kpi-value" style="color:${avgScore>=75?'#38A169':avgScore>=45?'#D69E2E':'#E53E3E'};font-size:1.6rem;">${avgScore}<span style="font-size:.9rem;font-weight:400;">/100</span></div>
+      <div class="kpi-sub">Across ${projectHealthData.length} active projects</div>
+    </div>
+    <div class="card kpi-card" style="flex:1;min-width:140px;padding:14px 18px;">
+      <div class="kpi-label">Open Risk Flags</div>
+      <div class="kpi-value" style="font-size:1.6rem;">${totalFlags}</div>
+      <div class="kpi-sub"><span style="color:#E53E3E;font-weight:600;">${critFlags} critical</span> · ${totalFlags-critFlags} warnings</div>
+    </div>`;
+
+  // ── Heatmap ─────────────────────────────────────────────
+  let hmHtml = `<table style="width:100%;border-collapse:collapse;">
+    <thead><tr>
+      <th style="text-align:left;padding:10px 16px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:2px solid var(--border);white-space:nowrap;min-width:180px;">Project</th>
+      <th style="padding:10px 8px;font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--border);text-align:center;width:36px;">Score</th>
+      ${healthDimensions.map(d=>`<th style="padding:10px 8px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:2px solid var(--border);text-align:center;min-width:90px;">${d.icon} ${d.label}</th>`).join('')}
+    </tr></thead><tbody>`;
+
+  projects.forEach((p,i) => {
+    const os = overallScore(p);
+    const rag = scoreToRag(os);
+    hmHtml += `<tr style="cursor:pointer;transition:background .1s;" onmouseover="this.style.background='#FAFBFC'" onmouseout="this.style.background=''" onclick="spotlightProject('${p.id}')">
+      <td style="padding:10px 16px;border-bottom:1px solid var(--border);">
+        <div style="font-size:.85rem;font-weight:600;">${p.name}</div>
+        <div style="font-size:.72rem;color:var(--muted);">${p.customer} · ${p.pm}</div>
+      </td>
+      <td style="padding:10px 8px;border-bottom:1px solid var(--border);text-align:center;">
+        <div style="width:40px;height:40px;border-radius:50%;background:${ragColor(rag)};border:2.5px solid ${ragText(rag)};display:inline-flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:${ragText(rag)};">${os}</div>
+      </td>
+      ${healthDimensions.map(d=>{
+        const s = p.scores[d.key];
+        const r = scoreToRag(s);
+        const flag = p.flags.find(f=>f.dim===d.key);
+        return `<td style="padding:6px 8px;border-bottom:1px solid var(--border);text-align:center;">
+          <div title="${flag?flag.msg:ragLabel(r)}" style="margin:0 auto;width:72px;border-radius:8px;padding:6px 4px;background:${ragColor(r)};cursor:pointer;" onclick="event.stopPropagation();spotlightProject('${p.id}')">
+            <div style="font-size:.75rem;font-weight:700;color:${ragText(r)};">${s}</div>
+            <div style="font-size:.62rem;color:${ragText(r)};margin-top:1px;">${ragLabel(r)}</div>
+          </div>
+        </td>`;
+      }).join('')}
+    </tr>`;
+  });
+  hmHtml += `</tbody></table>`;
+  document.getElementById('health-heatmap').innerHTML = hmHtml;
+
+  // ── Insights panel ───────────────────────────────────────
+  const allFlags = projectHealthData.flatMap(p=>p.flags.map(f=>({...f, project:p.name, customer:p.customer, pid:p.id})));
+  allFlags.sort((a,b)=> (a.sev==='red'?0:a.sev==='amber'?1:2) - (b.sev==='red'?0:b.sev==='amber'?1:2));
+  const dimNames = Object.fromEntries(healthDimensions.map(d=>[d.key, d.icon+' '+d.label]));
+  document.getElementById('health-insights').innerHTML = allFlags.map((f,fi)=>`
+    <div style="border-left:3px solid ${f.sev==='red'?'#E53E3E':f.sev==='amber'?'#D69E2E':'#38A169'};
+      background:${f.sev==='red'?'#FFF5F5':f.sev==='amber'?'#FFFFF0':'#F0FFF4'};
+      border-radius:0 8px 8px 0;padding:10px 12px;margin-bottom:8px;">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+        <span style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+          color:${f.sev==='red'?'#9B2C2C':f.sev==='amber'?'#744210':'#276749'};">${f.sev==='red'?'🔴 CRITICAL':f.sev==='amber'?'🟡 WARNING':'🟢 NOTE'}</span>
+        <span style="font-size:.62rem;color:var(--muted);">· ${f.project} · ${dimNames[f.dim]||f.dim}</span>
+      </div>
+      <div style="font-size:.78rem;font-weight:600;color:var(--text);margin-bottom:6px;">${f.msg}</div>
+      <div style="font-size:.72rem;color:var(--muted);margin-bottom:8px;">
+        📌 <strong>Owner:</strong> ${f.owner || '—'} &nbsp;·&nbsp; ⏰ <strong>Act by:</strong> <span style="color:${f.sev==='red'?'#E53E3E':'#D69E2E'};font-weight:600;">${f.by || '—'}</span>
+      </div>
+      <button onclick="showActionPlan(${fi})" style="background:${f.sev==='red'?'#E53E3E':'#D69E2E'};color:#fff;border:none;border-radius:6px;
+        padding:5px 12px;font-size:.72rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;">
+        ▶ View Action Plan
+      </button>
+    </div>`).join('');
+
+  // ── Score cards ──────────────────────────────────────────
+  document.getElementById('health-cards').innerHTML = projects.map(p=>{
+    const os = overallScore(p);
+    const rag = scoreToRag(os);
+    const critCount = p.flags.filter(f=>f.sev==='red').length;
+    const warnCount = p.flags.filter(f=>f.sev==='amber').length;
+    return `<div class="card" style="padding:18px;cursor:pointer;border-top:4px solid ${ragText(rag)};transition:box-shadow .15s;"
+      onclick="spotlightProject('${p.id}')"
+      onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow=''">
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;">
+        <div style="flex:1;">
+          <div style="font-size:.88rem;font-weight:700;">${p.name}</div>
+          <div style="font-size:.75rem;color:var(--muted);">${p.customer} · ${p.pm}</div>
+        </div>
+        <div style="width:44px;height:44px;border-radius:50%;background:${ragColor(rag)};border:2.5px solid ${ragText(rag)};
+          display:flex;align-items:center;justify-content:center;font-size:.88rem;font-weight:800;color:${ragText(rag)};flex-shrink:0;">${os}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px;">
+        ${healthDimensions.map(d=>{
+          const s = p.scores[d.key]; const r = scoreToRag(s);
+          return `<div style="text-align:center;padding:5px 4px;background:${ragColor(r)};border-radius:6px;" title="${d.label}: ${s}/100">
+            <div style="font-size:.62rem;color:${ragText(r)};">${d.icon}</div>
+            <div style="font-size:.7rem;font-weight:700;color:${ragText(r)};">${s}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-bottom:3px;">
+          <span>Completion</span><span>${p.pctComplete}%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${p.pctComplete}%;background:${rag==='green'?'#38A169':rag==='amber'?'#D69E2E':'#E53E3E'};"></div></div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        ${critCount?`<span class="chip chip-error">🔴 ${critCount} critical</span>`:''}
+        ${warnCount?`<span class="chip chip-warning">🟡 ${warnCount} warning${warnCount>1?'s':''}</span>`:''}
+        ${!critCount&&!warnCount?`<span class="chip chip-success">✅ Healthy</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function spotlightProject(pid){
+  const p = projectHealthData.find(x=>x.id===pid);
+  if(!p) return;
+  const os = overallScore(p);
+  const rag = scoreToRag(os);
+  const dimNames = Object.fromEntries(healthDimensions.map(d=>[d.key, d.icon+' '+d.label]));
+  const allFlags = projectHealthData.flatMap(q=>q.flags.map(f=>({...f,pid:q.id})));
+  openModal(`${ragEmoji(rag)} ${p.name} — Full Health Report`,`
+    <div style="display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:100px;background:${ragColor(rag)};border-radius:10px;padding:12px;text-align:center;">
+        <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;color:${ragText(rag)};">Overall</div>
+        <div style="font-size:2.2rem;font-weight:800;color:${ragText(rag)};line-height:1.1;">${os}</div>
+        <div style="font-size:.7rem;color:${ragText(rag)};">${ragLabel(rag)}</div>
+      </div>
+      <div style="flex:2;min-width:200px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+          ${healthDimensions.map(d=>{
+            const s = p.scores[d.key]; const r = scoreToRag(s);
+            return `<div style="background:${ragColor(r)};border-radius:7px;padding:7px 9px;display:flex;align-items:center;gap:7px;">
+              <span>${d.icon}</span>
+              <div><div style="font-size:.62rem;color:${ragText(r)};font-weight:600;">${d.label}</div>
+              <div style="font-size:.85rem;font-weight:700;color:${ragText(r)};">${s}/100</div></div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;font-size:.78rem;color:var(--muted);margin-bottom:14px;flex-wrap:wrap;padding:10px;background:var(--bg);border-radius:8px;">
+      <span>📁 ${p.code}</span><span>👤 ${p.pm}</span><span>🏢 ${p.customer}</span>
+      <span>📅 ${p.startDate} → ${p.endDate}</span><span>💰 £${(p.value/1000).toFixed(0)}K</span><span>✅ ${p.pctComplete}% done</span>
+    </div>
+    ${p.flags.length===0
+      ? '<div style="background:#F0FFF4;border-radius:8px;padding:14px;text-align:center;color:#276749;font-weight:600;">✅ No risk flags — this project is healthy</div>'
+      : p.flags.map((f,i)=>{
+          const globalIdx = allFlags.findIndex(x=>x.pid===p.id && x.dim===f.dim && x.msg===f.msg);
+          return `<div style="border:1.5px solid ${f.sev==='red'?'#FEB2B2':'#FAF089'};border-left:4px solid ${f.sev==='red'?'#E53E3E':'#D69E2E'};
+            background:${f.sev==='red'?'#FFF5F5':'#FFFFF0'};border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <span style="font-size:.68rem;font-weight:700;text-transform:uppercase;
+                color:${f.sev==='red'?'#9B2C2C':'#744210'};">${f.sev==='red'?'🔴 CRITICAL':'🟡 WARNING'}</span>
+              <span style="font-size:.68rem;color:var(--muted);">· ${dimNames[f.dim]||f.dim}</span>
+              <div style="flex:1;"></div>
+              <span style="font-size:.65rem;background:${f.sev==='red'?'#FED7D7':'#FEFCBF'};
+                color:${f.sev==='red'?'#9B2C2C':'#744210'};padding:2px 8px;border-radius:10px;font-weight:600;">Act by: ${f.by||'—'}</span>
+            </div>
+            <div style="font-size:.82rem;font-weight:600;margin-bottom:4px;">${f.msg}</div>
+            <div style="font-size:.75rem;color:#744210;font-style:italic;margin-bottom:8px;">💥 Impact: ${f.impact||''}</div>
+            <div style="font-size:.72rem;color:var(--muted);margin-bottom:8px;">📌 Owner: <strong>${f.owner||'—'}</strong></div>
+            <div style="background:rgba(255,255,255,.7);border-radius:6px;padding:10px 12px;">
+              <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+                color:${f.sev==='red'?'#9B2C2C':'#744210'};margin-bottom:7px;">▶ Action Steps</div>
+              ${(f.actions||[]).map((a,ai)=>`
+                <div style="display:flex;gap:8px;margin-bottom:6px;align-items:flex-start;">
+                  <span style="flex-shrink:0;width:18px;height:18px;border-radius:50%;
+                    background:${f.sev==='red'?'#E53E3E':'#D69E2E'};color:#fff;
+                    font-size:.62rem;font-weight:700;display:flex;align-items:center;justify-content:center;">${ai+1}</span>
+                  <span style="font-size:.78rem;line-height:1.5;">${a}</span>
+                </div>`).join('')}
+            </div>
+          </div>`;
+        }).join('')
+    }
+  `,[{label:'Close', cls:'btn-outline', action:()=>closeModal()}]);
+}
+
+function showActionPlan(flagIndex){
+  const allFlags = projectHealthData.flatMap(p=>p.flags.map(f=>({...f, project:p.name, pid:p.id})));
+  const f = allFlags[flagIndex];
+  if(!f) return;
+  const dimNames = Object.fromEntries(healthDimensions.map(d=>[d.key, d.icon+' '+d.label]));
+  openModal(`Action Plan — ${f.project}`,`
+    <div style="background:${f.sev==='red'?'#FFF5F5':'#FFFFF0'};border-left:4px solid ${f.sev==='red'?'#E53E3E':'#D69E2E'};
+      border-radius:0 8px 8px 0;padding:12px 14px;margin-bottom:16px;">
+      <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;color:${f.sev==='red'?'#9B2C2C':'#744210'};margin-bottom:5px;">
+        ${f.sev==='red'?'🔴 CRITICAL':'🟡 WARNING'} · ${f.project} · ${dimNames[f.dim]||f.dim}</div>
+      <div style="font-size:.88rem;font-weight:700;margin-bottom:4px;">${f.msg}</div>
+      <div style="font-size:.78rem;color:#744210;font-style:italic;">💥 ${f.impact||''}</div>
+    </div>
+    <div style="display:flex;gap:16px;font-size:.78rem;margin-bottom:16px;flex-wrap:wrap;">
+      <div style="background:var(--bg);border-radius:8px;padding:8px 14px;flex:1;">
+        <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Owner</div>
+        <div style="font-weight:600;">${f.owner||'—'}</div>
+      </div>
+      <div style="background:${f.sev==='red'?'#FED7D7':'#FEFCBF'};border-radius:8px;padding:8px 14px;flex:1;">
+        <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;color:${f.sev==='red'?'#9B2C2C':'#744210'};margin-bottom:2px;">Act By</div>
+        <div style="font-weight:700;color:${f.sev==='red'?'#E53E3E':'#D69E2E'};">${f.by||'—'}</div>
+      </div>
+    </div>
+    <div style="font-size:.82rem;font-weight:700;margin-bottom:12px;">Step-by-Step Actions</div>
+    ${(f.actions||[]).map((a,i)=>`
+      <div style="display:flex;gap:12px;margin-bottom:10px;align-items:flex-start;
+        padding:10px 12px;background:${i%2===0?'#fff':'var(--bg)'};border-radius:8px;border:1px solid var(--border);">
+        <div style="flex-shrink:0;width:24px;height:24px;border-radius:50%;
+          background:${f.sev==='red'?'#E53E3E':'#D69E2E'};color:#fff;
+          font-size:.72rem;font-weight:800;display:flex;align-items:center;justify-content:center;">${i+1}</div>
+        <div style="font-size:.82rem;line-height:1.6;">${a}</div>
+      </div>`).join('')}
+  `,[
+    {label:'Mark as Done', cls:'btn-teal', action:()=>{ closeModal(); toast(`Action plan for "${f.project}" marked complete ✓`); }},
+    {label:'View Full Project', cls:'btn-outline', action:()=>{ closeModal(); spotlightProject(f.pid); }}
+  ]);
+}
+
+// ══ CHASE AR ═══════════════════════════════════════════════
+function chaseInvoice(btn){
+  const row = btn.closest('tr');
+  const inv = row.querySelector('td strong')?.textContent || 'invoice';
+  btn.textContent = '✓ Chased'; btn.disabled = true; btn.style.opacity='.5';
+  toast(`Reminder email sent for ${inv}`,'info');
+}
+</script>
+</body>
+</html>
