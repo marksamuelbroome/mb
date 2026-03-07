@@ -281,6 +281,8 @@
       <div class="nav-item" id="nav-customers" onclick="showPage('pg-customers')"><span class="ico">🏢</span> Customers</div>
       <div class="nav-item" id="nav-projects" onclick="showPage('pg-projects')"><span class="ico">📁</span> Projects</div>
       <div class="nav-item" id="nav-pipeline" onclick="showPage('pg-pipeline')"><span class="ico">📈</span> Pipeline</div>
+      <div class="nav-item" id="nav-ado" onclick="showPage('pg-ado')"><span class="ico">🔷</span> ADO Tasks &amp; Sizing</div>
+      <div class="nav-item" id="nav-variance" onclick="showPage('pg-variance')"><span class="ico">🔍</span> What Changed</div>
 
       <div class="section-label">Resourcing</div>
       <div class="nav-item" id="nav-resourcing" onclick="showPage('pg-resourcing')"><span class="ico">🔍</span> Resource Requests</div>
@@ -302,6 +304,7 @@
       <div class="section-label">Admin</div>
       <div class="nav-item" id="nav-roles" onclick="showPage('pg-roles')"><span class="ico">⚙️</span> Roles & Rates</div>
       <div class="nav-item" id="nav-security" onclick="showPage('pg-security')"><span class="ico">🔐</span> Security & Roles</div>
+      <div class="nav-item" id="nav-changelog" onclick="showPage('pg-changelog')"><span class="ico">📜</span> Change Log</div>
       <div class="nav-item" id="nav-database" onclick="showPage('pg-database')"><span class="ico">🗄️</span> Database Explorer</div>
 
       <div class="section-label">Help</div>
@@ -989,6 +992,15 @@
         <div id="faq-page-content"></div>
       </div>
 
+      <!-- ══ ADO TASKS ══ -->
+      <div id="pg-ado" class="page"><div id="ado-content"></div></div>
+
+      <!-- ══ WHAT CHANGED ══ -->
+      <div id="pg-variance" class="page"><div id="variance-content"></div></div>
+
+      <!-- ══ CHANGE LOG ══ -->
+      <div id="pg-changelog" class="page"><div id="changelog-content"></div></div>
+
       <!-- ══ EXECUTIVE OVERVIEW ══ -->
       <div id="pg-overview" class="page"><div id="overview-content"></div></div>
 
@@ -1140,6 +1152,7 @@ const navMap = {
   'pg-cashflow':'nav-cashflow','pg-roles':'nav-roles','pg-database':'nav-database','pg-agents':'nav-agents',
   'pg-security':'nav-security','pg-tutorial':'nav-tutorial','pg-faq':'nav-faq',
   'pg-overview':'nav-overview','pg-tech':'nav-tech','pg-erd':'nav-erd',
+  'pg-ado':'nav-ado','pg-variance':'nav-variance','pg-changelog':'nav-changelog',
   'pg-my-dashboard':'nav-my-dash','pg-timesheet':'nav-timesheet',
   'pg-my-assignments':'nav-my-assign','pg-my-expenses':'nav-expenses','pg-my-leave':'nav-leave',
 };
@@ -1160,6 +1173,9 @@ function showPage(id){
   if(id==='pg-overview') renderOverview();
   if(id==='pg-tech') renderTechNotes();
   if(id==='pg-erd') renderERD();
+  if(id==='pg-ado') renderADO('erp');
+  if(id==='pg-variance') renderVariance();
+  if(id==='pg-changelog') renderChangeLog();
   window.scrollTo(0,0);
 }
 
@@ -2208,6 +2224,616 @@ function showActionPlan(flagIndex){
     {label:'Mark as Done', cls:'btn-teal', action:()=>{ closeModal(); toast(`Action plan for "${f.project}" marked complete ✓`); }},
     {label:'View Full Project', cls:'btn-outline', action:()=>{ closeModal(); spotlightProject(f.pid); }}
   ]);
+}
+
+// ══════════════════════════════════════════════════════════
+// ADO TASKS ENGINE
+// ══════════════════════════════════════════════════════════
+
+const adoProjects = [
+  { id:'erp', name:'ERP Implementation', customer:'AIB Group', color:'#E53E3E',
+    totalSP:320, completedSP:198, inProgressSP:42, sprintCurrent:'Sprint 5 of 8',
+    sprintStart:'24 Feb', sprintEnd:'7 Mar', budget_days:180, forecast_days:192,
+    tasks:[
+      {id:'ERP-041',title:'GL journal posting service — period close logic',type:'Feature',priority:'High',assignee:'Ciarán O\'Brien',sp:8,sprint:'Sprint 5',status:'In Progress'},
+      {id:'ERP-042',title:'AP payment run approval workflow',type:'Feature',priority:'High',assignee:'Brian Doyle',sp:5,sprint:'Sprint 5',status:'In Progress'},
+      {id:'ERP-043',title:'Fix: VAT code not populating on import',type:'Bug',priority:'Critical',assignee:'Ciarán O\'Brien',sp:3,sprint:'Sprint 5',status:'In Progress'},
+      {id:'ERP-044',title:'Supplier master data migration — Phase 2',type:'Task',priority:'Medium',assignee:'Sarah Murphy',sp:5,sprint:'Sprint 5',status:'To Do'},
+      {id:'ERP-045',title:'UAT: Purchase order end-to-end flow',type:'Test',priority:'High',assignee:'Niamh Ryan',sp:3,sprint:'Sprint 5',status:'To Do'},
+      {id:'ERP-046',title:'AR aging report — custom date buckets',type:'Feature',priority:'Medium',assignee:'Brian Doyle',sp:5,sprint:'Sprint 5',status:'To Do'},
+      {id:'ERP-038',title:'Chart of accounts configuration',type:'Feature',priority:'High',assignee:'Ciarán O\'Brien',sp:8,sprint:'Sprint 4',status:'Done'},
+      {id:'ERP-039',title:'Bank reconciliation module',type:'Feature',priority:'High',assignee:'Sarah Murphy',sp:13,sprint:'Sprint 4',status:'Done'},
+      {id:'ERP-040',title:'Fix: Duplicate invoice number on concurrent save',type:'Bug',priority:'Critical',assignee:'Brian Doyle',sp:2,sprint:'Sprint 4',status:'Done'},
+      {id:'ERP-035',title:'Cost centre hierarchy — 4-level structure',type:'Feature',priority:'Medium',assignee:'Niamh Ryan',sp:5,sprint:'Sprint 3',status:'Done'},
+      {id:'ERP-036',title:'Integration: SAP FI → ERP GL sync',type:'Feature',priority:'High',assignee:'Ciarán O\'Brien',sp:13,sprint:'Sprint 3',status:'Done'},
+      {id:'ERP-037',title:'User acceptance testing — Sprint 3 scope',type:'Test',priority:'High',assignee:'Niamh Ryan',sp:5,sprint:'Sprint 3',status:'Done'},
+    ]
+  },
+  { id:'cloud', name:'Cloud Migration', customer:'CRH plc', color:'#3182CE',
+    totalSP:240, completedSP:134, inProgressSP:38, sprintCurrent:'Sprint 4 of 6',
+    sprintStart:'17 Feb', sprintEnd:'28 Feb', budget_days:120, forecast_days:138,
+    tasks:[
+      {id:'CLO-031',title:'Migrate SQL Server cluster — 3 nodes',type:'Feature',priority:'Critical',assignee:'Ronan McCarthy',sp:13,sprint:'Sprint 4',status:'In Progress'},
+      {id:'CLO-032',title:'Azure Virtual Network peering — hub topology',type:'Feature',priority:'High',assignee:'Declan Byrne',sp:8,sprint:'Sprint 4',status:'In Progress'},
+      {id:'CLO-033',title:'Fix: NSG rule blocking port 1433 in UAT',type:'Bug',priority:'Critical',assignee:'Ronan McCarthy',sp:2,sprint:'Sprint 4',status:'In Progress'},
+      {id:'CLO-034',title:'DNS cutover runbook & rollback plan',type:'Task',priority:'High',assignee:'Declan Byrne',sp:5,sprint:'Sprint 4',status:'To Do'},
+      {id:'CLO-035',title:'Load test — 500 concurrent connections',type:'Test',priority:'High',assignee:'Ronan McCarthy',sp:3,sprint:'Sprint 4',status:'To Do'},
+      {id:'CLO-028',title:'Azure AD Connect sync configuration',type:'Feature',priority:'High',assignee:'Declan Byrne',sp:8,sprint:'Sprint 3',status:'Done'},
+      {id:'CLO-029',title:'Storage account tiering policy',type:'Task',priority:'Medium',assignee:'Ronan McCarthy',sp:3,sprint:'Sprint 3',status:'Done'},
+      {id:'CLO-030',title:'Backup and DR validation — RTO test',type:'Test',priority:'High',assignee:'Declan Byrne',sp:5,sprint:'Sprint 3',status:'Done'},
+    ]
+  },
+  { id:'crm', name:'CRM Rollout', customer:'Bank of Ireland', color:'#D69E2E',
+    totalSP:180, completedSP:58, inProgressSP:34, sprintCurrent:'Sprint 3 of 8',
+    sprintStart:'10 Feb', sprintEnd:'21 Feb', budget_days:90, forecast_days:108,
+    tasks:[
+      {id:'CRM-022',title:'Lead capture form — custom field mapping',type:'Feature',priority:'High',assignee:'Aoife Walsh',sp:5,sprint:'Sprint 3',status:'In Progress'},
+      {id:'CRM-023',title:'Opportunity pipeline — stage configuration',type:'Feature',priority:'High',assignee:'Aoife Walsh',sp:8,sprint:'Sprint 3',status:'In Progress'},
+      {id:'CRM-024',title:'Fix: Duplicate contacts on CSV import',type:'Bug',priority:'Critical',assignee:'Seán Gallagher',sp:3,sprint:'Sprint 3',status:'Blocked'},
+      {id:'CRM-025',title:'Email integration — Exchange Online connector',type:'Feature',priority:'Medium',assignee:'Seán Gallagher',sp:8,sprint:'Sprint 3',status:'To Do'},
+      {id:'CRM-026',title:'Reporting: Monthly sales pipeline dashboard',type:'Feature',priority:'Low',assignee:'Aoife Walsh',sp:5,sprint:'Sprint 3',status:'To Do'},
+      {id:'CRM-019',title:'CRM tenant provisioning & baseline config',type:'Task',priority:'High',assignee:'Aoife Walsh',sp:8,sprint:'Sprint 2',status:'Done'},
+      {id:'CRM-020',title:'Data migration — legacy contacts (12k records)',type:'Task',priority:'High',assignee:'Seán Gallagher',sp:13,sprint:'Sprint 2',status:'Done'},
+      {id:'CRM-021',title:'UAT workshop with BOI relationship team',type:'Task',priority:'High',assignee:'Aoife Walsh',sp:5,sprint:'Sprint 2',status:'Done'},
+    ]
+  },
+  { id:'data', name:'Data Warehouse', customer:'Glanbia', color:'#38A169',
+    totalSP:200, completedSP:80, inProgressSP:22, sprintCurrent:'Sprint 2 of 6',
+    sprintStart:'3 Mar', sprintEnd:'14 Mar', budget_days:100, forecast_days:104,
+    tasks:[
+      {id:'DW-011',title:'ELT pipeline — SAP HANA source connector',type:'Feature',priority:'High',assignee:'Niamh Ryan',sp:8,sprint:'Sprint 2',status:'In Progress'},
+      {id:'DW-012',title:'Azure Synapse workspace configuration',type:'Task',priority:'High',assignee:'Ronan McCarthy',sp:5,sprint:'Sprint 2',status:'In Progress'},
+      {id:'DW-013',title:'Dimension modelling — Product & Customer dims',type:'Feature',priority:'Medium',assignee:'Niamh Ryan',sp:8,sprint:'Sprint 2',status:'To Do'},
+      {id:'DW-014',title:'Fix: Incremental load missing deletes',type:'Bug',priority:'High',assignee:'Ronan McCarthy',sp:3,sprint:'Sprint 2',status:'To Do'},
+      {id:'DW-008',title:'Data platform architecture sign-off',type:'Task',priority:'High',assignee:'Niamh Ryan',sp:5,sprint:'Sprint 1',status:'Done'},
+      {id:'DW-009',title:'Source system connectivity — 4 feeds',type:'Feature',priority:'High',assignee:'Ronan McCarthy',sp:13,sprint:'Sprint 1',status:'Done'},
+      {id:'DW-010',title:'Data quality framework — rule engine',type:'Feature',priority:'Medium',assignee:'Niamh Ryan',sp:8,sprint:'Sprint 1',status:'Done'},
+    ]
+  },
+  { id:'analytics', name:'Analytics Platform', customer:'Ryanair', color:'#805AD5',
+    totalSP:160, completedSP:148, inProgressSP:5, sprintCurrent:'Sprint 7 of 8',
+    sprintStart:'24 Feb', sprintEnd:'7 Mar', budget_days:80, forecast_days:80,
+    tasks:[
+      {id:'ANL-041',title:'Power BI embedded token refresh service',type:'Feature',priority:'Medium',assignee:'Seán Gallagher',sp:5,sprint:'Sprint 7',status:'In Progress'},
+      {id:'ANL-042',title:'Final UAT sign-off report',type:'Task',priority:'High',assignee:'Fionnuala Burke',sp:3,sprint:'Sprint 7',status:'To Do'},
+      {id:'ANL-043',title:'Go-live cutover & hypercare plan',type:'Task',priority:'High',assignee:'Fionnuala Burke',sp:2,sprint:'Sprint 7',status:'To Do'},
+      {id:'ANL-038',title:'Row-level security — airline crew roles',type:'Feature',priority:'High',assignee:'Seán Gallagher',sp:8,sprint:'Sprint 6',status:'Done'},
+      {id:'ANL-039',title:'Performance tuning — 50M row dataset',type:'Task',priority:'High',assignee:'Seán Gallagher',sp:5,sprint:'Sprint 6',status:'Done'},
+      {id:'ANL-040',title:'Penetration test remediation',type:'Task',priority:'Critical',assignee:'Fionnuala Burke',sp:5,sprint:'Sprint 6',status:'Done'},
+    ]
+  },
+  { id:'hr', name:'HR Transformation', customer:'ESB', color:'#718096',
+    totalSP:280, completedSP:42, inProgressSP:18, sprintCurrent:'Sprint 1 of 10',
+    sprintStart:'3 Mar', sprintEnd:'14 Mar', budget_days:140, forecast_days:140,
+    tasks:[
+      {id:'HR-004',title:'Workday tenant setup & configuration workbook',type:'Task',priority:'High',assignee:'Fionnuala Burke',sp:8,sprint:'Sprint 1',status:'In Progress'},
+      {id:'HR-005',title:'Organisation structure — 12 cost centres mapped',type:'Feature',priority:'High',assignee:'Sarah Murphy',sp:5,sprint:'Sprint 1',status:'In Progress'},
+      {id:'HR-006',title:'Payroll integration spec — SAP payroll to Workday',type:'Task',priority:'Medium',assignee:'Fionnuala Burke',sp:5,sprint:'Sprint 1',status:'To Do'},
+      {id:'HR-007',title:'Data audit — legacy HR system (6 years)',type:'Task',priority:'High',assignee:'Sarah Murphy',sp:8,sprint:'Sprint 1',status:'To Do'},
+      {id:'HR-001',title:'Project kick-off & stakeholder alignment',type:'Task',priority:'High',assignee:'Fionnuala Burke',sp:5,sprint:'Sprint 0',status:'Done'},
+      {id:'HR-002',title:'As-is process documentation',type:'Task',priority:'Medium',assignee:'Sarah Murphy',sp:8,sprint:'Sprint 0',status:'Done'},
+      {id:'HR-003',title:'Solution architecture & ADO board setup',type:'Task',priority:'High',assignee:'Fionnuala Burke',sp:5,sprint:'Sprint 0',status:'Done'},
+    ]
+  },
+];
+
+function renderADO(projectId){
+  const el = document.getElementById('ado-content');
+  if(!el) return;
+  const proj = adoProjects.find(p=>p.id===projectId) || adoProjects[0];
+  const pct = Math.round((proj.completedSP / proj.totalSP)*100);
+  const remainSP = proj.totalSP - proj.completedSP - proj.inProgressSP;
+  const overForecast = proj.forecast_days > proj.budget_days;
+  const freeDays = proj.forecast_days - proj.budget_days;
+  const statusColors = {'Done':'#C6F6D5','In Progress':'#BEE3F8','To Do':'#EDF2F7','Blocked':'#FED7D7'};
+  const statusText = {'Done':'#276749','In Progress':'#2B6CB0','To Do':'#4A5568','Blocked':'#9B2C2C'};
+  const typeIcons = {'Feature':'✨','Bug':'🐛','Task':'📋','Test':'🧪','Story':'📖'};
+  const priorityColors = {'Critical':'#E53E3E','High':'#D69E2E','Medium':'#3182CE','Low':'#718096'};
+
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+      <div>
+        <h5 style="margin:0;">🔷 ADO Tasks &amp; Project Sizing</h5>
+        <div class="sub" style="margin:0;">Azure DevOps work items — sprint progress, completion % and budget sizing</div>
+      </div>
+      <select onchange="renderADO(this.value)" style="padding:8px 14px;border:1px solid var(--border);border-radius:8px;font-size:.82rem;font-weight:600;background:#fff;cursor:pointer;">
+        ${adoProjects.map(p=>`<option value="${p.id}" ${p.id===projectId?'selected':''}>${p.name} — ${p.customer}</option>`).join('')}
+      </select>
+    </div>
+
+    <!-- Project header -->
+    <div style="background:linear-gradient(135deg,${proj.color}22,${proj.color}08);border:1px solid ${proj.color}44;border-radius:12px;padding:20px;margin-bottom:20px;">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="flex:1;">
+          <div style="font-weight:800;font-size:1.1rem;color:var(--navy);margin-bottom:2px;">${proj.name}</div>
+          <div style="font-size:.78rem;color:var(--muted);">${proj.customer} · ${proj.sprintCurrent} · ${proj.sprintStart} → ${proj.sprintEnd}</div>
+        </div>
+        <!-- Completion ring -->
+        <div style="text-align:center;flex-shrink:0;">
+          <svg width="90" height="90" viewBox="0 0 90 90">
+            <circle cx="45" cy="45" r="38" fill="none" stroke="#E2E8F0" stroke-width="8"/>
+            <circle cx="45" cy="45" r="38" fill="none" stroke="${proj.color}" stroke-width="8"
+              stroke-dasharray="${2*Math.PI*38}" stroke-dashoffset="${2*Math.PI*38*(1-pct/100)}"
+              stroke-linecap="round" transform="rotate(-90 45 45)"/>
+            <text x="45" y="49" text-anchor="middle" font-size="16" font-weight="800" fill="${proj.color}">${pct}%</text>
+          </svg>
+          <div style="font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;margin-top:-4px;">Complete</div>
+        </div>
+      </div>
+
+      <!-- SP breakdown bar -->
+      <div style="margin-top:16px;">
+        <div style="display:flex;justify-content:space-between;font-size:.72rem;font-weight:700;margin-bottom:6px;">
+          <span style="color:#276749;">✅ Done: ${proj.completedSP} SP</span>
+          <span style="color:#2B6CB0;">⚡ In Progress: ${proj.inProgressSP} SP</span>
+          <span style="color:#4A5568;">📋 Remaining: ${remainSP} SP</span>
+          <span style="font-weight:800;color:var(--navy);">Total: ${proj.totalSP} SP</span>
+        </div>
+        <div style="background:#E2E8F0;border-radius:6px;height:10px;overflow:hidden;">
+          <div style="display:flex;height:100%;">
+            <div style="width:${(proj.completedSP/proj.totalSP*100).toFixed(1)}%;background:#38A169;transition:width .5s;"></div>
+            <div style="width:${(proj.inProgressSP/proj.totalSP*100).toFixed(1)}%;background:#3182CE;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI row -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px;">
+      ${[
+        {label:'Story Points Done',val:proj.completedSP+' / '+proj.totalSP,sub:'Completed SP',color:'#38A169'},
+        {label:'Budget Days',val:proj.budget_days+'d',sub:'Contracted scope',color:'#3182CE'},
+        {label:'Forecast Days',val:proj.forecast_days+'d',sub:overForecast?`⚠️ +${freeDays}d over budget`:'On track',color:overForecast?'#E53E3E':'#38A169'},
+        {label:'Free Days',val:overForecast?freeDays+'d':'0d',sub:overForecast?'Unbudgeted effort':'No overrun',color:overForecast?'#E53E3E':'#718096'},
+        {label:'Blocked Tasks',val:proj.tasks.filter(t=>t.status==='Blocked').length,sub:'Needs immediate action',color:proj.tasks.filter(t=>t.status==='Blocked').length>0?'#E53E3E':'#718096'},
+        {label:'Sizing Confidence',val:pct>80?'High':pct>50?'Medium':'Low',sub:pct>80?'Near completion':'Active delivery',color:pct>80?'#38A169':pct>50?'#D69E2E':'#E53E3E'},
+      ].map(k=>`
+        <div class="card" style="padding:14px;border-left:3px solid ${k.color};">
+          <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">${k.label}</div>
+          <div style="font-size:1.4rem;font-weight:800;color:${k.color};line-height:1;">${k.val}</div>
+          <div style="font-size:.7rem;color:var(--muted);margin-top:4px;">${k.sub}</div>
+        </div>`).join('')}
+    </div>
+
+    ${overForecast?`
+    <div style="background:#FFF5F5;border-left:4px solid #E53E3E;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:20px;">
+      <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:#9B2C2C;margin-bottom:5px;">⚠️ Sizing Warning — Unbudgeted Days Detected</div>
+      <div style="font-size:.85rem;font-weight:600;color:#C53030;margin-bottom:4px;">${freeDays} forecast days have been added beyond the contracted budget of ${proj.budget_days} days</div>
+      <div style="font-size:.78rem;color:#742A2A;line-height:1.6;">These days represent <strong>free work</strong> — effort being delivered with no corresponding revenue. At a blended daily rate of ~£800, this equates to approximately <strong>£${(freeDays*800).toLocaleString()} of unrecoverable cost</strong>. A Change Request should be raised immediately or the scope must be reduced. See the <strong>What Changed</strong> page for a full breakdown.</div>
+    </div>`:''}
+
+    <!-- Task table -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+        <strong style="font-size:.92rem;">📋 Work Items (${proj.tasks.length})</strong>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          ${['All','To Do','In Progress','Done','Blocked'].map(s=>`
+            <button onclick="filterADO('${projectId}','${s}')" id="ado-filter-${s.replace(' ','')}"
+              class="btn btn-outline" style="font-size:.72rem;padding:4px 10px;${s==='All'?'background:var(--teal);color:#fff;border-color:var(--teal);':''}">${s}</button>`).join('')}
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:.78rem;" id="ado-table">
+          <thead>
+            <tr style="background:var(--navy);color:#fff;">
+              <th style="padding:9px 12px;text-align:left;width:90px;">ID</th>
+              <th style="padding:9px 12px;text-align:left;">Title</th>
+              <th style="padding:9px 12px;text-align:center;width:60px;">Type</th>
+              <th style="padding:9px 12px;text-align:center;width:80px;">Priority</th>
+              <th style="padding:9px 12px;text-align:left;width:140px;">Assignee</th>
+              <th style="padding:9px 12px;text-align:center;width:50px;">SP</th>
+              <th style="padding:9px 12px;text-align:center;width:90px;">Sprint</th>
+              <th style="padding:9px 12px;text-align:center;width:100px;">Status</th>
+            </tr>
+          </thead>
+          <tbody id="ado-tbody">
+            ${proj.tasks.map((t,i)=>`
+              <tr style="background:${i%2===0?'#fff':'var(--bg)'};">
+                <td style="padding:8px 12px;font-family:monospace;font-size:.72rem;color:var(--teal);font-weight:600;">${t.id}</td>
+                <td style="padding:8px 12px;font-weight:500;">${t.title}</td>
+                <td style="padding:8px 12px;text-align:center;" title="${t.type}">${typeIcons[t.type]||'📋'}</td>
+                <td style="padding:8px 12px;text-align:center;"><span style="font-size:.68rem;font-weight:700;color:${priorityColors[t.priority]||'#718096'};">${t.priority}</span></td>
+                <td style="padding:8px 12px;color:#4A5568;">${t.assignee.split(' ')[0]} ${t.assignee.split(' ')[1][0]}.</td>
+                <td style="padding:8px 12px;text-align:center;font-weight:700;">${t.sp}</td>
+                <td style="padding:8px 12px;text-align:center;font-size:.72rem;color:var(--muted);">${t.sprint}</td>
+                <td style="padding:8px 12px;text-align:center;">
+                  <span style="background:${statusColors[t.status]||'#EDF2F7'};color:${statusText[t.status]||'#4A5568'};
+                    font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:10px;white-space:nowrap;">${t.status}</span>
+                </td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function filterADO(projectId, status){
+  document.querySelectorAll('[id^="ado-filter-"]').forEach(b=>{
+    b.style.background=''; b.style.color=''; b.style.borderColor='';
+  });
+  const btn = document.getElementById('ado-filter-'+status.replace(' ',''));
+  if(btn){ btn.style.background='var(--teal)'; btn.style.color='#fff'; btn.style.borderColor='var(--teal)'; }
+  const proj = adoProjects.find(p=>p.id===projectId);
+  if(!proj) return;
+  const tasks = status==='All' ? proj.tasks : proj.tasks.filter(t=>t.status===status);
+  const statusColors = {'Done':'#C6F6D5','In Progress':'#BEE3F8','To Do':'#EDF2F7','Blocked':'#FED7D7'};
+  const statusText = {'Done':'#276749','In Progress':'#2B6CB0','To Do':'#4A5568','Blocked':'#9B2C2C'};
+  const typeIcons = {'Feature':'✨','Bug':'🐛','Task':'📋','Test':'🧪','Story':'📖'};
+  const priorityColors = {'Critical':'#E53E3E','High':'#D69E2E','Medium':'#3182CE','Low':'#718096'};
+  const tbody = document.getElementById('ado-tbody');
+  if(!tbody) return;
+  tbody.innerHTML = tasks.map((t,i)=>`
+    <tr style="background:${i%2===0?'#fff':'var(--bg)'};">
+      <td style="padding:8px 12px;font-family:monospace;font-size:.72rem;color:var(--teal);font-weight:600;">${t.id}</td>
+      <td style="padding:8px 12px;font-weight:500;">${t.title}</td>
+      <td style="padding:8px 12px;text-align:center;">${typeIcons[t.type]||'📋'}</td>
+      <td style="padding:8px 12px;text-align:center;"><span style="font-size:.68rem;font-weight:700;color:${priorityColors[t.priority]||'#718096'};">${t.priority}</span></td>
+      <td style="padding:8px 12px;color:#4A5568;">${t.assignee.split(' ')[0]} ${t.assignee.split(' ')[1][0]}.</td>
+      <td style="padding:8px 12px;text-align:center;font-weight:700;">${t.sp}</td>
+      <td style="padding:8px 12px;text-align:center;font-size:.72rem;color:var(--muted);">${t.sprint}</td>
+      <td style="padding:8px 12px;text-align:center;">
+        <span style="background:${statusColors[t.status]||'#EDF2F7'};color:${statusText[t.status]||'#4A5568'};
+          font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:10px;">${t.status}</span>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="8" style="padding:20px;text-align:center;color:var(--muted);">No tasks match this filter</td></tr>';
+}
+
+// ══════════════════════════════════════════════════════════
+// WHAT CHANGED / VARIANCE ENGINE
+// ══════════════════════════════════════════════════════════
+
+const varianceEvents = [
+  { id:'V001', date:'2026-03-05', project:'CRM Rollout', projectId:'crm', customer:'Bank of Ireland',
+    type:'Free Days', severity:'red', icon:'🕐',
+    title:'6 unbudgeted forecast days added — Phase 2 Analysis',
+    who:'Aoife Walsh', triggeredBy:'Timesheet entries vs. budget tracking',
+    what:'Aoife Walsh logged 6 additional analysis days in Sprint 3 to cover scope items not in the original SoW. No Change Request was raised and no additional budget has been agreed with the client.',
+    financialImpact:-4800, marginImpact:-9.2, revenueImpact:0, costImpact:4800,
+    metric:'Margin', from:'34%', to:'24.8%',
+    action:'Raise CR-007 to BOI for additional analysis scope or descope equivalent work items from Sprint 3–4.',
+    adoRef:'CRM-022, CRM-023'
+  },
+  { id:'V002', date:'2026-03-04', project:'Cloud Migration', projectId:'cloud', customer:'CRH plc',
+    type:'Scope Creep', severity:'red', icon:'📦',
+    title:'Data centre decommission added to scope — 18 days unbudgeted',
+    who:'Ronan McCarthy (PM)', triggeredBy:'Client change request accepted without formal CR',
+    what:'CRH asked for decommission of Legacy DC-West to be included in the migration. Ronan accepted the work verbally and added tasks CLO-031 to CLO-035 to the board. This added 18 forecast days with no budget. Total project forecast is now 138d vs 120d contracted.',
+    financialImpact:-14400, marginImpact:-12.0, revenueImpact:0, costImpact:14400,
+    metric:'Timeline + Margin', from:'£0 overrun', to:'£14,400 unrecovered cost',
+    action:'Escalate to CRH account director. Raise formal CR for DC decommission scope. If client won\'t fund, remove CLO-031–035 from sprint.',
+    adoRef:'CLO-031, CLO-032, CLO-033, CLO-034, CLO-035'
+  },
+  { id:'V003', date:'2026-03-03', project:'ERP Implementation', projectId:'erp', customer:'AIB Group',
+    type:'Invoice Delay', severity:'amber', icon:'🧾',
+    title:'Sprint 4 invoice delayed — £68,400 held 18 days past planned issue date',
+    who:'Finance (auto-detected by Invoice Intelligence agent)', triggeredBy:'Invoice not raised within 5 days of sprint completion',
+    what:'Sprint 4 timesheets were approved on 14 Feb. Invoice INV-00023 for £68,400 was due to be raised by 19 Feb. As of 3 Mar it is still in Draft. The delay has extended DSO by 18 days on this invoice alone.',
+    financialImpact:-2040, marginImpact:-1.2, revenueImpact:0, costImpact:0,
+    metric:'DSO / Cash', from:'Invoice target: 19 Feb', to:'Still in Draft — 3 Mar',
+    note:'Financial impact is the financing cost of carrying £68,400 for 18 extra days at 4% annual rate.',
+    action:'Finance to review INV-00023 immediately. Send to AIB today. Add automated alert for invoices >5 days in Draft.',
+    adoRef:'ERP-038, ERP-039, ERP-040'
+  },
+  { id:'V004', date:'2026-03-02', project:'CRM Rollout', projectId:'crm', customer:'Bank of Ireland',
+    type:'Blocked Task', severity:'red', icon:'🚫',
+    title:'CRM-024 blocked 9 days — duplicate contacts bug delaying Phase 2',
+    who:'Seán Gallagher', triggeredBy:'ADO task status changed to Blocked',
+    what:'Bug CRM-024 (duplicate contacts on CSV import) has been in Blocked status for 9 days. It is a dependency for the Email integration feature (CRM-025) and the sales dashboard (CRM-026). If not resolved by end of Sprint 3, two features slip to Sprint 4, pushing the go-live by one sprint (2 weeks).',
+    financialImpact:-8000, marginImpact:-5.0, revenueImpact:0, costImpact:8000,
+    metric:'Timeline', from:'Go-live: 30 Mar', to:'At risk — could slip to 13 Apr',
+    action:'Pair Seán Gallagher with a senior developer immediately. Escalate to Aoife Walsh as PM. If not resolved in 2 days, raise a timeline risk flag with BOI.',
+    adoRef:'CRM-024, CRM-025, CRM-026'
+  },
+  { id:'V005', date:'2026-03-01', project:'Data Warehouse', projectId:'data', customer:'Glanbia',
+    type:'Resource Change', severity:'amber', icon:'👤',
+    title:'Niamh Ryan utilisation dropped to 60% — sprint capacity reduced',
+    who:'Resourcing Manager', triggeredBy:'Timesheet vs. assignment gap detected by Resource Matcher agent',
+    what:'Niamh Ryan is assigned 5 days/week to the Data Warehouse project but only logged 3 days last week. The other 2 days were spent on internal meetings and HR Transformation pre-sales activities not yet formally assigned. Sprint 2 velocity will be lower than planned if this continues.',
+    financialImpact:-3200, marginImpact:-3.5, revenueImpact:0, costImpact:3200,
+    metric:'Chargeability', from:'100% assigned (5d/wk)', to:'60% chargeable (3d/wk)',
+    action:'Confirm Niamh\'s formal assignment split with HR Transformation project. Update Data Warehouse sprint capacity. Recalculate sprint 2 end date.',
+    adoRef:'DW-011, DW-013'
+  },
+  { id:'V006', date:'2026-02-28', project:'Cloud Migration', projectId:'cloud', customer:'CRH plc',
+    type:'Budget Reforecast', severity:'amber', icon:'💰',
+    title:'Sprint 4 subcontractor cost £6,800 above budget',
+    who:'Fionnuala Burke (Finance)', triggeredBy:'PO-0018 raised for network consultant day rate',
+    what:'A specialist network consultant (third party) was brought in for the VNet peering work (CLO-032). Day rate is £850 vs the £650/day budgeted for subcontractor roles. Over the 8-day engagement this creates a £1,600 overrun. PO-0018 was approved without checking budget headroom.',
+    financialImpact:-1600, marginImpact:-1.4, revenueImpact:0, costImpact:1600,
+    metric:'Budget', from:'Sub budget: £5,200 (8d × £650)', to:'Actual: £6,800 (8d × £850)',
+    action:'Finance to note the £1,600 variance on the project P&L. PM to use standard-rate subcontractors for remaining work. Review subcontractor approval workflow.',
+    adoRef:'CLO-032'
+  },
+  { id:'V007', date:'2026-02-27', project:'Analytics Platform', projectId:'analytics', customer:'Ryanair',
+    type:'Scope Reduction', severity:'amber', icon:'✂️',
+    title:'Mobile reporting module descoped — revenue reduction of £18,000',
+    who:'Fionnuala Burke (PM) + Seán Gallagher', triggeredBy:'Client change request CR-ANL-006',
+    what:'Ryanair formally requested to remove the mobile Power BI app module from the project scope via CR-ANL-006. This reduces the contract value by £18,000 but also removes 22 story points (3 sprints of work) and saves ~22 delivery days. Net margin impact is positive (+4.2%).',
+    financialImpact:18000, marginImpact:4.2, revenueImpact:-18000, costImpact:-17600,
+    metric:'Scope / Revenue', from:'Contract: £220,000', to:'Revised: £202,000',
+    note:'Positive margin impact because descoped work was low-margin mobile development.',
+    action:'Issue revised SoW to Ryanair. Update project budget in PSA. Remove ANL tasks from backlog.',
+    adoRef:'ANL-041 (removed)'
+  },
+  { id:'V008', date:'2026-02-25', project:'ERP Implementation', projectId:'erp', customer:'AIB Group',
+    type:'Free Days', severity:'red', icon:'🕐',
+    title:'Senior developer overtime — 12 days unplanned effort in Sprint 4',
+    who:'Ciarán O\'Brien', triggeredBy:'Timesheet entries exceeded assignment hours',
+    what:'Ciarán O\'Brien submitted 12 days of hours in the 10-day Sprint 4 window. The extra 2 days/week were spent resolving legacy data migration issues not scoped in the original SoW. No overtime rate applies but 2 days × 5 weeks = 10 extra days of Senior Developer time with no budget.',
+    financialImpact:-9600, marginImpact:-4.8, revenueImpact:0, costImpact:9600,
+    metric:'Margin', from:'ERP margin: 28%', to:'ERP margin: 23.2%',
+    action:'PM to raise CR to AIB for legacy data migration complexity. Get written acknowledgement. Stop work on data migration until CR agreed or descope.',
+    adoRef:'ERP-036, ERP-037'
+  },
+];
+
+function renderVariance(){
+  const el = document.getElementById('variance-content');
+  if(!el || el.hasChildNodes()) return;
+
+  const totalLost = varianceEvents.filter(e=>e.financialImpact<0).reduce((s,e)=>s+e.financialImpact,0);
+  const totalGained = varianceEvents.filter(e=>e.financialImpact>0).reduce((s,e)=>s+e.financialImpact,0);
+  const typeColors = {'Free Days':'#E53E3E','Scope Creep':'#D69E2E','Invoice Delay':'#3182CE','Blocked Task':'#E53E3E','Resource Change':'#805AD5','Budget Reforecast':'#D69E2E','Scope Reduction':'#38A169'};
+  const projColors = {'erp':'#E53E3E','cloud':'#3182CE','crm':'#D69E2E','data':'#38A169','analytics':'#805AD5','hr':'#718096'};
+
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+      <div>
+        <h5 style="margin:0;">🔍 What Changed — Variance &amp; Impact Analysis</h5>
+        <div class="sub" style="margin:0;">Every significant change across all projects — what happened, why it matters, what to do</div>
+      </div>
+      <select onchange="filterVariance(this.value)" style="padding:8px 14px;border:1px solid var(--border);border-radius:8px;font-size:.82rem;background:#fff;cursor:pointer;">
+        <option value="all">All Projects</option>
+        ${adoProjects.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}
+      </select>
+    </div>
+
+    <!-- Summary KPIs -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:24px;">
+      ${[
+        {label:'Total Events',val:varianceEvents.length,sub:'Last 14 days',color:'var(--navy)'},
+        {label:'Critical Issues',val:varianceEvents.filter(e=>e.severity==='red').length,sub:'Needs immediate action',color:'#E53E3E'},
+        {label:'Unrecovered Cost',val:'£'+Math.abs(totalLost/1000).toFixed(0)+'k',sub:'Free days + cost overruns',color:'#E53E3E'},
+        {label:'Revenue at Risk',val:'£'+Math.abs(varianceEvents.filter(e=>e.type==='Invoice Delay').reduce((s,e)=>s+Math.abs(e.financialImpact),0)/1000).toFixed(0)+'k',sub:'Delayed invoicing',color:'#D69E2E'},
+        {label:'Scope Removals',val:'£'+Math.abs(totalGained/1000).toFixed(0)+'k',sub:'Positive margin events',color:'#38A169'},
+        {label:'Projects Affected',val:[...new Set(varianceEvents.map(e=>e.projectId))].length,sub:'Of 6 active',color:'#3182CE'},
+      ].map(k=>`
+        <div class="card" style="border-left:3px solid ${k.color};padding:14px;">
+          <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">${k.label}</div>
+          <div style="font-size:1.5rem;font-weight:800;color:${k.color};line-height:1;">${k.val}</div>
+          <div style="font-size:.7rem;color:var(--muted);margin-top:4px;">${k.sub}</div>
+        </div>`).join('')}
+    </div>
+
+    <!-- Event feed -->
+    <div id="variance-feed">
+      ${varianceEvents.map(e=>`
+        <div class="card" style="margin-bottom:14px;border-left:4px solid ${e.severity==='red'?'#E53E3E':'#D69E2E'};" data-project="${e.projectId}">
+          <div style="display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;">
+
+            <!-- Icon + type -->
+            <div style="flex-shrink:0;text-align:center;min-width:54px;">
+              <div style="font-size:1.6rem;">${e.icon}</div>
+              <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;color:${typeColors[e.type]||'#718096'};margin-top:2px;line-height:1.2;">${e.type}</div>
+            </div>
+
+            <!-- Main content -->
+            <div style="flex:1;min-width:240px;">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px;">
+                <span style="background:${e.severity==='red'?'#FED7D7':'#FEFCBF'};color:${e.severity==='red'?'#9B2C2C':'#744210'};
+                  font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:10px;">
+                  ${e.severity==='red'?'🔴 CRITICAL':'🟡 WARNING'}
+                </span>
+                <span style="font-size:.72rem;font-weight:700;color:${projColors[e.projectId]||'#718096'};">${e.project}</span>
+                <span style="font-size:.72rem;color:var(--muted);">·</span>
+                <span style="font-size:.72rem;color:var(--muted);">${e.customer}</span>
+                <span style="font-size:.72rem;color:var(--muted);">·</span>
+                <span style="font-size:.72rem;color:var(--muted);">${e.date}</span>
+              </div>
+              <div style="font-weight:700;font-size:.9rem;color:var(--navy);margin-bottom:6px;">${e.title}</div>
+              <div style="font-size:.78rem;color:#4A5568;line-height:1.6;margin-bottom:10px;">${e.what}</div>
+
+              <!-- Before/After metric -->
+              <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
+                <div style="background:#F0FFF4;border:1px solid #C6F6D5;border-radius:6px;padding:6px 10px;font-size:.75rem;">
+                  <span style="font-size:.65rem;font-weight:700;color:var(--muted);display:block;">Was</span>
+                  <span style="font-weight:600;color:#276749;">${e.from}</span>
+                </div>
+                <span style="font-size:1rem;color:var(--muted);">→</span>
+                <div style="background:${e.severity==='red'?'#FFF5F5':'#FFFFF0'};border:1px solid ${e.severity==='red'?'#FED7D7':'#FEFCBF'};border-radius:6px;padding:6px 10px;font-size:.75rem;">
+                  <span style="font-size:.65rem;font-weight:700;color:var(--muted);display:block;">Now</span>
+                  <span style="font-weight:600;color:${e.severity==='red'?'#E53E3E':'#D69E2E'};">${e.to}</span>
+                </div>
+                ${e.adoRef?`<div style="background:var(--bg);border-radius:6px;padding:6px 10px;font-size:.72rem;font-family:monospace;color:var(--teal);">🔷 ${e.adoRef}</div>`:''}
+              </div>
+
+              <!-- Action -->
+              <div style="background:${e.severity==='red'?'#FFF5F5':'#FFFFF0'};border-radius:6px;padding:10px 12px;">
+                <span style="font-size:.68rem;font-weight:700;text-transform:uppercase;color:${e.severity==='red'?'#9B2C2C':'#744210'};margin-bottom:4px;display:block;">▶ Recommended Action</span>
+                <span style="font-size:.78rem;color:#4A5568;line-height:1.5;">${e.action}</span>
+              </div>
+              ${e.note?`<div style="font-size:.72rem;color:var(--muted);font-style:italic;margin-top:6px;">ℹ️ ${e.note}</div>`:''}
+            </div>
+
+            <!-- Financial impact -->
+            <div style="flex-shrink:0;text-align:right;min-width:100px;">
+              <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">P&amp;L Impact</div>
+              <div style="font-size:1.3rem;font-weight:800;color:${e.financialImpact<0?'#E53E3E':'#38A169'};">
+                ${e.financialImpact<0?'−':'+'} £${Math.abs(e.financialImpact).toLocaleString()}
+              </div>
+              <div style="font-size:.72rem;font-weight:700;color:${e.marginImpact<0?'#E53E3E':'#38A169'};margin-top:3px;">
+                ${e.marginImpact<0?'▼':'▲'} ${Math.abs(e.marginImpact)}% margin
+              </div>
+              <div style="font-size:.68rem;color:var(--muted);margin-top:4px;">
+                Raised by: ${e.who.split(' ')[0]}
+              </div>
+            </div>
+          </div>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function filterVariance(projectId){
+  document.querySelectorAll('#variance-feed .card').forEach(card=>{
+    card.style.display = (projectId==='all' || card.dataset.project===projectId) ? '' : 'none';
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+// CHANGE LOG / AUDIT TRAIL ENGINE
+// ══════════════════════════════════════════════════════════
+
+const changeLogData = [
+  // Finance
+  {id:'CL-0289',ts:'2026-03-05 16:44:02',user:'Fionnuala Burke',role:'Finance',module:'Invoices',entity:'INV-00026',field:'Status',old:'Draft',newVal:'Sent',reason:'Manual send — Finance approval received',severity:'medium',ip:'192.168.1.14'},
+  {id:'CL-0288',ts:'2026-03-05 14:32:18',user:'Fionnuala Burke',role:'Finance',module:'Purchase Orders',entity:'PO-0019',field:'Approved By',old:'(pending)',newVal:'Fionnuala Burke',reason:'PO approved under £5k threshold',severity:'medium',ip:'192.168.1.14'},
+  {id:'CL-0287',ts:'2026-03-05 11:08:55',user:'Fionnuala Burke',role:'Finance',module:'Purchase Orders',entity:'PO-0019',field:'Status',old:'Submitted',newVal:'Approved',reason:'',severity:'medium',ip:'192.168.1.14'},
+  {id:'CL-0286',ts:'2026-03-05 09:15:33',user:'Aoife Walsh',role:'Manager',module:'Timesheets',entity:'TS-W09-AOI',field:'Status',old:'Submitted',newVal:'Approved',reason:'Approved via weekly batch',severity:'low',ip:'10.0.0.42'},
+  {id:'CL-0285',ts:'2026-03-05 09:14:58',user:'Aoife Walsh',role:'Manager',module:'Timesheets',entity:'TS-W09-SEA',field:'Status',old:'Submitted',newVal:'Approved',reason:'Approved via weekly batch',severity:'low',ip:'10.0.0.42'},
+  {id:'CL-0284',ts:'2026-03-04 17:55:12',user:'Ronan McCarthy',role:'Consultant',module:'Timesheets',entity:'TS-W09-RON',field:'Status',old:'Draft',newVal:'Submitted',reason:'Weekly timesheet submission',severity:'low',ip:'10.0.0.71'},
+  {id:'CL-0283',ts:'2026-03-04 17:12:44',user:'Ciarán O\'Brien',role:'Consultant',module:'Timesheets',entity:'TS-W09-CIA',field:'Hours (Thu)',old:'8.0',newVal:'10.5',reason:'Corrected actual hours worked',severity:'medium',ip:'10.0.0.33'},
+  {id:'CL-0282',ts:'2026-03-04 15:30:01',user:'Ronan McCarthy',role:'Manager',module:'Projects',entity:'Cloud Migration',field:'Forecast Days',old:'120',newVal:'138',reason:'DC decommission scope added by client request',severity:'high',ip:'10.0.0.71'},
+  {id:'CL-0281',ts:'2026-03-04 14:02:09',user:'Ronan McCarthy',role:'Manager',module:'ADO Tasks',entity:'CLO-031 to CLO-035',field:'Tasks Added',old:'(not in backlog)',newVal:'Sprint 4 backlog',reason:'Data centre decommission scope — verbal client approval',severity:'high',ip:'10.0.0.71'},
+  {id:'CL-0280',ts:'2026-03-04 11:45:22',user:'Fionnuala Burke',role:'Admin',module:'Roles & Rates',entity:'Senior Developer',field:'Default Rate (Daily)',old:'£780',newVal:'£820',reason:'Annual rate card review — effective 1 Mar 2026',severity:'high',ip:'192.168.1.14'},
+  {id:'CL-0279',ts:'2026-03-04 11:43:57',user:'Fionnuala Burke',role:'Admin',module:'Roles & Rates',entity:'Solution Architect',field:'Default Rate (Daily)',old:'£960',newVal:'£1,020',reason:'Annual rate card review — effective 1 Mar 2026',severity:'high',ip:'192.168.1.14'},
+  {id:'CL-0278',ts:'2026-03-03 16:18:45',user:'Aoife Walsh',role:'Manager',module:'Projects',entity:'CRM Rollout',field:'Forecast Days',old:'100',newVal:'108',reason:'Phase 2 analysis extended — additional requirements discovered',severity:'high',ip:'10.0.0.42'},
+  {id:'CL-0277',ts:'2026-03-03 14:55:30',user:'Admin Agent',role:'AI Agent',module:'Timesheet Chaser',entity:'Agent Run',field:'Reminders Sent',old:'0',newVal:'6',reason:'Friday 17:00 automated chase run',severity:'low',ip:'10.0.0.1'},
+  {id:'CL-0276',ts:'2026-03-03 10:22:11',user:'Sarah Murphy',role:'Consultant',module:'Expenses',entity:'EXP-0044',field:'Status',old:'(new)',newVal:'Submitted',reason:'Travel expense — Dublin to Limerick (BOI site visit)',severity:'low',ip:'10.0.0.88'},
+  {id:'CL-0275',ts:'2026-03-02 17:04:33',user:'Seán Gallagher',role:'Consultant',module:'ADO Tasks',entity:'CRM-024',field:'Status',old:'In Progress',newVal:'Blocked',reason:'Awaiting BOI DBA access to legacy CRM database — ticket raised with client IT',severity:'high',ip:'10.0.0.55'},
+  {id:'CL-0274',ts:'2026-03-01 09:30:00',user:'Risk Sentinel',role:'AI Agent',module:'Project Health',entity:'CRM Rollout',field:'Budget Score',old:'48',newVal:'18',reason:'Automated health rescore — forecast days exceeded budget threshold',severity:'high',ip:'10.0.0.1'},
+  {id:'CL-0273',ts:'2026-02-28 16:12:04',user:'Fionnuala Burke',role:'Finance',module:'Invoices',entity:'INV-00024',field:'Amount',old:'£31,500',newVal:'£33,200',reason:'Corrected rate — senior developer rate override not applied in original draft',severity:'high',ip:'192.168.1.14'},
+  {id:'CL-0272',ts:'2026-02-28 11:45:23',user:'Niamh Ryan',role:'Consultant',module:'Leave Requests',entity:'LV-0028',field:'Status',old:'(new)',newVal:'Submitted',reason:'Annual leave 9-13 Mar',severity:'low',ip:'10.0.0.92'},
+  {id:'CL-0271',ts:'2026-02-27 15:33:18',user:'Fionnuala Burke',role:'Manager',module:'Projects',entity:'Analytics Platform',field:'Contract Value',old:'£220,000',newVal:'£202,000',reason:'Scope reduction — mobile module descoped via CR-ANL-006',severity:'high',ip:'192.168.1.14'},
+  {id:'CL-0270',ts:'2026-02-27 14:22:05',user:'Seán Gallagher',role:'Manager',module:'ADO Tasks',entity:'ANL-041 (mobile app)',field:'Status',old:'To Do',newVal:'Removed from backlog',reason:'Descoped per CR-ANL-006 — client request',severity:'medium',ip:'10.0.0.55'},
+  {id:'CL-0269',ts:'2026-02-26 13:14:42',user:'Fionnuala Burke',role:'Admin',module:'Consultants',entity:'Declan Byrne',field:'Role',old:'Developer',newVal:'Senior Developer',reason:'Promotion — effective 1 Mar 2026',severity:'medium',ip:'192.168.1.14'},
+  {id:'CL-0268',ts:'2026-02-25 17:01:11',user:'Ciarán O\'Brien',role:'Consultant',module:'Timesheets',entity:'TS-W08-CIA',field:'Hours Submitted',old:'40.0',newVal:'50.0',reason:'Sprint 4 extra effort — legacy data migration issues',severity:'high',ip:'10.0.0.33'},
+  {id:'CL-0267',ts:'2026-02-25 09:45:03',user:'Ronan McCarthy',role:'Manager',module:'Purchase Orders',entity:'PO-0018',field:'Status',old:'Draft',newVal:'Submitted',reason:'Network consultant day rate £850/day — VNet peering work',severity:'medium',ip:'10.0.0.71'},
+  {id:'CL-0266',ts:'2026-02-24 11:22:30',user:'Invoice Intelligence',role:'AI Agent',module:'Invoices',entity:'INV-00025, INV-00026, INV-00027',field:'Status',old:'(new)',newVal:'Draft',reason:'Weekly auto-generation from approved timesheets',severity:'low',ip:'10.0.0.1'},
+];
+
+const clModuleColors = {'Invoices':'#38A169','Purchase Orders':'#D69E2E','Timesheets':'#3182CE','Projects':'#E53E3E','ADO Tasks':'#00A9CE','Roles & Rates':'#805AD5','Expenses':'#D69E2E','Leave Requests':'#718096','Project Health':'#E53E3E','Consultants':'#805AD5','Timesheet Chaser':'#00A9CE','Invoice Intelligence':'#38A169'};
+const clSeverityConfig = {'high':{bg:'#FED7D7',text:'#9B2C2C',label:'High Impact'},'medium':{bg:'#FEFCBF',text:'#744210',label:'Medium'},'low':{bg:'#C6F6D5',text:'#276749',label:'Low'}};
+
+function renderChangeLog(){
+  const el = document.getElementById('changelog-content');
+  if(!el || el.hasChildNodes()) return;
+
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+      <div>
+        <h5 style="margin:0;">📜 Change Log &amp; Compliance Audit</h5>
+        <div class="sub" style="margin:0;">Full immutable audit trail — every change across Codec PSA, who made it and why</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-outline" style="font-size:.78rem;" onclick="toast('CSV export initiated','info')">⬇ Export CSV</button>
+        <button class="btn btn-outline" style="font-size:.78rem;" onclick="toast('PDF audit report generating…','info')">📄 Export PDF</button>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card" style="margin-bottom:18px;padding:14px 16px;">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+        <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--muted);">Filter:</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          ${['All','High Impact','Finance','Projects','Timesheets','AI Agent'].map((f,i)=>`
+            <button onclick="filterCL('${f}')" id="cl-f-${i}"
+              class="btn btn-outline" style="font-size:.72rem;padding:4px 10px;${i===0?'background:var(--teal);color:#fff;border-color:var(--teal);':''}">${f}</button>`).join('')}
+        </div>
+        <div style="margin-left:auto;font-size:.72rem;color:var(--muted);">Showing <strong id="cl-count">${changeLogData.length}</strong> entries</div>
+      </div>
+    </div>
+
+    <!-- Summary KPIs -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:20px;">
+      ${[
+        {label:'Total Changes',val:changeLogData.length,sub:'Last 14 days',color:'var(--navy)'},
+        {label:'High Impact',val:changeLogData.filter(c=>c.severity==='high').length,sub:'Rate/budget/scope',color:'#E53E3E'},
+        {label:'AI Agent Actions',val:changeLogData.filter(c=>c.role==='AI Agent').length,sub:'Automated changes',color:'#00A9CE'},
+        {label:'Users Active',val:[...new Set(changeLogData.map(c=>c.user))].length,sub:'Distinct users',color:'#805AD5'},
+        {label:'Modules Touched',val:[...new Set(changeLogData.map(c=>c.module))].length,sub:'Of 12 modules',color:'#38A169'},
+        {label:'Forecast Changes',val:changeLogData.filter(c=>c.field==='Forecast Days').length,sub:'Budget/scope alerts',color:'#D69E2E'},
+      ].map(k=>`
+        <div class="card" style="padding:12px;border-left:3px solid ${k.color};">
+          <div style="font-size:.62rem;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">${k.label}</div>
+          <div style="font-size:1.3rem;font-weight:800;color:${k.color};line-height:1;">${k.val}</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:3px;">${k.sub}</div>
+        </div>`).join('')}
+    </div>
+
+    <!-- Audit table -->
+    <div class="card" style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:.76rem;" id="cl-table">
+        <thead>
+          <tr style="background:var(--navy);color:#fff;">
+            <th style="padding:9px 10px;text-align:left;width:70px;">ID</th>
+            <th style="padding:9px 10px;text-align:left;width:130px;">Timestamp</th>
+            <th style="padding:9px 10px;text-align:left;width:130px;">User</th>
+            <th style="padding:9px 10px;text-align:center;width:80px;">Impact</th>
+            <th style="padding:9px 10px;text-align:left;width:110px;">Module</th>
+            <th style="padding:9px 10px;text-align:left;width:140px;">Record</th>
+            <th style="padding:9px 10px;text-align:left;width:120px;">Field Changed</th>
+            <th style="padding:9px 10px;text-align:left;width:100px;">Old Value</th>
+            <th style="padding:9px 10px;text-align:left;width:100px;">New Value</th>
+            <th style="padding:9px 10px;text-align:left;">Reason / Note</th>
+          </tr>
+        </thead>
+        <tbody id="cl-tbody">
+          ${renderCLRows(changeLogData)}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderCLRows(data){
+  return data.map((c,i)=>{
+    const sev = clSeverityConfig[c.severity]||clSeverityConfig.low;
+    const modColor = clModuleColors[c.module]||'#718096';
+    return `
+      <tr style="background:${i%2===0?'#fff':'var(--bg)'};">
+        <td style="padding:7px 10px;font-family:monospace;font-size:.7rem;color:var(--muted);">${c.id}</td>
+        <td style="padding:7px 10px;font-size:.7rem;color:#4A5568;">${c.ts}</td>
+        <td style="padding:7px 10px;">
+          <div style="font-weight:600;">${c.user.split(' ')[0]} ${(c.user.split(' ')[1]||'')[0]||''}.</div>
+          <div style="font-size:.65rem;color:var(--muted);">${c.role}</div>
+        </td>
+        <td style="padding:7px 10px;text-align:center;">
+          <span style="background:${sev.bg};color:${sev.text};font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:8px;">${sev.label}</span>
+        </td>
+        <td style="padding:7px 10px;">
+          <span style="background:${modColor}22;color:${modColor};font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:8px;">${c.module}</span>
+        </td>
+        <td style="padding:7px 10px;font-weight:500;">${c.entity}</td>
+        <td style="padding:7px 10px;color:#4A5568;">${c.field}</td>
+        <td style="padding:7px 10px;font-family:monospace;font-size:.7rem;color:#9B2C2C;text-decoration:line-through;">${c.old}</td>
+        <td style="padding:7px 10px;font-family:monospace;font-size:.7rem;color:#276749;font-weight:600;">${c.newVal}</td>
+        <td style="padding:7px 10px;color:#4A5568;font-size:.72rem;line-height:1.4;">${c.reason||'—'}</td>
+      </tr>`;
+  }).join('');
+}
+
+function filterCL(filter){
+  // Update button styles
+  document.querySelectorAll('[id^="cl-f-"]').forEach(b=>{
+    b.style.background=''; b.style.color=''; b.style.borderColor='';
+  });
+  const idx = ['All','High Impact','Finance','Projects','Timesheets','AI Agent'].indexOf(filter);
+  const btn = document.getElementById('cl-f-'+idx);
+  if(btn){ btn.style.background='var(--teal)'; btn.style.color='#fff'; btn.style.borderColor='var(--teal)'; }
+
+  let filtered = changeLogData;
+  if(filter==='High Impact') filtered = changeLogData.filter(c=>c.severity==='high');
+  else if(filter==='Finance') filtered = changeLogData.filter(c=>['Invoices','Purchase Orders'].includes(c.module));
+  else if(filter==='Projects') filtered = changeLogData.filter(c=>['Projects','ADO Tasks','Project Health'].includes(c.module));
+  else if(filter==='Timesheets') filtered = changeLogData.filter(c=>c.module==='Timesheets'||c.module==='Timesheet Chaser');
+  else if(filter==='AI Agent') filtered = changeLogData.filter(c=>c.role==='AI Agent');
+
+  const tbody = document.getElementById('cl-tbody');
+  const count = document.getElementById('cl-count');
+  if(tbody) tbody.innerHTML = renderCLRows(filtered);
+  if(count) count.textContent = filtered.length;
 }
 
 // ══════════════════════════════════════════════════════════
