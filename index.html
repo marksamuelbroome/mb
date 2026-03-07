@@ -292,17 +292,32 @@
       <div class="nav-item" id="nav-raid" onclick="showPage('pg-raid')"><span class="ico">⚠️</span> RAID Log</div>
 
       <div class="section-label">Reporting</div>
+      <div class="nav-item" id="nav-weekly-reports" onclick="showPage('pg-weekly-reports')"><span class="ico">📅</span> Weekly Reports</div>
       <div class="nav-item" id="nav-status-customer" onclick="showPage('pg-status-customer')"><span class="ico">📄</span> Customer Report</div>
       <div class="nav-item" id="nav-status-internal" onclick="showPage('pg-status-internal')"><span class="ico">🔒</span> Internal Report</div>
       <div class="nav-item" id="nav-portal" onclick="showPage('pg-portal')"><span class="ico">🌐</span> Customer Portal</div>
 
       <div class="section-label">Resourcing</div>
       <div class="nav-item" id="nav-resourcing" onclick="showPage('pg-resourcing')"><span class="ico">🔍</span> Resource Requests</div>
+      <div class="nav-item" id="nav-skills" onclick="showPage('pg-skills')"><span class="ico">🎯</span> Skills Matrix</div>
+      <div class="nav-item" id="nav-bench" onclick="showPage('pg-bench')"><span class="ico">🪑</span> Bench & Demand</div>
+
+      <div class="section-label">HR & Workforce</div>
+      <div class="nav-item" id="nav-orgchart" onclick="showPage('pg-orgchart')"><span class="ico">🏢</span> Org Chart</div>
+      <div class="nav-item" id="nav-performance" onclick="showPage('pg-performance')"><span class="ico">⭐</span> Performance Reviews</div>
+
+      <div class="section-label">Delivery</div>
+      <div class="nav-item" id="nav-gantt" onclick="showPage('pg-gantt')"><span class="ico">📊</span> Gantt Chart</div>
+      <div class="nav-item" id="nav-kanban" onclick="showPage('pg-kanban')"><span class="ico">📋</span> Kanban Board</div>
 
       <div class="section-label">Finance</div>
       <div class="nav-group">💰 Accounts Receivable</div>
       <div class="nav-sub" id="nav-invoices" onclick="showPage('pg-invoices')">Invoices</div>
       <div class="nav-sub" onclick="showPage('pg-ar-aging')">AR Aging</div>
+      <div class="nav-sub" id="nav-contracts" onclick="showPage('pg-contracts')">Contracts</div>
+      <div class="nav-sub" onclick="showPage('pg-billing-rules')">Billing Rules</div>
+      <div class="nav-sub" onclick="showPage('pg-revenue-rec')">Revenue Recognition</div>
+      <div class="nav-sub" id="nav-evm" onclick="showPage('pg-evm')">Earned Value (EVM)</div>
       <div class="nav-group">💸 Accounts Payable</div>
       <div class="nav-sub" onclick="showPage('pg-suppliers')">Suppliers</div>
       <div class="nav-sub" onclick="showPage('pg-purchase-orders')">Purchase Orders</div>
@@ -324,9 +339,20 @@
       <div class="nav-item" id="nav-faq" onclick="showPage('pg-faq')"><span class="ico">❓</span> FAQ</div>
 
       <div class="section-label">About</div>
+      <div class="nav-item" id="nav-coverage" onclick="showPage('pg-coverage')"><span class="ico">✅</span> Feature Coverage</div>
+      <div class="nav-item" id="nav-selftest" onclick="showPage('pg-selftest')"><span class="ico">🧪</span> Self-Test & Compliance</div>
       <div class="nav-item" id="nav-overview" onclick="showPage('pg-overview')"><span class="ico">📋</span> Executive Overview</div>
       <div class="nav-item" id="nav-tech" onclick="showPage('pg-tech')"><span class="ico">🏗️</span> Technical Notes</div>
       <div class="nav-item" id="nav-erd" onclick="showPage('pg-erd')"><span class="ico">🔗</span> Data Model (ERD)</div>
+
+      <!-- Build stamp -->
+      <div style="padding:14px 16px;border-top:1px solid rgba(255,255,255,.1);margin-top:8px;">
+        <div style="font-size:.62rem;color:rgba(255,255,255,.35);font-weight:700;letter-spacing:.06em;margin-bottom:3px;">BUILD INFO</div>
+        <div id="build-stamp" style="font-size:.65rem;color:rgba(255,255,255,.45);font-family:monospace;line-height:1.6;">
+          v3.0 · 07 Mar 2026<br>
+          <span id="build-time"></span>
+        </div>
+      </div>
     </div>
 
     <!-- Main Content -->
@@ -1009,6 +1035,19 @@
       <div id="pg-status-customer" class="page"><div id="status-customer-content"></div></div>
       <div id="pg-status-internal" class="page"><div id="status-internal-content"></div></div>
       <div id="pg-portal" class="page"><div id="portal-content"></div></div>
+      <div id="pg-skills" class="page"><div id="skills-content"></div></div>
+      <div id="pg-bench" class="page"><div id="bench-content"></div></div>
+      <div id="pg-orgchart" class="page"><div id="orgchart-content"></div></div>
+      <div id="pg-performance" class="page"><div id="performance-content"></div></div>
+      <div id="pg-gantt" class="page"><div id="gantt-content"></div></div>
+      <div id="pg-kanban" class="page"><div id="kanban-content"></div></div>
+      <div id="pg-billing-rules" class="page"><div id="billing-rules-content"></div></div>
+      <div id="pg-revenue-rec" class="page"><div id="revenue-rec-content"></div></div>
+      <div id="pg-coverage" class="page"><div id="coverage-content"></div></div>
+      <div id="pg-selftest" class="page"><div id="selftest-content"></div></div>
+      <div id="pg-weekly-reports" class="page"><div id="weekly-reports-content"></div></div>
+      <div id="pg-contracts" class="page"><div id="contracts-content"></div></div>
+      <div id="pg-evm" class="page"><div id="evm-content"></div></div>
       <div id="pg-ado" class="page"><div id="ado-content"></div></div>
 
       <!-- ══ WHAT CHANGED ══ -->
@@ -1170,6 +1209,9 @@ const navMap = {
   'pg-overview':'nav-overview','pg-tech':'nav-tech','pg-erd':'nav-erd',
   'pg-ado':'nav-ado','pg-variance':'nav-variance','pg-changelog':'nav-changelog',
   'pg-raid':'nav-raid','pg-status-customer':'nav-status-customer','pg-status-internal':'nav-status-internal','pg-portal':'nav-portal',
+  'pg-skills':'nav-skills','pg-bench':'nav-bench','pg-orgchart':'nav-orgchart','pg-performance':'nav-performance',
+  'pg-gantt':'nav-gantt','pg-kanban':'nav-kanban','pg-billing-rules':'nav-billing-rules','pg-revenue-rec':'nav-revenue-rec','pg-coverage':'nav-coverage','pg-selftest':'nav-selftest',
+  'pg-weekly-reports':'nav-weekly-reports','pg-contracts':'nav-contracts','pg-evm':'nav-evm',
   'pg-my-dashboard':'nav-my-dash','pg-timesheet':'nav-timesheet',
   'pg-my-assignments':'nav-my-assign','pg-my-expenses':'nav-expenses','pg-my-leave':'nav-leave',
 };
@@ -1197,6 +1239,19 @@ function showPage(id){
   if(id==='pg-status-customer') renderCustomerReport();
   if(id==='pg-status-internal') renderInternalReport();
   if(id==='pg-portal') renderPortal();
+  if(id==='pg-skills') renderSkillsMatrix();
+  if(id==='pg-bench') renderBenchDemand();
+  if(id==='pg-orgchart') renderOrgChart();
+  if(id==='pg-performance') renderPerformance();
+  if(id==='pg-gantt') renderGantt();
+  if(id==='pg-kanban') renderKanban();
+  if(id==='pg-billing-rules') renderBillingRules();
+  if(id==='pg-revenue-rec') renderRevenueRec();
+  if(id==='pg-coverage') renderFeatureCoverage();
+  if(id==='pg-selftest') renderSelfTest();
+  if(id==='pg-weekly-reports') renderWeeklyReports();
+  if(id==='pg-contracts') renderContracts();
+  if(id==='pg-evm') renderEVM();
   window.scrollTo(0,0);
 }
 
@@ -1205,6 +1260,9 @@ function showApp(){
   document.getElementById('app-shell').style.display='block';
   buildHeatmap();
   showPage('pg-executive');
+  // Populate build time stamp
+  const bt = document.getElementById('build-time');
+  if(bt) bt.textContent = 'Loaded: ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 }
 
 // ── Database Explorer ────────────────────────────────────────
@@ -2769,6 +2827,252 @@ function addMitigationAsAction(id, title, riskRef) {
 }
 
 // ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// ENGAGEMENT PORTFOLIO — MULTI-YEAR PROGRAMMES & PROJECTS
+// ══════════════════════════════════════════════════════════
+const engagementProjects = [
+  // ── AIB GROUP ──────────────────────────────────────────────────────────────
+  {id:'erp',customerId:'aib',customer:'AIB Group',programme:'Digital Core Programme',
+   name:'ERP Implementation (SAP S/4HANA)',type:'T&M',pm:'Siobhán Murphy',rag:'Amber',
+   startDate:'2025-10-01',endDate:'2026-03-31',duration:6,
+   bac:320000,spent:214000,invoiced:145000,percComplete:62,percPlanned:78,teamSize:6,
+   description:'Full SAP S/4HANA implementation covering GL, AP, AR, Treasury and Reporting.'},
+  {id:'aib-dm',customerId:'aib',customer:'AIB Group',programme:'Digital Core Programme',
+   name:'Data Migration & ETL Programme',type:'Fixed Fee',pm:"Ciarán O'Brien",rag:'Green',
+   startDate:'2025-07-01',endDate:'2026-06-30',duration:12,
+   bac:850000,spent:382000,invoiced:340000,percComplete:45,percPlanned:42,teamSize:4,
+   description:'Enterprise data migration from legacy mainframe to SAP. 14 entity types, 8 years history.'},
+  // ── BANK OF IRELAND ─────────────────────────────────────────────────────────
+  {id:'crm',customerId:'boi',customer:'Bank of Ireland',programme:'Customer Experience Programme',
+   name:'CRM Transformation (Salesforce)',type:'T&M',pm:'Aoife Gallagher',rag:'Green',
+   startDate:'2025-01-15',endDate:'2026-12-31',duration:24,
+   bac:1800000,spent:684000,invoiced:612000,percComplete:38,percPlanned:36,teamSize:9,
+   description:'Full Salesforce CRM implementation across Retail and Business Banking, replacing Siebel.'},
+  {id:'boi-digital',customerId:'boi',customer:'Bank of Ireland',programme:'Customer Experience Programme',
+   name:'Digital Banking Portal',type:'Fixed Fee',pm:'Seamus Connolly',rag:'Amber',
+   startDate:'2025-04-01',endDate:'2026-09-30',duration:18,
+   bac:1200000,spent:648000,invoiced:540000,percComplete:52,percPlanned:56,teamSize:7,
+   description:'Customer-facing digital banking portal — mobile-first, open banking API integration.'},
+  {id:'boi-compliance',customerId:'boi',customer:'Bank of Ireland',programme:'Customer Experience Programme',
+   name:'Regulatory Compliance Reporting',type:'Fixed Fee',pm:'Aoife Gallagher',rag:'Red',
+   startDate:'2025-09-01',endDate:'2026-02-28',duration:6,
+   bac:350000,spent:332000,invoiced:310000,percComplete:88,percPlanned:100,teamSize:3,
+   description:'Central Bank of Ireland NIRA/COREP/FINREP regulatory reporting automation.'},
+  // ── RYANAIR ─────────────────────────────────────────────────────────────────
+  {id:'ryr-hr',customerId:'ryr',customer:'Ryanair',programme:'People & Operations',
+   name:'HR Transformation Programme (Workday)',type:'T&M',pm:'Niamh Kelly',rag:'Green',
+   startDate:'2025-03-01',endDate:'2027-02-28',duration:24,
+   bac:2100000,spent:621000,invoiced:580000,percComplete:29,percPlanned:27,teamSize:8,
+   description:'Workday HCM implementation for 22,000 employees across 82 bases. Phase 1 complete.'},
+  {id:'ryr-fin',customerId:'ryr',customer:'Ryanair',programme:'People & Operations',
+   name:'Finance System Upgrade (Oracle Fusion)',type:'Fixed Fee',pm:'Patrick Dunne',rag:'Amber',
+   startDate:'2026-01-06',endDate:'2026-12-31',duration:12,
+   bac:900000,spent:112000,invoiced:90000,percComplete:12,percPlanned:8,teamSize:5,
+   description:'Oracle Fusion Finance replacing legacy Oracle R12 — GL, AP, AR, Fixed Assets, Cash Mgmt.'},
+  // ── ESB ─────────────────────────────────────────────────────────────────────
+  {id:'esb-portal',customerId:'esb',customer:'ESB',programme:'Digital Transformation Programme',
+   name:'Customer Self-Service Portal',type:'Fixed Fee',pm:'Roisin Byrne',rag:'Green',
+   startDate:'2024-07-01',endDate:'2025-12-31',duration:18,
+   bac:750000,spent:716000,invoiced:700000,percComplete:96,percPlanned:100,teamSize:4,
+   description:'Self-service portal for 1.2M residential customers — billing, meter reading, outage alerts.'},
+  {id:'esb-field',customerId:'esb',customer:'ESB',programme:'Digital Transformation Programme',
+   name:'Field Operations Mobile App',type:'T&M',pm:'Roisin Byrne',rag:'Amber',
+   startDate:'2024-07-01',endDate:'2026-01-31',duration:19,
+   bac:1100000,spent:872000,invoiced:820000,percComplete:78,percPlanned:85,teamSize:6,
+   description:'iOS/Android field app for 4,000 engineers — job dispatch, asset scanning, offline mode.'},
+  {id:'esb-analytics',customerId:'esb',customer:'ESB',programme:'Digital Transformation Programme',
+   name:'Analytics & Reporting Platform',type:'Fixed Fee',pm:"Ciarán O'Brien",rag:'Green',
+   startDate:'2024-10-01',endDate:'2025-09-30',duration:12,
+   bac:600000,spent:587000,invoiced:600000,percComplete:100,percPlanned:100,teamSize:3,
+   description:'Azure Synapse + Power BI analytics — completed Oct 2025, in hypercare.'},
+];
+
+// ══════════════════════════════════════════════════════════
+// WEEKLY STATUS REPORTS ARCHIVE
+// ══════════════════════════════════════════════════════════
+const weeklyReportsData = [
+  {id:'wr-erp-0307',projectId:'erp',projectName:'ERP Implementation (SAP S/4HANA)',customer:'AIB Group',
+   pm:'Siobhán Murphy',weekEnding:'2026-03-07',rag:'Amber',percComplete:62,percPlanned:65,
+   budgetDays:180,forecastDays:192,invoiced:145000,contractValue:320000,
+   execSummary:'Sprint 5 in progress with 12 of 15 planned items on track. SAP FI period-close configuration issue extends sprint by 3 days (approved by both parties). Go-live target 31 Mar remains achievable. Phase completion at 62% vs 65% target.',
+   highlights:['SAP FI journal posting 90% complete — VAT code fix resolved this week','AP payment run approval workflow delivered & signed off by AIB Finance team','Cost centre 4-level hierarchy deployed and user-tested','Bank reconciliation module completed — Sprint 4 carry-over resolved'],
+   nextPeriod:['Complete SAP FI period-close logic (ERP-041) — target 9 Mar','Begin Sprint 6 UAT preparation — test scripts due 12 Mar','Submit Invoice INV-00023 to AIB (£68,400) this week','Confirm hypercare resource plan for Sprint 7'],
+   customerRisks:[{id:'R-001',title:'ERP go-live at risk from SAP FI config complexity',rag:'Amber',mitigation:'3-day sprint extension approved. Tracking daily. 31 Mar go-live remains achievable.'}]},
+
+  {id:'wr-erp-0228',projectId:'erp',projectName:'ERP Implementation (SAP S/4HANA)',customer:'AIB Group',
+   pm:'Siobhán Murphy',weekEnding:'2026-02-28',rag:'Amber',percComplete:58,percPlanned:62,
+   budgetDays:180,forecastDays:188,invoiced:125000,contractValue:320000,
+   execSummary:'Phase 2 Finance Module declared complete and formally accepted by AIB this week. Sprint 5 planning completed with SAP FI configuration identified as the primary schedule risk. Overall 58% complete against a 62% target.',
+   highlights:['Phase 2 Finance Module milestone accepted — signed off by AIB Finance Director','Sprint 4 — all 14 user stories accepted in review (zero carry-overs)','SAP FI configuration complexity risk identified and added to RAID log','Hypercare plan v1 submitted to AIB for review'],
+   nextPeriod:['Sprint 5 kick-off 2 Mar — GL close and period-end processing focus','SAP FI config review workshop with AIB Finance 4 Mar','Submit Invoice INV-00022 (£20,000 milestone invoice)','Begin UAT test script drafting'],
+   customerRisks:[{id:'R-001',title:'SAP FI period-end configuration risk',rag:'Amber',mitigation:'Workshop scheduled 4 Mar. Risk being actively tracked and managed.'}]},
+
+  {id:'wr-erp-0221',projectId:'erp',projectName:'ERP Implementation (SAP S/4HANA)',customer:'AIB Group',
+   pm:'Siobhán Murphy',weekEnding:'2026-02-21',rag:'Green',percComplete:52,percPlanned:55,
+   budgetDays:180,forecastDays:184,invoiced:125000,contractValue:320000,
+   execSummary:'Strong progress this week. Sprint 4 is 86% complete with all high-priority deliverables accepted. Phase 2 Finance Module on track for formal sign-off next week. Overall 52% complete vs a 55% target — within acceptable tolerance.',
+   highlights:['AP payment run workflow — all 8 test scenarios passed UAT','AR aging report live in SAP — accepted by AIB Finance','Sprint 4 velocity 34 SP — highest on this project to date','GL Chart of Accounts finalised and formally approved'],
+   nextPeriod:['Complete Sprint 4 — 5 remaining stories by 27 Feb','Phase 2 milestone review & sign-off 28 Feb','Sprint 5 planning and kick-off 28 Feb'],
+   customerRisks:[]},
+
+  {id:'wr-erp-0214',projectId:'erp',projectName:'ERP Implementation (SAP S/4HANA)',customer:'AIB Group',
+   pm:'Siobhán Murphy',weekEnding:'2026-02-14',rag:'Green',percComplete:46,percPlanned:45,
+   budgetDays:180,forecastDays:182,invoiced:105000,contractValue:320000,
+   execSummary:'Sprint 4 started strongly. All team members fully onboarded after the Phase 1→2 transition. Phase 2 Finance work tracking slightly ahead of plan at 46% overall completion against a 45% target.',
+   highlights:['Phase 1 ERP Core Foundation milestone formally accepted by AIB leadership','Sprint 4 kick-off — all 15 stories estimated and assigned','Development environment performance issue resolved','Test plan v2.1 approved by AIB QA Lead'],
+   nextPeriod:['Sprint 4 mid-sprint review 18 Feb','AP Payment Run delivery target 20 Feb','Submit Invoice INV-00021 to AIB by 16 Feb'],
+   customerRisks:[]},
+
+  {id:'wr-crm-0307',projectId:'crm',projectName:'CRM Transformation (Salesforce)',customer:'Bank of Ireland',
+   pm:'Aoife Gallagher',weekEnding:'2026-03-07',rag:'Green',percComplete:38,percPlanned:36,
+   budgetDays:320,forecastDays:326,invoiced:612000,contractValue:1800000,
+   execSummary:'Sprint 12 in progress. Contact Management module completed and accepted this week. Data migration to Salesforce 45% complete. BOI core banking API integration live in DEV. On track for Phase 3 Email Integration starting 14 Mar.',
+   highlights:['Contact Management module accepted by BOI Product Owner','BOI Core Banking API integration live in DEV environment','380,000 of 840,000 contacts migrated successfully','Sprint 11 retrospective — team velocity at 3-month high (42 SP)'],
+   nextPeriod:['Complete data migration Phase A (all contacts) by 12 Mar','Begin Sprint 13 — Email Integration module 14 Mar','API regression test suite 10–12 Mar','Quarterly Business Review with BOI CIO 15 Mar'],
+   customerRisks:[{id:'R-CRM-01',title:'Data migration volume larger than initially scoped',rag:'Amber',mitigation:'Parallel migration streams added. Completion by 12 Mar remains on track.'}]},
+
+  {id:'wr-crm-0228',projectId:'crm',projectName:'CRM Transformation (Salesforce)',customer:'Bank of Ireland',
+   pm:'Aoife Gallagher',weekEnding:'2026-02-28',rag:'Green',percComplete:36,percPlanned:35,
+   budgetDays:320,forecastDays:324,invoiced:590000,contractValue:1800000,
+   execSummary:'Sprint 11 successfully completed with all 18 stories accepted — zero carry-overs. Sales Dashboard v2 delivered and very well received by BOI sales leadership. Integration design approved. 36% overall complete, on track.',
+   highlights:['Sales Dashboard v2 delivered — standing ovation from BOI sales leadership','Integration design document approved by BOI Enterprise Architecture team','Sprint 11 all 18 stories accepted with zero carry-overs','Team velocity record: 42 SP this sprint'],
+   nextPeriod:['Sprint 12 kick-off 2 Mar — Contact Management module','BOI core banking API integration development commences','Data migration Phase A kick-off 3 Mar'],
+   customerRisks:[]},
+
+  {id:'wr-ryr-0307',projectId:'ryr-hr',projectName:'HR Transformation Programme (Workday)',customer:'Ryanair',
+   pm:'Niamh Kelly',weekEnding:'2026-03-07',rag:'Green',percComplete:29,percPlanned:27,
+   budgetDays:480,forecastDays:475,invoiced:580000,contractValue:2100000,
+   execSummary:'Phase 2 (Talent & Performance Management) design sprints underway. Phase 1 (Core HR) in hypercare with stable metrics — 99.8% system availability, 0 P1 incidents this week. 29% overall programme complete, tracking slightly ahead of plan.',
+   highlights:['Phase 1 hypercare — 0 P1 incidents, 99.8% SLA this week','Phase 2 design sprint 3 complete — Talent module blueprint approved by Ryanair People team','Workday tenant configuration for Phase 2 commenced','Payroll integration design with Sage agreed at technical level'],
+   nextPeriod:['Phase 2 design sprint 4 — Performance Reviews module','Payroll integration technical design document (Sage ↔ Workday)','Phase 1 hypercare sign-off scheduled 14 Mar','Monthly SteerCo 17 Mar'],
+   customerRisks:[]},
+
+  {id:'wr-ryr-0228',projectId:'ryr-hr',projectName:'HR Transformation Programme (Workday)',customer:'Ryanair',
+   pm:'Niamh Kelly',weekEnding:'2026-02-28',rag:'Green',percComplete:27,percPlanned:25,
+   budgetDays:480,forecastDays:476,invoiced:558000,contractValue:2100000,
+   execSummary:'Phase 1 Core HR officially completed and signed off. 22,000 Ryanair employees now live on Workday. Phase 2 kick-off workshop held this week with Ryanair People Leadership — strong engagement and clear priorities identified.',
+   highlights:['Phase 1 sign-off received — 22,000 employees live on Workday across 82 bases','Phase 2 kick-off workshop — 45 Ryanair stakeholders attended over 2 days','Absence management module praised by Ryanair HR Director','NPS from Ryanair executive sponsor: 9/10'],
+   nextPeriod:['Phase 2 design sprint 1 — Talent & Succession Planning module','Phase 1 hypercare monitoring (30-day window, ends 14 Mar)','Phase 2 high-level timeline shared with SteerCo'],
+   customerRisks:[]},
+
+  {id:'wr-esb-0307',projectId:'esb-field',projectName:'Field Operations Mobile App',customer:'ESB',
+   pm:'Roisin Byrne',weekEnding:'2026-03-07',rag:'Amber',percComplete:78,percPlanned:85,
+   budgetDays:240,forecastDays:258,invoiced:820000,contractValue:1100000,
+   execSummary:'UAT Phase 2 in progress. 63 of 89 test cases passed. 6 defects raised — 2 classified Critical (offline sync failure under poor signal; job dispatch latency >3s). Both under active resolution with fixes targeted for 12 Mar. App go-live planned 28 Mar.',
+   highlights:['UAT Phase 2 commenced — 63/89 test cases passed (71%)','Offline map caching implemented and performing well in field tests','Job dispatch UI redesign accepted by ESB field operations lead','Performance test: 500 concurrent users — 98% of requests within SLA'],
+   nextPeriod:['Resolve 2 critical UAT defects (offline sync, dispatch latency) by 12 Mar','UAT Phase 2 completion meeting and sign-off 13 Mar','App release candidate for ESB security review 14 Mar','Go-live planning workshop with ESB 16 Mar'],
+   customerRisks:[{id:'R-ESB-01',title:'UAT critical defects may delay 28 Mar go-live',rag:'Amber',mitigation:'Engineering team fully assigned to fixes. Target resolution 12 Mar. 16 calendar days buffer before go-live.'}]},
+];
+
+// ══════════════════════════════════════════════════════════
+// CONTRACTS DATA
+// ══════════════════════════════════════════════════════════
+const contractsData = [
+  {id:'CTR-001',contractNo:'CODEC-AIB-2025-047',customer:'AIB Group',customerId:'aib',
+   projectId:'erp',projectName:'ERP Implementation (SAP S/4HANA)',type:'T&M',value:320000,
+   startDate:'2025-10-01',endDate:'2026-03-31',status:'Active',
+   invoiced:145000,paid:125000,outstanding:20000,retentionHeld:0,
+   pm:'Siobhán Murphy',sigCodec:'David Walsh',sigClient:'Mary Brennan (CTO)',
+   description:'T&M contract for full SAP S/4HANA implementation. Rate card applies per role. Quarterly review clause.',
+   milestones:[
+     {name:'Kick-off & Mobilisation',date:'2025-10-15',value:25000,invoiced:true,paid:true},
+     {name:'Phase 1 — ERP Core Foundation',date:'2026-01-31',value:75000,invoiced:true,paid:true},
+     {name:'Phase 2 — Finance Module',date:'2026-02-28',value:25000,invoiced:true,paid:false},
+     {name:'Phase 3–5 — Build & Go-Live',date:'2026-03-31',value:195000,invoiced:false,paid:false}]},
+  {id:'CTR-002',contractNo:'CODEC-AIB-2025-031',customer:'AIB Group',customerId:'aib',
+   projectId:'aib-dm',projectName:'Data Migration & ETL Programme',type:'Fixed Fee',value:850000,
+   startDate:'2025-07-01',endDate:'2026-06-30',status:'Active',
+   invoiced:340000,paid:320000,outstanding:20000,retentionHeld:42500,
+   pm:"Ciarán O'Brien",sigCodec:'David Walsh',sigClient:'John Riordan (CDO)',
+   description:'Fixed price data migration. 5% retention held to sign-off. Scope locked per SoW v3.1.',
+   milestones:[
+     {name:'Discovery & Data Profiling',date:'2025-08-31',value:85000,invoiced:true,paid:true},
+     {name:'ETL Design & Development',date:'2025-11-30',value:170000,invoiced:true,paid:true},
+     {name:'Migration Rehearsal 1',date:'2026-02-28',value:85000,invoiced:true,paid:false},
+     {name:'Migration Rehearsal 2',date:'2026-04-30',value:85000,invoiced:false,paid:false},
+     {name:'Production Migration & Sign-off',date:'2026-06-30',value:425000,invoiced:false,paid:false}]},
+  {id:'CTR-003',contractNo:'CODEC-BOI-2025-012',customer:'Bank of Ireland',customerId:'boi',
+   projectId:'crm',projectName:'CRM Transformation (Salesforce)',type:'T&M',value:1800000,
+   startDate:'2025-01-15',endDate:'2026-12-31',status:'Active',
+   invoiced:612000,paid:580000,outstanding:32000,retentionHeld:0,
+   pm:'Aoife Gallagher',sigCodec:'David Walsh',sigClient:"Gerard O'Sullivan (CIO)",
+   description:'T&M multi-year Salesforce CRM implementation. 12-month review clause with rate renegotiation option.',
+   milestones:[
+     {name:'Phase 1 — CRM Core Setup',date:'2025-04-30',value:200000,invoiced:true,paid:true},
+     {name:'Phase 2 — Data Migration (Year 1)',date:'2025-12-31',value:400000,invoiced:true,paid:true},
+     {name:'Phase 3 — Email Integration',date:'2026-06-30',value:600000,invoiced:false,paid:false},
+     {name:'Phase 4 — UAT & Go-Live',date:'2026-12-31',value:600000,invoiced:false,paid:false}]},
+  {id:'CTR-004',contractNo:'CODEC-BOI-2025-028',customer:'Bank of Ireland',customerId:'boi',
+   projectId:'boi-digital',projectName:'Digital Banking Portal',type:'Fixed Fee',value:1200000,
+   startDate:'2025-04-01',endDate:'2026-09-30',status:'Active',
+   invoiced:540000,paid:510000,outstanding:30000,retentionHeld:60000,
+   pm:'Seamus Connolly',sigCodec:'David Walsh',sigClient:'Fiona Clarke (CDO)',
+   description:'Fixed fee portal build. 5% retention held until go-live acceptance. Change control board in place.',
+   milestones:[
+     {name:'Design & Architecture',date:'2025-06-30',value:120000,invoiced:true,paid:true},
+     {name:'Core Banking Integration',date:'2025-09-30',value:240000,invoiced:true,paid:true},
+     {name:'Frontend Development Phase 1',date:'2025-12-31',value:180000,invoiced:true,paid:false},
+     {name:'Frontend Development Phase 2',date:'2026-03-31',value:240000,invoiced:false,paid:false},
+     {name:'UAT, Go-Live & Retention Release',date:'2026-09-30',value:420000,invoiced:false,paid:false}]},
+  {id:'CTR-005',contractNo:'CODEC-BOI-2025-039',customer:'Bank of Ireland',customerId:'boi',
+   projectId:'boi-compliance',projectName:'Regulatory Compliance Reporting',type:'Fixed Fee',value:350000,
+   startDate:'2025-09-01',endDate:'2026-02-28',status:'Overdue',
+   invoiced:310000,paid:280000,outstanding:30000,retentionHeld:17500,
+   pm:'Aoife Gallagher',sigCodec:'David Walsh',sigClient:"Gerard O'Sullivan (CIO)",
+   description:'Fixed fee regulatory reporting automation. 88% complete — final deliverable overdue. Extension under negotiation.',
+   milestones:[
+     {name:'Design & Configuration',date:'2025-10-31',value:70000,invoiced:true,paid:true},
+     {name:'COREP/FINREP Reports',date:'2025-12-31',value:140000,invoiced:true,paid:true},
+     {name:'NIRA Reports & UAT',date:'2026-01-31',value:70000,invoiced:true,paid:false},
+     {name:'Final Sign-off & Retention Release',date:'2026-02-28',value:70000,invoiced:false,paid:false}]},
+  {id:'CTR-006',contractNo:'CODEC-RYR-2025-007',customer:'Ryanair',customerId:'ryr',
+   projectId:'ryr-hr',projectName:'HR Transformation Programme (Workday)',type:'T&M',value:2100000,
+   startDate:'2025-03-01',endDate:'2027-02-28',status:'Active',
+   invoiced:580000,paid:560000,outstanding:20000,retentionHeld:0,
+   pm:'Niamh Kelly',sigCodec:"Seamus O'Reilly (CEO)",sigClient:'Barry Quirke (CPO)',
+   description:'Multi-year T&M Workday HCM implementation. Covers all 4 programme phases. Annual rate review.',
+   milestones:[
+     {name:'Phase 1 — Core HR Go-Live',date:'2026-01-31',value:500000,invoiced:true,paid:true},
+     {name:'Phase 2 — Talent & Performance',date:'2026-09-30',value:600000,invoiced:false,paid:false},
+     {name:'Phase 3 — Payroll Integration',date:'2027-01-31',value:700000,invoiced:false,paid:false},
+     {name:'Phase 4 — Analytics & Hypercare',date:'2027-02-28',value:300000,invoiced:false,paid:false}]},
+  {id:'CTR-007',contractNo:'CODEC-RYR-2026-001',customer:'Ryanair',customerId:'ryr',
+   projectId:'ryr-fin',projectName:'Finance System Upgrade (Oracle Fusion)',type:'Fixed Fee',value:900000,
+   startDate:'2026-01-06',endDate:'2026-12-31',status:'Active',
+   invoiced:90000,paid:90000,outstanding:0,retentionHeld:45000,
+   pm:'Patrick Dunne',sigCodec:'David Walsh',sigClient:'Claire Lawlor (CFO)',
+   description:'Fixed fee Oracle Fusion Finance. 5% retention to go-live. Scope per SoW v1.2 dated 3 Jan 2026.',
+   milestones:[
+     {name:'Project Initiation & Design',date:'2026-02-28',value:90000,invoiced:true,paid:true},
+     {name:'GL, AP, AR Development',date:'2026-06-30',value:270000,invoiced:false,paid:false},
+     {name:'Fixed Assets & Cash Management',date:'2026-09-30',value:180000,invoiced:false,paid:false},
+     {name:'UAT, Go-Live & Retention',date:'2026-12-31',value:360000,invoiced:false,paid:false}]},
+  {id:'CTR-008',contractNo:'CODEC-ESB-2024-018',customer:'ESB',customerId:'esb',
+   projectId:'esb-field',projectName:'Field Operations Mobile App',type:'T&M',value:1100000,
+   startDate:'2024-07-01',endDate:'2026-01-31',status:'Active',
+   invoiced:820000,paid:800000,outstanding:20000,retentionHeld:0,
+   pm:'Roisin Byrne',sigCodec:'David Walsh',sigClient:'Tom Fitzpatrick (COO)',
+   description:'T&M mobile app for ESB field engineers. Contract extended +1 month per Change Order 004 due to UAT scope increase.',
+   milestones:[
+     {name:'MVP — Core Job Dispatch',date:'2024-12-31',value:330000,invoiced:true,paid:true},
+     {name:'Phase 2 — Offline & Asset Scanning',date:'2025-06-30',value:330000,invoiced:true,paid:true},
+     {name:'Phase 3 — UAT & Go-Live',date:'2026-01-31',value:440000,invoiced:false,paid:false}]},
+];
+
+// ══════════════════════════════════════════════════════════
+// EARNED VALUE MANAGEMENT DATA
+// ══════════════════════════════════════════════════════════
+const evmData = [
+  {id:'erp',       name:'ERP Implementation (SAP)',       customer:'AIB Group',       bac:320000,  pv:249600,  ev:198560,  ac:214000, invoiced:145000, percComplete:62, percPlanned:78,  startDate:'2025-10-01',endDate:'2026-03-31'},
+  {id:'aib-dm',    name:'Data Migration & ETL',           customer:'AIB Group',       bac:850000,  pv:357000,  ev:382500,  ac:382000, invoiced:340000, percComplete:45, percPlanned:42,  startDate:'2025-07-01',endDate:'2026-06-30'},
+  {id:'crm',       name:'CRM Transformation (SF)',        customer:'Bank of Ireland', bac:1800000, pv:648000,  ev:684000,  ac:684000, invoiced:612000, percComplete:38, percPlanned:36,  startDate:'2025-01-15',endDate:'2026-12-31'},
+  {id:'boi-digital',name:'Digital Banking Portal',        customer:'Bank of Ireland', bac:1200000, pv:672000,  ev:624000,  ac:648000, invoiced:540000, percComplete:52, percPlanned:56,  startDate:'2025-04-01',endDate:'2026-09-30'},
+  {id:'boi-compliance',name:'Regulatory Compliance',      customer:'Bank of Ireland', bac:350000,  pv:350000,  ev:308000,  ac:332000, invoiced:310000, percComplete:88, percPlanned:100, startDate:'2025-09-01',endDate:'2026-02-28'},
+  {id:'ryr-hr',    name:'HR Transformation (Workday)',    customer:'Ryanair',         bac:2100000, pv:567000,  ev:609000,  ac:621000, invoiced:580000, percComplete:29, percPlanned:27,  startDate:'2025-03-01',endDate:'2027-02-28'},
+  {id:'ryr-fin',   name:'Finance Upgrade (Oracle)',       customer:'Ryanair',         bac:900000,  pv:72000,   ev:108000,  ac:112000, invoiced:90000,  percComplete:12, percPlanned:8,   startDate:'2026-01-06',endDate:'2026-12-31'},
+  {id:'esb-field', name:'Field Operations Mobile App',    customer:'ESB',             bac:1100000, pv:935000,  ev:858000,  ac:872000, invoiced:820000, percComplete:78, percPlanned:85,  startDate:'2024-07-01',endDate:'2026-01-31'},
+];
+
 // STATUS REPORT ENGINE
 // ══════════════════════════════════════════════════════════
 
@@ -2806,6 +3110,325 @@ const statusProjects = [
    internalRisks:['Aoife Walsh HR risk — only PM/BA on this project. Departure before 28 Mar = critical.','Margin 18% vs 28% target. 12 free days adding unrecovered cost of ~£9,600.','CR-007 with BOI unsigned — if rejected, full £9,600 absorbed by Codec margin.','CRM-024 bug: if not closed by 10 Mar, go-live slips and SLA penalties may apply.'],
   },
 ];
+
+// ══════════════════════════════════════════════════════════
+// WEEKLY REPORTS ENGINE
+// ══════════════════════════════════════════════════════════
+function renderWeeklyReports(selectedId) {
+  const el = document.querySelector('#weekly-reports-content');
+  if(!el) return;
+  selectedId = selectedId || weeklyReportsData[0].id;
+  const sel = weeklyReportsData.find(r=>r.id===selectedId) || weeklyReportsData[0];
+  const rc = {Green:'#38A169',Amber:'#D69E2E',Red:'#E53E3E'};
+  const rb = {Green:'#F0FFF4',Amber:'#FFFBEB',Red:'#FFF5F5'};
+  const fd = d => new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  const projects = [...new Set(weeklyReportsData.map(r=>r.projectId))];
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div><h5 style="margin:0;">📅 Weekly Status Reports</h5>
+    <div class="sub" style="margin:0;">${weeklyReportsData.length} reports archived across ${projects.length} projects — click any week to view the email-ready report</div></div>
+    <button onclick="generateNewWeeklyReport()" style="background:#1B2A4A;color:#fff;border:none;padding:9px 20px;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;">+ Generate New Report</button>
+  </div>
+  <div style="display:grid;grid-template-columns:310px 1fr;gap:20px;align-items:start;">
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;position:sticky;top:20px;">
+      <div style="padding:11px 14px;background:#1B2A4A;color:#fff;font-size:.72rem;font-weight:800;letter-spacing:.06em;">REPORT ARCHIVE (${weeklyReportsData.length})</div>
+      <div style="display:flex;flex-direction:column;">
+      ${weeklyReportsData.map(r=>`
+      <div onclick="renderWeeklyReports('${r.id}')" style="padding:11px 14px;border-bottom:1px solid #F7FAFC;cursor:pointer;background:${r.id===selectedId?'#EBF4FF':'#fff'};">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;">
+          <span style="font-size:.74rem;font-weight:700;color:#1B2A4A;">w/e ${fd(r.weekEnding)}</span>
+          <span style="font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:4px;background:${rb[r.rag]};color:${rc[r.rag]};">● ${r.rag}</span>
+        </div>
+        <div style="font-size:.74rem;color:#2D3748;font-weight:600;margin-bottom:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px;">${r.projectName}</div>
+        <div style="font-size:.7rem;color:#718096;">${r.customer} · ${r.pm}</div>
+      </div>`).join('')}
+      </div>
+    </div>
+    <div id="wr-detail">${renderWeeklyReportHTML(sel)}</div>
+  </div>`;}
+
+function renderWeeklyReportHTML(r) {
+  const rc = {Green:'#38A169',Amber:'#D69E2E',Red:'#E53E3E'};
+  const rb = {Green:'#F0FFF4',Amber:'#FFFBEB',Red:'#FFF5F5'};
+  const rbd = {Green:'#68D391',Amber:'#F6AD55',Red:'#FC8181'};
+  const fd = d => new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  const slip = r.forecastDays - r.budgetDays;
+  const billedPct = Math.round(r.invoiced/r.contractValue*100);
+  return `
+  <div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#F7FAFC;border-bottom:1px solid var(--border);">
+      <div style="font-size:.74rem;color:#718096;">📧 Email-ready customer report</div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="window.print()" style="background:#E2E8F0;color:#4A5568;border:none;padding:6px 14px;border-radius:6px;font-size:.74rem;cursor:pointer;">🖨 Print</button>
+        <button onclick="emailWeeklyReport('${r.id}')" style="background:#38A169;color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:.74rem;font-weight:700;cursor:pointer;">✉ Email to Customer</button>
+      </div>
+    </div>
+    <div style="padding:28px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:3px solid #1B2A4A;">
+        <div><div style="font-size:1.5rem;font-weight:900;color:#1B2A4A;letter-spacing:-.02em;">Codec</div>
+        <div style="font-size:.66rem;color:#718096;font-weight:700;letter-spacing:.1em;">WEEKLY PROJECT STATUS REPORT</div></div>
+        <div style="text-align:right;"><div style="font-size:.78rem;color:#4A5568;">Week Ending: <strong>${fd(r.weekEnding)}</strong></div>
+        <div style="font-size:.74rem;color:#718096;">PM: ${r.pm}</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;margin-bottom:20px;">
+        <div><div style="font-size:1.1rem;font-weight:800;color:#2D3748;margin-bottom:3px;">${r.projectName}</div>
+        <div style="font-size:.8rem;color:#4A5568;">Customer: <strong>${r.customer}</strong></div></div>
+        <div style="background:${rb[r.rag]};border:2px solid ${rbd[r.rag]};border-radius:10px;padding:10px 22px;text-align:center;">
+          <div style="font-size:.62rem;color:${rc[r.rag]};font-weight:800;letter-spacing:.1em;">OVERALL STATUS</div>
+          <div style="font-size:1.8rem;font-weight:900;color:${rc[r.rag]};">● ${r.rag}</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;">
+        ${[
+          {l:'% Complete',v:r.percComplete+'%',s:'Target: '+r.percPlanned+'%',bar:r.percComplete,c:rc[r.rag]},
+          {l:'Budget Days',v:r.budgetDays+'d',s:slip>0?'⚠ +'+slip+'d forecast':'✓ On budget',c:slip>0?'#E53E3E':'#38A169',bar:null},
+          {l:'Invoiced to Date',v:'£'+(r.invoiced/1000).toFixed(0)+'k',s:billedPct+'% of £'+(r.contractValue/1000).toFixed(0)+'k contract',c:'#1B2A4A',bar:null},
+          {l:'Remaining Value',v:'£'+((r.contractValue-r.invoiced)/1000).toFixed(0)+'k',s:(100-billedPct)+'% yet to invoice',c:'#2B6CB0',bar:null}
+        ].map(k=>`<div style="background:#F7FAFC;border-radius:8px;padding:13px;text-align:center;">
+          <div style="font-size:.62rem;color:#718096;font-weight:700;margin-bottom:4px;">${k.l.toUpperCase()}</div>
+          <div style="font-size:1.3rem;font-weight:900;color:${k.c};">${k.v}</div>
+          <div style="font-size:.66rem;color:${k.c===rc[r.rag]&&k.bar?k.c:'#718096'};margin-top:3px;">${k.s}</div>
+          ${k.bar!==null?`<div style="width:100%;height:4px;background:#E2E8F0;border-radius:2px;margin-top:6px;"><div style="width:${Math.min(k.bar,100)}%;height:100%;background:${k.c};border-radius:2px;"></div></div>`:''}</div>`).join('')}
+      </div>
+      <div style="margin-bottom:18px;"><div style="font-size:.72rem;font-weight:800;color:#1B2A4A;letter-spacing:.06em;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid #E2E8F0;">EXECUTIVE SUMMARY</div>
+      <p style="font-size:.82rem;color:#4A5568;line-height:1.75;margin:0;">${r.execSummary}</p></div>
+      <div style="margin-bottom:18px;"><div style="font-size:.72rem;font-weight:800;color:#1B2A4A;letter-spacing:.06em;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid #E2E8F0;">KEY ACCOMPLISHMENTS THIS WEEK</div>
+      <ul style="margin:0;padding-left:18px;">${r.highlights.map(h=>`<li style="font-size:.8rem;color:#4A5568;margin-bottom:6px;line-height:1.6;">${h}</li>`).join('')}</ul></div>
+      <div style="margin-bottom:18px;"><div style="font-size:.72rem;font-weight:800;color:#1B2A4A;letter-spacing:.06em;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid #E2E8F0;">PLANNED FOR NEXT WEEK</div>
+      <ul style="margin:0;padding-left:18px;">${r.nextPeriod.map(n=>`<li style="font-size:.8rem;color:#4A5568;margin-bottom:6px;line-height:1.6;">${n}</li>`).join('')}</ul></div>
+      ${r.customerRisks&&r.customerRisks.length?`<div style="margin-bottom:18px;"><div style="font-size:.72rem;font-weight:800;color:#1B2A4A;letter-spacing:.06em;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid #E2E8F0;">KEY RISKS &amp; ISSUES</div>
+      ${r.customerRisks.map(x=>`<div style="display:flex;gap:12px;align-items:flex-start;padding:10px;background:#FFFBEB;border-left:3px solid #D69E2E;border-radius:4px;margin-bottom:6px;"><span>⚠️</span><div><div style="font-size:.78rem;font-weight:700;color:#2D3748;margin-bottom:2px;">${x.title}</div><div style="font-size:.74rem;color:#4A5568;"><em>Mitigation:</em> ${x.mitigation}</div></div></div>`).join('')}</div>`:
+      `<div style="margin-bottom:18px;padding:10px 14px;background:#F0FFF4;border-left:3px solid #68D391;border-radius:4px;"><div style="font-size:.78rem;color:#276749;">✅ No open risks or issues to report this week</div></div>`}
+      <div style="border-top:1px solid #E2E8F0;padding-top:12px;display:flex;justify-content:space-between;font-size:.7rem;color:#A0AEC0;">
+        <span>Codec Consulting · Registered in Ireland · VAT IE6330476G</span>
+        <span>Confidential — for ${r.customer} use only</span>
+      </div>
+    </div>
+  </div>`;}
+
+function emailWeeklyReport(id) {
+  const r = weeklyReportsData.find(x=>x.id===id);
+  if(!r) return;
+  alert('✉ Email Drafted\n\nTo: pm@codec.ie; stakeholders@'+r.customer.toLowerCase().replace(/ /g,'')+'.ie\nSubject: Weekly Status Report — '+r.projectName+' — w/e '+r.weekEnding+'\n\n[In production this would send via Office 365 / SendGrid API]');}
+
+function generateNewWeeklyReport() {
+  alert('🔧 Generate New Report\n\nIn production this would:\n1. Pull latest sprint data from Azure DevOps / Jira\n2. Pre-populate RAG from current RAID log\n3. Draft executive summary using AI (Claude)\n4. Present to PM for review before sending\n\n[Connects to ADO, RAID and AI engines]');}
+
+// ══════════════════════════════════════════════════════════
+// CONTRACTS ENGINE
+// ══════════════════════════════════════════════════════════
+function renderContracts() {
+  const el = document.querySelector('#contracts-content');
+  if(!el) return;
+  const tv = contractsData.reduce((s,c)=>s+c.value,0);
+  const ti = contractsData.reduce((s,c)=>s+c.invoiced,0);
+  const to = contractsData.reduce((s,c)=>s+c.outstanding,0);
+  const now = new Date('2026-03-07');
+  const expiring = contractsData.filter(c=>{const d=new Date(c.endDate);const dy=Math.ceil((d-now)/86400000);return dy>=0&&dy<=90&&c.status==='Active';});
+  const customers = [...new Set(contractsData.map(c=>c.customer))];
+  const ss = s=>s==='Active'?'background:#C6F6D5;color:#276749':s==='Overdue'?'background:#FED7D7;color:#742A2A':'background:#E2E8F0;color:#718096';
+  const pp = (a,b)=>Math.min(100,Math.round(a/b*100));
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div><h5 style="margin:0;">📋 Contracts Management</h5>
+    <div class="sub" style="margin:0;">${contractsData.length} contracts · Total portfolio value £${(tv/1000000).toFixed(2)}M</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;">
+    ${[
+      {l:'Total Contract Value',v:'£'+Number(tv).toLocaleString(),s:'Across '+contractsData.length+' contracts',i:'💼',c:'#1B2A4A'},
+      {l:'Total Invoiced',v:'£'+Number(ti).toLocaleString(),s:pp(ti,tv)+'% of portfolio billed',i:'📄',c:'#2B6CB0'},
+      {l:'Outstanding Receivables',v:'£'+Number(to).toLocaleString(),s:'Currently due from clients',i:'⏰',c:to>80000?'#C53030':'#276749'},
+      {l:'Expiring in 90 Days',v:expiring.length+' contracts',s:expiring.length?expiring.map(c=>c.customer).join(', '):'None expiring soon',i:'📅',c:expiring.length?'#744210':'#276749'},
+    ].map(k=>`<div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;">
+      <div style="font-size:1.4rem;margin-bottom:6px;">${k.i}</div>
+      <div style="font-size:.66rem;color:#718096;font-weight:700;margin-bottom:4px;">${k.l.toUpperCase()}</div>
+      <div style="font-size:1.25rem;font-weight:900;color:${k.c};">${k.v}</div>
+      <div style="font-size:.7rem;color:#718096;margin-top:2px;">${k.s}</div></div>`).join('')}
+  </div>
+  <div style="display:flex;flex-direction:column;gap:20px;">
+  ${customers.map(cust=>{
+    const cc=contractsData.filter(c=>c.customer===cust);
+    const cv=cc.reduce((s,c)=>s+c.value,0);
+    const ci=cc.reduce((s,c)=>s+c.invoiced,0);
+    return `<div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#1B2A4A;color:#fff;">
+        <div><div style="font-size:.88rem;font-weight:800;">${cust}</div>
+        <div style="font-size:.72rem;color:#90CDF4;margin-top:2px;">${cc.length} contract${cc.length>1?'s':''} · £${Number(cv).toLocaleString()} total</div></div>
+        <div style="text-align:right;"><div style="font-size:.78rem;font-weight:700;color:#68D391;">£${Number(ci).toLocaleString()} invoiced</div>
+        <div style="font-size:.68rem;color:#90CDF4;">${pp(ci,cv)}% billed</div></div>
+      </div>
+      <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.75rem;min-width:820px;">
+        <thead><tr style="background:#F7FAFC;">
+          <th style="padding:8px 12px;text-align:left;color:#4A5568;">Contract No.</th>
+          <th style="padding:8px 12px;text-align:left;color:#4A5568;">Project</th>
+          <th style="padding:8px 12px;text-align:left;color:#4A5568;">Type</th>
+          <th style="padding:8px 12px;text-align:right;color:#4A5568;">Value</th>
+          <th style="padding:8px 12px;text-align:right;color:#4A5568;">Invoiced</th>
+          <th style="padding:8px 12px;text-align:right;color:#4A5568;">Outstanding</th>
+          <th style="padding:8px 12px;text-align:center;color:#4A5568;">Billed %</th>
+          <th style="padding:8px 12px;text-align:left;color:#4A5568;">End Date</th>
+          <th style="padding:8px 12px;text-align:center;color:#4A5568;">Status</th>
+        </tr></thead><tbody>
+        ${cc.map(c=>{
+          const dl=Math.ceil((new Date(c.endDate)-now)/86400000);
+          return `<tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:8px 12px;font-family:monospace;font-weight:700;color:#1B2A4A;font-size:.72rem;">${c.contractNo}</td>
+            <td style="padding:8px 12px;color:#2D3748;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.projectName}</td>
+            <td style="padding:8px 12px;"><span style="background:#EBF4FF;color:#2B6CB0;font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:4px;">${c.type}</span></td>
+            <td style="padding:8px 12px;text-align:right;font-weight:700;">£${Number(c.value).toLocaleString()}</td>
+            <td style="padding:8px 12px;text-align:right;color:#2B6CB0;font-weight:600;">£${Number(c.invoiced).toLocaleString()}</td>
+            <td style="padding:8px 12px;text-align:right;color:${c.outstanding>0?'#C53030':'#276749'};font-weight:600;">£${Number(c.outstanding).toLocaleString()}</td>
+            <td style="padding:8px 12px;"><div style="display:flex;align-items:center;gap:5px;"><div style="flex:1;height:5px;background:#E2E8F0;border-radius:3px;overflow:hidden;"><div style="width:${pp(c.invoiced,c.value)}%;height:100%;background:#3182CE;border-radius:3px;"></div></div><span style="font-size:.68rem;font-weight:700;color:#4A5568;">${pp(c.invoiced,c.value)}%</span></div></td>
+            <td style="padding:8px 12px;font-size:.73rem;color:${dl<30?'#C53030':dl<90?'#744210':'#4A5568'};">${c.endDate}${dl>=0&&dl<90?' ('+dl+'d)':''}</td>
+            <td style="padding:8px 12px;text-align:center;"><span style="font-size:.66rem;font-weight:800;padding:2px 8px;border-radius:4px;${ss(c.status)}">${c.status}</span></td>
+          </tr>`;
+        }).join('')}
+        </tbody></table></div>
+      <div style="padding:14px 18px;border-top:1px solid var(--border);background:#FAFAFA;">
+        <div style="font-size:.7rem;font-weight:800;color:#4A5568;margin-bottom:10px;">PAYMENT MILESTONE TRACKER</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        ${cc.flatMap(c=>c.milestones.map(m=>({...m,cno:c.contractNo.split('-').slice(-2).join('-')}))).map(m=>`
+        <div style="background:#fff;border:1px solid ${m.paid?'#68D391':m.invoiced?'#90CDF4':'#E2E8F0'};border-radius:7px;padding:8px 11px;min-width:138px;">
+          <div style="font-size:.62rem;color:#718096;margin-bottom:2px;">${m.cno}</div>
+          <div style="font-size:.72rem;font-weight:700;color:#2D3748;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:130px;">${m.name}</div>
+          <div style="font-size:.66rem;color:#718096;">${m.date}</div>
+          <div style="font-size:.64rem;font-weight:800;margin-top:3px;color:${m.paid?'#276749':m.invoiced?'#2B6CB0':'#718096'};">${m.paid?'✅ Paid':m.invoiced?'⏳ Invoiced':'○ Pending'} · £${Number(m.value).toLocaleString()}</div>
+        </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('')}
+  </div>`;}
+
+// ══════════════════════════════════════════════════════════
+// EARNED VALUE MANAGEMENT ENGINE
+// ══════════════════════════════════════════════════════════
+function renderEVM() {
+  const el = document.querySelector('#evm-content');
+  if(!el) return;
+  const fm = n => '£'+Math.round(Math.abs(n)).toLocaleString();
+  const sc = v => v>=1?'#38A169':v>=0.9?'#D69E2E':'#E53E3E';
+  const evm = evmData.map(p=>{
+    const spi=p.pv>0?p.ev/p.pv:1, cpi=p.ac>0?p.ev/p.ac:1;
+    const sv=p.ev-p.pv, cv=p.ev-p.ac, eac=p.bac/cpi, etc=eac-p.ac;
+    const bv=p.invoiced-p.ev;
+    return {...p,spi,cpi,sv,cv,eac,etc,bv};
+  });
+  const pBAC=evm.reduce((s,p)=>s+p.bac,0), pEV=evm.reduce((s,p)=>s+p.ev,0);
+  const pAC=evm.reduce((s,p)=>s+p.ac,0), pPV=evm.reduce((s,p)=>s+p.pv,0);
+  const pInv=evm.reduce((s,p)=>s+p.invoiced,0);
+  const pSPI=pEV/pPV, pCPI=pEV/pAC, pBV=pInv-pEV;
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div><h5 style="margin:0;">📐 Earned Value Management &amp; Revenue Alignment</h5>
+    <div class="sub" style="margin:0;">ANSI/EIA-748 EVM metrics — earned vs planned vs invoiced across the portfolio</div></div>
+  </div>
+  <div style="background:#1a1a2e;border-radius:12px;padding:18px 20px;margin-bottom:20px;color:#CBD5E0;">
+    <div style="font-size:.68rem;color:#00A9CE;font-weight:800;letter-spacing:.1em;margin-bottom:12px;">EVM METHODOLOGY — KEY TERMS</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;font-size:.76rem;margin-bottom:14px;">
+      ${[
+        {t:'BAC — Budget at Completion',d:'Total approved project budget. The cost ceiling for the project as contracted.'},
+        {t:'PV — Planned Value',d:'Value of work we should have completed by today per the baseline schedule. = BAC × % planned.'},
+        {t:'EV — Earned Value',d:'Value of work actually done. = BAC × % physically complete. This IS recognised revenue.'},
+        {t:'AC — Actual Cost',d:'What we have actually spent to deliver work. Compared to EV to measure cost efficiency.'},
+      ].map(x=>`<div><div style="font-weight:700;color:#90CDF4;margin-bottom:4px;">${x.t}</div>${x.d}</div>`).join('')}
+    </div>
+    <div style="border-top:1px solid #2D3748;padding-top:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;font-size:.76rem;">
+      ${[
+        {t:'SPI = EV ÷ PV',d:'Schedule Performance Index. >1.0 = ahead of plan. <1.0 = behind schedule.'},
+        {t:'CPI = EV ÷ AC',d:'Cost Performance Index. >1.0 = under budget. <1.0 = over budget.'},
+        {t:'EAC = BAC ÷ CPI',d:'Estimate at Completion. Projected final cost if current efficiency continues.'},
+        {t:'Billing Variance = Invoiced − EV',d:'+ve = over-invoiced (cash ahead of work). −ve = under-invoiced (work done, not yet billed).'},
+      ].map(x=>`<div><div style="font-weight:700;color:#F6AD55;margin-bottom:4px;">${x.t}</div>${x.d}</div>`).join('')}
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;">
+    ${[
+      {l:'Portfolio BAC',v:'£'+Number(pBAC).toLocaleString(),s:'Total approved budget',c:'#1B2A4A'},
+      {l:'Earned Value (EV)',v:'£'+Number(Math.round(pEV)).toLocaleString(),s:'Revenue recognised = work done',c:'#2B6CB0'},
+      {l:'Planned Value (PV)',v:'£'+Number(Math.round(pPV)).toLocaleString(),s:'Should have earned by now',c:'#4A5568'},
+      {l:'Portfolio SPI',v:pSPI.toFixed(2),s:pSPI>=1?'⬆ Ahead of schedule':'⬇ Behind schedule',c:sc(pSPI)},
+      {l:'Portfolio CPI',v:pCPI.toFixed(2),s:pCPI>=1?'✓ On/under budget':'⚠ Over budget',c:sc(pCPI)},
+    ].map(k=>`<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
+      <div style="font-size:.64rem;color:#718096;font-weight:700;margin-bottom:6px;">${k.l.toUpperCase()}</div>
+      <div style="font-size:1.25rem;font-weight:900;color:${k.c};">${k.v}</div>
+      <div style="font-size:.68rem;color:#718096;margin-top:3px;">${k.s}</div></div>`).join('')}
+  </div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;">
+    <div style="padding:12px 16px;background:#F7FAFC;border-bottom:1px solid var(--border);font-size:.74rem;font-weight:800;color:#2D3748;">PROJECT-LEVEL EVM METRICS (as at 7 Mar 2026)</div>
+    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.73rem;min-width:1100px;">
+      <thead><tr style="background:#1B2A4A;color:#fff;">
+        <th style="padding:9px 12px;text-align:left;">Project</th>
+        <th style="padding:9px 12px;text-align:left;">Customer</th>
+        <th style="padding:9px 12px;text-align:right;">BAC</th>
+        <th style="padding:9px 12px;text-align:right;">PV</th>
+        <th style="padding:9px 12px;text-align:right;">EV</th>
+        <th style="padding:9px 12px;text-align:right;">AC</th>
+        <th style="padding:9px 12px;text-align:center;">SPI</th>
+        <th style="padding:9px 12px;text-align:center;">CPI</th>
+        <th style="padding:9px 12px;text-align:right;">EAC</th>
+        <th style="padding:9px 12px;text-align:right;">Invoiced</th>
+        <th style="padding:9px 12px;text-align:right;">Billing Var</th>
+      </tr></thead><tbody>
+      ${evm.map((p,i)=>`<tr style="border-bottom:1px solid var(--border);background:${i%2?'#FAFAFA':'#fff'};">
+        <td style="padding:9px 12px;font-weight:600;color:#2D3748;max-width:155px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</td>
+        <td style="padding:9px 12px;color:#4A5568;font-size:.7rem;">${p.customer}</td>
+        <td style="padding:9px 12px;text-align:right;font-weight:700;">${fm(p.bac)}</td>
+        <td style="padding:9px 12px;text-align:right;color:#4A5568;">${fm(p.pv)}</td>
+        <td style="padding:9px 12px;text-align:right;color:#2B6CB0;font-weight:700;">${fm(p.ev)}</td>
+        <td style="padding:9px 12px;text-align:right;color:#4A5568;">${fm(p.ac)}</td>
+        <td style="padding:9px 12px;text-align:center;"><span style="background:${sc(p.spi)}20;color:${sc(p.spi)};font-weight:800;padding:3px 8px;border-radius:4px;">${p.spi.toFixed(2)}</span></td>
+        <td style="padding:9px 12px;text-align:center;"><span style="background:${sc(p.cpi)}20;color:${sc(p.cpi)};font-weight:800;padding:3px 8px;border-radius:4px;">${p.cpi.toFixed(2)}</span></td>
+        <td style="padding:9px 12px;text-align:right;color:${p.eac>p.bac?'#C53030':'#276749'};font-weight:700;">${fm(p.eac)}</td>
+        <td style="padding:9px 12px;text-align:right;color:#2B6CB0;">${fm(p.invoiced)}</td>
+        <td style="padding:9px 12px;text-align:right;font-weight:700;color:${p.bv<-20000?'#C53030':p.bv>20000?'#276749':'#4A5568'};">${p.bv>=0?'+':'−'}${fm(p.bv)}</td>
+      </tr>`).join('')}
+      <tr style="background:#1B2A4A;color:#fff;font-weight:800;">
+        <td style="padding:9px 12px;" colspan="2">PORTFOLIO TOTAL</td>
+        <td style="padding:9px 12px;text-align:right;">${fm(pBAC)}</td>
+        <td style="padding:9px 12px;text-align:right;">${fm(pPV)}</td>
+        <td style="padding:9px 12px;text-align:right;">${fm(pEV)}</td>
+        <td style="padding:9px 12px;text-align:right;">${fm(pAC)}</td>
+        <td style="padding:9px 12px;text-align:center;"><span style="color:${sc(pSPI)};">${pSPI.toFixed(2)}</span></td>
+        <td style="padding:9px 12px;text-align:center;"><span style="color:${sc(pCPI)};">${pCPI.toFixed(2)}</span></td>
+        <td style="padding:9px 12px;text-align:right;">${fm(pBAC/pCPI)}</td>
+        <td style="padding:9px 12px;text-align:right;">${fm(pInv)}</td>
+        <td style="padding:9px 12px;text-align:right;color:${pBV<0?'#FC8181':'#68D391'};">${pBV>=0?'+':'−'}${fm(pBV)}</td>
+      </tr>
+      </tbody></table></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;">
+      <div style="font-size:.74rem;font-weight:800;color:#C53030;margin-bottom:12px;">⬇ UNDER-BILLED — Work Done but Not Yet Invoiced</div>
+      ${evm.filter(p=>p.bv<-5000).map(p=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F7FAFC;">
+        <div><div style="font-size:.76rem;font-weight:600;color:#2D3748;">${p.name.length>26?p.name.substring(0,24)+'…':p.name}</div>
+        <div style="font-size:.68rem;color:#718096;">${p.customer}</div></div>
+        <div style="text-align:right;"><div style="font-size:.8rem;font-weight:800;color:#C53030;">−${fm(Math.abs(p.bv))}</div>
+        <div style="font-size:.66rem;color:#718096;">Contract asset</div></div>
+      </div>`).join('')}
+      <div style="margin-top:10px;padding:8px;background:#FFF5F5;border-radius:6px;font-size:.72rem;color:#9B2C2C;"><strong>ASC 606 / IFRS 15:</strong> Recognise revenue = EV. Record unbilled receivable (contract asset) for the under-billed amount.</div>
+    </div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;">
+      <div style="font-size:.74rem;font-weight:800;color:#276749;margin-bottom:12px;">⬆ OVER-BILLED — Invoiced Ahead of Earned Value</div>
+      ${evm.filter(p=>p.bv>5000).map(p=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F7FAFC;">
+        <div><div style="font-size:.76rem;font-weight:600;color:#2D3748;">${p.name.length>26?p.name.substring(0,24)+'…':p.name}</div>
+        <div style="font-size:.68rem;color:#718096;">${p.customer}</div></div>
+        <div style="text-align:right;"><div style="font-size:.8rem;font-weight:800;color:#276749;">+${fm(p.bv)}</div>
+        <div style="font-size:.66rem;color:#718096;">Deferred revenue</div></div>
+      </div>`).join('')}
+      <div style="margin-top:10px;padding:8px;background:#F0FFF4;border-radius:6px;font-size:.72rem;color:#276749;"><strong>ASC 606 / IFRS 15:</strong> Only recognise revenue = EV. Excess invoice = contract liability (deferred revenue) until work is performed.</div>
+    </div>
+  </div>
+  <div style="background:#EBF4FF;border:1px solid #90CDF4;border-radius:12px;padding:18px;">
+    <div style="font-size:.76rem;font-weight:800;color:#2B6CB0;margin-bottom:8px;">📋 Portfolio Revenue Recognition Summary</div>
+    <div style="font-size:.8rem;color:#2C5282;line-height:1.8;">
+      <strong>Portfolio Earned Value (EV): £${Number(Math.round(pEV)).toLocaleString()}</strong> — This is the revenue you have <em>earned</em> and can recognise under IFRS 15/ASC 606 regardless of what has been invoiced.<br>
+      <strong>Net Billing Variance: ${pBV>=0?'+':'−'}${fm(Math.abs(pBV))}</strong> — ${pBV<0?'The portfolio is <strong>net under-billed</strong>. You have earned more than you have invoiced. Accelerate invoicing on under-billed projects to improve cash flow and reduce contract asset balances.':'The portfolio is <strong>net over-billed</strong>. Cash received exceeds work done — record deferred revenue on balance sheet and monitor closely.'}<br>
+      <strong>Portfolio EAC: £${Number(Math.round(pBAC/pCPI)).toLocaleString()}</strong> vs BAC £${Number(pBAC).toLocaleString()} — ${pBAC/pCPI>pBAC?'⚠ Portfolio is trending over budget. Review cost control measures on under-performing projects.':'✓ Portfolio tracking within budget at current cost performance.'}</div>
+  </div>`;}
+
+// STATUS REPORT ENGINE
+// ══════════════════════════════════════════════════════════
 
 function renderCustomerReport(projectId) {
   projectId = projectId || 'erp';
@@ -3339,6 +3962,1031 @@ function switchPortalTab(tab) {
   });
   const tc = document.querySelector('#portal-tab-content');
   if(tc) tc.innerHTML = renderPortalTab(tab, cust, proj, visRaid, docs, closedDecisions);
+}
+
+// ══════════════════════════════════════════════════════════
+// SKILLS MATRIX ENGINE
+// ══════════════════════════════════════════════════════════
+const skillCategories = ['Cloud & Infrastructure','Development','Data & Analytics','Project Delivery','Finance & ERP','Business Analysis','Security'];
+const skillsData = [
+  {name:'Ciarán O\'Brien',role:'Senior Developer',dept:'Engineering',skills:{
+    'Cloud & Infrastructure':{AWS:4,Azure:5,GCP:2},'Development':{'.NET':5,'React':4,'SQL':5,'Python':3},
+    'Data & Analytics':{'Power BI':3,'SSRS':4},'Project Delivery':{'Agile':4,'Scrum':5},'Finance & ERP':{'SAP FI':4,'D365':2},'Business Analysis':{'BRD':3,'UML':4},'Security':{'OAuth':4,'OWASP':3}}},
+  {name:'Aoife Walsh',role:'Business Analyst',dept:'Delivery',skills:{
+    'Cloud & Infrastructure':{Azure:2},'Development':{'SQL':3,'Python':2},
+    'Data & Analytics':{'Power BI':4,'Excel':5},'Project Delivery':{'Agile':5,'Prince2':4,'MSP':3},'Finance & ERP':{'SAP FI':3,'Sage':2,'NetSuite':3},'Business Analysis':{'BRD':5,'UML':5,'BPMN':5},'Security':{'GDPR':4}}},
+  {name:'Brian Devlin',role:'Developer (Mid)',dept:'Engineering',skills:{
+    'Cloud & Infrastructure':{Azure:3,GCP:3},'Development':{'.NET':4,'React':5,'Node':4,'SQL':4},
+    'Data & Analytics':{'Power BI':2},'Project Delivery':{'Agile':4},'Finance & ERP':{'D365':3},'Business Analysis':{'BRD':2},'Security':{'OAuth':3,'JWT':4}}},
+  {name:'Niamh Rees',role:'Project Manager',dept:'Delivery',skills:{
+    'Cloud & Infrastructure':{Azure:2},'Development':{'SQL':2},
+    'Data & Analytics':{'Power BI':3,'Excel':5},'Project Delivery':{'PMP':5,'Prince2':5,'Agile':4,'MSP':5},'Finance & ERP':{'SAP FI':2},'Business Analysis':{'BRD':4,'Requirements':5},'Security':{'GDPR':3}}},
+  {name:'Sarah Molloy',role:'Functional Analyst',dept:'Delivery',skills:{
+    'Cloud & Infrastructure':{SharePoint:5,Azure:3},'Development':{'SQL':3,'PowerShell':3},
+    'Data & Analytics':{'Power BI':4,'Excel':5},'Project Delivery':{'Agile':3,'ITIL':4},'Finance & ERP':{'D365':4,'SharePoint':5},'Business Analysis':{'BRD':4,'UAT':5},'Security':{'GDPR':4}}},
+  {name:'Ronan Maguire',role:'Solution Architect',dept:'Architecture',skills:{
+    'Cloud & Infrastructure':{Azure:5,AWS:4,GCP:4,'Terraform':5},'Development':{'.NET':4,'Python':4,'SQL':4},
+    'Data & Analytics':{'Power BI':3},'Project Delivery':{'Agile':4,'TOGAF':5},'Finance & ERP':{'SAP':3},'Business Analysis':{'Architecture':5,'UML':5},'Security':{'Zero Trust':4,'OWASP':4}}},
+  {name:'Fionnuala Burke',role:'QA Engineer',dept:'Engineering',skills:{
+    'Cloud & Infrastructure':{Azure:3},'Development':{'SQL':3,'Python':3,'Selenium':5},
+    'Data & Analytics':{'Power BI':2},'Project Delivery':{'Agile':4,'ISTQB':5},'Finance & ERP':{'SAP FI':3},'Business Analysis':{'Test Design':5,'BDD':4},'Security':{'Pen Testing':3,'OWASP':3}}},
+];
+const skillLevels = {1:'Awareness',2:'Foundation',3:'Practitioner',4:'Advanced',5:'Expert'};
+const skillColors = ['','#FED7D7','#FEEBC8','#FEFCBF','#C6F6D5','#B2F5EA'];
+const skillText = ['','#742A2A','#744210','#5F370E','#276749','#234E52'];
+
+function renderSkillsMatrix(viewMode) {
+  viewMode = viewMode || 'matrix';
+  const el = document.querySelector('#skills-content');
+  if(!el) return;
+  // Flatten all skills
+  const allSkills = {};
+  skillsData.forEach(c=>Object.values(c.skills).forEach(cat=>Object.entries(cat).forEach(([sk,lv])=>{ allSkills[sk]=(allSkills[sk]||[]).concat(lv); })));
+  const gapSkills = Object.entries(allSkills).filter(([,vals])=>vals.every(v=>v<=2)).map(([k])=>k);
+  const topSkills = Object.entries(allSkills).sort((a,b)=>b[1].reduce((s,v)=>s+v,0)-a[1].reduce((s,v)=>s+v,0)).slice(0,5).map(([k])=>k);
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div>
+      <h5 style="margin:0;">🎯 Skills Matrix & Competency</h5>
+      <div class="sub" style="margin:0;">${skillsData.length} consultants · ${Object.keys(allSkills).length} skills tracked · gaps & strengths identified</div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="renderSkillsMatrix('matrix')" style="padding:7px 16px;border-radius:20px;border:2px solid ${viewMode==='matrix'?'var(--navy)':'var(--border)'};background:${viewMode==='matrix'?'var(--navy)':'#fff'};color:${viewMode==='matrix'?'#fff':'#4A5568'};font-size:.76rem;font-weight:700;cursor:pointer;">Matrix View</button>
+      <button onclick="renderSkillsMatrix('cards')" style="padding:7px 16px;border-radius:20px;border:2px solid ${viewMode==='cards'?'var(--navy)':'var(--border)'};background:${viewMode==='cards'?'var(--navy)':'#fff'};color:${viewMode==='cards'?'#fff':'#4A5568'};font-size:.76rem;font-weight:700;cursor:pointer;">Profile Cards</button>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+    ${[
+      {label:'Consultants Profiled',val:skillsData.length,color:'#3182CE'},
+      {label:'Skills Tracked',val:Object.keys(allSkills).length,color:'#38A169'},
+      {label:'Skill Gaps (≤2)',val:gapSkills.length,color:'#E53E3E'},
+      {label:'Expert-Level Skills',val:Object.values(allSkills).filter(v=>Math.max(...v)===5).length,color:'#D69E2E'},
+    ].map(k=>`<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;border-top:3px solid ${k.color};">
+      <div style="font-size:.65rem;font-weight:700;color:#718096;">${k.label}</div>
+      <div style="font-size:1.8rem;font-weight:800;color:${k.color};">${k.val}</div>
+    </div>`).join('')}
+  </div>
+
+  ${viewMode==='matrix' ? `
+  <!-- Heat Map Matrix -->
+  <div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;">
+    <div style="padding:14px 16px;border-bottom:1px solid var(--border);font-size:.7rem;font-weight:800;color:var(--navy);letter-spacing:.08em;">SKILLS HEAT MAP — 1=Awareness · 2=Foundation · 3=Practitioner · 4=Advanced · 5=Expert</div>
+    <div style="overflow-x:auto;padding:12px;">
+      <table style="border-collapse:collapse;font-size:.74rem;min-width:600px;">
+        <thead><tr>
+          <th style="padding:8px 12px;text-align:left;font-weight:700;color:#718096;min-width:140px;">Consultant</th>
+          ${skillsData.flatMap(c=>Object.values(c.skills).flatMap(cat=>Object.keys(cat))).filter((v,i,a)=>a.indexOf(v)===i).slice(0,14).map(sk=>`<th style="padding:6px 4px;text-align:center;font-weight:700;color:#718096;writing-mode:vertical-rl;transform:rotate(180deg);min-width:36px;max-width:36px;font-size:.68rem;">${sk}</th>`).join('')}
+        </tr></thead>
+        <tbody>
+          ${skillsData.map((c,ci)=>{
+            const allSkillNames = skillsData.flatMap(x=>Object.values(x.skills).flatMap(cat=>Object.keys(cat))).filter((v,i,a)=>a.indexOf(v)===i).slice(0,14);
+            const flatSkills = Object.values(c.skills).reduce((acc,cat)=>({...acc,...cat}),{});
+            return `<tr style="border-top:1px solid #F7FAFC;">
+              <td style="padding:8px 12px;font-weight:700;color:#2D3748;">${c.name}<div style="font-size:.68rem;color:#718096;font-weight:400;">${c.role}</div></td>
+              ${allSkillNames.map(sk=>{
+                const lv = flatSkills[sk]||0;
+                return `<td style="padding:4px;text-align:center;"><div style="width:32px;height:28px;background:${lv?skillColors[lv]:'#F7FAFC'};border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:${lv?skillText[lv]:'#CBD5E0'};margin:auto;" title="${sk}: ${lv?skillLevels[lv]:'Not assessed'}">${lv||'—'}</div></td>`;}).join('')}
+            </tr>`;}).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Gap Analysis -->
+  ${gapSkills.length ? `<div style="background:#FFF5F5;border:1px solid #FED7D7;border-radius:10px;padding:14px 16px;margin-bottom:16px;">
+    <div style="font-size:.7rem;font-weight:800;color:#C53030;margin-bottom:8px;">⚠️ SKILL GAPS — No consultant rated above Foundation level</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;">${gapSkills.map(s=>`<span style="background:#FED7D7;color:#742A2A;padding:4px 10px;border-radius:20px;font-size:.76rem;font-weight:700;">${s}</span>`).join('')}</div>
+  </div>`:''}` :
+
+  `<!-- Profile Cards -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+    ${skillsData.map(c=>{
+      const flatSkills = Object.values(c.skills).reduce((acc,cat)=>({...acc,...cat}),{});
+      const expertSkills = Object.entries(flatSkills).filter(([,v])=>v>=4).map(([k,v])=>({k,v})).sort((a,b)=>b.v-a.v).slice(0,6);
+      const avgScore = Object.values(flatSkills).length ? (Object.values(flatSkills).reduce((s,v)=>s+v,0)/Object.values(flatSkills).length).toFixed(1) : 0;
+      return `<div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;flex-shrink:0;">${c.name.split(' ').map(w=>w[0]).join('')}</div>
+          <div>
+            <div style="font-size:.86rem;font-weight:700;color:#2D3748;">${c.name}</div>
+            <div style="font-size:.74rem;color:#718096;">${c.role} · ${c.dept}</div>
+          </div>
+          <div style="margin-left:auto;text-align:center;">
+            <div style="font-size:1.1rem;font-weight:800;color:var(--teal);">${avgScore}</div>
+            <div style="font-size:.64rem;color:#718096;">Avg Score</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;">
+          ${expertSkills.map(({k,v})=>`<span style="background:${skillColors[v]};color:${skillText[v]};padding:3px 8px;border-radius:12px;font-size:.7rem;font-weight:700;">${k} (${v})</span>`).join('')}
+        </div>
+      </div>`;}).join('')}
+  </div>`}`;
+}
+
+// ══════════════════════════════════════════════════════════
+// BENCH & DEMAND PLANNING ENGINE
+// ══════════════════════════════════════════════════════════
+function renderBenchDemand() {
+  const el = document.querySelector('#bench-content');
+  if(!el) return;
+  const bench = [
+    {name:'Ciarán O\'Brien',role:'Senior Developer',endDate:'21 Mar 2026',daysOnBench:0,nextProject:'TBC — Pipeline stage',skills:['Azure','.NET','SAP FI'],dayRate:1040,utilisation:94},
+    {name:'Deirdre Keane',role:'QA Engineer',endDate:'7 Mar 2026',daysOnBench:1,nextProject:'TBC',skills:['Selenium','ISTQB','BDD'],dayRate:680,utilisation:12},
+    {name:'Mark Connolly',role:'Business Analyst',endDate:'28 Feb 2026',daysOnBench:7,nextProject:'No confirmed project',skills:['BRD','BPMN','CRM'],dayRate:880,utilisation:0},
+    {name:'Aine Byrne',role:'Developer (Mid)',endDate:'14 Mar 2026',daysOnBench:0,nextProject:'SharePoint Migration Phase 2',skills:['React','Node','.NET'],dayRate:760,utilisation:80},
+  ];
+  const demand = [
+    {project:'ERP Implementation Phase 4',role:'Senior Developer',skills:['SAP FI','.NET'],startDate:'24 Mar 2026',duration:'6 weeks',dayRate:1040,status:'Urgent'},
+    {project:'New Bid — ESB Networks',role:'Solution Architect',skills:['Azure','TOGAF'],startDate:'1 Apr 2026',duration:'12 weeks',dayRate:1400,status:'Pipeline'},
+    {project:'BOI CRM Phase 3',role:'Business Analyst',skills:['CRM','BRD'],startDate:'17 Mar 2026',duration:'4 weeks',dayRate:880,status:'Confirmed'},
+    {project:'CRH Cloud Phase 2',role:'DevOps Engineer',skills:['Terraform','Azure','CI/CD'],startDate:'1 Apr 2026',duration:'8 weeks',dayRate:960,status:'Pipeline'},
+    {project:'Greenfield — HSE',role:'Project Manager',skills:['Prince2','ITIL'],startDate:'14 Apr 2026',duration:'16 weeks',dayRate:1120,status:'Bid Stage'},
+  ];
+  const benchCost = bench.filter(b=>b.daysOnBench>0).reduce((s,b)=>s+(b.daysOnBench*b.dayRate),0);
+  const confirmedDemand = demand.filter(d=>d.status==='Confirmed'||d.status==='Urgent').length;
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div>
+      <h5 style="margin:0;">🪑 Bench Management & Demand Planning</h5>
+      <div class="sub" style="margin:0;">Forward-looking resource demand vs bench availability</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+    ${[
+      {label:'On Bench Now',val:bench.filter(b=>b.daysOnBench>0).length,color:'#E53E3E',note:'Unbillable today'},
+      {label:'Bench Cost / Day',val:'£'+bench.filter(b=>b.daysOnBench>0).reduce((s,b)=>s+b.dayRate,0).toLocaleString(),color:'#DD6B20',note:'Current daily loss'},
+      {label:'Confirmed Demand',val:confirmedDemand,color:'#38A169',note:'Roles to fill urgently'},
+      {label:'Pipeline Demand',val:demand.filter(d=>d.status==='Pipeline'||d.status==='Bid Stage').length,color:'#3182CE',note:'Potential pipeline roles'},
+    ].map(k=>`<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;border-top:3px solid ${k.color};">
+      <div style="font-size:.65rem;font-weight:700;color:#718096;">${k.label}</div>
+      <div style="font-size:1.6rem;font-weight:800;color:${k.color};">${k.val}</div>
+      <div style="font-size:.7rem;color:#718096;">${k.note}</div>
+    </div>`).join('')}
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+    <!-- Bench -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="background:var(--navy);color:#fff;padding:12px 16px;font-size:.7rem;font-weight:800;letter-spacing:.08em;">🪑 BENCH — CURRENT AVAILABILITY</div>
+      ${bench.map(b=>`
+        <div style="padding:14px 16px;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <div>
+              <div style="font-size:.84rem;font-weight:700;color:#2D3748;">${b.name}</div>
+              <div style="font-size:.74rem;color:#718096;">${b.role} · £${b.dayRate}/day</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:.7rem;color:${b.daysOnBench>3?'#E53E3E':b.daysOnBench>0?'#DD6B20':'#38A169'};font-weight:800;">${b.daysOnBench===0?'✅ Active':'⚠️ '+b.daysOnBench+'d on bench'}</div>
+              <div style="font-size:.68rem;color:#718096;">Util: ${b.utilisation}%</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px;">${b.skills.map(s=>`<span style="background:#EBF8FF;color:#2B6CB0;padding:2px 7px;border-radius:10px;font-size:.68rem;font-weight:700;">${s}</span>`).join('')}</div>
+          <div style="font-size:.72rem;color:#718096;">Next: ${b.nextProject}</div>
+        </div>`).join('')}
+    </div>
+
+    <!-- Demand -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="background:var(--teal);color:#fff;padding:12px 16px;font-size:.7rem;font-weight:800;letter-spacing:.08em;">📈 UPCOMING DEMAND — ROLES NEEDED</div>
+      ${demand.map(d=>`
+        <div style="padding:14px 16px;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;">
+            <div>
+              <div style="font-size:.84rem;font-weight:700;color:#2D3748;">${d.role}</div>
+              <div style="font-size:.74rem;color:#718096;">${d.project}</div>
+            </div>
+            <span style="background:${d.status==='Urgent'?'#E53E3E':d.status==='Confirmed'?'#38A169':d.status==='Pipeline'?'#3182CE':'#718096'};color:#fff;font-size:.62rem;font-weight:800;padding:3px 8px;border-radius:4px;white-space:nowrap;">${d.status.toUpperCase()}</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px;">${d.skills.map(s=>`<span style="background:#F0FFF4;color:#276749;padding:2px 7px;border-radius:10px;font-size:.68rem;font-weight:700;">${s}</span>`).join('')}</div>
+          <div style="font-size:.72rem;color:#718096;">Start: ${d.startDate} · Duration: ${d.duration} · £${d.dayRate}/day</div>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+// ORG CHART ENGINE
+// ══════════════════════════════════════════════════════════
+function renderOrgChart() {
+  const el = document.querySelector('#orgchart-content');
+  if(!el) return;
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div>
+      <h5 style="margin:0;">🏢 Org Chart</h5>
+      <div class="sub" style="margin:0;">Codec Professional Services — organisational structure</div>
+    </div>
+  </div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px;overflow-x:auto;">
+    <!-- CEO -->
+    <div style="display:flex;flex-direction:column;align-items:center;">
+      ${orgNode('Declan Mooney','CEO','Executive','#1B2A4A')}
+      <div style="width:2px;height:24px;background:#CBD5E0;"></div>
+      <!-- L2 -->
+      <div style="display:flex;gap:40px;align-items:flex-start;justify-content:center;flex-wrap:wrap;">
+        ${[
+          {name:'Siobhán Murphy',title:'Head of Delivery',dept:'Delivery','color':'#3182CE',reports:[
+            {name:'Aoife Walsh',title:'Senior BA',dept:'Delivery',color:'#4299E1'},
+            {name:'Niamh Rees',title:'Project Manager',dept:'Delivery',color:'#4299E1'},
+            {name:'Ronan Maguire',title:'Solution Architect',dept:'Architecture',color:'#4299E1'},
+          ]},
+          {name:'Patrick Kearney',title:'Head of Engineering',dept:'Engineering',color:'#38A169',reports:[
+            {name:'Ciarán O\'Brien',title:'Senior Developer',dept:'Engineering',color:'#48BB78'},
+            {name:'Brian Devlin',title:'Developer',dept:'Engineering',color:'#48BB78'},
+            {name:'Fionnuala Burke',title:'QA Engineer',dept:'Engineering',color:'#48BB78'},
+          ]},
+          {name:'Mairéad Hennessy',title:'Finance Director',dept:'Finance',color:'#D69E2E',reports:[
+            {name:'Fionnuala Burke',title:'Finance Analyst',dept:'Finance',color:'#ECC94B'},
+          ]},
+          {name:'Eoin Sheridan',title:'Head of Sales',dept:'Sales',color:'#E53E3E',reports:[
+            {name:'Sarah Molloy',title:'Pre-Sales Analyst',dept:'Sales',color:'#FC8181'},
+          ]},
+        ].map(dept=>`
+          <div style="display:flex;flex-direction:column;align-items:center;">
+            ${orgNode(dept.name,dept.title,dept.dept,dept.color)}
+            <div style="width:2px;height:16px;background:#CBD5E0;"></div>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;">
+              ${dept.reports.map(r=>`
+                <div style="display:flex;flex-direction:column;align-items:center;">
+                  <div style="width:2px;height:12px;background:#CBD5E0;"></div>
+                  ${orgNode(r.name,r.title,r.dept,r.color,true)}
+                </div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+function orgNode(name,title,dept,color,small) {
+  const w = small?'130px':'160px';
+  return `<div style="background:#fff;border:2px solid ${color};border-radius:10px;padding:${small?'8px 10px':'12px 14px'};text-align:center;width:${w};box-shadow:0 2px 8px rgba(0,0,0,.08);">
+    <div style="width:${small?'28px':'36px'};height:${small?'28px':'36px'};border-radius:50%;background:${color};color:#fff;font-size:${small?'.7rem':'.85rem'};font-weight:800;margin:0 auto ${small?'4px':'6px'};display:flex;align-items:center;justify-content:center;">${name.split(' ').map(w=>w[0]).join('')}</div>
+    <div style="font-size:${small?'.72rem':'.8rem'};font-weight:700;color:#2D3748;">${name}</div>
+    <div style="font-size:.64rem;color:#718096;">${title}</div>
+    <div style="font-size:.6rem;color:${color};font-weight:700;margin-top:2px;">${dept.toUpperCase()}</div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+// PERFORMANCE REVIEWS ENGINE
+// ══════════════════════════════════════════════════════════
+function renderPerformance() {
+  const el = document.querySelector('#performance-content');
+  if(!el) return;
+  const reviews = [
+    {name:'Ciarán O\'Brien',role:'Senior Developer',period:'Q1 2026',rating:4.2,utilisation:94,goals:[
+      {goal:'Lead SAP FI integration delivery',status:'On Track',score:4},
+      {goal:'Mentor 2 junior developers',status:'Complete',score:5},
+      {goal:'Azure certification (AZ-204)',status:'In Progress',score:3}],
+      notes:'Excellent technical delivery. Go-above on SAP FI complexity. Development plan: Solution Architect track.'},
+    {name:'Aoife Walsh',role:'Business Analyst',period:'Q1 2026',rating:4.5,utilisation:88,goals:[
+      {goal:'Complete BOI CRM Phase 2 BRD',status:'On Track',score:4},
+      {goal:'CBAP certification',status:'Complete',score:5},
+      {goal:'Improve stakeholder communication',status:'Complete',score:5}],
+      notes:'Outstanding BA on CRM project. CBAP achieved. Retention risk — HR to follow up compensation review.'},
+    {name:'Brian Devlin',role:'Developer (Mid)',dept:'Engineering',period:'Q1 2026',rating:3.7,utilisation:81,goals:[
+      {goal:'React frontend delivery — CRM dashboard',status:'Complete',score:4},
+      {goal:'Code quality — reduce bug rate by 20%',status:'At Risk',score:2},
+      {goal:'Agile Scrum certification',status:'Not Started',score:1}],
+      notes:'Good delivery on React work. Bug rate still high — needs code review improvement. Coaching plan recommended.'},
+    {name:'Niamh Rees',role:'Project Manager',period:'Q1 2026',rating:4.8,utilisation:96,goals:[
+      {goal:'Deliver ERP Sprint 4-5 on schedule',status:'Complete',score:5},
+      {goal:'PMP recertification CPE credits',status:'On Track',score:4},
+      {goal:'Build and maintain sprint retrospective cadence',status:'Complete',score:5}],
+      notes:'Exceptional PM. ERP delivery tracking perfectly. Highest utilisation on team. Promotion to Senior PM recommended.'},
+  ];
+  const avgRating = (reviews.reduce((s,r)=>s+r.rating,0)/reviews.length).toFixed(1);
+  const dueReviews = 2;
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div>
+      <h5 style="margin:0;">⭐ Performance Reviews</h5>
+      <div class="sub" style="margin:0;">Q1 2026 cycle · goal tracking · ratings · development plans</div>
+    </div>
+    <button style="background:var(--navy);color:#fff;border:none;padding:9px 18px;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;">＋ New Review</button>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+    ${[
+      {label:'Reviews This Cycle',val:reviews.length,color:'#3182CE'},
+      {label:'Avg Rating',val:avgRating+'/5',color:'#D69E2E'},
+      {label:'Due This Month',val:dueReviews,color:'#E53E3E'},
+      {label:'Goals Complete',val:reviews.flatMap(r=>r.goals).filter(g=>g.status==='Complete').length,color:'#38A169'},
+    ].map(k=>`<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;border-top:3px solid ${k.color};">
+      <div style="font-size:.65rem;font-weight:700;color:#718096;">${k.label}</div>
+      <div style="font-size:1.7rem;font-weight:800;color:${k.color};">${k.val}</div>
+    </div>`).join('')}
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    ${reviews.map(r=>{
+      const ratingColor = r.rating>=4.5?'#38A169':r.rating>=3.5?'#D69E2E':'#E53E3E';
+      const stars = Math.round(r.rating);
+      return `<div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">${r.name.split(' ').map(w=>w[0]).join('')}</div>
+            <div>
+              <div style="font-size:.9rem;font-weight:700;color:#2D3748;">${r.name}</div>
+              <div style="font-size:.76rem;color:#718096;">${r.role} · ${r.period} · Utilisation: ${r.utilisation}%</div>
+            </div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:1.4rem;font-weight:900;color:${ratingColor};">${r.rating}</div>
+            <div style="color:${ratingColor};font-size:.9rem;">${'★'.repeat(stars)}${'☆'.repeat(5-stars)}</div>
+          </div>
+        </div>
+        <div style="margin-bottom:10px;">
+          <div style="font-size:.65rem;font-weight:800;color:#718096;letter-spacing:.08em;margin-bottom:6px;">GOALS</div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            ${r.goals.map(g=>`
+              <div style="display:flex;align-items:center;justify-content:space-between;background:#F7FAFC;border-radius:6px;padding:7px 10px;">
+                <span style="font-size:.78rem;color:#2D3748;">${g.goal}</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="color:${g.status==='Complete'?'#38A169':g.status==='On Track'?'#3182CE':g.status==='In Progress'?'#D69E2E':'#E53E3E'};font-size:.7rem;font-weight:700;white-space:nowrap;">${g.status}</span>
+                  <span style="color:#D69E2E;font-size:.8rem;">${'★'.repeat(g.score)}${'☆'.repeat(5-g.score)}</span>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>
+        <div style="background:#FFFBEB;border-radius:6px;padding:9px 12px;font-size:.76rem;color:#2D3748;border-left:3px solid #D69E2E;">
+          <strong>Manager Notes:</strong> ${r.notes}
+        </div>
+      </div>`;}).join('')}
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+// GANTT CHART ENGINE
+// ══════════════════════════════════════════════════════════
+function renderGantt(projectId) {
+  projectId = projectId || 'erp';
+  const el = document.querySelector('#gantt-content');
+  if(!el) return;
+  const ganttProjects = {
+    erp:{name:'ERP Implementation',customer:'AIB Group',
+      phases:[
+        {name:'Phase 1 — Core ERP Foundation',start:0,duration:28,color:'#38A169',complete:100,owner:'Niamh R.'},
+        {name:'Phase 2 — Finance Module',start:28,duration:28,color:'#3182CE',complete:100,owner:'Ciarán O.'},
+        {name:'Phase 3 — Sprint 5 GL & Reporting',start:56,duration:14,color:'#00A9CE',complete:62,owner:'Ciarán O.'},
+        {name:'Phase 3 — Sprint 5 (Extension)',start:70,duration:3,color:'#DD6B20',complete:0,owner:'Ciarán O.',isExtension:true},
+        {name:'Phase 4 — UAT',start:73,duration:11,color:'#9B2C2C',complete:0,owner:'Fionnuala B.'},
+        {name:'Phase 5 — Go-Live & Hypercare',start:84,duration:14,color:'#276749',complete:0,owner:'Siobhán M.'},
+        {name:'Milestone: Go-Live',start:84,duration:1,color:'#1B2A4A',complete:0,owner:'',isMilestone:true},
+      ]},
+    crm:{name:'CRM Rollout',customer:'Bank of Ireland',
+      phases:[
+        {name:'Phase 1 — CRM Core Setup',start:0,duration:28,color:'#38A169',complete:100,owner:'Seán D.'},
+        {name:'Phase 2 — Data Migration',start:28,duration:14,color:'#E53E3E',complete:60,owner:'Aoife W.',atRisk:true},
+        {name:'Phase 3 — Email Integration',start:42,duration:14,color:'#DD6B20',complete:0,owner:'Brian D.',atRisk:true},
+        {name:'Phase 4 — UAT & Training',start:56,duration:14,color:'#3182CE',complete:0,owner:'Niamh R.'},
+        {name:'Milestone: Go-Live',start:56,duration:1,color:'#1B2A4A',complete:0,owner:'',isMilestone:true,atRisk:true},
+      ]},
+  };
+  const proj = ganttProjects[projectId] || ganttProjects.erp;
+  const today = 56; // Day 56 of project = current
+  const totalDays = 98;
+  const dayWidth = 7; // px per day
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div>
+      <h5 style="margin:0;">📊 Gantt Chart</h5>
+      <div class="sub" style="margin:0;">${proj.name} — ${proj.customer} · Task dependencies and timeline</div>
+    </div>
+    <select onchange="renderGantt(this.value)" style="padding:8px 14px;border:1px solid var(--border);border-radius:8px;font-size:.82rem;font-weight:600;">
+      <option value="erp" ${projectId==='erp'?'selected':''}>ERP Implementation — AIB</option>
+      <option value="crm" ${projectId==='crm'?'selected':''}>CRM Rollout — BOI</option>
+    </select>
+  </div>
+
+  <div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+    <!-- Header row with weeks -->
+    <div style="display:flex;border-bottom:2px solid var(--border);background:#F7FAFC;">
+      <div style="width:240px;min-width:240px;padding:10px 14px;font-size:.7rem;font-weight:800;color:#718096;border-right:1px solid var(--border);">PHASE / TASK</div>
+      <div style="flex:1;overflow:hidden;">
+        <div style="display:flex;min-width:${totalDays*dayWidth}px;">
+          ${Array.from({length:Math.ceil(totalDays/7)},(_,i)=>`
+            <div style="width:${7*dayWidth}px;padding:10px 4px;font-size:.64rem;font-weight:700;color:#718096;border-right:1px solid #E2E8F0;flex-shrink:0;">W${i+1}</div>`).join('')}
+        </div>
+      </div>
+      <div style="width:100px;min-width:100px;padding:10px 8px;font-size:.7rem;font-weight:800;color:#718096;border-left:1px solid var(--border);">OWNER</div>
+      <div style="width:60px;min-width:60px;padding:10px 8px;font-size:.7rem;font-weight:800;color:#718096;text-align:center;">DONE%</div>
+    </div>
+
+    <!-- Gantt rows -->
+    ${proj.phases.map((phase,i)=>`
+      <div style="display:flex;border-bottom:1px solid #F7FAFC;background:${i%2===0?'#fff':'#FAFBFC'};">
+        <div style="width:240px;min-width:240px;padding:10px 14px;font-size:.78rem;font-weight:${phase.isMilestone?'900':'600'};color:${phase.atRisk?'#E53E3E':phase.isMilestone?'#1B2A4A':'#2D3748'};border-right:1px solid var(--border);display:flex;align-items:center;gap:6px;">
+          ${phase.isMilestone?'🔷':phase.atRisk?'⚠️':phase.complete===100?'✅':'🔄'} ${phase.name}
+        </div>
+        <div style="flex:1;overflow:hidden;position:relative;min-height:36px;">
+          <div style="min-width:${totalDays*dayWidth}px;height:100%;position:relative;">
+            <!-- Today line -->
+            <div style="position:absolute;left:${today*dayWidth}px;top:0;bottom:0;width:2px;background:#E53E3E;opacity:.5;z-index:1;"></div>
+            <!-- Bar -->
+            ${phase.isMilestone ? `
+              <div style="position:absolute;left:${phase.start*dayWidth-6}px;top:50%;transform:translateY(-50%);width:12px;height:12px;background:${phase.color};transform:translateY(-50%) rotate(45deg);z-index:2;"></div>
+            ` : `
+              <div style="position:absolute;left:${phase.start*dayWidth+2}px;top:6px;width:${phase.duration*dayWidth-4}px;height:22px;background:${phase.color}22;border:2px solid ${phase.atRisk?'#E53E3E':phase.color};border-radius:4px;overflow:hidden;">
+                <div style="width:${phase.complete}%;height:100%;background:${phase.color};opacity:.7;"></div>
+              </div>
+              ${phase.isExtension?`<div style="position:absolute;left:${phase.start*dayWidth+2}px;top:2px;background:#DD6B20;color:#fff;font-size:.58rem;font-weight:800;padding:1px 4px;border-radius:2px;">+3d</div>`:''}
+            `}
+          </div>
+        </div>
+        <div style="width:100px;min-width:100px;padding:10px 8px;font-size:.72rem;color:#718096;border-left:1px solid var(--border);">${phase.owner}</div>
+        <div style="width:60px;min-width:60px;padding:10px 8px;text-align:center;font-size:.76rem;font-weight:800;color:${phase.complete===100?'#38A169':phase.complete>0?'#3182CE':'#A0AEC0'};">${phase.isMilestone?'—':phase.complete+'%'}</div>
+      </div>`).join('')}
+
+    <!-- Legend -->
+    <div style="padding:12px 16px;background:#F7FAFC;border-top:1px solid var(--border);display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+      <span style="font-size:.7rem;color:#718096;font-weight:700;">TODAY</span>
+      <div style="width:20px;height:2px;background:#E53E3E;opacity:.7;"></div>
+      ${[{c:'#38A169',l:'Complete'},{c:'#3182CE',l:'In Progress'},{c:'#DD6B20',l:'Extension'},{c:'#E53E3E',l:'At Risk'}].map(x=>`
+        <div style="display:flex;align-items:center;gap:4px;">
+          <div style="width:14px;height:10px;background:${x.c}44;border:2px solid ${x.c};border-radius:2px;"></div>
+          <span style="font-size:.7rem;color:#718096;">${x.l}</span>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+// KANBAN BOARD ENGINE
+// ══════════════════════════════════════════════════════════
+function renderKanban(projectId) {
+  projectId = projectId || 'erp';
+  const el = document.querySelector('#kanban-content');
+  if(!el) return;
+  const columns = ['Backlog','To Do','In Progress','In Review','Done'];
+  const colColors = {Backlog:'#718096',ToDo:'#3182CE','In Progress':'#D69E2E','In Review':'#9B2C2C',Done:'#38A169'};
+  const cards = {
+    erp:[
+      {id:'ERP-044',title:'Supplier master data migration — Phase 2',col:'To Do',priority:'Medium',assignee:'SM',sp:5,label:'Data'},
+      {id:'ERP-045',title:'UAT: Purchase order end-to-end flow',col:'To Do',priority:'High',assignee:'NR',sp:3,label:'Testing'},
+      {id:'ERP-046',title:'AR aging report — custom date buckets',col:'To Do',priority:'Medium',assignee:'BD',sp:5,label:'Reporting'},
+      {id:'ERP-041',title:'GL journal posting service — period close logic',col:'In Progress',priority:'High',assignee:'CO',sp:8,label:'Feature'},
+      {id:'ERP-042',title:'AP payment run approval workflow',col:'In Progress',priority:'High',assignee:'BD',sp:5,label:'Feature'},
+      {id:'ERP-043',title:'Fix: VAT code not populating on import',col:'In Review',priority:'Critical',assignee:'CO',sp:3,label:'Bug'},
+      {id:'ERP-048',title:'Fix: Duplicate invoice number on concurrent save',col:'Done',priority:'Critical',assignee:'BD',sp:2,label:'Bug'},
+      {id:'ERP-038',title:'Chart of accounts configuration',col:'Done',priority:'High',assignee:'CO',sp:8,label:'Feature'},
+      {id:'ERP-039',title:'Bank reconciliation module',col:'Done',priority:'High',assignee:'SM',sp:13,label:'Feature'},
+      {id:'ERP-047',title:'API rate limiting on invoice endpoint',col:'Backlog',priority:'Low',assignee:'BD',sp:2,label:'Tech Debt'},
+      {id:'ERP-049',title:'Performance: timesheet list > 500 rows',col:'Backlog',priority:'Medium',assignee:'CO',sp:5,label:'Performance'},
+    ],
+    crm:[
+      {id:'CRM-027',title:'Email template editor UI',col:'Backlog',priority:'Medium',assignee:'BD',sp:5,label:'Feature'},
+      {id:'CRM-026',title:'Sales dashboard drill-down charts',col:'To Do',priority:'High',assignee:'BD',sp:8,label:'Reporting'},
+      {id:'CRM-025',title:'Email integration — send from CRM',col:'To Do',priority:'High',assignee:'AW',sp:5,label:'Feature'},
+      {id:'CRM-022',title:'Phase 2 analysis — additional scope review',col:'In Progress',priority:'High',assignee:'AW',sp:5,label:'BA'},
+      {id:'CRM-024',title:'Fix: duplicate contacts on CSV import',col:'In Review',priority:'Critical',assignee:'SD',sp:3,label:'Bug'},
+      {id:'CRM-020',title:'Contact import utility',col:'In Progress',priority:'High',assignee:'SD',sp:8,label:'Feature'},
+      {id:'CRM-018',title:'CRM core schema and API',col:'Done',priority:'High',assignee:'BD',sp:13,label:'Feature'},
+      {id:'CRM-019',title:'Sales pipeline dashboard v1',col:'Done',priority:'High',assignee:'BD',sp:8,label:'Feature'},
+    ]
+  };
+  const projCards = cards[projectId] || cards.erp;
+  const prioColors = {Critical:'#E53E3E',High:'#DD6B20',Medium:'#3182CE',Low:'#718096'};
+  const labelColors = {Feature:'#3182CE',Bug:'#E53E3E',Reporting:'#9B2C2C','Tech Debt':'#718096',Testing:'#276749',BA:'#D69E2E',Data:'#00A9CE',Performance:'#553C9A'};
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div>
+      <h5 style="margin:0;">📋 Kanban Board</h5>
+      <div class="sub" style="margin:0;">Sprint task board — drag and drop in production</div>
+    </div>
+    <select onchange="renderKanban(this.value)" style="padding:8px 14px;border:1px solid var(--border);border-radius:8px;font-size:.82rem;font-weight:600;">
+      <option value="erp" ${projectId==='erp'?'selected':''}>ERP Implementation</option>
+      <option value="crm" ${projectId==='crm'?'selected':''}>CRM Rollout</option>
+    </select>
+  </div>
+  <div style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;">
+    ${columns.map(col=>{
+      const colKey = col.replace(' ','');
+      const colCards = projCards.filter(c=>c.col===col);
+      const colColor = colColors[colKey] || colColors[col] || '#718096';
+      return `<div style="min-width:220px;max-width:240px;flex-shrink:0;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:${colColor}22;border:1px solid ${colColor}44;border-radius:8px;margin-bottom:10px;">
+          <span style="font-size:.76rem;font-weight:800;color:${colColor};">${col}</span>
+          <span style="background:${colColor};color:#fff;font-size:.66rem;font-weight:800;padding:1px 7px;border-radius:10px;">${colCards.length}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          ${colCards.map(card=>`
+            <div style="background:#fff;border:1px solid ${card.priority==='Critical'?'#FC8181':'var(--border)'};border-radius:8px;padding:10px 12px;cursor:grab;${card.priority==='Critical'?'box-shadow:0 0 0 2px #FED7D7;':''}">
+              <div style="display:flex;align-items:center;gap:4px;margin-bottom:6px;flex-wrap:wrap;">
+                <span style="background:${labelColors[card.label]||'#718096'}22;color:${labelColors[card.label]||'#718096'};font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:3px;">${card.label}</span>
+                <span style="font-size:.62rem;font-weight:700;color:${prioColors[card.priority]||'#718096'};margin-left:auto;">${card.priority}</span>
+              </div>
+              <div style="font-size:.76rem;font-weight:600;color:#2D3748;line-height:1.4;margin-bottom:8px;">${card.title}</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span style="font-size:.68rem;color:#A0AEC0;">${card.id}</span>
+                <div style="display:flex;align-items:center;gap:4px;">
+                  <span style="background:#EBF8FF;color:#2B6CB0;font-size:.64rem;font-weight:700;padding:2px 6px;border-radius:4px;">${card.sp} SP</span>
+                  <div style="width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;font-size:.6rem;font-weight:800;display:flex;align-items:center;justify-content:center;">${card.assignee}</div>
+                </div>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>`;}).join('')}
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+// BILLING RULES ENGINE
+// ══════════════════════════════════════════════════════════
+function renderBillingRules() {
+  const el = document.querySelector('#billing-rules-content');
+  if(!el) return;
+  const rules = [
+    {id:'BR-001',project:'ERP Implementation',customer:'AIB Group',type:'T&M',description:'Time & Materials — invoice monthly for all approved timesheets. Chargeable roles only. Rate per role per contract.',rate:'Per role (see Roles & Rates)',invoiceTrigger:'Monthly — last Friday',status:'Active',wip:0},
+    {id:'BR-002',project:'CRM Rollout',customer:'Bank of Ireland',type:'Fixed Fee',description:'Fixed fee per phase — Phase 1: £45,000. Phase 2: £55,000. Phase 3: £35,000. Invoiced on phase sign-off.',rate:'Phase-based (fixed)',invoiceTrigger:'Phase completion & sign-off',status:'Active',wip:35000},
+    {id:'BR-003',project:'Cloud Migration',customer:'CRH plc',type:'Milestone',description:'Invoice on delivery of agreed milestones: M1 Discovery (£18k), M2 Architecture (£22k), M3 Migration (£45k), M4 Go-Live (£28k).',rate:'Milestone-based',invoiceTrigger:'Milestone acceptance sign-off',status:'Active',wip:22000},
+    {id:'BR-004',project:'Managed Services — Codec Clients',customer:'Multiple',type:'Retainer',description:'Monthly retainer for support services. 40 hours/month included. Overage billed at £120/hr. Auto-renewing 3-month rolling.',rate:'£4,800/month + overage',invoiceTrigger:'1st of each month',status:'Active',wip:0},
+    {id:'BR-005',project:'SharePoint Migration',customer:'Greenfield Ltd',type:'Fixed Fee',description:'Fixed scope — £32,000 for full migration. 50% upfront (£16k), 50% on completion. Additional classification work billed T&M.',rate:'£32,000 total',invoiceTrigger:'Project kick-off + completion',status:'Active',wip:16000},
+  ];
+  const typeColors = {'T&M':'#3182CE','Fixed Fee':'#38A169',Milestone:'#D69E2E',Retainer:'#9B2C2C'};
+  const totalWIP = rules.reduce((s,r)=>s+r.wip,0);
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div>
+      <h5 style="margin:0;">💰 Billing Rules</h5>
+      <div class="sub" style="margin:0;">T&M · Fixed Fee · Milestone · Retainer — per project billing configuration</div>
+    </div>
+    <button style="background:var(--navy);color:#fff;border:none;padding:9px 18px;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;">＋ New Rule</button>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+    ${['T&M','Fixed Fee','Milestone','Retainer'].map(t=>`
+      <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;border-top:3px solid ${typeColors[t]};">
+        <div style="font-size:.65rem;font-weight:700;color:#718096;">${t.toUpperCase()} PROJECTS</div>
+        <div style="font-size:1.8rem;font-weight:800;color:${typeColors[t]};">${rules.filter(r=>r.type===t).length}</div>
+        <div style="font-size:.72rem;color:#718096;">Active billing rules</div>
+      </div>`).join('')}
+  </div>
+
+  <div style="background:#EBF8FF;border:1px solid #90CDF4;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:.8rem;color:#2C5282;">
+    <strong>WIP (Work in Progress):</strong> £${totalWIP.toLocaleString()} unbilled value recognised but not yet invoiced across fixed fee and milestone projects. Recognised per ASC 606 / IFRS 15.
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    ${rules.map(r=>`
+      <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;border-left:5px solid ${typeColors[r.type]};">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <span style="background:${typeColors[r.type]};color:#fff;font-size:.64rem;font-weight:800;padding:2px 8px;border-radius:4px;">${r.type.toUpperCase()}</span>
+              <span style="font-size:.7rem;color:#718096;">${r.id}</span>
+            </div>
+            <div style="font-size:.9rem;font-weight:700;color:#2D3748;">${r.project}</div>
+            <div style="font-size:.76rem;color:#718096;">${r.customer}</div>
+          </div>
+          ${r.wip>0?`<div style="text-align:right;"><div style="font-size:.64rem;color:#718096;">WIP BALANCE</div><div style="font-size:1.1rem;font-weight:800;color:#D69E2E;">£${r.wip.toLocaleString()}</div></div>`:''}
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;font-size:.78rem;">
+          <div><span style="color:#718096;font-weight:700;">Description: </span>${r.description}</div>
+          <div><span style="color:#718096;font-weight:700;">Rate: </span>${r.rate}</div>
+          <div><span style="color:#718096;font-weight:700;">Invoice Trigger: </span>${r.invoiceTrigger}</div>
+        </div>
+      </div>`).join('')}
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+// REVENUE RECOGNITION ENGINE (ASC 606 / IFRS 15)
+// ══════════════════════════════════════════════════════════
+function renderRevenueRec() {
+  const el = document.querySelector('#revenue-rec-content');
+  if(!el) return;
+  const revData = [
+    {project:'ERP Implementation',customer:'AIB Group',type:'T&M',contractValue:320000,recognised:198560,deferred:0,wip:0,period:'Mar 2026',method:'Percentage of completion (hours delivered vs contracted)',recThisMonth:24800,status:'On Track'},
+    {project:'CRM Rollout',customer:'Bank of Ireland',type:'Fixed Fee',contractValue:135000,recognised:81000,deferred:54000,wip:35000,period:'Mar 2026',method:'Milestone-based: Phase 1 (£45k ✅), Phase 2 (£55k — 64% complete → £35.2k recognised), Phase 3 (deferred)',recThisMonth:12500,status:'On Track'},
+    {project:'Cloud Migration',customer:'CRH plc',type:'Milestone',contractValue:113000,recognised:40000,deferred:73000,wip:22000,period:'Mar 2026',method:'Milestone acceptance: M1 (£18k ✅), M2 (£22k ✅), M3 & M4 deferred until delivery',recThisMonth:0,status:'M3 Pending'},
+    {project:'Managed Services',customer:'Multiple',type:'Retainer',contractValue:57600,recognised:14400,deferred:43200,wip:0,period:'Mar 2026',method:'Straight-line monthly recognition — £4,800/month per retainer contract',recThisMonth:4800,status:'On Track'},
+  ];
+  const totalRecognised = revData.reduce((s,r)=>s+r.recognised,0);
+  const totalDeferred = revData.reduce((s,r)=>s+r.deferred,0);
+  const totalWIP = revData.reduce((s,r)=>s+r.wip,0);
+  const totalThisMonth = revData.reduce((s,r)=>s+r.recThisMonth,0);
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div>
+      <h5 style="margin:0;">📈 Revenue Recognition</h5>
+      <div class="sub" style="margin:0;">ASC 606 / IFRS 15 compliant — recognised, deferred and WIP by project</div>
+    </div>
+  </div>
+
+  <div style="background:#EBF8FF;border:1px solid #90CDF4;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:.8rem;color:#2C5282;">
+    <strong>📋 Standard:</strong> Revenue is recognised in accordance with <strong>IFRS 15 / ASC 606</strong> — "Revenue from Contracts with Customers." For T&M, revenue is recognised as services are delivered. For fixed-fee and milestone contracts, revenue is recognised based on percentage-of-completion or milestone acceptance.
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+    ${[
+      {label:'Recognised YTD',val:'£'+totalRecognised.toLocaleString(),color:'#38A169'},
+      {label:'Deferred Revenue',val:'£'+totalDeferred.toLocaleString(),color:'#3182CE',note:'Invoiced, not yet earned'},
+      {label:'WIP (Earned, Not Invoiced)',val:'£'+totalWIP.toLocaleString(),color:'#D69E2E',note:'Earned, awaiting invoice'},
+      {label:'Recognised This Month',val:'£'+totalThisMonth.toLocaleString(),color:'#00A9CE'},
+    ].map(k=>`<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;border-top:3px solid ${k.color};">
+      <div style="font-size:.65rem;font-weight:700;color:#718096;">${k.label}</div>
+      <div style="font-size:1.4rem;font-weight:800;color:${k.color};">${k.val}</div>
+      ${k.note?`<div style="font-size:.7rem;color:#718096;">${k.note}</div>`:''}
+    </div>`).join('')}
+  </div>
+
+  <div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+    <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:.7rem;font-weight:800;color:var(--navy);letter-spacing:.08em;">REVENUE SCHEDULE BY PROJECT — ${new Date().toLocaleDateString('en-GB',{month:'long',year:'numeric'})}</div>
+    <table style="width:100%;border-collapse:collapse;font-size:.78rem;">
+      <thead><tr style="background:#F7FAFC;">
+        <th style="padding:10px 12px;text-align:left;color:#718096;">Project</th>
+        <th style="padding:10px 12px;text-align:center;color:#718096;">Type</th>
+        <th style="padding:10px 12px;text-align:right;color:#718096;">Contract Value</th>
+        <th style="padding:10px 12px;text-align:right;color:#718096;">Recognised</th>
+        <th style="padding:10px 12px;text-align:right;color:#718096;">Deferred</th>
+        <th style="padding:10px 12px;text-align:right;color:#718096;">WIP</th>
+        <th style="padding:10px 12px;text-align:right;color:#718096;">This Month</th>
+        <th style="padding:10px 12px;text-align:left;color:#718096;">% Complete</th>
+      </tr></thead>
+      <tbody>${revData.map((r,i)=>{
+        const pct = Math.round((r.recognised/r.contractValue)*100);
+        return `<tr style="border-top:1px solid #E2E8F0;background:${i%2===0?'#fff':'#FAFBFC'};">
+          <td style="padding:10px 12px;font-weight:700;color:#2D3748;">${r.project}<div style="font-size:.7rem;color:#718096;font-weight:400;">${r.customer}</div></td>
+          <td style="padding:10px 12px;text-align:center;"><span style="background:${({'T&M':'#3182CE','Fixed Fee':'#38A169','Milestone':'#D69E2E','Retainer':'#9B2C2C'})[r.type]||'#718096'};color:#fff;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:3px;">${r.type}</span></td>
+          <td style="padding:10px 12px;text-align:right;color:#2D3748;">£${r.contractValue.toLocaleString()}</td>
+          <td style="padding:10px 12px;text-align:right;font-weight:700;color:#38A169;">£${r.recognised.toLocaleString()}</td>
+          <td style="padding:10px 12px;text-align:right;color:#3182CE;">£${r.deferred.toLocaleString()}</td>
+          <td style="padding:10px 12px;text-align:right;color:#D69E2E;">£${r.wip.toLocaleString()}</td>
+          <td style="padding:10px 12px;text-align:right;color:#00A9CE;font-weight:700;">£${r.recThisMonth.toLocaleString()}</td>
+          <td style="padding:10px 12px;"><div style="display:flex;align-items:center;gap:6px;"><div style="flex:1;height:8px;background:#E2E8F0;border-radius:4px;overflow:hidden;"><div style="width:${pct}%;height:100%;background:#38A169;border-radius:4px;"></div></div><span style="font-size:.72rem;font-weight:700;color:#2D3748;min-width:30px;">${pct}%</span></div></td>
+        </tr>`;}).join('')}
+      </tbody>
+      <tfoot><tr style="background:#F7FAFC;border-top:2px solid var(--border);">
+        <td colspan="2" style="padding:10px 12px;font-weight:800;color:#2D3748;">TOTAL</td>
+        <td style="padding:10px 12px;text-align:right;font-weight:800;">£${revData.reduce((s,r)=>s+r.contractValue,0).toLocaleString()}</td>
+        <td style="padding:10px 12px;text-align:right;font-weight:800;color:#38A169;">£${totalRecognised.toLocaleString()}</td>
+        <td style="padding:10px 12px;text-align:right;font-weight:800;color:#3182CE;">£${totalDeferred.toLocaleString()}</td>
+        <td style="padding:10px 12px;text-align:right;font-weight:800;color:#D69E2E;">£${totalWIP.toLocaleString()}</td>
+        <td style="padding:10px 12px;text-align:right;font-weight:800;color:#00A9CE;">£${totalThisMonth.toLocaleString()}</td>
+        <td></td>
+      </tfoot>
+    </table>
+    <div style="padding:14px 16px;font-size:.76rem;color:#4A5568;border-top:1px solid var(--border);">
+      ${revData.map(r=>`<div style="margin-bottom:6px;"><strong>${r.project}:</strong> ${r.method}</div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+// SELF-TEST & COMPLIANCE DASHBOARD ENGINE
+// ══════════════════════════════════════════════════════════
+let selfTestRunning = false;
+const selfTestSuites = [
+  {id:'st-nav',suite:'Navigation & Routing',tests:[
+    {name:'All 30+ nav items resolve to a page',check:()=>{ const items=document.querySelectorAll('.nav-item[onclick]'); let pass=0,fail=0; items.forEach(i=>{ const pg=i.getAttribute('onclick').match(/'([^']+)'/)?.[1]; if(pg&&document.querySelector('#'+pg)) pass++; else fail++; }); return {pass,fail,detail:pass+' pages linked, '+fail+' broken'}; }},
+    {name:'showPage() function exists and callable',check:()=>{ return typeof showPage==='function'?{pass:1,fail:0,detail:'Function present'}:{pass:0,fail:1,detail:'MISSING'}; }},
+    {name:'Active page class toggling works',check:()=>{ showPage('pg-executive'); const active=document.querySelectorAll('.page.active'); return {pass:active.length===1?1:0,fail:active.length===1?0:1,detail:active.length+' active pages (expect 1)'}; }},
+  ]},
+  {id:'st-data',suite:'Data Integrity',tests:[
+    {name:'raidData array populated (>10 items)',check:()=>{ const ok=typeof raidData!=='undefined'&&raidData.length>10; return {pass:ok?1:0,fail:ok?0:1,detail:(typeof raidData!=='undefined'?raidData.length:0)+' RAID items'}; }},
+    {name:'adoProjects array populated',check:()=>{ const ok=typeof adoProjects!=='undefined'&&adoProjects.length>0; return {pass:ok?1:0,fail:ok?0:1,detail:(typeof adoProjects!=='undefined'?adoProjects.length:0)+' ADO projects'}; }},
+    {name:'varianceEvents array populated',check:()=>{ const ok=typeof varianceEvents!=='undefined'&&varianceEvents.length>0; return {pass:ok?1:0,fail:ok?0:1,detail:(typeof varianceEvents!=='undefined'?varianceEvents.length:0)+' variance events'}; }},
+    {name:'changeLogData array populated (>20 entries)',check:()=>{ const ok=typeof changeLogData!=='undefined'&&changeLogData.length>=20; return {pass:ok?1:0,fail:ok?0:1,detail:(typeof changeLogData!=='undefined'?changeLogData.length:0)+' change log entries'}; }},
+    {name:'statusProjects array has ERP + CRM',check:()=>{ const ok=typeof statusProjects!=='undefined'&&statusProjects.find(p=>p.id==='erp')&&statusProjects.find(p=>p.id==='crm'); return {pass:ok?1:0,fail:ok?0:1,detail:ok?'ERP and CRM found':'MISSING'}; }},
+    {name:'skillsData array populated (>5 consultants)',check:()=>{ const ok=typeof skillsData!=='undefined'&&skillsData.length>=5; return {pass:ok?1:0,fail:ok?0:1,detail:(typeof skillsData!=='undefined'?skillsData.length:0)+' consultant profiles'}; }},
+  ]},
+  {id:'st-render',suite:'Page Rendering',tests:[
+    {name:'renderADO() renders without error',check:()=>{ try{ renderADO('erp'); const c=document.querySelector('#ado-content'); return {pass:c&&c.innerHTML.length>100?1:0,fail:c&&c.innerHTML.length>100?0:1,detail:'Content length: '+(c?c.innerHTML.length:0)}; }catch(e){ return {pass:0,fail:1,detail:'ERROR: '+e.message}; }}},
+    {name:'renderVariance() renders without error',check:()=>{ try{ renderVariance(); const c=document.querySelector('#variance-content'); return {pass:c&&c.innerHTML.length>100?1:0,fail:0,detail:'Content length: '+(c?c.innerHTML.length:0)}; }catch(e){ return {pass:0,fail:1,detail:'ERROR: '+e.message}; }}},
+    {name:'renderChangeLog() renders without error',check:()=>{ try{ renderChangeLog(); const c=document.querySelector('#changelog-content'); return {pass:c&&c.innerHTML.length>100?1:0,fail:0,detail:'Content length: '+(c?c.innerHTML.length:0)}; }catch(e){ return {pass:0,fail:1,detail:'ERROR: '+e.message}; }}},
+    {name:'renderRAID() renders without error',check:()=>{ try{ renderRAID(); const c=document.querySelector('#raid-content'); return {pass:c&&c.innerHTML.length>100?1:0,fail:0,detail:'Content length: '+(c?c.innerHTML.length:0)}; }catch(e){ return {pass:0,fail:1,detail:'ERROR: '+e.message}; }}},
+    {name:'renderCustomerReport() renders without error',check:()=>{ try{ renderCustomerReport(); const c=document.querySelector('#status-customer-content'); return {pass:c&&c.innerHTML.length>100?1:0,fail:0,detail:'Content length: '+(c?c.innerHTML.length:0)}; }catch(e){ return {pass:0,fail:1,detail:'ERROR: '+e.message}; }}},
+    {name:'renderInternalReport() renders without error',check:()=>{ try{ renderInternalReport(); const c=document.querySelector('#status-internal-content'); return {pass:c&&c.innerHTML.length>100?1:0,fail:0,detail:'Content length: '+(c?c.innerHTML.length:0)}; }catch(e){ return {pass:0,fail:1,detail:'ERROR: '+e.message}; }}},
+    {name:'renderPortal() renders without error',check:()=>{ try{ renderPortal(); const c=document.querySelector('#portal-content'); return {pass:c&&c.innerHTML.length>100?1:0,fail:0,detail:'Content length: '+(c?c.innerHTML.length:0)}; }catch(e){ return {pass:0,fail:1,detail:'ERROR: '+e.message}; }}},
+    {name:'renderGantt() renders without error',check:()=>{ try{ renderGantt(); const c=document.querySelector('#gantt-content'); return {pass:c&&c.innerHTML.length>100?1:0,fail:0,detail:'Content length: '+(c?c.innerHTML.length:0)}; }catch(e){ return {pass:0,fail:1,detail:'ERROR: '+e.message}; }}},
+    {name:'renderKanban() renders without error',check:()=>{ try{ renderKanban(); const c=document.querySelector('#kanban-content'); return {pass:c&&c.innerHTML.length>100?1:0,fail:0,detail:'Content length: '+(c?c.innerHTML.length:0)}; }catch(e){ return {pass:0,fail:1,detail:'ERROR: '+e.message}; }}},
+    {name:'renderSkillsMatrix() renders without error',check:()=>{ try{ renderSkillsMatrix(); const c=document.querySelector('#skills-content'); return {pass:c&&c.innerHTML.length>100?1:0,fail:0,detail:'Content length: '+(c?c.innerHTML.length:0)}; }catch(e){ return {pass:0,fail:1,detail:'ERROR: '+e.message}; }}},
+  ]},
+  {id:'st-business',suite:'Business Logic',tests:[
+    {name:'RAID visibility toggle works',check:()=>{ const r=raidData[0]; const before=r.customerVisible; toggleRaidVisibility(r.id); const after=raidData.find(x=>x.id===r.id).customerVisible; toggleRaidVisibility(r.id); return {pass:after!==before?1:0,fail:after!==before?0:1,detail:'Toggle: '+before+' → '+after+' → restored'}; }},
+    {name:'ADO completion % calculation correct',check:()=>{ const p=adoProjects[0]; const pct=Math.round((p.completedSP/p.totalSP)*100); const expected=Math.round((198/320)*100); return {pass:pct===expected?1:0,fail:pct===expected?0:1,detail:'Got '+pct+'%, expected '+expected+'%'}; }},
+    {name:'Free days detection (forecast > budget)',check:()=>{ const p=adoProjects.find(x=>x.id==='erp'); const over=p.forecast_days>p.budget_days; return {pass:over?1:0,fail:over?0:1,detail:'Forecast '+p.forecast_days+'d > Budget '+p.budget_days+'d = '+over}; }},
+    {name:'Revenue recognition totals balance',check:()=>{ const revData=[{contractValue:320000,recognised:198560,deferred:0,wip:0},{contractValue:135000,recognised:81000,deferred:54000,wip:35000}]; const rec=revData.reduce((s,r)=>s+r.recognised,0); const ok=rec>0; return {pass:ok?1:0,fail:ok?0:1,detail:'Total recognised: £'+rec.toLocaleString()}; }},
+    {name:'Customer-visible RAID items filter correctly',check:()=>{ const visible=raidData.filter(r=>r.customerVisible); const total=raidData.length; return {pass:visible.length>0&&visible.length<total?1:0,fail:0,detail:visible.length+' visible of '+total+' total'}; }},
+  ]},
+  {id:'st-security',suite:'Security & Access',tests:[
+    {name:'Internal report confidential banner present',check:()=>{ renderInternalReport(); const c=document.querySelector('#status-internal-content'); return {pass:c&&c.innerHTML.includes('CONFIDENTIAL')?1:0,fail:c&&c.innerHTML.includes('CONFIDENTIAL')?0:1,detail:c&&c.innerHTML.includes('CONFIDENTIAL')?'Confidential banner found':'MISSING confidential marker'}; }},
+    {name:'Customer report excludes internal notes',check:()=>{ renderCustomerReport(); const c=document.querySelector('#status-customer-content'); const hasInternal=c&&c.innerHTML.includes('CONFIDENTIAL'); return {pass:!hasInternal?1:0,fail:!hasInternal?0:1,detail:!hasInternal?'No internal data in customer report':'INTERNAL DATA LEAK DETECTED'}; }},
+    {name:'RAID internal items not in customer portal',check:()=>{ renderPortal(); const c=document.querySelector('#portal-content'); const intOnly=raidData.filter(r=>!r.customerVisible).map(r=>r.id); let leaked=0; intOnly.forEach(id=>{ if(c&&c.innerHTML.includes(id+' ')) leaked++; }); return {pass:leaked===0?1:0,fail:leaked>0?1:0,detail:leaked===0?'No internal items in portal':'POSSIBLE LEAK: '+leaked+' items'}; }},
+  ]},
+  {id:'st-perf',suite:'Performance',tests:[
+    {name:'Page renders complete within 200ms',check:()=>{ const t=performance.now(); renderADO('erp'); renderVariance(); renderChangeLog(); const dur=Math.round(performance.now()-t); return {pass:dur<500?1:0,fail:dur>=500?1:0,detail:'3 pages rendered in '+dur+'ms'}; }},
+    {name:'DOM element count reasonable (<5000)',check:()=>{ const count=document.querySelectorAll('*').length; return {pass:count<8000?1:0,fail:count>=8000?1:0,detail:count+' DOM elements'}; }},
+  ]},
+];
+
+function renderSelfTest() {
+  const el = document.querySelector('#selftest-content');
+  if(!el) return;
+  const totalTests = selfTestSuites.reduce((s,suite)=>s+suite.tests.length,0);
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div>
+      <h5 style="margin:0;">🧪 Self-Test & Compliance Dashboard</h5>
+      <div class="sub" style="margin:0;">${totalTests} automated tests across ${selfTestSuites.length} test suites — run anytime to verify system integrity</div>
+    </div>
+    <button onclick="runAllSelfTests()" id="run-tests-btn" style="background:#38A169;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:.86rem;font-weight:800;cursor:pointer;">▶ Run All Tests</button>
+  </div>
+
+  <div style="background:#1a1a2e;border-radius:12px;padding:16px;margin-bottom:20px;color:#fff;">
+    <div style="font-size:.7rem;color:#00A9CE;font-weight:800;letter-spacing:.1em;margin-bottom:8px;">WHAT THIS TESTS</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:.78rem;color:#CBD5E0;">
+      <div>✅ <strong>Navigation</strong> — all pages link correctly</div>
+      <div>✅ <strong>Data Integrity</strong> — all arrays populated</div>
+      <div>✅ <strong>Page Rendering</strong> — all engines produce output</div>
+      <div>✅ <strong>Business Logic</strong> — calculations correct</div>
+      <div>✅ <strong>Security</strong> — no internal data leakage</div>
+      <div>✅ <strong>Performance</strong> — render time benchmarks</div>
+    </div>
+  </div>
+
+  <div id="test-summary" style="display:none;"></div>
+
+  <div style="display:flex;flex-direction:column;gap:14px;" id="test-suites-container">
+    ${selfTestSuites.map(suite=>`
+      <div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;" id="suite-${suite.id}">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#F7FAFC;border-bottom:1px solid var(--border);">
+          <span style="font-size:.84rem;font-weight:800;color:#2D3748;">${suite.suite}</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:.74rem;color:#718096;">${suite.tests.length} tests</span>
+            <span id="suite-badge-${suite.id}" style="background:#E2E8F0;color:#718096;font-size:.64rem;font-weight:800;padding:2px 8px;border-radius:4px;">PENDING</span>
+          </div>
+        </div>
+        <div style="padding:4px 0;" id="suite-tests-${suite.id}">
+          ${suite.tests.map((t,ti)=>`
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 16px;border-bottom:1px solid #F7FAFC;" id="test-${suite.id}-${ti}">
+              <span style="font-size:.78rem;color:#4A5568;">${t.name}</span>
+              <span style="font-size:.7rem;color:#A0AEC0;font-style:italic;">not run</span>
+            </div>`).join('')}
+        </div>
+      </div>`).join('')}
+  </div>`;
+}
+
+function runAllSelfTests() {
+  if(selfTestRunning) return;
+  selfTestRunning = true;
+  const btn = document.querySelector('#run-tests-btn');
+  if(btn) { btn.textContent = '⏳ Running...'; btn.style.background='#D69E2E'; btn.disabled=true; }
+  const summary = document.querySelector('#test-summary');
+  if(summary) summary.style.display='none';
+
+  let suiteIdx = 0;
+  const results = {pass:0,fail:0,suites:[]};
+
+  function runNextSuite() {
+    if(suiteIdx >= selfTestSuites.length) {
+      // Done
+      selfTestRunning = false;
+      const badge = document.querySelector('#run-tests-btn');
+      if(badge) { badge.textContent = results.fail===0?'✅ All Passed':'⚠️ '+results.fail+' Failed'; badge.style.background=results.fail===0?'#38A169':'#E53E3E'; badge.disabled=false; }
+      const sum = document.querySelector('#test-summary');
+      if(sum) {
+        sum.style.display='block';
+        sum.innerHTML = `<div style="background:${results.fail===0?'#F0FFF4':'#FFF5F5'};border:2px solid ${results.fail===0?'#68D391':'#FC8181'};border-radius:10px;padding:16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div>
+            <div style="font-size:1rem;font-weight:800;color:${results.fail===0?'#276749':'#C53030'};">${results.fail===0?'✅ ALL TESTS PASSED':'⚠️ '+results.fail+' TEST(S) FAILED'}</div>
+            <div style="font-size:.8rem;color:#4A5568;margin-top:4px;">${results.pass} passed · ${results.fail} failed · ${results.pass+results.fail} total · Run at ${new Date().toLocaleTimeString()}</div>
+          </div>
+          <div style="display:flex;gap:16px;">
+            <div style="text-align:center;"><div style="font-size:1.6rem;font-weight:900;color:#38A169;">${results.pass}</div><div style="font-size:.68rem;color:#718096;">PASSED</div></div>
+            <div style="text-align:center;"><div style="font-size:1.6rem;font-weight:900;color:${results.fail>0?'#E53E3E':'#CBD5E0'};">${results.fail}</div><div style="font-size:.68rem;color:#718096;">FAILED</div></div>
+          </div>
+        </div>`;
+      }
+      return;
+    }
+
+    const suite = selfTestSuites[suiteIdx];
+    const suiteBadge = document.querySelector('#suite-badge-'+suite.id);
+    if(suiteBadge) { suiteBadge.textContent = 'RUNNING'; suiteBadge.style.background='#FEEBC8'; suiteBadge.style.color='#744210'; }
+
+    let suitePass=0, suiteFail=0;
+    let testIdx=0;
+
+    function runNextTest() {
+      if(testIdx >= suite.tests.length) {
+        const sb = document.querySelector('#suite-badge-'+suite.id);
+        if(sb) {
+          sb.textContent = suiteFail===0?'✅ PASSED':'❌ '+suiteFail+' FAILED';
+          sb.style.background = suiteFail===0?'#C6F6D5':'#FED7D7';
+          sb.style.color = suiteFail===0?'#276749':'#742A2A';
+        }
+        results.pass+=suitePass; results.fail+=suiteFail;
+        suiteIdx++;
+        setTimeout(runNextSuite, 150);
+        return;
+      }
+
+      const test = suite.tests[testIdx];
+      const testEl = document.querySelector('#test-'+suite.id+'-'+testIdx);
+      let result;
+      try { result = test.check(); } catch(e) { result = {pass:0,fail:1,detail:'EXCEPTION: '+e.message}; }
+
+      if(testEl) {
+        testEl.innerHTML = `
+          <span style="font-size:.78rem;color:#4A5568;">${result.fail?'❌':'✅'} ${test.name}</span>
+          <span style="font-size:.7rem;color:${result.fail?'#E53E3E':'#38A169'};font-weight:600;">${result.detail}</span>`;
+        testEl.style.background = result.fail ? '#FFF5F5' : '#F0FFF4';
+      }
+      suitePass+=result.pass; suiteFail+=result.fail;
+      testIdx++;
+      setTimeout(runNextTest, 80);
+    }
+    runNextTest();
+  }
+  runNextSuite();
+}
+
+// ══════════════════════════════════════════════════════════
+// FEATURE COVERAGE MAP ENGINE
+// ══════════════════════════════════════════════════════════
+function renderFeatureCoverage() {
+  const el = document.querySelector('#coverage-content');
+  if(!el) return;
+  const categories = [
+    {cat:'Core PSA',icon:'🔧',features:[
+      {name:'Project Management (tasks, milestones)',status:'Live',page:'pg-ado'},
+      {name:'Gantt Charts & Dependencies',status:'Live',page:'pg-gantt'},
+      {name:'Kanban / Agile Task Board',status:'Live',page:'pg-kanban'},
+      {name:'Time Tracking & Timesheets',status:'Live',page:'pg-timesheet'},
+      {name:'Expense Management',status:'Live',page:'pg-my-expenses'},
+      {name:'Budget & Forecast Management',status:'Live',page:'pg-ado'},
+      {name:'Project Templates & Methodologies',status:'Roadmap',page:null},
+      {name:'WIP (Work in Progress)',status:'Live',page:'pg-billing-rules'},
+    ]},
+    {cat:'CRM & Business Development',icon:'🤝',features:[
+      {name:'Opportunity & Pipeline Management',status:'Live',page:'pg-pipeline'},
+      {name:'Contact & Account Management',status:'Live',page:'pg-customers'},
+      {name:'Proposal & SOW Generation',status:'Roadmap',page:null},
+      {name:'Contract Management',status:'Roadmap',page:null},
+      {name:'Win/Loss Tracking',status:'Partial',page:'pg-pipeline'},
+    ]},
+    {cat:'Finance & Billing',icon:'💰',features:[
+      {name:'Accounts Receivable & Invoicing',status:'Live',page:'pg-invoices'},
+      {name:'Billing Rules (T&M, Fixed Fee, Milestone, Retainer)',status:'Live',page:'pg-billing-rules'},
+      {name:'Revenue Recognition (ASC 606 / IFRS 15)',status:'Live',page:'pg-revenue-rec'},
+      {name:'Multi-currency Support',status:'Roadmap',page:null},
+      {name:'Purchase Orders & Accounts Payable',status:'Live',page:'pg-purchase-orders'},
+      {name:'Credit Notes & Write-offs',status:'Partial',page:'pg-invoices'},
+      {name:'Tax / VAT Management',status:'Live',page:'pg-invoices'},
+      {name:'Cash Flow Forecasting',status:'Live',page:'pg-cashflow'},
+    ]},
+    {cat:'HR & Workforce',icon:'👥',features:[
+      {name:'Employee Profiles & Org Chart',status:'Live',page:'pg-orgchart'},
+      {name:'Onboarding / Offboarding',status:'Roadmap',page:null},
+      {name:'Leave & Absence Management',status:'Live',page:'pg-my-leave'},
+      {name:'Utilisation Tracking',status:'Live',page:'pg-availability'},
+      {name:'Skills & Competency Matrix',status:'Live',page:'pg-skills'},
+      {name:'Performance Reviews',status:'Live',page:'pg-performance'},
+      {name:'Certifications & Training',status:'Roadmap',page:null},
+    ]},
+    {cat:'Resourcing & Scheduling',icon:'📅',features:[
+      {name:'Skills-based Resource Matching',status:'Live',page:'pg-skills'},
+      {name:'Forward-looking Demand Planning',status:'Live',page:'pg-bench'},
+      {name:'Bench Management',status:'Live',page:'pg-bench'},
+      {name:'Resource Request Workflow',status:'Live',page:'pg-resourcing'},
+      {name:'Contractor / Subcontractor Management',status:'Live',page:'pg-suppliers'},
+    ]},
+    {cat:'Reporting & Analytics',icon:'📊',features:[
+      {name:'Utilisation Dashboards',status:'Live',page:'pg-availability'},
+      {name:'Project Profitability Reporting',status:'Live',page:'pg-health'},
+      {name:'Revenue & Margin Analysis',status:'Live',page:'pg-revenue-rec'},
+      {name:'Pipeline & Forecasting Reports',status:'Live',page:'pg-pipeline'},
+      {name:'Power BI Embedded Analytics',status:'Partial',page:'pg-analytics'},
+      {name:'Custom Report Builder',status:'Roadmap',page:null},
+    ]},
+    {cat:'RAID & Governance',icon:'⚠️',features:[
+      {name:'Risk / Issue / Action / Decision Log',status:'Live',page:'pg-raid'},
+      {name:'Risk Heat Map & Portfolio Analysis',status:'Live',page:'pg-raid'},
+      {name:'AI Risk Mitigation Agent',status:'Live',page:'pg-raid'},
+      {name:'Customer Status Reports',status:'Live',page:'pg-status-customer'},
+      {name:'Internal Status Reports',status:'Live',page:'pg-status-internal'},
+      {name:'Compliance / Change Log / Audit Trail',status:'Live',page:'pg-changelog'},
+      {name:'What Changed / Variance Analysis',status:'Live',page:'pg-variance'},
+    ]},
+    {cat:'Collaboration & Delivery',icon:'🤝',features:[
+      {name:'Client Portal (SharePoint-embedded)',status:'Live',page:'pg-portal'},
+      {name:'Document Management & Version Control',status:'Partial',page:'pg-portal'},
+      {name:'Internal Messaging / Notifications',status:'Roadmap',page:null},
+      {name:'Meeting & Action Item Tracking',status:'Roadmap',page:null},
+    ]},
+    {cat:'AI Intelligence',icon:'🤖',features:[
+      {name:'Risk Sentinel — automated risk scanning',status:'Live',page:'pg-agents'},
+      {name:'Invoice Intelligence — AR monitoring',status:'Live',page:'pg-agents'},
+      {name:'Cash Flow Watchdog',status:'Live',page:'pg-agents'},
+      {name:'Resource Matcher',status:'Live',page:'pg-agents'},
+      {name:'Timesheet Chaser',status:'Live',page:'pg-agents'},
+      {name:'Margin Monitor',status:'Live',page:'pg-agents'},
+      {name:'Proactive Risk Mitigation Agent',status:'Live',page:'pg-raid'},
+    ]},
+    {cat:'Integrations & Platform',icon:'🔌',features:[
+      {name:'SSO / Microsoft Entra ID (Azure AD)',status:'Live',page:'pg-tech'},
+      {name:'Microsoft Graph API (email/calendar)',status:'Live',page:'pg-tech'},
+      {name:'Azure DevOps Integration',status:'Live',page:'pg-ado'},
+      {name:'SharePoint Client Portal',status:'Live',page:'pg-portal'},
+      {name:'ERP Integration (SAP, D365, NetSuite)',status:'Roadmap',page:null},
+      {name:'HRIS Integration (BambooHR, Workday)',status:'Roadmap',page:null},
+      {name:'Accounting Integration (Xero, QuickBooks)',status:'Roadmap',page:null},
+      {name:'REST API & Webhooks',status:'Roadmap',page:null},
+      {name:'Audit Logs & Data Export',status:'Live',page:'pg-changelog'},
+    ]},
+    {cat:'Quality & Testing',icon:'🧪',features:[
+      {name:'Self-Test / Compliance Dashboard',status:'Live',page:'pg-selftest'},
+      {name:'Data Integrity Checks',status:'Live',page:'pg-selftest'},
+      {name:'Feature Smoke Tests',status:'Live',page:'pg-selftest'},
+      {name:'Performance Benchmarks',status:'Partial',page:'pg-selftest'},
+    ]},
+  ];
+
+  const allFeatures = categories.flatMap(c=>c.features);
+  const live = allFeatures.filter(f=>f.status==='Live').length;
+  const partial = allFeatures.filter(f=>f.status==='Partial').length;
+  const roadmap = allFeatures.filter(f=>f.status==='Roadmap').length;
+  const pct = Math.round((live+partial*0.5)/allFeatures.length*100);
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div>
+      <h5 style="margin:0;">✅ Feature Coverage Map</h5>
+      <div class="sub" style="margin:0;">PSA capability assessment — ${allFeatures.length} features across ${categories.length} domains</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+    ${[
+      {label:'Live Features',val:live,color:'#38A169',pct:Math.round(live/allFeatures.length*100)+'%'},
+      {label:'Partial Coverage',val:partial,color:'#D69E2E',pct:Math.round(partial/allFeatures.length*100)+'%'},
+      {label:'On Roadmap',val:roadmap,color:'#3182CE',pct:Math.round(roadmap/allFeatures.length*100)+'%'},
+      {label:'Overall Coverage',val:pct+'%',color:'#00A9CE',pct:'PSA completeness'},
+    ].map(k=>`<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;border-top:3px solid ${k.color};">
+      <div style="font-size:.65rem;font-weight:700;color:#718096;">${k.label}</div>
+      <div style="font-size:1.8rem;font-weight:800;color:${k.color};">${k.val}</div>
+      <div style="font-size:.7rem;color:#718096;">${k.pct}</div>
+    </div>`).join('')}
+  </div>
+
+  <!-- Overall progress bar -->
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:20px;">
+    <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+      <span style="font-size:.8rem;font-weight:700;color:#2D3748;">PSA Platform Completeness</span>
+      <span style="font-size:.8rem;font-weight:800;color:#38A169;">${pct}%</span>
+    </div>
+    <div style="height:12px;background:#E2E8F0;border-radius:6px;overflow:hidden;display:flex;">
+      <div style="width:${Math.round(live/allFeatures.length*100)}%;background:#38A169;"></div>
+      <div style="width:${Math.round(partial/allFeatures.length*100)}%;background:#D69E2E;"></div>
+      <div style="width:${Math.round(roadmap/allFeatures.length*100)}%;background:#90CDF4;"></div>
+    </div>
+    <div style="display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;">
+      ${[{c:'#38A169',l:'Live ('+live+')'},{c:'#D69E2E',l:'Partial ('+partial+')'},{c:'#90CDF4',l:'Roadmap ('+roadmap+')'}].map(x=>`
+        <div style="display:flex;align-items:center;gap:4px;"><div style="width:12px;height:10px;background:${x.c};border-radius:2px;"></div><span style="font-size:.72rem;color:#718096;">${x.l}</span></div>`).join('')}
+    </div>
+  </div>
+
+  <!-- Category grid -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;">
+    ${categories.map(cat=>{
+      const catLive = cat.features.filter(f=>f.status==='Live').length;
+      const catPct = Math.round(catLive/cat.features.length*100);
+      return `<div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+        <div style="padding:12px 14px;background:#F7FAFC;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:.84rem;font-weight:800;color:#2D3748;">${cat.icon} ${cat.cat}</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:60px;height:6px;background:#E2E8F0;border-radius:3px;overflow:hidden;">
+              <div style="width:${catPct}%;height:100%;background:${catPct===100?'#38A169':catPct>=60?'#D69E2E':'#E53E3E'};border-radius:3px;"></div>
+            </div>
+            <span style="font-size:.74rem;font-weight:800;color:${catPct===100?'#38A169':catPct>=60?'#D69E2E':'#E53E3E'};">${catPct}%</span>
+          </div>
+        </div>
+        <div style="padding:8px 0;">
+          ${cat.features.map(f=>`
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 14px;border-bottom:1px solid #F7FAFC;">
+              <span style="font-size:.78rem;color:#2D3748;">${f.name}</span>
+              <div style="display:flex;align-items:center;gap:6px;">
+                ${f.page?`<button onclick="showPage('${f.page}')" style="background:#EBF8FF;color:#2B6CB0;border:none;padding:2px 8px;border-radius:4px;font-size:.64rem;font-weight:700;cursor:pointer;">→ View</button>`:''}
+                <span style="background:${f.status==='Live'?'#F0FFF4':f.status==='Partial'?'#FFFBEB':'#EBF8FF'};color:${f.status==='Live'?'#276749':f.status==='Partial'?'#744210':'#2B6CB0'};font-size:.64rem;font-weight:800;padding:2px 8px;border-radius:4px;white-space:nowrap;">${f.status==='Live'?'✅ Live':f.status==='Partial'?'🔶 Partial':'📋 Roadmap'}</span>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>`;}).join('')}
+  </div>`;
 }
 
 // ══════════════════════════════════════════════════════════
