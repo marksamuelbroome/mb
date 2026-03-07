@@ -307,6 +307,7 @@
       <div class="nav-item" id="nav-performance" onclick="showPage('pg-performance')"><span class="ico">⭐</span> Performance Reviews</div>
 
       <div class="section-label">Delivery</div>
+      <div class="nav-item" id="nav-portfolio-gantt" onclick="showPage('pg-portfolio-gantt')"><span class="ico">🗓</span> Portfolio Gantt</div>
       <div class="nav-item" id="nav-gantt" onclick="showPage('pg-gantt')"><span class="ico">📊</span> Gantt Chart</div>
       <div class="nav-item" id="nav-kanban" onclick="showPage('pg-kanban')"><span class="ico">📋</span> Kanban Board</div>
 
@@ -1045,6 +1046,7 @@
       <div id="pg-revenue-rec" class="page"><div id="revenue-rec-content"></div></div>
       <div id="pg-coverage" class="page"><div id="coverage-content"></div></div>
       <div id="pg-selftest" class="page"><div id="selftest-content"></div></div>
+      <div id="pg-portfolio-gantt" class="page"><div id="portfolio-gantt-content"></div></div>
       <div id="pg-weekly-reports" class="page"><div id="weekly-reports-content"></div></div>
       <div id="pg-contracts" class="page"><div id="contracts-content"></div></div>
       <div id="pg-evm" class="page"><div id="evm-content"></div></div>
@@ -1211,7 +1213,7 @@ const navMap = {
   'pg-raid':'nav-raid','pg-status-customer':'nav-status-customer','pg-status-internal':'nav-status-internal','pg-portal':'nav-portal',
   'pg-skills':'nav-skills','pg-bench':'nav-bench','pg-orgchart':'nav-orgchart','pg-performance':'nav-performance',
   'pg-gantt':'nav-gantt','pg-kanban':'nav-kanban','pg-billing-rules':'nav-billing-rules','pg-revenue-rec':'nav-revenue-rec','pg-coverage':'nav-coverage','pg-selftest':'nav-selftest',
-  'pg-weekly-reports':'nav-weekly-reports','pg-contracts':'nav-contracts','pg-evm':'nav-evm',
+  'pg-portfolio-gantt':'nav-portfolio-gantt','pg-weekly-reports':'nav-weekly-reports','pg-contracts':'nav-contracts','pg-evm':'nav-evm',
   'pg-my-dashboard':'nav-my-dash','pg-timesheet':'nav-timesheet',
   'pg-my-assignments':'nav-my-assign','pg-my-expenses':'nav-expenses','pg-my-leave':'nav-leave',
 };
@@ -1249,6 +1251,7 @@ function showPage(id){
   if(id==='pg-revenue-rec') renderRevenueRec();
   if(id==='pg-coverage') renderFeatureCoverage();
   if(id==='pg-selftest') renderSelfTest();
+  if(id==='pg-portfolio-gantt') renderPortfolioGantt();
   if(id==='pg-weekly-reports') renderWeeklyReports();
   if(id==='pg-contracts') renderContracts();
   if(id==='pg-evm') renderEVM();
@@ -3110,6 +3113,379 @@ const statusProjects = [
    internalRisks:['Aoife Walsh HR risk — only PM/BA on this project. Departure before 28 Mar = critical.','Margin 18% vs 28% target. 12 free days adding unrecovered cost of ~£9,600.','CR-007 with BOI unsigned — if rejected, full £9,600 absorbed by Codec margin.','CRM-024 bug: if not closed by 10 Mar, go-live slips and SLA penalties may apply.'],
   },
 ];
+
+// ══════════════════════════════════════════════════════════
+// PORTFOLIO GANTT — AMENDMENTS DATA
+// ══════════════════════════════════════════════════════════
+const ganttAmendments = [
+  {id:'am-001',projectId:'erp',date:'2026-02-14',type:'extended',label:'Extended +6wk',
+   desc:'Go-live delayed — ERP Phase 3 UAT extended due to resource conflict.',
+   oldVal:'28 Feb 2026',newVal:'31 Mar 2026',severity:'amber',approvedBy:'David Walsh'},
+  {id:'am-002',projectId:'erp',date:'2026-01-20',type:'scope-increase',label:'Scope +£45K',
+   desc:'CR-047: Additional payroll integration module added to ERP scope.',
+   oldVal:'£275,000',newVal:'£320,000',severity:'amber',approvedBy:'Mary Brennan (AIB)'},
+  {id:'am-003',projectId:'crm',date:'2026-02-28',type:'pm-change',label:'PM Changed',
+   desc:'Project Manager changed from Tom Byrne to Niamh Kelly following internal restructure.',
+   oldVal:'Tom Byrne',newVal:'Niamh Kelly',severity:'info',approvedBy:'David Walsh'},
+  {id:'am-004',projectId:'boi-digital',date:'2026-01-15',type:'scope-decrease',label:'Scope −£50K',
+   desc:'CR-012: Phase 2 mobile features deferred to a follow-on engagement.',
+   oldVal:'£480,000',newVal:'£430,000',severity:'green',approvedBy:'Claire Doyle (BOI)'},
+  {id:'am-005',projectId:'ryr-hr',date:'2026-02-07',type:'rag-change',label:'RAG → Red',
+   desc:'RAID escalation: HR-SAP connector dependency unresolved for 3 weeks.',
+   oldVal:'Amber',newVal:'Red',severity:'red',approvedBy:'Siobhán Murphy'},
+  {id:'am-006',projectId:'aib-dm',date:'2026-03-01',type:'added',label:'New Project',
+   desc:'Data Migration & ETL Programme approved following successful ERP Phase 1.',
+   oldVal:'—',newVal:'£870,000 contract',severity:'green',approvedBy:'David Walsh'},
+  {id:'am-007',projectId:'boi-compliance',date:'2026-03-05',type:'extended',label:'Extended +8wk',
+   desc:'Central Bank updated regulatory framework — additional controls required.',
+   oldVal:'28 Jun 2026',newVal:'23 Aug 2026',severity:'amber',approvedBy:'Claire Doyle (BOI)'},
+  {id:'am-008',projectId:'esb-portal',date:'2026-02-10',type:'compressed',label:'Fast-tracked',
+   desc:'ESB board approved accelerated delivery. End date brought forward 6 weeks.',
+   oldVal:'30 Nov 2026',newVal:'15 Oct 2026',severity:'green',approvedBy:'Patrick Nolan (ESB)'},
+  {id:'am-009',projectId:'ryr-fin',date:'2026-01-25',type:'scope-increase',label:'Scope +£60K',
+   desc:'CR-023: Automated reconciliation module added to Finance Integration scope.',
+   oldVal:'£290,000',newVal:'£350,000',severity:'amber',approvedBy:'James Murphy (Ryanair)'},
+  {id:'am-010',projectId:'esb-field',date:'2026-02-20',type:'milestone-added',label:'New Milestone',
+   desc:'"Field Trial Sign-off" interim milestone added per ESB governance requirements.',
+   oldVal:'—',newVal:'£125,000 payment milestone',severity:'info',approvedBy:'Patrick Nolan (ESB)'},
+  {id:'am-011',projectId:'esb-analytics',date:'2026-03-03',type:'added',label:'New Project',
+   desc:'ESB Analytics & Reporting platform approved — third workstream in ESB programme.',
+   oldVal:'—',newVal:'£620,000 contract',severity:'green',approvedBy:'David Walsh'},
+  {id:'am-012',projectId:'boi-digital',date:'2025-11-15',type:'paused',label:'Paused 6wk',
+   desc:'BOI Digital Transformation paused Nov–Dec 2025 during internal BOI restructure. Resumed Jan 2026.',
+   oldVal:'Active',newVal:'Paused → Resumed Jan 2026',severity:'amber',approvedBy:'Claire Doyle (BOI)'},
+];
+
+// ══════════════════════════════════════════════════════════
+// PORTFOLIO GANTT ENGINE
+// ══════════════════════════════════════════════════════════
+function renderPortfolioGantt(zoom, showAmends) {
+  const el = document.querySelector('#portfolio-gantt-content');
+  if(!el) return;
+  zoom = zoom || 'all';
+  showAmends = (showAmends === undefined) ? true : showAmends;
+
+  const today = new Date('2026-03-07');
+  const zr = {
+    'all':    {s:new Date('2024-05-01'), e:new Date('2027-05-01'), label:'All Time (2024–2027)'},
+    'active': {s:new Date('2025-06-01'), e:new Date('2027-04-01'), label:'Active Window'},
+    '6month': {s:new Date('2025-11-01'), e:new Date('2026-10-01'), label:'Current 6 Months'},
+  };
+  const range = zr[zoom];
+  const rangeMs = range.e - range.s;
+
+  const toLeft = d => Math.max(0, Math.min(100, ((new Date(d)-range.s)/rangeMs)*100));
+  const toWidth = (s,e) => {
+    const l = toLeft(s), r = toLeft(e);
+    return Math.max(0, Math.min(100-l, r-l));
+  };
+
+  // All months in range
+  const months = [];
+  let mc = new Date(range.s.getFullYear(), range.s.getMonth(), 1);
+  while(mc < range.e) { months.push(new Date(mc)); mc = new Date(mc.getFullYear(), mc.getMonth()+1, 1); }
+
+  // Quarter start months
+  const quarters = months.filter(m=>m.getMonth()%3===0);
+
+  // Build milestone map by project
+  const msMap = {};
+  contractsData.forEach(c=>{
+    if(!msMap[c.projectId]) msMap[c.projectId]=[];
+    c.milestones.forEach(m=>msMap[c.projectId].push({...m,cust:c.customer}));
+  });
+
+  const rc = {Green:'#38A169',Amber:'#D69E2E',Red:'#E53E3E'};
+  const custColor = {'AIB Group':'#3182CE','Bank of Ireland':'#805AD5','Ryanair':'#E53E3E','ESB':'#319795'};
+  const custOrder = ['AIB Group','Bank of Ireland','Ryanair','ESB'];
+
+  // Amendment type → display config
+  const amendCfg = {
+    'added':          {icon:'✚',bg:'#38A169',text:'#fff',label:'Added'},
+    'deleted':        {icon:'✖',bg:'#E53E3E',text:'#fff',label:'Deleted'},
+    'extended':       {icon:'→',bg:'#D69E2E',text:'#fff',label:'Extended'},
+    'compressed':     {icon:'←',bg:'#3182CE',text:'#fff',label:'Compressed'},
+    'scope-increase': {icon:'▲',bg:'#805AD5',text:'#fff',label:'Scope ▲'},
+    'scope-decrease': {icon:'▼',bg:'#718096',text:'#fff',label:'Scope ▼'},
+    'pm-change':      {icon:'◀▶',bg:'#319795',text:'#fff',label:'PM Change'},
+    'rag-change':     {icon:'⚠',bg:'#E53E3E',text:'#fff',label:'RAG Change'},
+    'paused':         {icon:'⏸',bg:'#A0AEC0',text:'#fff',label:'Paused'},
+    'milestone-added':{icon:'◆',bg:'#D69E2E',text:'#fff',label:'Milestone+'},
+  };
+  // Build amendment map by projectId
+  const amendMap = {};
+  ganttAmendments.forEach(a=>{ if(!amendMap[a.projectId]) amendMap[a.projectId]=[]; amendMap[a.projectId].push(a); });
+
+  const todayL = toLeft(today);
+  const ml = d => new Date(d).toLocaleDateString('en-GB',{month:'short'});
+  const fmt = d => new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'});
+
+  // Today marker row (shared)
+  const todayMarker = `<div style="position:absolute;left:${todayL}%;top:0;bottom:0;width:2px;background:rgba(229,62,62,0.5);z-index:8;pointer-events:none;"></div>`;
+  // Quarter grid lines (shared)
+  const qLines = quarters.map(q=>`<div style="position:absolute;left:${toLeft(q)}%;top:0;bottom:0;width:1px;background:#E2E8F0;z-index:1;"></div>`).join('');
+  const mLines = months.map(m=>`<div style="position:absolute;left:${toLeft(m)}%;top:0;bottom:0;width:1px;background:#F7FAFC;z-index:1;"></div>`).join('');
+
+  const totalAmends = ganttAmendments.length;
+  const recentAmends = ganttAmendments.filter(a=>new Date(a.date)>new Date('2026-02-01')).length;
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+    <div>
+      <h5 style="margin:0;">🗓 Portfolio Gantt Chart</h5>
+      <div class="sub" style="margin:0;">${engagementProjects.length} projects · ${custOrder.length} customers · £${(engagementProjects.reduce((s,p)=>s+p.bac,0)/1000000).toFixed(1)}M portfolio
+        · <span style="color:#805AD5;font-weight:700;">${totalAmends} amendments</span>
+        · <span style="color:#E53E3E;font-weight:700;">${recentAmends} in last 5 weeks</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+      ${Object.entries(zr).map(([k,v])=>`<button onclick="renderPortfolioGantt('${k}',${showAmends})" style="padding:6px 14px;border:1.5px solid ${k===zoom?'#1B2A4A':'var(--border)'};background:${k===zoom?'#1B2A4A':'#fff'};color:${k===zoom?'#fff':'#4A5568'};border-radius:6px;font-size:.74rem;font-weight:700;cursor:pointer;">${v.label}</button>`).join('')}
+      <div style="width:1px;height:22px;background:#E2E8F0;margin:0 4px;"></div>
+      <button onclick="renderPortfolioGantt('${zoom}',${!showAmends})" style="padding:6px 14px;border:1.5px solid ${showAmends?'#805AD5':'var(--border)'};background:${showAmends?'#805AD5':'#fff'};color:${showAmends?'#fff':'#4A5568'};border-radius:6px;font-size:.74rem;font-weight:700;cursor:pointer;">
+        📋 ${showAmends?'Hide':'Show'} Changes
+      </button>
+    </div>
+  </div>
+
+  <!-- Amendment summary strip (visible when amendments on) -->
+  ${showAmends?`
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+    ${Object.entries(amendCfg).map(([type,cfg])=>{
+      const count = ganttAmendments.filter(a=>a.type===type).length;
+      if(!count) return '';
+      return `<div style="display:flex;align-items:center;gap:5px;background:${cfg.bg}15;border:1px solid ${cfg.bg}40;border-radius:20px;padding:4px 10px;">
+        <span style="font-size:.72rem;font-weight:800;color:${cfg.bg};">${cfg.icon} ${cfg.label}</span>
+        <span style="font-size:.72rem;font-weight:700;color:${cfg.bg};background:${cfg.bg};color:#fff;border-radius:10px;padding:0 5px;">${count}</span>
+      </div>`;
+    }).join('')}
+  </div>`:''}
+
+  <!-- Legend -->
+  <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:14px;padding:10px 14px;background:#fff;border:1px solid var(--border);border-radius:8px;">
+    <span style="font-size:.7rem;font-weight:800;color:#4A5568;">RAG STATUS:</span>
+    ${Object.entries(rc).map(([r,c])=>`<div style="display:flex;align-items:center;gap:4px;font-size:.7rem;color:#4A5568;"><div style="width:16px;height:10px;background:${c};border-radius:3px;opacity:.8;"></div>${r}</div>`).join('')}
+    <div style="width:1px;height:14px;background:#E2E8F0;"></div>
+    <span style="font-size:.7rem;font-weight:800;color:#4A5568;">CUSTOMERS:</span>
+    ${custOrder.map(c=>`<div style="display:flex;align-items:center;gap:4px;font-size:.7rem;color:#4A5568;"><div style="width:10px;height:10px;background:${custColor[c]};border-radius:50%;"></div>${c}</div>`).join('')}
+    <div style="width:1px;height:14px;background:#E2E8F0;"></div>
+    <div style="display:flex;align-items:center;gap:4px;font-size:.7rem;color:#4A5568;"><div style="width:2px;height:14px;background:#E53E3E;border-radius:1px;"></div>Today (7 Mar 2026)</div>
+    <div style="display:flex;align-items:center;gap:4px;font-size:.7rem;color:#4A5568;"><div style="width:12px;height:12px;background:#D69E2E;transform:rotate(45deg);border-radius:2px;"></div>Contract Milestone</div>
+    <div style="display:flex;align-items:center;gap:4px;font-size:.7rem;color:#4A5568;"><div style="width:16px;height:10px;background:linear-gradient(to right,#38A169 60%,rgba(56,161,105,.2) 60%);border-radius:3px;"></div>% Complete</div>
+    ${showAmends?`<div style="width:1px;height:14px;background:#E2E8F0;"></div><div style="display:flex;align-items:center;gap:4px;font-size:.7rem;color:#805AD5;font-weight:700;">📋 Amendments visible</div>`:''}
+  </div>
+
+  <!-- Gantt main chart -->
+  <div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+      <div style="min-width:860px;">
+
+        <!-- Timeline header -->
+        <div style="display:flex;border-bottom:2px solid var(--border);">
+          <div style="width:250px;min-width:250px;background:#1B2A4A;padding:0 14px;display:flex;align-items:center;">
+            <span style="font-size:.7rem;font-weight:800;color:#90CDF4;letter-spacing:.08em;">PROJECT / PROGRAMME</span>
+          </div>
+          <div style="flex:1;position:relative;height:50px;background:#F7FAFC;overflow:hidden;">
+            ${qLines}${mLines}${todayMarker}
+            <!-- Quarter labels -->
+            ${quarters.map(q=>`<div style="position:absolute;left:calc(${toLeft(q)}% + 4px);top:4px;font-size:.62rem;font-weight:800;color:#2D3748;">Q${Math.floor(q.getMonth()/3)+1} ${q.getFullYear()}</div>`).join('')}
+            <!-- Month labels -->
+            ${months.map((m,i)=>`<div style="position:absolute;left:${toLeft(m)}%;bottom:5px;width:${100/months.length}%;text-align:center;font-size:.58rem;color:#A0AEC0;">${ml(m)}</div>`).join('')}
+            <!-- Today label -->
+            <div style="position:absolute;left:${todayL}%;top:4px;transform:translateX(-50%);">
+              <div style="background:#E53E3E;color:#fff;font-size:.58rem;font-weight:800;padding:2px 5px;border-radius:3px;white-space:nowrap;">▼ TODAY</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project rows grouped by customer -->
+        ${custOrder.map(cust=>{
+          const cc = custColor[cust];
+          const custProj = engagementProjects.filter(p=>p.customer===cust);
+          if(!custProj.length) return '';
+          const prog = custProj[0].programme;
+          const custVal = custProj.reduce((s,p)=>s+p.bac,0);
+          const custInv = custProj.reduce((s,p)=>s+p.invoiced,0);
+          const ragPriority = custProj.map(p=>p.rag).includes('Red')?'Red':custProj.map(p=>p.rag).includes('Amber')?'Amber':'Green';
+          return `
+          <!-- Customer header row -->
+          <div style="display:flex;border-bottom:1px solid ${cc}40;background:${cc}10;">
+            <div style="width:250px;min-width:250px;padding:9px 14px;display:flex;align-items:center;gap:8px;border-right:3px solid ${cc};">
+              <div style="width:10px;height:10px;background:${cc};border-radius:50%;flex-shrink:0;"></div>
+              <div>
+                <div style="font-size:.78rem;font-weight:900;color:#1B2A4A;">${cust}</div>
+                <div style="font-size:.64rem;color:#718096;">${prog} · £${(custVal/1000000).toFixed(2)}M</div>
+              </div>
+            </div>
+            <div style="flex:1;position:relative;overflow:hidden;">
+              ${qLines}${mLines}${todayMarker}
+              <!-- Programme span bar -->
+              ${(()=>{
+                const earliest = custProj.reduce((a,p)=>new Date(p.startDate)<new Date(a)?p.startDate:a, custProj[0].startDate);
+                const latest   = custProj.reduce((a,p)=>new Date(p.endDate)>new Date(a)?p.endDate:a, custProj[0].endDate);
+                const pl = toLeft(earliest); const pw = toWidth(earliest,latest);
+                return pw>0?`<div style="position:absolute;top:50%;transform:translateY(-50%);left:${pl}%;width:${pw}%;height:6px;background:${cc};border-radius:3px;opacity:.4;"></div>`:'';
+              })()}
+              <div style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:.68rem;font-weight:700;color:${rc[ragPriority]};background:${rc[ragPriority]}15;padding:2px 8px;border-radius:4px;">${custProj.length} projects · ${custInv>0?Math.round(custInv/custVal*100)+'% billed':''}</div>
+            </div>
+          </div>
+
+          ${custProj.map(proj=>{
+            const barL = toLeft(proj.startDate);
+            const barW = toWidth(proj.startDate, proj.endDate);
+            const compW = barW * (proj.percComplete/100);
+            const ragC = rc[proj.rag];
+            const milestones = msMap[proj.id]||[];
+            const daysLeft = Math.ceil((new Date(proj.endDate)-today)/86400000);
+            const isActive = new Date(proj.startDate)<=today && new Date(proj.endDate)>=today;
+            const isDone   = new Date(proj.endDate)<today;
+            const isFuture = new Date(proj.startDate)>today;
+            return `
+            <div style="display:flex;border-bottom:1px solid #F7FAFC;background:${isDone?'#FAFAFA':isActive?'#fff':'#FCFCFC'};">
+              <div style="width:250px;min-width:250px;padding:8px 14px;border-right:3px solid ${cc};background:${isDone?'#FAFAFA':''};${showAmends&&amendMap[proj.id]?'border-left:3px solid #805AD5;':''}" >
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+                  <div style="width:8px;height:8px;background:${ragC};border-radius:50%;flex-shrink:0;"></div>
+                  <span style="font-size:.74rem;font-weight:700;color:#2D3748;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px;" title="${proj.name}">${proj.name}</span>
+                  ${showAmends&&amendMap[proj.id]?`<span style="margin-left:auto;flex-shrink:0;background:#805AD5;color:#fff;font-size:.58rem;font-weight:800;border-radius:10px;padding:1px 6px;">${amendMap[proj.id].length}</span>`:''}
+                </div>
+                <div style="font-size:.64rem;color:#718096;margin-bottom:2px;">${proj.type} · ${proj.pm}</div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:${showAmends&&amendMap[proj.id]?'4':'0'}px;">
+                  <div style="flex:1;height:3px;background:#E2E8F0;border-radius:2px;overflow:hidden;"><div style="width:${proj.percComplete}%;height:100%;background:${ragC};border-radius:2px;"></div></div>
+                  <span style="font-size:.62rem;font-weight:700;color:${ragC};">${proj.percComplete}%</span>
+                  <span style="font-size:.6rem;color:${daysLeft<0?'#C53030':daysLeft<30?'#744210':'#A0AEC0'};">${isDone?'✓ Done':isFuture?'⟳ Future':daysLeft+'d left'}</span>
+                </div>
+                ${showAmends&&amendMap[proj.id]?`
+                <div style="display:flex;gap:3px;flex-wrap:wrap;">
+                  ${amendMap[proj.id].map(a=>{
+                    const cfg2=amendCfg[a.type]||{icon:'?',bg:'#718096',text:'#fff'};
+                    return `<span title="${a.desc}&#10;${a.oldVal} → ${a.newVal}&#10;Approved: ${a.approvedBy}" style="font-size:.58rem;font-weight:800;background:${cfg2.bg};color:${cfg2.text};border-radius:10px;padding:1px 6px;white-space:nowrap;cursor:default;">${cfg2.icon} ${a.label}</span>`;
+                  }).join('')}
+                </div>`:''}
+              </div>
+              <div style="flex:1;position:relative;height:56px;overflow:hidden;">
+                ${qLines}${mLines}${todayMarker}
+                ${barW>0?`
+                <!-- Full duration bar (unfilled) -->
+                <div style="position:absolute;top:50%;transform:translateY(-50%);left:${barL}%;width:${barW}%;height:22px;background:${ragC}25;border:1.5px solid ${ragC}50;border-radius:11px;overflow:visible;">
+                  <!-- Completed fill -->
+                  <div style="position:absolute;left:0;top:0;width:${proj.percComplete}%;height:100%;background:${ragC};border-radius:11px 0 0 11px;opacity:.85;"></div>
+                  <!-- Project label inside bar (if wide enough) -->
+                  ${barW>14?`<div style="position:absolute;top:50%;transform:translateY(-50%);left:6px;right:6px;font-size:.58rem;font-weight:800;color:${proj.percComplete>30?'#fff':'#2D3748'};overflow:hidden;white-space:nowrap;text-overflow:ellipsis;z-index:2;">${proj.name.length>35?proj.name.substring(0,33)+'…':proj.name}</div>`:''}
+                </div>
+                <!-- Start date label -->
+                <div style="position:absolute;left:${barL}%;bottom:6px;font-size:.56rem;color:#718096;transform:translateX(-2px);white-space:nowrap;">${fmt(proj.startDate)}</div>
+                <!-- End date label -->
+                <div style="position:absolute;left:${Math.min(barL+barW,98)}%;bottom:6px;font-size:.56rem;color:#718096;transform:translateX(-100%);white-space:nowrap;">${fmt(proj.endDate)}</div>
+                `:''}
+                <!-- Contract milestones -->
+                ${milestones.map(ms=>{
+                  const ml2 = toLeft(ms.date);
+                  if(ml2<0||ml2>100) return '';
+                  const mc2 = ms.paid?'#38A169':ms.invoiced?'#3182CE':'#D69E2E';
+                  const mBorder = ms.paid?'#276749':ms.invoiced?'#2B6CB0':'#744210';
+                  return `<div title="${ms.name}&#10;${ms.date}&#10;£${Number(ms.value).toLocaleString()}&#10;${ms.paid?'✅ Paid':ms.invoiced?'⏳ Invoiced':'Pending'}" style="position:absolute;top:50%;transform:translateY(-50%) rotate(45deg);left:calc(${ml2}% - 7px);width:14px;height:14px;background:${mc2};border:2px solid ${mBorder};border-radius:2px;z-index:6;cursor:default;box-shadow:0 1px 3px rgba(0,0,0,.2);"></div>`;
+                }).join('')}
+              </div>
+            </div>`;
+          }).join('')}`;
+        }).join('')}
+
+        <!-- Footer / date scale -->
+        <div style="display:flex;border-top:2px solid var(--border);background:#F7FAFC;">
+          <div style="width:250px;min-width:250px;padding:6px 14px;font-size:.64rem;color:#718096;font-weight:700;border-right:3px solid #E2E8F0;">TIMELINE SCALE</div>
+          <div style="flex:1;position:relative;height:28px;overflow:hidden;">
+            ${qLines}
+            ${quarters.map(q=>`<div style="position:absolute;left:${toLeft(q)}%;top:50%;transform:translateY(-50%);font-size:.6rem;font-weight:800;color:#4A5568;padding-left:4px;">Q${Math.floor(q.getMonth()/3)+1} '${String(q.getFullYear()).slice(2)}</div>`).join('')}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer summary cards -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px;">
+    ${custOrder.map(cust=>{
+      const cc2 = custColor[cust];
+      const cp = engagementProjects.filter(p=>p.customer===cust);
+      const tv2 = cp.reduce((s,p)=>s+p.bac,0);
+      const ti2 = cp.reduce((s,p)=>s+p.invoiced,0);
+      const ac2 = Math.round(cp.reduce((s,p)=>s+p.percComplete,0)/cp.length);
+      const rags = cp.map(p=>p.rag);
+      const overallRag = rags.includes('Red')?'Red':rags.includes('Amber')?'Amber':'Green';
+      const custAmendCount = ganttAmendments.filter(a=>cp.some(p=>p.id===a.projectId)).length;
+      const span = (() => {
+        const e = cp.reduce((a,p)=>new Date(p.startDate)<new Date(a)?p.startDate:a, cp[0].startDate);
+        const l = cp.reduce((a,p)=>new Date(p.endDate)>new Date(a)?p.endDate:a, cp[0].endDate);
+        return new Date(e).getFullYear()+' – '+new Date(l).getFullYear();
+      })();
+      return `<div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;border-top:3px solid ${cc2};">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <div style="width:10px;height:10px;background:${cc2};border-radius:50%;"></div>
+          <span style="font-size:.84rem;font-weight:800;color:#2D3748;">${cust}</span>
+          <span style="margin-left:auto;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:4px;background:${rc[overallRag]}20;color:${rc[overallRag]};">${overallRag}</span>
+        </div>
+        <div style="font-size:.68rem;color:#718096;margin-bottom:10px;">${cp[0].programme} · ${span}</div>
+        ${[
+          {l:'Projects',v:cp.length,c:'#1B2A4A'},
+          {l:'Contract Value',v:'£'+Number(tv2).toLocaleString(),c:'#1B2A4A'},
+          {l:'Invoiced',v:'£'+Number(ti2).toLocaleString()+' ('+Math.round(ti2/tv2*100)+'%)',c:'#2B6CB0'},
+          {l:'Avg Complete',v:ac2+'%',c:rc[overallRag]},
+          {l:'Amendments',v:custAmendCount,c:'#805AD5'},
+        ].map(k=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid #F7FAFC;"><span style="font-size:.7rem;color:#718096;">${k.l}</span><span style="font-size:.74rem;font-weight:700;color:${k.c};">${k.v}</span></div>`).join('')}
+        <div style="margin-top:8px;"><div style="width:100%;height:5px;background:#E2E8F0;border-radius:3px;overflow:hidden;"><div style="width:${ac2}%;height:100%;background:${rc[overallRag]};border-radius:3px;transition:width .4s;"></div></div></div>
+      </div>`;
+    }).join('')}
+  </div>
+
+  <!-- ── AMENDMENTS LOG ─────────────────────────────────── -->
+  ${showAmends?`
+  <div style="margin-top:28px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div>
+        <h6 style="margin:0;font-size:.9rem;font-weight:800;color:#1B2A4A;">📋 Portfolio Change Log</h6>
+        <div style="font-size:.72rem;color:#718096;margin-top:2px;">${ganttAmendments.length} amendments recorded across ${Object.keys(amendMap).length} projects — sorted most recent first</div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+        <div style="min-width:860px;">
+          <!-- Table header -->
+          <div style="display:grid;grid-template-columns:90px 160px 120px 1fr 160px 110px;background:#1B2A4A;padding:9px 16px;">
+            ${['Date','Project','Type','Description / Change','Before → After','Approved By'].map(h=>`<div style="font-size:.66rem;font-weight:800;color:#90CDF4;letter-spacing:.06em;text-transform:uppercase;">${h}</div>`).join('')}
+          </div>
+          ${[...ganttAmendments].sort((a,b)=>new Date(b.date)-new Date(a.date)).map((a,i)=>{
+            const cfg3 = amendCfg[a.type]||{icon:'?',bg:'#718096',text:'#fff'};
+            const proj2 = engagementProjects.find(p=>p.id===a.projectId);
+            const projName = proj2?proj2.name:a.projectId;
+            const custName = proj2?proj2.customer:'';
+            const cc3 = custColor[custName]||'#718096';
+            const isNew = new Date(a.date)>new Date('2026-02-15');
+            return `<div style="display:grid;grid-template-columns:90px 160px 120px 1fr 160px 110px;padding:10px 16px;border-top:1px solid #F7FAFC;background:${i%2===0?'#fff':'#FAFAFA'};${isNew?'border-left:3px solid #E53E3E;':'border-left:3px solid transparent;'}align-items:start;">
+              <div style="font-size:.72rem;color:#4A5568;">
+                ${new Date(a.date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'})}
+                ${isNew?'<div style="display:inline-block;font-size:.56rem;font-weight:800;color:#fff;background:#E53E3E;border-radius:4px;padding:1px 5px;margin-top:2px;">NEW</div>':''}
+              </div>
+              <div style="padding-right:8px;">
+                <div style="font-size:.72rem;font-weight:700;color:#2D3748;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${projName}">${projName.length>22?projName.substring(0,20)+'…':projName}</div>
+                <div style="font-size:.62rem;color:${cc3};font-weight:700;">${custName}</div>
+              </div>
+              <div>
+                <span style="font-size:.68rem;font-weight:800;background:${cfg3.bg};color:${cfg3.text};border-radius:10px;padding:2px 8px;white-space:nowrap;">${cfg3.icon} ${cfg3.label}</span>
+              </div>
+              <div style="font-size:.72rem;color:#4A5568;padding-right:12px;line-height:1.5;">${a.desc}</div>
+              <div style="padding-right:8px;">
+                <div style="font-size:.66rem;color:#A0AEC0;text-decoration:line-through;margin-bottom:3px;">${a.oldVal}</div>
+                <div style="font-size:.68rem;font-weight:700;color:#2D3748;">${a.newVal}</div>
+              </div>
+              <div style="font-size:.64rem;color:#718096;line-height:1.5;">${a.approvedBy}</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+  </div>`:''}
+`;
+}
 
 // ══════════════════════════════════════════════════════════
 // WEEKLY REPORTS ENGINE
