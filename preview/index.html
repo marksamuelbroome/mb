@@ -296,9 +296,22 @@
       <div class="nav-group">🧾 Expenses</div>
       <div class="nav-sub" onclick="showPage('pg-expense-approval')">Expense Approval</div>
 
+      <div class="section-label">AI Intelligence</div>
+      <div class="nav-item" id="nav-agents" onclick="showPage('pg-agents')"><span class="ico">🤖</span> AI Agents <span style="background:#00A9CE;color:#fff;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:auto;">6</span></div>
+
       <div class="section-label">Admin</div>
       <div class="nav-item" id="nav-roles" onclick="showPage('pg-roles')"><span class="ico">⚙️</span> Roles & Rates</div>
+      <div class="nav-item" id="nav-security" onclick="showPage('pg-security')"><span class="ico">🔐</span> Security & Roles</div>
       <div class="nav-item" id="nav-database" onclick="showPage('pg-database')"><span class="ico">🗄️</span> Database Explorer</div>
+
+      <div class="section-label">Help</div>
+      <div class="nav-item" id="nav-tutorial" onclick="showPage('pg-tutorial')"><span class="ico">📘</span> User Tutorial</div>
+      <div class="nav-item" id="nav-faq" onclick="showPage('pg-faq')"><span class="ico">❓</span> FAQ</div>
+
+      <div class="section-label">About</div>
+      <div class="nav-item" id="nav-overview" onclick="showPage('pg-overview')"><span class="ico">📋</span> Executive Overview</div>
+      <div class="nav-item" id="nav-tech" onclick="showPage('pg-tech')"><span class="ico">🏗️</span> Technical Notes</div>
+      <div class="nav-item" id="nav-erd" onclick="showPage('pg-erd')"><span class="ico">🔗</span> Data Model (ERD)</div>
     </div>
 
     <!-- Main Content -->
@@ -960,6 +973,64 @@
         </div>
       </div>
 
+      <!-- ══ SECURITY & ROLES ══ -->
+      <div id="pg-security" class="page">
+        <div id="security-content"></div>
+      </div>
+
+      <!-- ══ USER TUTORIAL ══ -->
+      <div id="pg-tutorial" class="page">
+        <div id="tutorial-tabs" style="margin-bottom:20px;"></div>
+        <div id="tutorial-content"></div>
+      </div>
+
+      <!-- ══ FAQ ══ -->
+      <div id="pg-faq" class="page">
+        <div id="faq-page-content"></div>
+      </div>
+
+      <!-- ══ EXECUTIVE OVERVIEW ══ -->
+      <div id="pg-overview" class="page"><div id="overview-content"></div></div>
+
+      <!-- ══ TECHNICAL NOTES ══ -->
+      <div id="pg-tech" class="page"><div id="tech-content"></div></div>
+
+      <!-- ══ DATA MODEL (ERD) ══ -->
+      <div id="pg-erd" class="page"><div id="erd-content"></div></div>
+
+      <!-- ══ AI AGENTS ══ -->
+      <div id="pg-agents" class="page">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex-wrap:wrap;gap:12px;">
+          <div>
+            <h5 style="margin:0;">🤖 AI Agents</h5>
+            <div class="sub" style="margin:0;">Intelligent automation running across your PSA data — monitoring, analysing and acting</div>
+          </div>
+          <button class="btn btn-teal" onclick="runAllAgents()">▶ Run All Agents</button>
+        </div>
+
+        <!-- Agent Status Bar -->
+        <div id="agent-status-bar" style="background:linear-gradient(90deg,#1B2A4A,#1e3a6e);border-radius:10px;padding:14px 20px;margin-bottom:20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
+          <div style="color:rgba(255,255,255,.6);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;">Agent Status</div>
+          <div style="display:flex;gap:6px;align-items:center;"><span style="width:8px;height:8px;border-radius:50%;background:#38A169;display:inline-block;"></span><span style="color:#fff;font-size:.8rem;"><strong id="agents-active">5</strong> Active</span></div>
+          <div style="display:flex;gap:6px;align-items:center;"><span style="width:8px;height:8px;border-radius:50%;background:#D69E2E;display:inline-block;"></span><span style="color:#fff;font-size:.8rem;"><strong id="agents-paused">1</strong> Paused</span></div>
+          <div style="display:flex;gap:6px;align-items:center;"><span style="color:rgba(255,255,255,.7);font-size:.8rem;"><strong id="agents-findings" style="color:#00A9CE;">23</strong> Open Findings</span></div>
+          <div style="flex:1;"></div>
+          <div style="color:rgba(255,255,255,.5);font-size:.72rem;">Last sweep: <strong style="color:rgba(255,255,255,.8);">Today 08:00</strong></div>
+        </div>
+
+        <!-- Agent Cards Grid -->
+        <div id="agent-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:24px;"></div>
+
+        <!-- Agent Activity Feed -->
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+            <strong style="font-size:.92rem;">📋 Agent Activity Feed</strong>
+            <span style="font-size:.72rem;color:var(--muted);">Last 24 hours</span>
+          </div>
+          <div id="agent-feed"></div>
+        </div>
+      </div>
+
       <!-- ══ PROJECT HEALTH ══ -->
       <div id="pg-health" class="page">
         <div style="display:flex;align-items:center;margin-bottom:4px;">
@@ -1066,7 +1137,9 @@ const navMap = {
   'pg-executive':'nav-exec','pg-availability':'nav-avail','pg-consultants':'nav-consultants',
   'pg-health':'nav-health','pg-approval':'nav-approval','pg-customers':'nav-customers','pg-projects':'nav-projects',
   'pg-pipeline':'nav-pipeline','pg-resourcing':'nav-resourcing','pg-invoices':'nav-invoices',
-  'pg-cashflow':'nav-cashflow','pg-roles':'nav-roles','pg-database':'nav-database',
+  'pg-cashflow':'nav-cashflow','pg-roles':'nav-roles','pg-database':'nav-database','pg-agents':'nav-agents',
+  'pg-security':'nav-security','pg-tutorial':'nav-tutorial','pg-faq':'nav-faq',
+  'pg-overview':'nav-overview','pg-tech':'nav-tech','pg-erd':'nav-erd',
   'pg-my-dashboard':'nav-my-dash','pg-timesheet':'nav-timesheet',
   'pg-my-assignments':'nav-my-assign','pg-my-expenses':'nav-expenses','pg-my-leave':'nav-leave',
 };
@@ -1080,6 +1153,13 @@ function showPage(id){
   if(navId) document.getElementById(navId)?.classList.add('active');
   if(id==='pg-database') buildDatabase('Consultants');
   if(id==='pg-health') renderHealth();
+  if(id==='pg-agents') renderAgents();
+  if(id==='pg-tutorial') showTutorial(0);
+  if(id==='pg-faq') renderFaqPage();
+  if(id==='pg-security') renderSecurity();
+  if(id==='pg-overview') renderOverview();
+  if(id==='pg-tech') renderTechNotes();
+  if(id==='pg-erd') renderERD();
   window.scrollTo(0,0);
 }
 
@@ -2128,6 +2208,1358 @@ function showActionPlan(flagIndex){
     {label:'Mark as Done', cls:'btn-teal', action:()=>{ closeModal(); toast(`Action plan for "${f.project}" marked complete ✓`); }},
     {label:'View Full Project', cls:'btn-outline', action:()=>{ closeModal(); spotlightProject(f.pid); }}
   ]);
+}
+
+// ══════════════════════════════════════════════════════════
+// EXECUTIVE OVERVIEW ENGINE
+// ══════════════════════════════════════════════════════════
+
+function renderOverview(){
+  const el = document.getElementById('overview-content');
+  if(!el || el.hasChildNodes()) return;
+
+  const modules = [
+    { icon:'⏱', name:'Timesheet Management', color:'#3182CE',
+      desc:'Consultants log hours daily against projects. Auto-chase agent sends reminders. Managers approve in one click. Feeds directly into invoicing.',
+      benefits:['Eliminates manual spreadsheet timesheets','Reduces missing/late submissions by 80%','Directly drives invoice generation — no rekeying','Full audit trail per consultant per day'] },
+    { icon:'🎯', name:'Project Health & Risk Intelligence', color:'#E53E3E',
+      desc:'Real-time RAG scoring across 6 dimensions for every active project. AI flags issues, names owners, provides step-by-step action plans.',
+      benefits:['Spot budget overruns before they become write-offs','Reduce project delivery risk with early warning','Every risk flag comes with a named action plan','Replace monthly review meetings with live dashboards'] },
+    { icon:'💰', name:'Finance — AR, AP & Cash Flow', color:'#38A169',
+      desc:'End-to-end billing from approved timesheet to paid invoice. Automated draft invoice generation, AP payment runs, 13-week cash forecast.',
+      benefits:['Cut invoice cycle from 2 weeks to 2 days','Real-time cash flow forecast — no more surprises','Reduce DSO (Days Sales Outstanding)','VAT-compliant invoice generation, GL posting'] },
+    { icon:'🧑‍💼', name:'Resourcing & Availability', color:'#805AD5',
+      desc:'Visual availability heatmap across all consultants. Skills-based resource matching. Open request inbox with AI-suggested candidates.',
+      benefits:['Maximise billable utilisation across the firm','Fill resource gaps faster with AI matching','Prevent overbooking and project delivery risk','Plan hiring needs months in advance'] },
+    { icon:'💸', name:'Expenses & Leave', color:'#D69E2E',
+      desc:'Consultants submit expenses with receipts. Tiered approval by value. Leave requests integrated with timesheet exclusions.',
+      benefits:['Reduce expense fraud with tiered approval limits','Eliminate paper expense forms entirely','Leave balances always accurate and visible','Expenses directly rechargeable to client projects'] },
+    { icon:'🤖', name:'AI Intelligence Agents', color:'#00A9CE',
+      desc:'Six AI agents running automatically: risk detection, invoice generation, cash forecasting, resource matching, timesheet chasing, margin monitoring.',
+      benefits:['Automates 6 previously manual finance/ops tasks','Finds issues before humans do — 24/7 monitoring','Generates draft invoices worth £100k+ every week','Saves 15–20 hours of admin per week across the firm'] },
+  ];
+
+  const benefits = [
+    { metric:'↑ 92%', label:'Timesheet submission rate', detail:'vs 67% industry average with manual processes' },
+    { metric:'↓ 8 days', label:'Invoice cycle time', detail:'From timesheet approval to invoice sent (was 3 weeks)' },
+    { metric:'↑ 18%', label:'Billable utilisation', detail:'Resourcing visibility eliminates idle bench time' },
+    { metric:'↓ 62%', label:'Finance admin hours', detail:'AI agents replace manual AR chasing, invoice prep and cash modelling' },
+    { metric:'£340k+', label:'Annual revenue recovered', detail:'From previously unbilled or late-billed work (300-consultant firm)' },
+    { metric:'< 2hrs', label:'Monthly close time', detail:'vs 3–5 days with spreadsheet-based processes' },
+  ];
+
+  el.innerHTML = `
+    <!-- Hero -->
+    <div style="background:linear-gradient(135deg,#1B2A4A 0%,#1e3a6e 60%,#0d4f6e 100%);border-radius:14px;padding:36px 32px;margin-bottom:24px;color:#fff;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-30px;right:-30px;width:200px;height:200px;border-radius:50%;background:rgba(0,169,206,.08);"></div>
+      <div style="position:absolute;bottom:-50px;right:60px;width:140px;height:140px;border-radius:50%;background:rgba(0,169,206,.05);"></div>
+      <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:rgba(255,255,255,.5);margin-bottom:10px;">Codec PSA · Professional Services Accounting</div>
+      <h2 style="font-size:1.8rem;font-weight:800;line-height:1.2;margin-bottom:12px;">The operating system for<br>your consulting firm</h2>
+      <p style="font-size:.92rem;color:rgba(255,255,255,.75);max-width:600px;line-height:1.7;margin-bottom:20px;">
+        Codec PSA replaces disconnected spreadsheets, email approval chains and manual billing processes with a single, intelligent platform — purpose-built for professional services firms with 50–500 consultants.
+      </p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <span style="background:rgba(0,169,206,.2);border:1px solid rgba(0,169,206,.4);color:#7ee8fa;font-size:.78rem;font-weight:600;padding:6px 14px;border-radius:20px;">⏱ Timesheet to Invoice in 2 days</span>
+        <span style="background:rgba(56,161,105,.2);border:1px solid rgba(56,161,105,.4);color:#9ae6b4;font-size:.78rem;font-weight:600;padding:6px 14px;border-radius:20px;">🤖 6 AI Agents running 24/7</span>
+        <span style="background:rgba(214,158,46,.2);border:1px solid rgba(214,158,46,.4);color:#fbd38d;font-size:.78rem;font-weight:600;padding:6px 14px;border-radius:20px;">🔐 Microsoft Entra ID SSO</span>
+        <span style="background:rgba(128,90,213,.2);border:1px solid rgba(128,90,213,.4);color:#d6bcfa;font-size:.78rem;font-weight:600;padding:6px 14px;border-radius:20px;">☁️ Azure Cloud — Irish data residency</span>
+      </div>
+    </div>
+
+    <!-- Problem statement -->
+    <div class="card" style="margin-bottom:24px;background:linear-gradient(135deg,#FFF5F5,#FFFFF0);border-left:5px solid #E53E3E;">
+      <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#9B2C2C;margin-bottom:8px;">The Problem We Solve</div>
+      <p style="font-size:.88rem;line-height:1.7;color:#4A5568;">
+        Most professional services firms lose <strong style="color:#E53E3E;">8–15% of billable revenue</strong> every year — not because the work wasn't done, but because of delays in billing, unbilled timesheet entries, missed expense recharges, and cash tied up in slow-paying AR. Managers spend hours every week chasing timesheets, formatting invoices in Excel and updating project status decks. Finance has no real-time view of cash. The SLT make decisions from last month's numbers.
+      </p>
+      <p style="font-size:.88rem;line-height:1.7;color:#4A5568;margin-top:10px;">
+        <strong>Codec PSA eliminates all of this.</strong> Every module connects — timesheet approval automatically triggers invoice generation; project health scores update in real time; AI agents chase, flag, forecast and fix without human intervention.
+      </p>
+    </div>
+
+    <!-- Module cards -->
+    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:14px;">Core Modules</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:28px;">
+      ${modules.map(m=>`
+        <div class="card" style="border-top:4px solid ${m.color};">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <span style="font-size:1.5rem;background:var(--bg);width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;">${m.icon}</span>
+            <div style="font-weight:700;font-size:.92rem;">${m.name}</div>
+          </div>
+          <p style="font-size:.78rem;color:#4A5568;line-height:1.6;margin-bottom:12px;">${m.desc}</p>
+          <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:7px;">Key Benefits</div>
+          ${m.benefits.map(b=>`
+            <div style="display:flex;gap:8px;margin-bottom:5px;font-size:.78rem;">
+              <span style="color:${m.color};flex-shrink:0;font-weight:700;">✓</span><span>${b}</span>
+            </div>`).join('')}
+        </div>`).join('')}
+    </div>
+
+    <!-- ROI metrics -->
+    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:14px;">Measurable Outcomes (300-Consultant Firm)</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:28px;">
+      ${benefits.map(b=>`
+        <div class="card" style="text-align:center;padding:20px 16px;">
+          <div style="font-size:1.9rem;font-weight:800;color:var(--teal);line-height:1;">${b.metric}</div>
+          <div style="font-size:.82rem;font-weight:700;color:var(--navy);margin:8px 0 4px;">${b.label}</div>
+          <div style="font-size:.72rem;color:var(--muted);line-height:1.4;">${b.detail}</div>
+        </div>`).join('')}
+    </div>
+
+    <!-- Who is it for -->
+    <div class="card" style="margin-bottom:20px;">
+      <strong style="font-size:.92rem;display:block;margin-bottom:14px;">🎯 Built For</strong>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;">
+        ${[
+          ['🏢','IT Consulting Firms','50–500 consultants, project-based billing'],
+          ['🔧','Managed Services Providers','Recurring and time & materials engagements'],
+          ['📊','Business Consultancies','Strategy, change management, advisory firms'],
+          ['🌍','Systems Integrators','Multi-customer, multi-project delivery organisations'],
+          ['🏛️','Public Sector Contractors','Government & enterprise framework suppliers'],
+          ['🚀','Scale-ups','Fast-growing firms outgrowing spreadsheets'],
+        ].map(([ic,t,d])=>`
+          <div style="padding:14px;background:var(--bg);border-radius:8px;text-align:center;">
+            <div style="font-size:1.4rem;margin-bottom:6px;">${ic}</div>
+            <div style="font-weight:700;font-size:.82rem;margin-bottom:4px;">${t}</div>
+            <div style="font-size:.72rem;color:var(--muted);">${d}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <!-- Codec.ie footer note -->
+    <div class="card" style="background:var(--navy);color:#fff;display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+      <div style="font-size:2rem;">🌐</div>
+      <div style="flex:1;">
+        <div style="font-weight:700;font-size:.92rem;margin-bottom:4px;">Built by Codec · codec.ie</div>
+        <div style="font-size:.78rem;color:rgba(255,255,255,.65);line-height:1.6;">Codec is an Irish technology company specialising in digital transformation, cloud solutions and enterprise software for Irish and UK organisations. Codec PSA is our internal accelerator — a production-grade platform designed to run Codec's own ~300-consultant delivery operation and licensed to other professional services firms.</div>
+      </div>
+      <button class="btn" style="background:var(--teal);color:#fff;border:none;flex-shrink:0;" onclick="window.open('https://codec.ie','_blank')">Visit codec.ie ↗</button>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════════════════
+// TECHNICAL NOTES ENGINE
+// ══════════════════════════════════════════════════════════
+
+function renderTechNotes(){
+  const el = document.getElementById('tech-content');
+  if(!el || el.hasChildNodes()) return;
+
+  const stack = [
+    { layer:'Frontend', component:'Blazor Server', tech:'Microsoft Blazor Server (.NET 8)', purpose:'Component-based UI with real-time SignalR updates. No JavaScript framework needed — C# runs in the browser context via WebSocket.' },
+    { layer:'Frontend', component:'UI Component Library', tech:'MudBlazor 6.x', purpose:'Material Design component library for Blazor. Provides data grids, forms, charts, dialogs, navigation drawers and date pickers out of the box.' },
+    { layer:'Frontend', component:'Preview / Demo Mode', tech:'Vanilla HTML5 + CSS3 + ES6 JavaScript', purpose:'A single-file static preview (index.html, ~3,500 lines) served by Python http.server. All UI logic, mock data and agent simulations run client-side. No backend required for demos.' },
+    { layer:'Backend', component:'Application Server', tech:'ASP.NET Core 8 (Kestrel)', purpose:'Hosts the Blazor Server hub, REST API endpoints and background services. Runs as a Linux container on Azure App Service.' },
+    { layer:'Backend', component:'ORM / Data Access', tech:'Entity Framework Core 8', purpose:'Code-first migrations, strongly-typed LINQ queries, optimistic concurrency. All entities map directly to Azure SQL tables.' },
+    { layer:'Backend', component:'Business Logic', tech:'C# 12 / .NET 8 Class Libraries', purpose:'Domain services, CQRS command/query handlers, approval workflow engine, invoice calculation logic, health score engine.' },
+    { layer:'Data', component:'Primary Database', tech:'Azure SQL Database (General Purpose, 4 vCore)', purpose:'Relational store for all transactional data. geo-redundant backups, point-in-time restore, 99.99% SLA. Irish region (Ireland North).' },
+    { layer:'Data', component:'Caching', tech:'Azure Cache for Redis', purpose:'Session state, frequently-read reference data (roles, rate cards), availability heatmap pre-computation.' },
+    { layer:'Data', component:'File Storage', tech:'Azure Blob Storage', purpose:'Expense receipt uploads, invoice PDF storage, timesheet export archives.' },
+    { layer:'Security', component:'Identity / SSO', tech:'Microsoft Entra ID (Azure AD) + MSAL', purpose:'OAuth 2.0 / OpenID Connect. Users log in with their Microsoft 365 work account. No separate passwords. Conditional Access policies enforced.' },
+    { layer:'Security', component:'Secrets Management', tech:'Azure Key Vault', purpose:'Connection strings, API keys and certificates stored in Key Vault. App uses Managed Identity — no secrets ever in config files or environment variables.' },
+    { layer:'Security', component:'Role-Based Access', tech:'ASP.NET Core Authorization Policies', purpose:'6 roles mapped to Azure AD groups: SLT, Manager, Finance, Resourcing, Consultant, Admin. Claims-based, evaluated server-side.' },
+    { layer:'AI / Automation', component:'AI Agent Runtime', tech:'C# Background Services (IHostedService)', purpose:'Each AI agent is a .NET hosted service that wakes on a cron schedule, queries the DB, runs analysis logic, writes findings to AgentFinding table and sends email alerts.' },
+    { layer:'AI / Automation', component:'Email Dispatch', tech:'Microsoft Exchange Online (Graph API)', purpose:'Timesheet chase emails, invoice notifications, risk alerts and approval notifications sent via Microsoft 365 tenant using Graph API mail.send scope.' },
+    { layer:'Integration', component:'Accounting Export', tech:'CSV / API (Sage / Xero ready)', purpose:'Finance module exports GL journals, AR ledger and VAT returns in Sage 200 and Xero format. REST webhook integration available.' },
+    { layer:'Observability', component:'Application Monitoring', tech:'Azure Application Insights', purpose:'Live telemetry: page load times, exception tracking, custom events (timesheet submitted, invoice sent), dependency call tracking (SQL, Redis, external APIs).' },
+    { layer:'Infrastructure', component:'Hosting', tech:'Azure App Service (P1v3 Linux)', purpose:'Auto-scaling, deployment slots (blue/green), always-on, custom domain + managed SSL certificate.' },
+    { layer:'Infrastructure', component:'Infrastructure as Code', tech:'Azure Bicep', purpose:'All Azure resources defined in Bicep templates. Environments (dev/prod) provisioned identically with one command: deploy.sh.' },
+    { layer:'DevOps', component:'CI/CD Pipeline', tech:'GitHub Actions', purpose:'5-stage pipeline: Build & Test → Deploy Infrastructure → Run EF Migrations → Deploy App → Smoke Test. Triggers on push to main (prod) or develop (staging).' },
+    { layer:'DevOps', component:'Source Control', tech:'GitHub (private repository)', purpose:'Feature branching, pull request reviews, branch protection on main. Automated code scanning (GitHub Advanced Security).' },
+  ];
+
+  const layers = ['Frontend','Backend','Data','Security','AI / Automation','Integration','Observability','Infrastructure','DevOps'];
+  const layerColors = { 'Frontend':'#3182CE','Backend':'#805AD5','Data':'#38A169','Security':'#E53E3E','AI / Automation':'#00A9CE','Integration':'#D69E2E','Observability':'#718096','Infrastructure':'#2D3748','DevOps':'#553C9A' };
+
+  el.innerHTML = `
+    <h5 style="margin-bottom:4px;">🏗️ Technical Architecture</h5>
+    <div class="sub" style="margin-bottom:20px;">How Codec PSA is built — technology stack, infrastructure and key design decisions</div>
+
+    <!-- Architecture diagram -->
+    <div style="background:linear-gradient(135deg,#1B2A4A,#1e3a6e);border-radius:14px;padding:28px;margin-bottom:24px;color:#fff;">
+      <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.5);margin-bottom:16px;">System Architecture Overview</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
+        ${[
+          ['🌐','Browser / Client','Blazor WebSocket (SignalR)','rgba(49,130,206,.3)','#90CDF4'],
+          ['⚙️','App Server','ASP.NET Core 8 on Azure App Service Linux','rgba(128,90,213,.3)','#D6BCFA'],
+          ['🗄️','SQL Database','Azure SQL General Purpose — Ireland North','rgba(56,161,105,.3)','#9AE6B4'],
+          ['⚡','Redis Cache','Azure Cache for Redis — session + ref data','rgba(214,158,46,.3)','#FBD38D'],
+          ['🔐','Identity','Microsoft Entra ID (Azure AD) SSO','rgba(229,62,62,.3)','#FEB2B2'],
+          ['🔑','Key Vault','Azure Key Vault — secrets + certs','rgba(229,62,62,.3)','#FEB2B2'],
+          ['🤖','AI Agents','6 x .NET Background Services (IHostedService)','rgba(0,169,206,.3)','#7EE8FA'],
+          ['📧','Email','Microsoft Exchange Online via Graph API','rgba(0,169,206,.3)','#7EE8FA'],
+          ['📊','Monitoring','Azure Application Insights + Log Analytics','rgba(113,128,150,.3)','#CBD5E0'],
+          ['🗂️','Files','Azure Blob Storage — receipts + PDFs','rgba(56,161,105,.3)','#9AE6B4'],
+          ['🔄','CI/CD','GitHub Actions — 5-stage pipeline','rgba(85,60,154,.3)','#D6BCFA'],
+          ['📐','IaC','Azure Bicep — infrastructure as code','rgba(45,55,72,.5)','#CBD5E0'],
+        ].map(([ic,t,d,bg,tc])=>`
+          <div style="background:${bg};border-radius:8px;padding:12px 10px;text-align:center;">
+            <div style="font-size:1.2rem;margin-bottom:5px;">${ic}</div>
+            <div style="font-weight:700;font-size:.75rem;color:${tc};margin-bottom:3px;">${t}</div>
+            <div style="font-size:.65rem;color:rgba(255,255,255,.6);line-height:1.4;">${d}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <!-- Stack table -->
+    <div class="card" style="margin-bottom:20px;overflow-x:auto;">
+      <strong style="font-size:.92rem;display:block;margin-bottom:16px;">📦 Full Technology Stack</strong>
+      <table style="width:100%;border-collapse:collapse;font-size:.78rem;">
+        <thead>
+          <tr style="background:var(--navy);color:#fff;">
+            <th style="padding:10px 12px;text-align:left;width:120px;">Layer</th>
+            <th style="padding:10px 12px;text-align:left;width:160px;">Component</th>
+            <th style="padding:10px 12px;text-align:left;width:220px;">Technology</th>
+            <th style="padding:10px 12px;text-align:left;">Purpose & Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${stack.map((r,i)=>`
+            <tr style="background:${i%2===0?'#fff':'var(--bg)'};">
+              <td style="padding:9px 12px;">
+                <span style="background:${layerColors[r.layer]||'#718096'};color:#fff;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;">${r.layer}</span>
+              </td>
+              <td style="padding:9px 12px;font-weight:600;">${r.component}</td>
+              <td style="padding:9px 12px;color:#2D3748;font-weight:500;">${r.tech}</td>
+              <td style="padding:9px 12px;color:#4A5568;line-height:1.5;">${r.purpose}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Key design decisions -->
+    <div class="card" style="margin-bottom:20px;">
+      <strong style="font-size:.92rem;display:block;margin-bottom:14px;">🧭 Key Design Decisions</strong>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;">
+        ${[
+          ['Why Blazor Server (not React/Vue)?',
+           'Codec developers are full-stack C# engineers. Blazor Server eliminates the need for a separate JS frontend team, keeps all business logic server-side (no API surface exposure), and SignalR gives real-time updates for free. The tradeoff is a persistent WebSocket per user — fine for 300 concurrent users.'],
+          ['Why Azure SQL (not Postgres/MySQL)?',
+           'The client base is enterprise Microsoft shops. Azure SQL integrates natively with Entra ID, Key Vault and Application Insights. Familar tooling for DBAs. Row-level security and column-level encryption available out of the box. Managed Identity means no connection string passwords.'],
+          ['Why Bicep (not Terraform)?',
+           'Bicep is Azure-native, has first-class VS Code tooling, compiles to ARM templates and is directly supported by Microsoft. For a single-cloud (Azure) deployment, Bicep is simpler and faster to iterate than Terraform. Terraform makes more sense for multi-cloud scenarios.'],
+          ['Why static HTML preview mode?',
+           'The Blazor app requires .NET 8 SDK + SQL Server to run locally. To enable stakeholder demos without infrastructure setup, a complete single-file HTML preview (index.html) mirrors the full UI using vanilla JS mock data. It runs with just Python\'s built-in http.server — zero dependencies.'],
+          ['Why no external AI API (e.g. OpenAI)?',
+           'The 6 AI agents are deterministic rule-engines, not LLM-based. Each agent has defined thresholds, scoring models and action libraries hard-coded in C#. This avoids LLM cost, latency, hallucination risk and data privacy concerns (no client data leaves Azure). LLM enhancement is roadmapped.'],
+          ['Security: zero secrets in code',
+           'All connection strings, client secrets and API keys live exclusively in Azure Key Vault. The App Service uses a System-Assigned Managed Identity with Key Vault RBAC. There are no .env files, no appsettings.Production.json secrets, and no environment variables containing credentials.'],
+        ].map(([q,a])=>`
+          <div style="background:var(--bg);border-radius:8px;padding:14px;">
+            <div style="font-weight:700;font-size:.82rem;color:var(--navy);margin-bottom:7px;">❓ ${q}</div>
+            <div style="font-size:.78rem;color:#4A5568;line-height:1.6;">${a}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <!-- Preview mode note -->
+    <div class="card" style="background:linear-gradient(135deg,#EBF8FF,#F0FFF4);border:1px solid #BEE3F8;">
+      <strong style="font-size:.88rem;">ℹ️ About This Preview</strong>
+      <p style="font-size:.78rem;color:#4A5568;margin-top:8px;line-height:1.6;">
+        You are currently viewing the <strong>static HTML preview</strong> of Codec PSA — a single <code>index.html</code> file (~3,500 lines) served by <code>python3 -m http.server 5001</code>. All data is mocked in JavaScript arrays. All interactions (modals, approvals, agent runs, toasts) are client-side simulations. The AI agents show realistic step-by-step progress animations but do not query a real database. The production Blazor Server application connects to a live Azure SQL database with real consultant, project and financial data.
+      </p>
+      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+        <code style="background:#1B2A4A;color:#7EE8FA;padding:6px 12px;border-radius:6px;font-size:.75rem;">Preview: python3 -m http.server 5001 --directory preview/</code>
+        <code style="background:#1B2A4A;color:#9AE6B4;padding:6px 12px;border-radius:6px;font-size:.75rem;">Production: ./CodecPSA/infra/deploy.sh</code>
+      </div>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════════════════
+// ERD ENGINE
+// ══════════════════════════════════════════════════════════
+
+function renderERD(){
+  const el = document.getElementById('erd-content');
+  if(!el || el.hasChildNodes()) return;
+
+  // Entity definitions with fields [name, type, pk/fk/idx]
+  const entities = [
+    { id:'consultant', name:'Consultant', color:'#3182CE', domain:'People',
+      fields:[
+        ['id','int','PK'],['azure_ad_oid','nvarchar(64)','UQ'],
+        ['first_name','nvarchar(80)',''],['last_name','nvarchar(80)',''],
+        ['email','nvarchar(150)','UQ'],['role_id','int','FK'],
+        ['department','nvarchar(80)',''],['start_date','date',''],
+        ['is_active','bit',''],['created_at','datetime2',''],
+      ],
+      relations:['role_id → Role.id','assigned via Assignment','timesheets, expenses, leave']
+    },
+    { id:'role', name:'Role', color:'#3182CE', domain:'People',
+      fields:[
+        ['id','int','PK'],['name','nvarchar(80)',''],
+        ['is_chargeable','bit',''],['default_rate_hourly','decimal(10,2)',''],
+        ['default_rate_daily','decimal(10,2)',''],
+        ['department','nvarchar(80)',''],['is_active','bit',''],
+      ],
+      relations:['1:N → Consultant','1:N → Assignment','1:N → ResourceRequest']
+    },
+    { id:'customer', name:'Customer', color:'#38A169', domain:'Engagements',
+      fields:[
+        ['id','int','PK'],['name','nvarchar(150)',''],
+        ['industry','nvarchar(80)',''],['account_manager_id','int','FK'],
+        ['contact_name','nvarchar(100)',''],['contact_email','nvarchar(150)',''],
+        ['payment_terms_days','int',''],['is_active','bit',''],
+      ],
+      relations:['account_manager_id → Consultant.id','1:N → Project','1:N → Invoice']
+    },
+    { id:'project', name:'Project', color:'#38A169', domain:'Engagements',
+      fields:[
+        ['id','int','PK'],['name','nvarchar(150)',''],
+        ['customer_id','int','FK'],['pm_id','int','FK'],
+        ['budget','decimal(12,2)',''],['start_date','date',''],
+        ['end_date','date',''],['status','nvarchar(20)',''],
+        ['project_code','nvarchar(20)','UQ'],
+      ],
+      relations:['customer_id → Customer.id','pm_id → Consultant.id','1:N → Assignment, TimesheetEntry, Invoice, Expense, PurchaseOrder, ResourceRequest']
+    },
+    { id:'assignment', name:'Assignment', color:'#805AD5', domain:'Resourcing',
+      fields:[
+        ['id','int','PK'],['consultant_id','int','FK'],
+        ['project_id','int','FK'],['role_id','int','FK'],
+        ['rate_override_hourly','decimal(10,2)','NULL'],
+        ['start_date','date',''],['end_date','date',''],
+        ['hours_per_week','decimal(5,2)',''],['is_active','bit',''],
+      ],
+      relations:['consultant_id → Consultant.id','project_id → Project.id','role_id → Role.id']
+    },
+    { id:'resource_request', name:'ResourceRequest', color:'#805AD5', domain:'Resourcing',
+      fields:[
+        ['id','int','PK'],['project_id','int','FK'],
+        ['role_id','int','FK'],['requested_by_id','int','FK'],
+        ['start_date','date',''],['end_date','date',''],
+        ['status','nvarchar(20)',''],['notes','nvarchar(500)',''],
+        ['matched_consultant_id','int','FK NULL'],
+      ],
+      relations:['project_id → Project.id','role_id → Role.id','requested_by_id → Consultant.id','matched_consultant_id → Consultant.id']
+    },
+    { id:'timesheet_entry', name:'TimesheetEntry', color:'#D69E2E', domain:'Time & Finance',
+      fields:[
+        ['id','int','PK'],['consultant_id','int','FK'],
+        ['project_id','int','FK'],['assignment_id','int','FK'],
+        ['entry_date','date',''],['hours','decimal(5,2)',''],
+        ['notes','nvarchar(500)',''],['status','nvarchar(20)',''],
+        ['approved_by_id','int','FK NULL'],['approved_at','datetime2',''],
+      ],
+      relations:['consultant_id → Consultant.id','project_id → Project.id','assignment_id → Assignment.id','approved_by_id → Consultant.id']
+    },
+    { id:'expense', name:'Expense', color:'#D69E2E', domain:'Time & Finance',
+      fields:[
+        ['id','int','PK'],['consultant_id','int','FK'],
+        ['project_id','int','FK'],['expense_date','date',''],
+        ['category','nvarchar(50)',''],['description','nvarchar(300)',''],
+        ['amount_net','decimal(10,2)',''],['vat_amount','decimal(10,2)',''],
+        ['receipt_blob_url','nvarchar(500)',''],['status','nvarchar(20)',''],
+        ['approved_by_id','int','FK NULL'],
+      ],
+      relations:['consultant_id → Consultant.id','project_id → Project.id','approved_by_id → Consultant.id']
+    },
+    { id:'leave_request', name:'LeaveRequest', color:'#D69E2E', domain:'Time & Finance',
+      fields:[
+        ['id','int','PK'],['consultant_id','int','FK'],
+        ['leave_type','nvarchar(30)',''],['start_date','date',''],
+        ['end_date','date',''],['days','decimal(4,1)',''],
+        ['status','nvarchar(20)',''],['notes','nvarchar(300)',''],
+        ['approved_by_id','int','FK NULL'],
+      ],
+      relations:['consultant_id → Consultant.id','approved_by_id → Consultant.id']
+    },
+    { id:'invoice', name:'Invoice', color:'#E53E3E', domain:'Finance',
+      fields:[
+        ['id','int','PK'],['invoice_number','nvarchar(20)','UQ'],
+        ['customer_id','int','FK'],['project_id','int','FK'],
+        ['issue_date','date',''],['due_date','date',''],
+        ['subtotal','decimal(12,2)',''],['vat_amount','decimal(12,2)',''],
+        ['total','decimal(12,2)',''],['status','nvarchar(20)',''],
+        ['paid_date','date',''],['pdf_blob_url','nvarchar(500)',''],
+      ],
+      relations:['customer_id → Customer.id','project_id → Project.id','1:N → InvoiceLine']
+    },
+    { id:'invoice_line', name:'InvoiceLine', color:'#E53E3E', domain:'Finance',
+      fields:[
+        ['id','int','PK'],['invoice_id','int','FK'],
+        ['description','nvarchar(300)',''],['quantity','decimal(10,2)',''],
+        ['unit_price','decimal(10,2)',''],['line_total','decimal(12,2)',''],
+        ['timesheet_ref_ids','nvarchar(500)',''],
+      ],
+      relations:['invoice_id → Invoice.id']
+    },
+    { id:'supplier', name:'Supplier', color:'#718096', domain:'Finance',
+      fields:[
+        ['id','int','PK'],['name','nvarchar(150)',''],
+        ['contact_name','nvarchar(100)',''],['email','nvarchar(150)',''],
+        ['payment_terms_days','int',''],['iban','nvarchar(34)',''],
+        ['is_active','bit',''],
+      ],
+      relations:['1:N → PurchaseOrder']
+    },
+    { id:'purchase_order', name:'PurchaseOrder', color:'#718096', domain:'Finance',
+      fields:[
+        ['id','int','PK'],['po_number','nvarchar(20)','UQ'],
+        ['supplier_id','int','FK'],['project_id','int','FK'],
+        ['raised_by_id','int','FK'],['po_date','date',''],
+        ['amount_net','decimal(12,2)',''],['vat_amount','decimal(12,2)',''],
+        ['status','nvarchar(20)',''],['approved_by_id','int','FK NULL'],
+      ],
+      relations:['supplier_id → Supplier.id','project_id → Project.id','raised_by_id → Consultant.id','approved_by_id → Consultant.id']
+    },
+    { id:'agent_finding', name:'AgentFinding', color:'#00A9CE', domain:'AI',
+      fields:[
+        ['id','int','PK'],['agent_id','nvarchar(50)',''],
+        ['severity','nvarchar(10)',''],['project_id','int','FK NULL'],
+        ['message','nvarchar(500)',''],['impact','nvarchar(300)',''],
+        ['status','nvarchar(20)',''],['created_at','datetime2',''],
+        ['dismissed_by_id','int','FK NULL'],
+      ],
+      relations:['project_id → Project.id','dismissed_by_id → Consultant.id']
+    },
+  ];
+
+  const domainColors = {'People':'#3182CE','Engagements':'#38A169','Resourcing':'#805AD5','Time & Finance':'#D69E2E','Finance':'#E53E3E','AI':'#00A9CE'};
+
+  el.innerHTML = `
+    <h5 style="margin-bottom:4px;">🔗 Data Model — Entity Relationship Diagram</h5>
+    <div class="sub" style="margin-bottom:16px;">All ${entities.length} entities, their fields, data types and foreign-key relationships</div>
+
+    <!-- Domain legend -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
+      ${Object.entries(domainColors).map(([d,c])=>`
+        <span style="background:${c}22;border:1px solid ${c}55;color:${c};font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:12px;">${d}</span>`).join('')}
+      <span style="background:#f9f9f9;border:1px solid var(--border);color:var(--muted);font-size:.72rem;font-weight:600;padding:4px 12px;border-radius:12px;">🔑 PK = Primary Key &nbsp;·&nbsp; FK = Foreign Key &nbsp;·&nbsp; UQ = Unique</span>
+    </div>
+
+    <!-- Entity grid -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;">
+      ${entities.map(e=>`
+        <div class="card" style="border-top:3px solid ${e.color};font-size:.75rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <strong style="font-size:.88rem;color:var(--navy);">${e.name}</strong>
+            <span style="background:${e.color}22;color:${e.color};font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px;">${e.domain}</span>
+          </div>
+          <!-- Fields table -->
+          <table style="width:100%;border-collapse:collapse;margin-bottom:10px;">
+            <thead>
+              <tr style="background:var(--bg);">
+                <th style="padding:4px 6px;text-align:left;font-size:.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;">Field</th>
+                <th style="padding:4px 6px;text-align:left;font-size:.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;">Type</th>
+                <th style="padding:4px 6px;text-align:left;font-size:.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;">Key</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${e.fields.map((f,i)=>`
+                <tr style="background:${i%2===0?'#fff':'var(--bg)'};">
+                  <td style="padding:4px 6px;font-weight:${f[2]==='PK'?'700':'400'};color:${f[2]==='PK'?'#E53E3E':f[2]==='FK'?'#3182CE':f[2]==='UQ'?'#805AD5':'var(--text)'};">${f[0]}</td>
+                  <td style="padding:4px 6px;color:var(--muted);font-family:monospace;font-size:.7rem;">${f[1]}</td>
+                  <td style="padding:4px 6px;">
+                    ${f[2]==='PK'?'<span style="background:#FED7D7;color:#9B2C2C;font-size:.6rem;font-weight:700;padding:1px 5px;border-radius:4px;">PK</span>':f[2]==='FK'?'<span style="background:#BEE3F8;color:#2B6CB0;font-size:.6rem;font-weight:700;padding:1px 5px;border-radius:4px;">FK</span>':f[2]==='UQ'?'<span style="background:#E9D8FD;color:#553C9A;font-size:.6rem;font-weight:700;padding:1px 5px;border-radius:4px;">UQ</span>':''}
+                  </td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+          <!-- Relations -->
+          <div style="background:var(--bg);border-radius:6px;padding:8px 10px;">
+            <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">Relationships</div>
+            ${e.relations.map(r=>`<div style="font-size:.7rem;color:#4A5568;padding:2px 0;font-family:monospace;">${r}</div>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>
+
+    <!-- Relationship summary -->
+    <div class="card" style="margin-top:20px;">
+      <strong style="font-size:.92rem;display:block;margin-bottom:14px;">🗺️ Key Relationships at a Glance</strong>
+      <div style="overflow-x:auto;">
+        <table style="border-collapse:collapse;width:100%;font-size:.78rem;">
+          <thead>
+            <tr style="background:var(--navy);color:#fff;">
+              <th style="padding:9px 12px;text-align:left;">Parent Entity</th>
+              <th style="padding:9px 12px;text-align:center;">Cardinality</th>
+              <th style="padding:9px 12px;text-align:left;">Child Entity</th>
+              <th style="padding:9px 12px;text-align:left;">Business Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${[
+              ['Consultant','1 : N','Assignment','One consultant can be assigned to many projects over time'],
+              ['Project','1 : N','Assignment','One project has many assigned consultants'],
+              ['Role','1 : N','Assignment','One role type applies to many assignments'],
+              ['Project','1 : N','TimesheetEntry','Every timesheet entry is logged against a project'],
+              ['Consultant','1 : N','TimesheetEntry','Every timesheet entry is submitted by a consultant'],
+              ['Assignment','1 : N','TimesheetEntry','Timesheet entries trace back to the specific assignment'],
+              ['Customer','1 : N','Project','One customer can have many active projects'],
+              ['Customer','1 : N','Invoice','Invoices are raised to the customer, not the project'],
+              ['Project','1 : N','Invoice','One project generates many invoices over its lifecycle'],
+              ['Invoice','1 : N','InvoiceLine','Each invoice contains one or more line items'],
+              ['Supplier','1 : N','PurchaseOrder','One supplier receives many purchase orders'],
+              ['Project','1 : N','PurchaseOrder','Subcontractor POs are raised against a project'],
+              ['Project','1 : N','ResourceRequest','A project raises requests for specific skills'],
+              ['Consultant','1 : N','Expense','A consultant submits many expense claims'],
+              ['Consultant','1 : N','LeaveRequest','A consultant submits many leave requests'],
+              ['Project','1 : N','AgentFinding','AI agent findings are linked to the affected project'],
+            ].map((r,i)=>`
+              <tr style="background:${i%2===0?'#fff':'var(--bg)'};">
+                <td style="padding:8px 12px;font-weight:600;color:#3182CE;">${r[0]}</td>
+                <td style="padding:8px 12px;text-align:center;font-weight:700;color:#E53E3E;font-size:.9rem;">${r[1]}</td>
+                <td style="padding:8px 12px;font-weight:600;color:#38A169;">${r[2]}</td>
+                <td style="padding:8px 12px;color:#4A5568;">${r[3]}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════════════════
+// SECURITY & ROLES ENGINE
+// ══════════════════════════════════════════════════════════
+
+const securityRoles = [
+  { icon:'👔', title:'SLT (Senior Leadership Team)', group:'CodecPSA-SLT', badge:'EXECUTIVE', color:'#1B2A4A',
+    desc:'Full read access to all data across the platform. Can view all financial reports, project margins, consultant utilisation and pipeline. Cannot enter or approve operational transactions.',
+    caps:[
+      ['✅','View Executive Dashboard, all KPIs'],
+      ['✅','View all project health & risk scores'],
+      ['✅','View P&L, cash flow, margin reports'],
+      ['✅','View consultant utilisation & availability'],
+      ['✅','View full pipeline & sales engagements'],
+      ['✅','View Power BI analytics dashboards'],
+      ['❌','Cannot approve timesheets or expenses'],
+      ['❌','Cannot raise invoices or POs'],
+      ['❌','Cannot modify roles, rates or consultants'],
+    ]
+  },
+  { icon:'👨‍💼', title:'Manager', group:'CodecPSA-Manager', badge:'APPROVER', color:'#3182CE',
+    desc:"Manages their own team's projects and consultants. Can approve timesheets, leave and expenses for direct reports. Has read access to their projects' financials.",
+    caps:[
+      ['✅','Approve / reject timesheets for own team'],
+      ['✅','Approve / reject leave requests'],
+      ['✅','Approve / reject expense claims (≤ £500)'],
+      ['✅','View project health for own projects'],
+      ['✅','Raise resource requests'],
+      ['✅','View project financials (own projects only)'],
+      ['✅','View team availability & utilisation'],
+      ['⚠️','Approve expenses > £500 → escalates to Finance'],
+      ['❌','Cannot raise or approve invoices'],
+      ['❌','Cannot modify consultant rates or roles'],
+    ]
+  },
+  { icon:'🛠️', title:'Administrator', group:'CodecPSA-Admin', badge:'FULL ACCESS', color:'#D69E2E',
+    desc:'Full system access including configuration, user management, rate cards, and all financial modules. Responsible for system health, data integrity and AI agent management.',
+    caps:[
+      ['✅','All SLT and Manager capabilities'],
+      ['✅','Create / edit / deactivate consultants'],
+      ['✅','Configure roles, rates and rate overrides'],
+      ['✅','Manage customers, projects, programmes'],
+      ['✅','Full finance module (AR, AP, GL, budgets)'],
+      ['✅','Approve payment runs and journal entries'],
+      ['✅','Configure and run AI agents'],
+      ['✅','Manage chart of accounts & cost centres'],
+      ['✅','Export all data, run all reports'],
+      ['✅','Access database explorer'],
+    ]
+  },
+  { icon:'👤', title:'User (Consultant)', group:'CodecPSA-Consultant', badge:'SELF-SERVICE', color:'#38A169',
+    desc:'Self-service access only. Can submit their own timesheets, expenses and leave. Can view their own assignments and utilisation. Cannot see other consultants\' data or financials.',
+    caps:[
+      ['✅','Submit weekly timesheets (own only)'],
+      ['✅','Submit expense claims (own only)'],
+      ['✅','Request leave / view leave balance'],
+      ['✅','View own assignments & project details'],
+      ['✅','View own utilisation & chargeability'],
+      ['❌','Cannot see other consultants\' data'],
+      ['❌','Cannot view financial figures'],
+      ['❌','Cannot approve anything'],
+      ['❌','Cannot access admin or config pages'],
+    ]
+  },
+];
+
+const approvalMatrix = [
+  ['Submit timesheet','✍️ Submit','✅ Approve','—','✅ Override','👁 View'],
+  ['Submit expense claim','✍️ Submit','✅ Approve ≤£500','✅ Approve all','✅ Override','👁 View'],
+  ['Request leave','✍️ Request','✅ Approve','—','✅ Override','👁 View'],
+  ['Raise resource request','✍️ Submit','✅ Raise','—','✅ Override','👁 View'],
+  ['Raise sales invoice','—','—','✅ Draft + Send','✅ Override','👁 View'],
+  ['Approve purchase order','—','⚠️ ≤£5k','✅ ≤£25k','✅ Any','✅ >£25k'],
+  ['Approve payment run','—','—','✅ Draft','✅ Execute','✅ >£50k'],
+  ['Post journal entry','—','—','✅ Post','✅ Post + Reverse','👁 View'],
+  ['Add/edit consultant','—','—','—','✅ Full access','—'],
+  ['Change rate card','—','—','—','✅ Full access','👁 View'],
+  ['Configure AI agents','—','—','—','✅ Full access','—'],
+];
+
+function capRows(caps){
+  return caps.map(([ic,tx])=>`<div style="display:flex;gap:8px;padding:4px 0;font-size:.78rem;border-bottom:1px solid var(--border);"><span>${ic}</span><span>${tx}</span></div>`).join('');
+}
+
+function renderSecurity(){
+  const el = document.getElementById('security-content');
+  if(!el) return;
+  el.innerHTML = `
+    <h5>🔐 Security &amp; Access Roles</h5>
+    <div class="sub">Role-based access control — who can see and do what across Codec PSA</div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;margin-bottom:28px;">
+      ${securityRoles.map(r=>`
+        <div class="card" style="border-top:4px solid ${r.color};">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+            <span style="font-size:1.8rem;">${r.icon}</span>
+            <div>
+              <div style="font-weight:700;font-size:1rem;">${r.title}</div>
+              <div style="font-size:.72rem;color:var(--muted);">Azure AD Group: ${r.group}</div>
+            </div>
+            <span style="margin-left:auto;background:${r.color};color:#fff;font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:10px;">${r.badge}</span>
+          </div>
+          <div style="font-size:.8rem;color:#4A5568;line-height:1.6;margin-bottom:14px;">${r.desc}</div>
+          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Capabilities</div>
+          ${capRows(r.caps)}
+        </div>`).join('')}
+    </div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <strong style="font-size:.92rem;display:block;margin-bottom:14px;">📋 Approval Sign-Off Matrix</strong>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:.78rem;">
+          <thead>
+            <tr style="background:var(--navy);color:#fff;">
+              <th style="padding:10px 12px;text-align:left;">Action</th>
+              <th style="padding:10px 12px;text-align:center;">User</th>
+              <th style="padding:10px 12px;text-align:center;">Manager</th>
+              <th style="padding:10px 12px;text-align:center;">Finance</th>
+              <th style="padding:10px 12px;text-align:center;">Admin</th>
+              <th style="padding:10px 12px;text-align:center;">SLT</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${approvalMatrix.map((r,i)=>`
+              <tr style="background:${i%2===0?'#fff':'var(--bg)'};">
+                <td style="padding:9px 12px;font-weight:500;">${r[0]}</td>
+                ${r.slice(1).map(c=>`<td style="padding:9px 12px;text-align:center;">${c}</td>`).join('')}
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="background:linear-gradient(135deg,#EBF8FF,#F0FFF4);border:1px solid #BEE3F8;">
+      <strong style="font-size:.88rem;">ℹ️ Finance Role</strong>
+      <p style="font-size:.78rem;color:#4A5568;margin-top:6px;line-height:1.6;">
+        The <strong>Finance</strong> role (Azure AD Group: <code>CodecPSA-Finance</code>) has full access to the Finance module — AR, AP, GL, budgets, cash flow, VAT — with read-only access to projects and consultants. Finance can raise and send invoices, approve payment runs up to £25k, and post journal entries. Expenses over £500 escalate to Finance for approval.
+      </p>
+      <strong style="font-size:.88rem;margin-top:12px;display:block;">🔒 Resourcing Manager Role</strong>
+      <p style="font-size:.78rem;color:#4A5568;margin-top:6px;line-height:1.6;">
+        The <strong>Resourcing Manager</strong> role (Azure AD Group: <code>CodecPSA-Resourcing</code>) manages the resource request inbox, assigns consultants to projects, views full availability across all consultants, and runs the Resource Matcher AI agent. No financial access.
+      </p>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════════════════
+// TUTORIAL ENGINE
+// ══════════════════════════════════════════════════════════
+
+const tutorialData = [
+  {
+    role:'👤 Consultant',
+    intro:'As a Consultant, your workspace is under "My Workspace" in the left nav. You submit your own timesheets, expenses and leave requests here. Nothing else is visible to you.',
+    steps:[
+      { icon:'⏱', title:'Submitting Your Timesheet',
+        desc:'Every week you must log your hours against the projects you\'re assigned to.',
+        actions:[
+          'Click <strong>My Timesheet</strong> in the left nav.',
+          'Select the week using the date picker at the top.',
+          'Enter hours for each day against your project. Non-billable time (e.g. internal meetings) goes against "Internal".',
+          'Click <strong>Save Draft</strong> to save your progress, or <strong>Submit Timesheet</strong> when the week is complete.',
+          'Your Manager will receive an email and can approve or reject. You\'ll be notified by email.',
+          '⚠️ <em>Timesheets must be submitted by <strong>Friday 17:00</strong> each week. The Timesheet Chaser agent will send you a reminder at 17:00 if yours is incomplete.</em>',
+        ]
+      },
+      { icon:'💸', title:'Submitting an Expense Claim',
+        desc:'Claim back business expenses like travel, accommodation and software.',
+        actions:[
+          'Click <strong>My Expenses</strong> in the left nav.',
+          'Click <strong>+ New Claim</strong>.',
+          'Select the project the expense relates to (or "Internal" for non-project costs).',
+          'Add line items: select category, enter description, amount and attach receipt reference.',
+          'Click <strong>Submit</strong>. Expenses ≤ £500 go to your Manager. Expenses > £500 go to Finance.',
+          '⚠️ <em>Always attach a receipt reference. Claims without receipts will be rejected.</em>',
+        ]
+      },
+      { icon:'🏖', title:'Requesting Leave',
+        desc:'Book holidays, sick leave or other absence through the system.',
+        actions:[
+          'Click <strong>My Leave</strong> in the left nav.',
+          'Click <strong>Request Leave</strong>.',
+          'Select leave type: Holiday, Sick, Compassionate, Study, or Other.',
+          'Set start and end dates. Add a note if needed.',
+          'Click <strong>Submit Request</strong>. Your Manager will approve or reject and you\'ll be notified.',
+          '✅ <em>Approved leave is automatically excluded from timesheet requirements for those days.</em>',
+        ]
+      },
+      { icon:'📋', title:'Viewing Your Assignments',
+        desc:'See which projects you\'re assigned to, your role and the engagement dates.',
+        actions:[
+          'Click <strong>My Assignments</strong> in the left nav.',
+          'All your active and upcoming project assignments are listed here.',
+          'Click any assignment to see the project details, your role, rate and expected hours per week.',
+        ]
+      },
+    ]
+  },
+  {
+    role:'👨‍💼 Manager',
+    intro:'As a Manager, you have all Consultant capabilities plus approval workflows for your team. You manage project health, raise resource requests and have read-only access to your projects\' financials.',
+    steps:[
+      { icon:'✅', title:'Approving Timesheets',
+        desc:'Review and approve your team\'s weekly timesheet submissions.',
+        actions:[
+          'Click <strong>Timesheet Approval</strong> in the left nav.',
+          'You\'ll see all pending timesheets from your direct reports.',
+          'Click a row to review the breakdown (hours per project per day).',
+          'Click <strong>✓ Approve</strong> to approve or <strong>✗ Reject</strong> to send back with a comment.',
+          'Use <strong>Bulk Approve</strong> to approve all clean timesheets at once.',
+          '⏰ <em>Aim to approve timesheets within 48 hours. Finance needs approved timesheets to raise invoices.</em>',
+        ]
+      },
+      { icon:'💸', title:'Approving Expenses',
+        desc:'Review expense claims submitted by your team.',
+        actions:[
+          'Click <strong>Expenses → Expense Approval</strong> in the left nav.',
+          'Claims ≤ £500 are routed directly to you.',
+          'Review each claim — check receipts are attached and the project allocation is correct.',
+          'Click ✓ to approve or ✗ to reject with a reason.',
+          '⚠️ <em>Claims > £500 automatically escalate to Finance — you\'ll be CC\'d on the outcome.</em>',
+        ]
+      },
+      { icon:'🧑‍💼', title:'Raising a Resource Request',
+        desc:'Request a specific skill or role to be added to your project.',
+        actions:[
+          'Click <strong>Resourcing</strong> in the left nav.',
+          'Click <strong>+ New Request</strong>.',
+          'Select the project, required role, seniority level, start date and duration.',
+          'Add any special skills or requirements in the notes.',
+          'The Resourcing Manager will receive the request and the <strong>Resource Matcher AI agent</strong> will suggest candidates.',
+          '✅ <em>You\'ll be notified when a consultant is assigned or if no suitable match is found.</em>',
+        ]
+      },
+      { icon:'🎯', title:'Monitoring Project Health',
+        desc:'Use the Project Health dashboard to stay on top of risks across your projects.',
+        actions:[
+          'Click <strong>Project Health</strong> in the left nav.',
+          'Review the heatmap — red/amber cells need your attention.',
+          'Click a project row to see the full risk report with action plans.',
+          'For each risk flag, click <strong>▶ View Action Plan</strong> to see step-by-step remediation guidance.',
+          'Action plans include named owners and deadlines — assign actions directly from this screen.',
+        ]
+      },
+    ]
+  },
+  {
+    role:'💰 Finance',
+    intro:'As a Finance user, you manage the full financial cycle: invoicing clients, paying suppliers, running expenses, forecasting cash and producing management accounts. Your work lives under the Finance section of the left nav.',
+    steps:[
+      { icon:'🧾', title:'Generating Client Invoices',
+        desc:'The Invoice Intelligence AI agent creates drafts — you review and send.',
+        actions:[
+          'Click <strong>Finance → Invoices</strong> in the left nav.',
+          'Draft invoices generated by the AI agent will appear here weekly (Monday 07:00).',
+          'Review each draft — check hours, rates and totals match the project rate card.',
+          'Click the invoice to open it, add any manual adjustments, then click <strong>Send Invoice</strong>.',
+          'The system emails the invoice PDF (via Exchange) to the customer contact and updates the AR ledger.',
+          '⚠️ <em>Never send an invoice without verifying that all timesheets for the period are approved.</em>',
+        ]
+      },
+      { icon:'💳', title:'Running a Supplier Payment Run',
+        desc:'Batch-pay approved supplier invoices on a scheduled date.',
+        actions:[
+          'Click <strong>Finance → AP → Payment Runs</strong>.',
+          'Click <strong>+ New Payment Run</strong> — select due-date window (e.g. "invoices due by 15 Mar").',
+          'Review the list of supplier invoices included. Remove any in dispute.',
+          'Click <strong>Submit for Approval</strong>. Admin will approve payment runs > £25k.',
+          'Once approved, click <strong>Execute Run</strong> to mark payments as made and update the AP ledger.',
+        ]
+      },
+      { icon:'📊', title:'Viewing the Cash Flow Forecast',
+        desc:'Monitor the 13-week rolling cash position.',
+        actions:[
+          'Click <strong>Finance → Cash Flow</strong>.',
+          'The Cash Flow Watchdog AI agent updates this daily at 07:30.',
+          'Red weeks (below £100k buffer) are highlighted — click for the breakdown of inflows/outflows.',
+          'Adjust assumptions (e.g. expected payment timing) by clicking <strong>Edit Forecast</strong>.',
+        ]
+      },
+      { icon:'📈', title:'Running the P&L Report',
+        desc:'Monthly profit and loss by project and cost centre.',
+        actions:[
+          'Click <strong>Finance → Reports → P&L</strong>.',
+          'Select the period (month, quarter, YTD).',
+          'Revenue is recognised from sent invoices. Costs are from approved timesheets + subcontractors + expenses.',
+          'Drill down to project level by clicking a row. Export to Excel for board packs.',
+        ]
+      },
+    ]
+  },
+  {
+    role:'🛠️ Administrator',
+    intro:'As Administrator you have full system access. You manage consultants, configure rate cards, maintain the chart of accounts, manage AI agents and handle system configuration. With great power comes great responsibility — changes here affect all users.',
+    steps:[
+      { icon:'👥', title:'Adding a New Consultant',
+        desc:'When a new team member joins Codec, add them to the system.',
+        actions:[
+          'Click <strong>Consultants</strong> in the left nav.',
+          'Click <strong>+ Add Consultant</strong>.',
+          'Enter their name, email (must match their Microsoft 365 account), role, department and start date.',
+          'The system will auto-provision them on first login via Azure AD SSO.',
+          'Assign them to projects via <strong>Resourcing → Assignments</strong>.',
+          '✅ <em>They will automatically appear in the Timesheet Chaser agent and Availability heatmap.</em>',
+        ]
+      },
+      { icon:'💷', title:'Managing Roles & Rate Cards',
+        desc:'Configure consultant roles and their default billing rates.',
+        actions:[
+          'Click <strong>Admin → Roles & Rates</strong>.',
+          'Click <strong>Edit</strong> on any role to update the default hourly and daily rates.',
+          'To set a <strong>project-specific rate override</strong>, go to the project detail page → Rate Overrides tab.',
+          '⚠️ <em>Changes to default rates only affect new assignments. Existing invoices are not affected.</em>',
+          'Mark a role as Non-Chargeable to exclude it from invoice generation (e.g. Admin, Support Staff).',
+        ]
+      },
+      { icon:'🤖', title:'Managing AI Agents',
+        desc:'Configure, pause and monitor the six AI agents.',
+        actions:[
+          'Click <strong>AI Agents</strong> in the left nav.',
+          'Each agent card shows its status, schedule, last run time and open findings.',
+          'Click <strong>▶ Run Now</strong> to trigger an immediate run — the progress bar shows each analysis step.',
+          'Click <strong>N Findings</strong> to review what the agent has flagged.',
+          'Click <strong>⏸</strong> to pause an agent (e.g. during a data migration).',
+          'Click <strong>▶ Run All Agents</strong> to run all active agents simultaneously.',
+        ]
+      },
+      { icon:'🗄️', title:'Database Explorer',
+        desc:'View raw table data for auditing and troubleshooting.',
+        actions:[
+          'Click <strong>Admin → Database Explorer</strong>.',
+          'Select a table from the left panel to view its contents.',
+          'Use this for auditing — e.g. check which timesheets are in "Draft" status.',
+          '⚠️ <em>This is read-only. Never attempt to edit data directly — use the UI or contact Codec IT.</em>',
+        ]
+      },
+    ]
+  }
+];
+
+function showTutorial(idx){
+  const t = tutorialData[idx];
+  // Render header + tabs if needed
+  const tabs = document.getElementById('tutorial-tabs');
+  if(tabs && !tabs.hasChildNodes()){
+    tabs.innerHTML = `
+      <h5 style="margin-bottom:4px;">📘 User Tutorial</h5>
+      <div class="sub" style="margin-bottom:16px;">Step-by-step guides for every role — get up and running with Codec PSA</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        ${tutorialData.map((r,i)=>`
+          <button onclick="showTutorial(${i})" id="tut-tab-${i}"
+            class="btn ${i===0?'btn-teal':'btn-outline'}" style="font-size:.8rem;">${r.role}</button>`).join('')}
+      </div>`;
+  }
+  const content = document.getElementById('tutorial-content');
+  if(!content) return;
+  // Update tab styles
+  tutorialData.forEach((_,i)=>{
+    const btn = document.getElementById('tut-tab-'+i);
+    if(btn){ btn.className = 'btn ' + (i===idx ? 'btn-teal' : 'btn-outline'); btn.style.fontSize='.8rem'; }
+  });
+  content.innerHTML = `
+    <div class="card" style="margin-bottom:20px;background:linear-gradient(135deg,#EBF8FF,var(--white));border:1px solid #BEE3F8;">
+      <div style="font-size:1.1rem;font-weight:700;margin-bottom:8px;">${t.role}</div>
+      <div style="font-size:.82rem;color:#4A5568;line-height:1.6;">${t.intro}</div>
+    </div>
+    ${t.steps.map((s,si)=>`
+      <div class="card" style="margin-bottom:14px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <span style="font-size:1.4rem;">${s.icon}</span>
+          <div>
+            <div style="font-weight:700;font-size:.92rem;">Step ${si+1}: ${s.title}</div>
+            <div style="font-size:.75rem;color:var(--muted);">${s.desc}</div>
+          </div>
+        </div>
+        <div style="background:var(--bg);border-radius:8px;padding:12px 14px;">
+          ${s.actions.map((a,ai)=>`
+            <div style="display:flex;gap:10px;margin-bottom:${ai<s.actions.length-1?'8px':'0'};align-items:flex-start;">
+              <span style="flex-shrink:0;width:20px;height:20px;border-radius:50%;
+                background:var(--teal);color:#fff;font-size:.65rem;font-weight:700;
+                display:flex;align-items:center;justify-content:center;margin-top:1px;">${ai+1}</span>
+              <span style="font-size:.8rem;line-height:1.6;">${a}</span>
+            </div>`).join('')}
+        </div>
+      </div>`).join('')}
+  `;
+}
+
+// ── FAQ ENGINE ────────────────────────────────────────────
+
+const faqData = [
+  { cat:'timesheets', q:'When is the timesheet deadline?', a:'Timesheets must be submitted by <strong>Friday 17:00</strong> each week. The Timesheet Chaser AI agent sends automated reminders at 17:00 on Friday and 09:00 on Monday if your timesheet is incomplete or missing.' },
+  { cat:'timesheets', q:'Can I edit a timesheet after it has been submitted?', a:'Once submitted, you cannot edit a timesheet directly. Contact your Manager — they can reject it, which returns it to Draft status for you to correct and resubmit.' },
+  { cat:'timesheets', q:'My timesheet was rejected — what do I do?', a:'You\'ll receive an email notification with the Manager\'s reason. Go to <strong>My Timesheet</strong>, select the relevant week, make the corrections, and click <strong>Submit Timesheet</strong> again.' },
+  { cat:'expenses', q:'What is the expense approval limit for Managers?', a:'Managers can approve expense claims up to <strong>£500</strong>. Claims above £500 automatically escalate to Finance for approval. You\'ll always receive an email notification of the outcome.' },
+  { cat:'expenses', q:'I submitted an expense but forgot to attach a receipt — what do I do?', a:'Claims without receipts will typically be rejected by your Manager. If this happens, go to <strong>My Expenses</strong>, open the rejected claim and re-submit with the receipt reference added. If the claim has already been approved, contact Finance directly.' },
+  { cat:'finance', q:'How are invoices generated from timesheets?', a:'The <strong>Invoice Intelligence AI agent</strong> runs every Monday at 07:00. It scans all approved timesheets since the last invoice run, filters for chargeable roles only, applies the project rate card, and creates draft invoices in the AR module. Finance reviews and sends them.' },
+  { cat:'finance', q:'How does the cash flow forecast work?', a:'The <strong>Cash Flow Watchdog agent</strong> runs daily at 07:30. It models AR inflows (outstanding invoices × customer payment probability based on historical DSO), AP outflows (supplier invoices by due date), payroll estimates and approved expenses. It produces a rolling 13-week week-by-week cash position and alerts Finance when projected cash drops below the £100k safety buffer.' },
+  { cat:'finance', q:'Which roles are excluded from invoice generation?', a:'Roles marked as <strong>Non-Chargeable</strong> in the Roles & Rates configuration are excluded. By default: Support Staff, Admin, and Head of Business are non-chargeable. Administrators can change this in <strong>Admin → Roles & Rates</strong>.' },
+  { cat:'access', q:'How do I log in to Codec PSA?', a:'Go to <strong>psa.codec.ie</strong> and click <strong>Sign in with Microsoft</strong>. Use your standard Codec Microsoft 365 account (firstname.lastname@codec.ie). No separate password is needed — it uses your existing Microsoft SSO.' },
+  { cat:'access', q:'I can\'t access the Finance module — why?', a:'Access is controlled by your Azure AD group membership. Finance module access requires membership of the <strong>CodecPSA-Finance</strong> or <strong>CodecPSA-Admin</strong> group. Contact IT or your Administrator to request access.' },
+  { cat:'access', q:'I\'m a new starter and the system doesn\'t know who I am', a:'You are auto-provisioned on your first login — simply go to psa.codec.ie and sign in with your Microsoft account. If you don\'t see your project assignments, contact your Administrator who can add them under <strong>Consultants</strong>.' },
+  { cat:'agents', q:'What are the AI Agents and what do they do?', a:'Codec PSA has 6 AI agents that run automatically: <strong>Risk Sentinel</strong> (hourly project health monitoring), <strong>Invoice Intelligence</strong> (weekly draft invoice generation), <strong>Cash Flow Watchdog</strong> (daily cash forecasting), <strong>Resource Matcher</strong> (matches open requests to consultants), <strong>Timesheet Chaser</strong> (automated reminders), and <strong>Margin Monitor</strong> (tracks project profitability).' },
+  { cat:'agents', q:'Can I turn off an AI agent?', a:'Yes — Administrators can pause any agent by clicking the <strong>⏸</strong> button on its card in <strong>AI Agents</strong>. Paused agents won\'t run on their schedule but can still be triggered manually with <strong>Run Now</strong>. Resume by clicking <strong>▶</strong>.' },
+  { cat:'agents', q:'An AI agent has flagged a finding — what should I do?', a:'Click the <strong>N Findings</strong> button on the agent card to review all findings. Each finding shows the severity (Critical/Warning), the affected project, and what action is needed. For project risk flags, you can also go to <strong>Project Health</strong> and click <strong>▶ View Action Plan</strong> for step-by-step remediation guidance.' },
+];
+
+const faqCategories = [
+  ['all','📋 All Questions','14'],
+  ['timesheets','⏱ Timesheets','3'],
+  ['expenses','💸 Expenses','2'],
+  ['finance','💰 Finance','3'],
+  ['access','🔐 Access & Login','3'],
+  ['agents','🤖 AI Agents','3'],
+];
+
+function renderFaqPage(){
+  const el = document.getElementById('faq-page-content');
+  if(!el) return;
+  el.innerHTML = `
+    <h5 style="margin-bottom:4px;">❓ Frequently Asked Questions</h5>
+    <div class="sub" style="margin-bottom:20px;">Answers to the most common questions about Codec PSA</div>
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:20px;align-items:start;">
+      <div class="card">
+        <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Categories</div>
+        ${faqCategories.map(([k,l,c])=>`
+          <div onclick="filterFaq('${k}')" id="faq-cat-${k}"
+            style="padding:8px 10px;border-radius:6px;cursor:pointer;display:flex;justify-content:space-between;
+              background:${k==='all'?'var(--teal-light)':'transparent'};margin-bottom:3px;font-size:.82rem;"
+            class="faq-cat">
+            <span>${l}</span>
+            <span style="background:var(--bg);border-radius:10px;padding:1px 8px;font-size:.7rem;font-weight:700;">${c}</span>
+          </div>`).join('')}
+      </div>
+      <div id="faq-list"></div>
+    </div>`;
+  filterFaq('all');
+}
+
+function filterFaq(cat){
+  // Re-render page if not yet rendered
+  const el = document.getElementById('faq-page-content');
+  if(el && !document.getElementById('faq-list')) { renderFaqPage(); return; }
+  document.querySelectorAll('.faq-cat').forEach(el=>{
+    el.style.background = el.id === 'faq-cat-'+cat ? 'var(--teal-light)' : 'transparent';
+  });
+  const filtered = cat==='all' ? faqData : faqData.filter(f=>f.cat===cat);
+  const list = document.getElementById('faq-list');
+  if(!list) return;
+  list.innerHTML = filtered.map((f,i)=>`
+    <div class="card" style="margin-bottom:10px;cursor:pointer;" onclick="toggleFaq(${i},this)">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:1rem;">❓</span>
+        <span style="font-size:.85rem;font-weight:600;flex:1;">${f.q}</span>
+        <span id="faq-arrow-${i}" style="color:var(--muted);font-size:.8rem;">▼</span>
+      </div>
+      <div id="faq-body-${i}" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);
+        font-size:.8rem;color:#4A5568;line-height:1.7;">${f.a}</div>
+    </div>
+  `).join('');
+}
+
+function toggleFaq(i, card){
+  const body = document.getElementById('faq-body-'+i);
+  const arrow = document.getElementById('faq-arrow-'+i);
+  if(!body) return;
+  const open = body.style.display!=='none';
+  body.style.display = open ? 'none' : 'block';
+  if(arrow) arrow.textContent = open ? '▼' : '▲';
+}
+
+// Init tutorial and FAQ when page loads
+document.addEventListener('DOMContentLoaded',()=>{
+  // Tutorial loads on demand
+  // FAQ default filter
+});
+
+// ══════════════════════════════════════════════════════════
+// AI AGENTS ENGINE
+// ══════════════════════════════════════════════════════════
+
+const agentDefs = [
+  {
+    id:'risk-sentinel',
+    name:'Risk Sentinel',
+    icon:'🎯',
+    desc:'Monitors all project health scores every hour. Automatically raises flags when scores drop below thresholds and assigns owners.',
+    status:'active',
+    schedule:'Every hour',
+    lastRun:'Today 08:00',
+    nextRun:'Today 09:00',
+    findings:4,
+    color:'#E53E3E',
+    runSteps:[
+      'Loading project health data for 6 active engagements…',
+      'Calculating budget burn rates vs actuals…',
+      'Checking timeline milestones against project plans…',
+      'Analysing resourcing gaps and skill shortages…',
+      'Scoring chargeability rates per consultant…',
+      'Checking AR aging — identifying overdue invoices…',
+      'Comparing scores against threshold baselines…',
+      'Generating risk flags and assigning owners…',
+      'Sending alerts to Project Managers…',
+    ],
+    findings_data:[
+      {sev:'red', msg:'CRM Rollout budget at 112% — immediate action required', project:'CRM Rollout · Bank of Ireland', time:'08:01'},
+      {sev:'red', msg:'Cloud Migration timeline slipped 3 weeks — risk to go-live', project:'Cloud Migration · CRH plc', time:'08:01'},
+      {sev:'amber', msg:'ERP Implementation resourcing gap — 2 Senior Developers needed', project:'ERP Implementation · AIB Group', time:'08:02'},
+      {sev:'amber', msg:'Data Warehouse AR invoicing delayed — £42,000 not yet raised', project:'Data Warehouse · Glanbia', time:'08:02'},
+    ]
+  },
+  {
+    id:'invoice-intel',
+    name:'Invoice Intelligence',
+    icon:'💰',
+    desc:'Scans approved timesheets weekly, identifies chargeable work not yet invoiced, auto-generates draft invoices for Finance review.',
+    status:'active',
+    schedule:'Every Monday 07:00',
+    lastRun:'Mon 2 Mar',
+    nextRun:'Mon 9 Mar',
+    findings:3,
+    color:'#38A169',
+    runSteps:[
+      'Scanning approved timesheets since last invoice run…',
+      'Filtering for chargeable roles only…',
+      'Matching timesheet entries to active project rate overrides…',
+      'Checking for existing draft invoices to avoid duplication…',
+      'Calculating amounts per consultant per project…',
+      'Applying VAT at 20%…',
+      'Generating 3 draft invoices for Finance review…',
+      'Posting drafts to AR module…',
+      'Notifying Finance team via email…',
+    ],
+    findings_data:[
+      {sev:'amber', msg:'Draft invoice generated: AIB Group ERP — £68,400 (340 hrs × senior/mid rates)', project:'ERP Implementation · AIB Group', time:'Mon 07:01'},
+      {sev:'amber', msg:'Draft invoice generated: CRH Cloud Migration — £31,500 (180 hrs)', project:'Cloud Migration · CRH plc', time:'Mon 07:01'},
+      {sev:'amber', msg:'Draft invoice generated: Glanbia Data Warehouse — £18,200 (104 hrs)', project:'Data Warehouse · Glanbia', time:'Mon 07:02'},
+    ]
+  },
+  {
+    id:'cashflow-watchdog',
+    name:'Cash Flow Watchdog',
+    icon:'📊',
+    desc:'Forecasts 13-week rolling cash position daily using live AR/AP data. Alerts Finance when projected cash drops below the £100k safety buffer.',
+    status:'active',
+    schedule:'Daily 07:30',
+    lastRun:'Today 07:30',
+    nextRun:'Tomorrow 07:30',
+    findings:2,
+    color:'#3182CE',
+    runSteps:[
+      'Loading AR — outstanding invoices and expected payment dates…',
+      'Loading AP — upcoming supplier invoices and payment runs…',
+      'Pulling payroll estimate for next 13 weeks…',
+      'Modelling customer payment probability by historical DSO…',
+      'Calculating week-by-week inflows and outflows…',
+      'Projecting cash balance against £100k safety buffer…',
+      'Identifying weeks where cash falls below threshold…',
+      'Generating Cash Flow Forecast report…',
+      'Alerting Finance Director…',
+    ],
+    findings_data:[
+      {sev:'red', msg:'Week of 23 Mar: projected cash dips to £78k — below £100k buffer', project:'Treasury / Finance', time:'07:31'},
+      {sev:'amber', msg:'3 customer invoices totalling £112k are 30+ days overdue — chase recommended', project:'AR Aging', time:'07:31'},
+    ]
+  },
+  {
+    id:'resource-matcher',
+    name:'Resource Matcher',
+    icon:'🧑‍💼',
+    desc:'Matches open resource requests to available consultants based on skills, certifications, seniority and current utilisation.',
+    status:'active',
+    schedule:'Every 4 hours',
+    lastRun:'Today 08:00',
+    nextRun:'Today 12:00',
+    findings:5,
+    color:'#805AD5',
+    runSteps:[
+      'Loading 5 open resource requests…',
+      'Pulling current consultant utilisation from timesheets…',
+      'Analysing skill requirements for each request…',
+      'Checking certification and seniority requirements…',
+      'Calculating availability windows per consultant…',
+      'Scoring consultants against each request (0–100)…',
+      'Identifying top 3 matches per request…',
+      'Checking for conflicts with existing assignments…',
+      'Posting match recommendations to Resourcing inbox…',
+    ],
+    findings_data:[
+      {sev:'amber', msg:'RR-0041 (Senior Dev, ERP): Top match — Ciarán O\'Brien (87% fit, 40% available)', project:'ERP Implementation · AIB Group', time:'08:01'},
+      {sev:'amber', msg:'RR-0042 (Solution Arch, Cloud): Top match — Fionnuala Burke (92% fit, currently free)', project:'Cloud Migration · CRH plc', time:'08:01'},
+      {sev:'amber', msg:'RR-0043 (BA, CRM): No strong match found — 2 consultants below 60% fit', project:'CRM Rollout · Bank of Ireland', time:'08:02'},
+      {sev:'red', msg:'RR-0044 (QA Lead, ERP): Unmatched for 12 days — escalating to Resourcing Manager', project:'ERP Implementation · AIB Group', time:'08:02'},
+      {sev:'amber', msg:'RR-0045 (PM, Data Warehouse): Top match — Aoife Walsh (79% fit)', project:'Data Warehouse · Glanbia', time:'08:03'},
+    ]
+  },
+  {
+    id:'timesheet-chaser',
+    name:'Timesheet Chaser',
+    icon:'⏰',
+    desc:'Every Friday at 17:00, identifies consultants with missing or incomplete timesheets and sends automated reminders via Microsoft Exchange.',
+    status:'active',
+    schedule:'Fri 17:00 + Mon 09:00',
+    lastRun:'Fri 28 Feb 17:00',
+    nextRun:'Fri 6 Mar 17:00',
+    findings:6,
+    color:'#D69E2E',
+    runSteps:[
+      'Identifying active consultants on billable projects this week…',
+      'Checking timesheet submission status for week ending 28 Feb…',
+      'Calculating expected hours (5 days × 8hrs) per consultant…',
+      'Flagging consultants with 0 hours submitted…',
+      'Flagging consultants with less than 32 hours submitted…',
+      'Excluding approved leave periods…',
+      'Drafting personalised reminder emails via Exchange…',
+      'Sending reminders to 6 consultants…',
+      'Logging chase actions to audit trail…',
+    ],
+    findings_data:[
+      {sev:'red', msg:'Ronan McCarthy — 0 hrs submitted for w/e 28 Feb (Cloud Migration)', project:'Cloud Migration · CRH plc', time:'Fri 17:01'},
+      {sev:'red', msg:'Brian Doyle — 0 hrs submitted for w/e 28 Feb (ERP Implementation)', project:'ERP Implementation · AIB Group', time:'Fri 17:01'},
+      {sev:'amber', msg:'Sarah Murphy — 24 hrs submitted, expected 40 hrs', project:'Analytics Platform · Ryanair', time:'Fri 17:02'},
+      {sev:'amber', msg:'Ciarán O\'Brien — 16 hrs submitted, expected 40 hrs (partial leave?)', project:'CRM Rollout · Bank of Ireland', time:'Fri 17:02'},
+      {sev:'amber', msg:'Niamh Ryan — 32 hrs submitted, expected 40 hrs', project:'Data Warehouse · Glanbia', time:'Fri 17:03'},
+      {sev:'amber', msg:'Declan Byrne — no timesheet opened for w/e 28 Feb', project:'HR Transformation · ESB', time:'Fri 17:03'},
+    ]
+  },
+  {
+    id:'margin-monitor',
+    name:'Margin Monitor',
+    icon:'📈',
+    desc:'Tracks realised margin per project daily. Alerts when margin drops below 20% threshold or budget is forecast to be exceeded.',
+    status:'paused',
+    schedule:'Daily 08:15',
+    lastRun:'Fri 28 Feb',
+    nextRun:'Paused — resume to schedule',
+    findings:3,
+    color:'#718096',
+    runSteps:[
+      'Loading approved timesheets — calculating internal cost by role…',
+      'Loading invoiced revenue per project…',
+      'Loading subcontractor costs and approved expenses…',
+      'Calculating gross margin: Revenue − (Time cost + Sub cost + Expenses)…',
+      'Comparing margin % against 20% minimum threshold…',
+      'Identifying projects with forecast budget overrun…',
+      'Generating project P&L summary…',
+      'Flagging projects to Finance Director…',
+      'Updating margin trend charts…',
+    ],
+    findings_data:[
+      {sev:'red', msg:'CRM Rollout margin at 8% — well below 20% minimum. Subcontractor costs over-running.', project:'CRM Rollout · Bank of Ireland', time:'Fri 08:16'},
+      {sev:'amber', msg:'Cloud Migration margin at 17% — approaching threshold. Monitor closely.', project:'Cloud Migration · CRH plc', time:'Fri 08:16'},
+      {sev:'amber', msg:'ERP Implementation forecast margin 22% — on track but budget pressure building', project:'ERP Implementation · AIB Group', time:'Fri 08:17'},
+    ]
+  },
+];
+
+function renderAgents(){
+  const grid = document.getElementById('agent-grid');
+  const feed = document.getElementById('agent-feed');
+  if(!grid) return;
+
+  // Render agent cards
+  grid.innerHTML = agentDefs.map(a=>`
+    <div class="card" style="border-top:3px solid ${a.status==='paused'?'#CBD5E0':a.color};position:relative;overflow:hidden;">
+      <!-- Status badge -->
+      <div style="position:absolute;top:14px;right:14px;">
+        <span style="background:${a.status==='active'?'#C6F6D5':a.status==='running'?'#BEE3F8':'#EDF2F7'};
+          color:${a.status==='active'?'#276749':a.status==='running'?'#2B6CB0':'#718096'};
+          font-size:.65rem;font-weight:700;padding:3px 9px;border-radius:10px;text-transform:uppercase;">
+          ${a.status==='running'?'⚡ Running':a.status==='active'?'● Active':'⏸ Paused'}
+        </span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-right:80px;">
+        <span style="font-size:1.6rem;">${a.icon}</span>
+        <div>
+          <div style="font-weight:700;font-size:.9rem;">${a.name}</div>
+          <div style="font-size:.7rem;color:var(--muted);">${a.schedule}</div>
+        </div>
+      </div>
+      <div style="font-size:.77rem;color:#4A5568;line-height:1.5;margin-bottom:12px;">${a.desc}</div>
+
+      <!-- Progress bar (hidden when not running) -->
+      <div id="progress-${a.id}" style="display:none;margin-bottom:10px;">
+        <div style="background:#E2E8F0;border-radius:4px;height:4px;overflow:hidden;margin-bottom:4px;">
+          <div id="pbar-${a.id}" style="height:100%;background:${a.color};width:0%;transition:width .3s;border-radius:4px;"></div>
+        </div>
+        <div id="pstep-${a.id}" style="font-size:.7rem;color:var(--muted);"></div>
+      </div>
+
+      <!-- Stats row -->
+      <div style="display:flex;gap:12px;margin-bottom:12px;font-size:.75rem;">
+        <div style="flex:1;background:var(--bg);border-radius:6px;padding:7px 10px;">
+          <div style="color:var(--muted);font-size:.65rem;font-weight:700;text-transform:uppercase;margin-bottom:2px;">Last Run</div>
+          <div style="font-weight:600;">${a.lastRun}</div>
+        </div>
+        <div style="flex:1;background:var(--bg);border-radius:6px;padding:7px 10px;">
+          <div style="color:var(--muted);font-size:.65rem;font-weight:700;text-transform:uppercase;margin-bottom:2px;">Next Run</div>
+          <div style="font-weight:600;font-size:.72rem;">${a.nextRun}</div>
+        </div>
+        <div style="background:${a.findings>0?(a.status==='paused'?'#EDF2F7':'#FED7D7'):'#C6F6D5'};border-radius:6px;padding:7px 12px;text-align:center;min-width:52px;">
+          <div style="font-size:.65rem;font-weight:700;color:${a.findings>0?(a.status==='paused'?'#718096':'#9B2C2C'):'#276749'};text-transform:uppercase;margin-bottom:2px;">Findings</div>
+          <div style="font-size:1.1rem;font-weight:800;color:${a.findings>0?(a.status==='paused'?'#718096':'#E53E3E'):'#38A169'};">${a.findings}</div>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div style="display:flex;gap:8px;">
+        <button id="run-btn-${a.id}" class="btn btn-teal" style="font-size:.75rem;padding:6px 14px;flex:1;"
+          onclick="runAgent('${a.id}')" ${a.status==='paused'?'disabled style="opacity:.45;cursor:not-allowed;"':''}>
+          ▶ Run Now
+        </button>
+        <button class="btn btn-outline" style="font-size:.75rem;padding:6px 14px;" onclick="showAgentFindings('${a.id}')">
+          ${a.findings} Findings
+        </button>
+        <button class="btn btn-outline" style="font-size:.75rem;padding:6px 10px;" onclick="toggleAgent('${a.id}')">
+          ${a.status==='paused'?'▶':'⏸'}
+        </button>
+      </div>
+    </div>
+  `).join('');
+
+  // Render activity feed
+  const allFindings = agentDefs.flatMap(a=>
+    a.findings_data.map(f=>({...f, agentName:a.name, agentIcon:a.icon, agentColor:a.color, agentId:a.id}))
+  ).slice(0,12);
+
+  feed.innerHTML = allFindings.map(f=>`
+    <div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start;">
+      <span style="font-size:1.1rem;flex-shrink:0;">${f.agentIcon}</span>
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;flex-wrap:wrap;">
+          <span style="background:${f.sev==='red'?'#FED7D7':'#FEFCBF'};color:${f.sev==='red'?'#9B2C2C':'#744210'};
+            font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:10px;text-transform:uppercase;">
+            ${f.sev==='red'?'🔴 Critical':'🟡 Warning'}
+          </span>
+          <span style="font-size:.72rem;color:var(--muted);">${f.agentName}</span>
+          <span style="font-size:.72rem;color:var(--muted);">·</span>
+          <span style="font-size:.72rem;color:var(--muted);">${f.time}</span>
+        </div>
+        <div style="font-size:.82rem;font-weight:500;">${f.msg}</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-top:2px;">📁 ${f.project}</div>
+      </div>
+      <button class="btn btn-outline" style="font-size:.68rem;padding:4px 10px;flex-shrink:0;"
+        onclick="dismissFinding(this)">Dismiss</button>
+    </div>
+  `).join('');
+}
+
+function runAgent(agentId){
+  const agent = agentDefs.find(a=>a.id===agentId);
+  if(!agent || agent.status==='running') return;
+
+  const prevStatus = agent.status;
+  agent.status = 'running';
+  const card = document.getElementById('run-btn-'+agentId)?.closest('.card');
+  const btn = document.getElementById('run-btn-'+agentId);
+  const pbar = document.getElementById('pbar-'+agentId);
+  const pstep = document.getElementById('pstep-'+agentId);
+  const progressWrap = document.getElementById('progress-'+agentId);
+
+  if(btn) { btn.textContent = '⚡ Running…'; btn.disabled=true; }
+  if(progressWrap) progressWrap.style.display='block';
+  // Update status badge
+  renderAgents();
+  // Re-grab elements after re-render
+  const btn2 = document.getElementById('run-btn-'+agentId);
+  const pbar2 = document.getElementById('pbar-'+agentId);
+  const pstep2 = document.getElementById('pstep-'+agentId);
+  const pw2 = document.getElementById('progress-'+agentId);
+  if(pw2) pw2.style.display='block';
+  if(btn2){ btn2.textContent='⚡ Running…'; btn2.disabled=true; }
+
+  const steps = agent.runSteps;
+  let i=0;
+  const interval = setInterval(()=>{
+    if(i>=steps.length){
+      clearInterval(interval);
+      agent.status = 'active';
+      agent.lastRun = 'Just now';
+      const now = new Date();
+      const nextH = now.getHours()+1;
+      agent.nextRun = `Today ${String(nextH).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+      renderAgents();
+      toast(`✅ ${agent.name} completed — ${agent.findings} findings`,'success');
+      return;
+    }
+    const pct = Math.round(((i+1)/steps.length)*100);
+    const pb = document.getElementById('pbar-'+agentId);
+    const ps = document.getElementById('pstep-'+agentId);
+    if(pb) pb.style.width = pct+'%';
+    if(ps) ps.textContent = steps[i];
+    i++;
+  }, 420);
+}
+
+function runAllAgents(){
+  const active = agentDefs.filter(a=>a.status==='active');
+  toast(`▶ Running ${active.length} agents…`,'info');
+  active.forEach((a,i)=>{
+    setTimeout(()=>runAgent(a.id), i*800);
+  });
+}
+
+function toggleAgent(agentId){
+  const agent = agentDefs.find(a=>a.id===agentId);
+  if(!agent) return;
+  if(agent.status==='paused'){
+    agent.status='active';
+    agent.nextRun = 'Next scheduled run';
+    toast(`▶ ${agent.name} resumed`,'success');
+  } else {
+    agent.status='paused';
+    agent.nextRun = 'Paused — resume to schedule';
+    toast(`⏸ ${agent.name} paused`,'info');
+  }
+  renderAgents();
+}
+
+function showAgentFindings(agentId){
+  const agent = agentDefs.find(a=>a.id===agentId);
+  if(!agent) return;
+  openModal(`${agent.icon} ${agent.name} — ${agent.findings} Findings`,`
+    <div style="font-size:.8rem;color:var(--muted);margin-bottom:14px;">
+      Last run: ${agent.lastRun} · Schedule: ${agent.schedule}
+    </div>
+    ${agent.findings_data.map((f,i)=>`
+      <div style="padding:12px;border-radius:8px;margin-bottom:10px;
+        background:${f.sev==='red'?'#FFF5F5':'#FFFFF0'};border-left:4px solid ${f.sev==='red'?'#E53E3E':'#D69E2E'};">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+          <span style="background:${f.sev==='red'?'#FED7D7':'#FEFCBF'};color:${f.sev==='red'?'#9B2C2C':'#744210'};
+            font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:10px;">
+            ${f.sev==='red'?'🔴 CRITICAL':'🟡 WARNING'}
+          </span>
+          <span style="font-size:.7rem;color:var(--muted);">${f.time}</span>
+        </div>
+        <div style="font-size:.85rem;font-weight:600;margin-bottom:4px;">${f.msg}</div>
+        <div style="font-size:.75rem;color:var(--muted);">📁 ${f.project}</div>
+      </div>
+    `).join('')}
+  `,[
+    {label:'Run Agent Now', cls:'btn-teal', action:()=>{ closeModal(); runAgent(agentId); }},
+    {label:'Close', cls:'btn-outline', action:()=>closeModal()}
+  ]);
+}
+
+function dismissFinding(btn){
+  const row = btn.closest('div[style*="border-bottom"]');
+  if(row){ row.style.opacity='0'; row.style.transition='opacity .3s'; setTimeout(()=>row.remove(),300); }
+  toast('Finding dismissed','info');
 }
 
 // ══ CHASE AR ═══════════════════════════════════════════════
