@@ -268,80 +268,95 @@
 
   <div class="body-row">
     <!-- Drawer -->
+    <!-- Change Monitor Toast -->
+    <div id="cm-toast" style="display:none;position:fixed;top:70px;right:20px;z-index:9999;max-width:360px;background:#1B2A4A;border:1px solid #00A9CE;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.35);padding:16px 18px;animation:slideIn .3s ease;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:1rem;">📡</span>
+          <span style="font-size:.78rem;font-weight:800;color:#90CDF4;">Change Monitor Alert</span>
+        </div>
+        <button onclick="document.getElementById('cm-toast').style.display='none'" style="background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:.9rem;padding:0 4px;">✕</button>
+      </div>
+      <div id="cm-toast-body" style="font-size:.74rem;color:rgba(255,255,255,.85);line-height:1.6;"></div>
+      <div style="margin-top:10px;display:flex;gap:8px;">
+        <button onclick="showPage('pg-change-monitor');document.getElementById('cm-toast').style.display='none'" style="flex:1;padding:6px;background:#00A9CE;color:#fff;border:none;border-radius:6px;font-size:.72rem;font-weight:700;cursor:pointer;">View Details</button>
+        <button onclick="document.getElementById('cm-toast').style.display='none'" style="padding:6px 12px;background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:6px;font-size:.72rem;cursor:pointer;">Dismiss</button>
+      </div>
+    </div>
     <div class="drawer">
-      <div class="section-label">My Workspace</div>
+      <div class="section-label">👤 My Workspace</div>
       <div class="nav-item" id="nav-my-dash" onclick="showPage('pg-my-dashboard')"><span class="ico">⬛</span> My Dashboard</div>
       <div class="nav-item" id="nav-timesheet" onclick="showPage('pg-timesheet')"><span class="ico">⏱</span> My Timesheet</div>
       <div class="nav-item" id="nav-my-assign" onclick="showPage('pg-my-assignments')"><span class="ico">📋</span> My Assignments</div>
       <div class="nav-item" id="nav-expenses" onclick="showPage('pg-my-expenses')"><span class="ico">🧾</span> My Expenses</div>
       <div class="nav-item" id="nav-leave" onclick="showPage('pg-my-leave')"><span class="ico">🌴</span> My Leave</div>
 
-      <div class="section-label">Operations</div>
+      <div class="section-label">📊 Portfolio & Executive</div>
       <div class="nav-item active" id="nav-exec" onclick="showPage('pg-executive')"><span class="ico">📊</span> Executive Dashboard</div>
-      <div class="nav-item" id="nav-avail" onclick="showPage('pg-availability')"><span class="ico">👥</span> Availability</div>
-      <div class="nav-item" id="nav-consultants" onclick="showPage('pg-consultants')"><span class="ico">🧑‍💼</span> Consultants</div>
-      <div class="nav-item" id="nav-approval" onclick="showPage('pg-approval')"><span class="ico">✅</span> Timesheet Approval</div>
       <div class="nav-item" id="nav-health" onclick="showPage('pg-health')"><span class="ico">🎯</span> Project Health</div>
-
-      <div class="section-label">Engagements</div>
-      <div class="nav-item" id="nav-customers" onclick="showPage('pg-customers')"><span class="ico">🏢</span> Customers</div>
-      <div class="nav-item" id="nav-projects" onclick="showPage('pg-projects')"><span class="ico">📁</span> Projects</div>
-      <div class="nav-item" id="nav-pipeline" onclick="showPage('pg-pipeline')"><span class="ico">📈</span> Pipeline</div>
-      <div class="nav-item" id="nav-ado" onclick="showPage('pg-ado')"><span class="ico">🔷</span> ADO Tasks &amp; Sizing</div>
       <div class="nav-item" id="nav-variance" onclick="showPage('pg-variance')"><span class="ico">🔍</span> What Changed</div>
       <div class="nav-item" id="nav-raid" onclick="showPage('pg-raid')"><span class="ico">⚠️</span> RAID Log</div>
 
-      <div class="section-label">Reporting</div>
+      <div class="section-label">📁 Customers & Engagements</div>
+      <div class="nav-item" id="nav-customers" onclick="showPage('pg-customers')"><span class="ico">🏢</span> Customers</div>
+      <div class="nav-item" id="nav-projects" onclick="showPage('pg-projects')"><span class="ico">📁</span> Projects</div>
+      <div class="nav-item" id="nav-pipeline" onclick="showPage('pg-pipeline')"><span class="ico">📈</span> Pipeline</div>
+      <div class="nav-item" id="nav-contracts" onclick="showPage('pg-contracts')"><span class="ico">📑</span> Contracts</div>
+      <div class="nav-item" id="nav-ado" onclick="showPage('pg-ado')"><span class="ico">🔷</span> ADO Tasks &amp; Sizing</div>
+
+      <div class="section-label">🗓 Delivery</div>
+      <div class="nav-item" id="nav-portfolio-gantt" onclick="showPage('pg-portfolio-gantt')"><span class="ico">🗓</span> Portfolio Gantt</div>
+      <div class="nav-item" id="nav-gantt" onclick="showPage('pg-gantt')"><span class="ico">📊</span> Gantt Chart</div>
+      <div class="nav-item" id="nav-kanban" onclick="showPage('pg-kanban')"><span class="ico">📋</span> Kanban Board</div>
+
+      <div class="section-label">👥 Resourcing & HR</div>
+      <div class="nav-item" id="nav-avail" onclick="showPage('pg-availability')"><span class="ico">👥</span> Availability</div>
+      <div class="nav-item" id="nav-consultants" onclick="showPage('pg-consultants')"><span class="ico">🧑‍💼</span> Consultants</div>
+      <div class="nav-item" id="nav-resourcing" onclick="showPage('pg-resourcing')"><span class="ico">🔍</span> Resource Requests</div>
+      <div class="nav-item" id="nav-skills" onclick="showPage('pg-skills')"><span class="ico">🎯</span> Skills Matrix</div>
+      <div class="nav-item" id="nav-bench" onclick="showPage('pg-bench')"><span class="ico">🪑</span> Bench & Demand</div>
+      <div class="nav-item" id="nav-orgchart" onclick="showPage('pg-orgchart')"><span class="ico">🏢</span> Org Chart</div>
+      <div class="nav-item" id="nav-performance" onclick="showPage('pg-performance')"><span class="ico">⭐</span> Performance Reviews</div>
+
+      <div class="section-label">📅 Reporting</div>
       <div class="nav-item" id="nav-weekly-reports" onclick="showPage('pg-weekly-reports')"><span class="ico">📅</span> Weekly Reports</div>
       <div class="nav-item" id="nav-status-customer" onclick="showPage('pg-status-customer')"><span class="ico">📄</span> Customer Report</div>
       <div class="nav-item" id="nav-status-internal" onclick="showPage('pg-status-internal')"><span class="ico">🔒</span> Internal Report</div>
       <div class="nav-item" id="nav-portal" onclick="showPage('pg-portal')"><span class="ico">🌐</span> Customer Portal</div>
 
-      <div class="section-label">Resourcing</div>
-      <div class="nav-item" id="nav-resourcing" onclick="showPage('pg-resourcing')"><span class="ico">🔍</span> Resource Requests</div>
-      <div class="nav-item" id="nav-skills" onclick="showPage('pg-skills')"><span class="ico">🎯</span> Skills Matrix</div>
-      <div class="nav-item" id="nav-bench" onclick="showPage('pg-bench')"><span class="ico">🪑</span> Bench & Demand</div>
+      <div class="section-label">✅ Approvals</div>
+      <div class="nav-item" id="nav-approval" onclick="showPage('pg-approval')"><span class="ico">✅</span> Timesheet Approval</div>
+      <div class="nav-item" id="nav-coapprove" onclick="showPage('pg-coapprove')"><span class="ico">🤝</span> Co-Approvals <span style="background:#805AD5;color:#fff;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:auto;">NEW</span></div>
 
-      <div class="section-label">HR & Workforce</div>
-      <div class="nav-item" id="nav-orgchart" onclick="showPage('pg-orgchart')"><span class="ico">🏢</span> Org Chart</div>
-      <div class="nav-item" id="nav-performance" onclick="showPage('pg-performance')"><span class="ico">⭐</span> Performance Reviews</div>
-
-      <div class="section-label">Delivery</div>
-      <div class="nav-item" id="nav-portfolio-gantt" onclick="showPage('pg-portfolio-gantt')"><span class="ico">🗓</span> Portfolio Gantt</div>
-      <div class="nav-item" id="nav-gantt" onclick="showPage('pg-gantt')"><span class="ico">📊</span> Gantt Chart</div>
-      <div class="nav-item" id="nav-kanban" onclick="showPage('pg-kanban')"><span class="ico">📋</span> Kanban Board</div>
-
-      <div class="section-label">Finance</div>
-      <div class="nav-group">💰 Accounts Receivable</div>
+      <div class="section-label">💰 Finance</div>
+      <div class="nav-group">💳 Accounts Receivable</div>
       <div class="nav-sub" id="nav-invoices" onclick="showPage('pg-invoices')">Invoices</div>
       <div class="nav-sub" onclick="showPage('pg-ar-aging')">AR Aging</div>
-      <div class="nav-sub" id="nav-contracts" onclick="showPage('pg-contracts')">Contracts</div>
-      <div class="nav-sub" onclick="showPage('pg-billing-rules')">Billing Rules</div>
-      <div class="nav-sub" onclick="showPage('pg-revenue-rec')">Revenue Recognition</div>
+      <div class="nav-sub" id="nav-billing-rules" onclick="showPage('pg-billing-rules')">Billing Rules</div>
+      <div class="nav-sub" id="nav-revenue-rec" onclick="showPage('pg-revenue-rec')">Revenue Recognition</div>
       <div class="nav-sub" id="nav-evm" onclick="showPage('pg-evm')">Earned Value (EVM)</div>
-      <div class="nav-group">💸 Accounts Payable</div>
+      <div class="nav-group">🏭 Accounts Payable</div>
       <div class="nav-sub" onclick="showPage('pg-suppliers')">Suppliers</div>
       <div class="nav-sub" onclick="showPage('pg-purchase-orders')">Purchase Orders</div>
       <div class="nav-sub" id="nav-cashflow" onclick="showPage('pg-cashflow')">Cash Forecast</div>
       <div class="nav-group">🧾 Expenses</div>
       <div class="nav-sub" onclick="showPage('pg-expense-approval')">Expense Approval</div>
 
-      <div class="section-label">AI Intelligence</div>
+      <div class="section-label">🤖 AI & Intelligence</div>
       <div class="nav-item" id="nav-agents" onclick="showPage('pg-agents')"><span class="ico">🤖</span> AI Agents <span style="background:#00A9CE;color:#fff;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:auto;">6</span></div>
+      <div class="nav-item" id="nav-change-monitor" onclick="showPage('pg-change-monitor')"><span class="ico">📡</span> Change Monitor <span id="cm-nav-badge" style="display:none;background:#E53E3E;color:#fff;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:auto;">0</span></div>
 
-      <div class="section-label">Admin</div>
+      <div class="section-label">⚙️ Admin</div>
       <div class="nav-item" id="nav-roles" onclick="showPage('pg-roles')"><span class="ico">⚙️</span> Roles & Rates</div>
       <div class="nav-item" id="nav-security" onclick="showPage('pg-security')"><span class="ico">🔐</span> Security & Roles</div>
       <div class="nav-item" id="nav-changelog" onclick="showPage('pg-changelog')"><span class="ico">📜</span> Change Log</div>
       <div class="nav-item" id="nav-database" onclick="showPage('pg-database')"><span class="ico">🗄️</span> Database Explorer</div>
 
-      <div class="section-label">Help</div>
+      <div class="section-label">❓ Help & About</div>
       <div class="nav-item" id="nav-tutorial" onclick="showPage('pg-tutorial')"><span class="ico">📘</span> User Tutorial</div>
       <div class="nav-item" id="nav-faq" onclick="showPage('pg-faq')"><span class="ico">❓</span> FAQ</div>
-
-      <div class="section-label">About</div>
       <div class="nav-item" id="nav-coverage" onclick="showPage('pg-coverage')"><span class="ico">✅</span> Feature Coverage</div>
-      <div class="nav-item" id="nav-selftest" onclick="showPage('pg-selftest')"><span class="ico">🧪</span> Self-Test & Compliance</div>
+      <div class="nav-item" id="nav-selftest" onclick="showPage('pg-selftest')"><span class="ico">🧪</span> Self-Test</div>
       <div class="nav-item" id="nav-overview" onclick="showPage('pg-overview')"><span class="ico">📋</span> Executive Overview</div>
       <div class="nav-item" id="nav-tech" onclick="showPage('pg-tech')"><span class="ico">🏗️</span> Technical Notes</div>
       <div class="nav-item" id="nav-erd" onclick="showPage('pg-erd')"><span class="ico">🔗</span> Data Model (ERD)</div>
@@ -350,7 +365,7 @@
       <div style="padding:14px 16px;border-top:1px solid rgba(255,255,255,.1);margin-top:8px;">
         <div style="font-size:.62rem;color:rgba(255,255,255,.35);font-weight:700;letter-spacing:.06em;margin-bottom:3px;">BUILD INFO</div>
         <div id="build-stamp" style="font-size:.65rem;color:rgba(255,255,255,.45);font-family:monospace;line-height:1.6;">
-          v3.0 · 07 Mar 2026<br>
+          v3.1 · 07 Mar 2026<br>
           <span id="build-time"></span>
         </div>
       </div>
@@ -1050,6 +1065,8 @@
       <div id="pg-weekly-reports" class="page"><div id="weekly-reports-content"></div></div>
       <div id="pg-contracts" class="page"><div id="contracts-content"></div></div>
       <div id="pg-evm" class="page"><div id="evm-content"></div></div>
+      <div id="pg-coapprove" class="page"><div id="coapprove-content"></div></div>
+      <div id="pg-change-monitor" class="page"><div id="change-monitor-content"></div></div>
       <div id="pg-ado" class="page"><div id="ado-content"></div></div>
 
       <!-- ══ WHAT CHANGED ══ -->
@@ -1214,6 +1231,7 @@ const navMap = {
   'pg-skills':'nav-skills','pg-bench':'nav-bench','pg-orgchart':'nav-orgchart','pg-performance':'nav-performance',
   'pg-gantt':'nav-gantt','pg-kanban':'nav-kanban','pg-billing-rules':'nav-billing-rules','pg-revenue-rec':'nav-revenue-rec','pg-coverage':'nav-coverage','pg-selftest':'nav-selftest',
   'pg-portfolio-gantt':'nav-portfolio-gantt','pg-weekly-reports':'nav-weekly-reports','pg-contracts':'nav-contracts','pg-evm':'nav-evm',
+  'pg-coapprove':'nav-coapprove','pg-change-monitor':'nav-change-monitor',
   'pg-my-dashboard':'nav-my-dash','pg-timesheet':'nav-timesheet',
   'pg-my-assignments':'nav-my-assign','pg-my-expenses':'nav-expenses','pg-my-leave':'nav-leave',
 };
@@ -1255,6 +1273,8 @@ function showPage(id){
   if(id==='pg-weekly-reports') renderWeeklyReports();
   if(id==='pg-contracts') renderContracts();
   if(id==='pg-evm') renderEVM();
+  if(id==='pg-coapprove') renderCoApprove();
+  if(id==='pg-change-monitor') renderChangeMonitor();
   window.scrollTo(0,0);
 }
 
@@ -1263,9 +1283,10 @@ function showApp(){
   document.getElementById('app-shell').style.display='block';
   buildHeatmap();
   showPage('pg-executive');
-  // Populate build time stamp
   const bt = document.getElementById('build-time');
   if(bt) bt.textContent = 'Loaded: ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  // Start Change Monitor agent
+  startChangeMonitor();
 }
 
 // ── Database Explorer ────────────────────────────────────────
@@ -3115,6 +3136,410 @@ const statusProjects = [
 ];
 
 // ══════════════════════════════════════════════════════════
+// CHANGE MONITOR AGENT ENGINE
+// ══════════════════════════════════════════════════════════
+const changeMonitorLog = [];
+let changeMonitorTick = 0;
+let changeMonitorAlertCount = 0;
+
+function startChangeMonitor() {
+  // Run immediately then every 60s
+  runChangeMonitorScan();
+  setInterval(runChangeMonitorScan, 60000);
+}
+
+function runChangeMonitorScan() {
+  changeMonitorTick++;
+  const now = new Date('2026-03-07');
+  const alerts = [];
+
+  // 1. Deadline proximity alerts (projects ending < 30 days)
+  engagementProjects.forEach(p => {
+    const daysLeft = Math.ceil((new Date(p.endDate) - now) / 86400000);
+    if(daysLeft >= 0 && daysLeft <= 30) {
+      alerts.push({type:'deadline', severity:'red', icon:'⏰',
+        title:'Deadline in ' + daysLeft + ' days',
+        detail: p.name + ' (' + p.customer + ') ends ' + p.endDate,
+        projectId: p.id, ts: new Date().toISOString()});
+    }
+  });
+
+  // 2. Red RAG projects
+  engagementProjects.filter(p=>p.rag==='Red').forEach(p => {
+    alerts.push({type:'rag', severity:'red', icon:'🔴',
+      title:'Red RAG: ' + p.name.substring(0,30),
+      detail: 'Project at risk — ' + p.customer + ' · PM: ' + p.pm,
+      projectId: p.id, ts: new Date().toISOString()});
+  });
+
+  // 3. Recent amendments (last 7 days)
+  const recentAmends = ganttAmendments.filter(a => {
+    const d = new Date(a.date);
+    return (now - d) / 86400000 <= 7;
+  });
+  if(recentAmends.length) {
+    recentAmends.forEach(a => {
+      const proj = engagementProjects.find(p=>p.id===a.projectId);
+      alerts.push({type:'amendment', severity:'amber', icon:'📋',
+        title: a.label + ' — ' + (proj?proj.name.substring(0,25):a.projectId),
+        detail: a.desc + ' · Approved: ' + a.approvedBy,
+        projectId: a.projectId, ts: a.date + 'T00:00:00'});
+    });
+  }
+
+  // 4. Contracts expiring < 60 days
+  contractsData.filter(c=>c.status==='Active').forEach(c => {
+    const daysLeft = Math.ceil((new Date(c.endDate) - now) / 86400000);
+    if(daysLeft >= 0 && daysLeft <= 60) {
+      alerts.push({type:'contract', severity:'amber', icon:'📑',
+        title: 'Contract expiring in ' + daysLeft + 'd',
+        detail: c.contractNo + ' · ' + c.customer + ' · £' + Number(c.value).toLocaleString(),
+        ts: new Date().toISOString()});
+    }
+  });
+
+  // 5. Overdue outstanding invoices
+  contractsData.filter(c=>c.outstanding>50000).forEach(c => {
+    alerts.push({type:'invoice', severity:'amber', icon:'💰',
+      title: 'Outstanding: £' + Number(c.outstanding).toLocaleString(),
+      detail: c.customer + ' · ' + c.contractNo + ' — payment overdue',
+      ts: new Date().toISOString()});
+  });
+
+  // Log the scan
+  const scanEntry = {
+    tick: changeMonitorTick,
+    ts: new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'}),
+    date: '07 Mar 2026',
+    alertCount: alerts.length,
+    alerts: alerts
+  };
+  changeMonitorLog.unshift(scanEntry);
+  if(changeMonitorLog.length > 20) changeMonitorLog.pop();
+
+  // Update badge count
+  changeMonitorAlertCount = alerts.length;
+  const badge = document.getElementById('cm-nav-badge');
+  if(badge) {
+    badge.style.display = alerts.length ? 'inline' : 'none';
+    badge.textContent = alerts.length;
+  }
+
+  // Show toast if there are alerts (not on first scan to avoid spam)
+  if(changeMonitorTick > 1 && alerts.length > 0) {
+    showChangeMonitorToast(alerts);
+  }
+
+  // Refresh change monitor page if open
+  const pg = document.getElementById('pg-change-monitor');
+  if(pg && pg.classList.contains('active')) renderChangeMonitor();
+}
+
+function showChangeMonitorToast(alerts) {
+  const toast = document.getElementById('cm-toast');
+  const body = document.getElementById('cm-toast-body');
+  if(!toast || !body) return;
+  const top3 = alerts.slice(0,3);
+  body.innerHTML = top3.map(a =>
+    `<div style="display:flex;gap:6px;align-items:flex-start;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.1);">
+      <span style="flex-shrink:0;font-size:.9rem;">${a.icon}</span>
+      <div><div style="font-weight:700;color:#fff;">${a.title}</div>
+      <div style="font-size:.68rem;color:rgba(255,255,255,.6);">${a.detail}</div></div>
+    </div>`
+  ).join('') + (alerts.length > 3 ? `<div style="font-size:.7rem;color:rgba(255,255,255,.5);margin-top:6px;">+${alerts.length-3} more alerts</div>` : '');
+  toast.style.display = 'block';
+  // Auto-dismiss after 8 seconds
+  setTimeout(()=>{ if(toast) toast.style.display='none'; }, 8000);
+}
+
+function renderChangeMonitor() {
+  const el = document.querySelector('#change-monitor-content');
+  if(!el) return;
+  const latestScan = changeMonitorLog[0];
+  const allAlerts = latestScan ? latestScan.alerts : [];
+  const rc2 = {red:'#E53E3E', amber:'#D69E2E', green:'#38A169'};
+  const alertByType = {};
+  allAlerts.forEach(a=>{ if(!alertByType[a.type]) alertByType[a.type]=[]; alertByType[a.type].push(a); });
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div>
+      <h5 style="margin:0;">📡 Change Monitor</h5>
+      <div class="sub" style="margin:0;">Automated portfolio surveillance · Scanning every 60 seconds · ${changeMonitorTick} scan${changeMonitorTick!==1?'s':''} completed</div>
+    </div>
+    <button onclick="runChangeMonitorScan()" style="padding:8px 18px;background:#1B2A4A;color:#fff;border:none;border-radius:8px;font-size:.76rem;font-weight:700;cursor:pointer;">▶ Run Scan Now</button>
+  </div>
+
+  <!-- Status bar -->
+  <div style="background:${allAlerts.length?'#FFF5F5':'#F0FFF4'};border:1px solid ${allAlerts.length?'#FEB2B2':'#9AE6B4'};border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div style="width:10px;height:10px;border-radius:50%;background:${allAlerts.length?'#E53E3E':'#38A169'};animation:${allAlerts.length?'pulse 1.5s infinite':'none'};"></div>
+      <span style="font-weight:800;color:${allAlerts.length?'#C53030':'#276749'};font-size:.82rem;">${allAlerts.length ? allAlerts.length + ' Active Alerts' : '✓ All Clear'}</span>
+    </div>
+    <div style="font-size:.72rem;color:#718096;">Last scan: ${latestScan?latestScan.date+' '+latestScan.ts:'Not yet run'}</div>
+    <div style="font-size:.72rem;color:#718096;">Scan #${changeMonitorTick}</div>
+    <div style="margin-left:auto;display:flex;gap:6px;">
+      ${[
+        {l:'Deadlines', v:allAlerts.filter(a=>a.type==='deadline').length, c:'#E53E3E'},
+        {l:'RAG Red', v:allAlerts.filter(a=>a.type==='rag').length, c:'#E53E3E'},
+        {l:'Amendments', v:allAlerts.filter(a=>a.type==='amendment').length, c:'#D69E2E'},
+        {l:'Contracts', v:allAlerts.filter(a=>a.type==='contract'||a.type==='invoice').length, c:'#D69E2E'},
+      ].map(k=>`<div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:4px 10px;text-align:center;">
+        <div style="font-size:.62rem;color:#718096;">${k.l}</div>
+        <div style="font-size:.88rem;font-weight:800;color:${k.v?k.c:'#38A169'};">${k.v}</div>
+      </div>`).join('')}
+    </div>
+  </div>
+
+  <!-- Current alerts -->
+  ${allAlerts.length ? `
+  <h6 style="font-size:.82rem;font-weight:800;color:#1B2A4A;margin:0 0 12px;">🚨 Current Alerts (${allAlerts.length})</h6>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px;">
+    ${allAlerts.map(a=>{
+      const sc = a.severity==='red'?{bg:'#FFF5F5',border:'#FEB2B2',tc:'#C53030'}:{bg:'#FFFBEB',border:'#FBD38D',tc:'#744210'};
+      return `<div style="background:${sc.bg};border:1px solid ${sc.border};border-left:4px solid ${a.severity==='red'?'#E53E3E':'#D69E2E'};border-radius:8px;padding:12px 16px;display:flex;align-items:flex-start;gap:12px;">
+        <span style="font-size:1.2rem;flex-shrink:0;">${a.icon}</span>
+        <div style="flex:1;">
+          <div style="font-size:.78rem;font-weight:800;color:${sc.tc};">${a.title}</div>
+          <div style="font-size:.72rem;color:#4A5568;margin-top:2px;">${a.detail}</div>
+        </div>
+        <span style="font-size:.62rem;font-weight:800;padding:2px 8px;border-radius:10px;background:${a.severity==='red'?'#FED7D7':'#FEFCBF'};color:${sc.tc};flex-shrink:0;">${a.severity.toUpperCase()}</span>
+      </div>`;
+    }).join('')}
+  </div>` : `<div style="text-align:center;padding:32px;color:#38A169;font-size:.9rem;font-weight:700;">✓ No active alerts — portfolio is healthy</div>`}
+
+  <!-- Scan history -->
+  <h6 style="font-size:.82rem;font-weight:800;color:#1B2A4A;margin:0 0 12px;">🕐 Scan History (last ${changeMonitorLog.length} scans)</h6>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+    ${changeMonitorLog.length===0?'<div style="padding:20px;text-align:center;color:#718096;font-size:.78rem;">No scans yet — click Run Scan Now</div>':
+    changeMonitorLog.map((scan,i)=>`
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid #F7FAFC;background:${i===0?'#EBF8FF':'#fff'};">
+        <div style="width:8px;height:8px;border-radius:50%;background:${scan.alertCount?'#E53E3E':'#38A169'};flex-shrink:0;"></div>
+        <div style="font-size:.72rem;color:#718096;font-family:monospace;white-space:nowrap;">${scan.date} ${scan.ts}</div>
+        <div style="font-size:.72rem;font-weight:700;color:#2D3748;">Scan #${scan.tick}</div>
+        <div style="font-size:.72rem;color:${scan.alertCount?'#C53030':'#276749'};font-weight:700;">${scan.alertCount ? scan.alertCount+' alert'+( scan.alertCount!==1?'s':'') : '✓ Clear'}</div>
+        ${i===0?'<span style="font-size:.62rem;background:#BEE3F8;color:#2B6CB0;padding:1px 6px;border-radius:4px;font-weight:700;">Latest</span>':''}
+      </div>`).join('')}
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+// CO-APPROVE — DUAL APPROVAL ENGINE
+// ══════════════════════════════════════════════════════════
+const coApproveRequests = [
+  {id:'CAR-001',type:'Contract Change',ref:'CTR-001',subject:'ERP Implementation — Phase Extension',
+   requestor:'Siobhán Murphy',delegate:'David Walsh',justification:'Siobhán is on client-site and unable to access portal. David Walsh is authorised to approve on her behalf.',
+   description:'Approve 6-week extension to ERP Implementation engagement per client request. New end date: 31 Mar 2026. Scope unchanged.',
+   urgency:'Urgent',status:'Pending',raised:'2026-03-05',approvalDeadline:'2026-03-09',value:'£0 (date change only)'},
+  {id:'CAR-002',type:'Invoice Approval',ref:'INV-2026-034',subject:'BOI Digital Transformation — Invoice £43,500',
+   requestor:'Aoife Gallagher',delegate:'David Walsh',justification:'Finance Director approval required but she is on annual leave. David has delegated sign-off authority.',
+   description:'Approve invoice CODEC-BOI-INV-034 for £43,500 covering February T&M — 15 consultant days × 5 staff.',
+   urgency:'Normal',status:'Approved',raised:'2026-02-28',approvalDeadline:'2026-03-07',value:'£43,500',
+   approvedBy:'David Walsh',approvedDate:'2026-03-02',approvedNote:'Approved on behalf of Aoife Gallagher. Invoice matches timesheet records.'},
+  {id:'CAR-003',type:'Resource Request',ref:'RR-2026-018',subject:'Ryanair — Additional Senior Developer',
+   requestor:'James Murphy (Ryanair PM)',delegate:'Siobhán Murphy',justification:'Requesting team lead to co-approve additional resource as project is cross-functional.',
+   description:'Approve allocation of 1 × Senior Developer (Mark O\'Brien) to Ryanair Finance Integration from 16 Mar 2026.',
+   urgency:'Urgent',status:'Pending',raised:'2026-03-06',approvalDeadline:'2026-03-10',value:'£130/hr est. 40 days'},
+  {id:'CAR-004',type:'Expense Claim',ref:'EXP-2026-112',subject:'ESB Field Operations — Travel Expenses £2,840',
+   requestor:'Ciarán O\'Brien',delegate:'David Walsh',justification:'Line manager is away at a conference. Finance requires approval within 5 days of submission.',
+   description:'Travel and accommodation expenses for 3-week ESB field deployment. Dublin–Cork rail, hotel, subsistence.',
+   urgency:'Normal',status:'Rejected',raised:'2026-02-20',approvalDeadline:'2026-02-25',value:'£2,840',
+   approvedBy:'David Walsh',approvedDate:'2026-02-23',approvedNote:'Rejected — receipts missing for hotel nights 18–19 Feb. Please resubmit with full documentation.'},
+];
+
+function renderCoApprove() {
+  const el = document.querySelector('#coapprove-content');
+  if(!el) return;
+  const pending = coApproveRequests.filter(r=>r.status==='Pending');
+  const approved = coApproveRequests.filter(r=>r.status==='Approved');
+  const rejected = coApproveRequests.filter(r=>r.status==='Rejected');
+  const sc = {
+    'Pending': {bg:'#FFFBEB',border:'#FBD38D',tc:'#744210',dot:'#D69E2E'},
+    'Approved': {bg:'#F0FFF4',border:'#9AE6B4',tc:'#276749',dot:'#38A169'},
+    'Rejected': {bg:'#FFF5F5',border:'#FEB2B2',tc:'#742A2A',dot:'#E53E3E'},
+  };
+  const uc = {'Urgent':'background:#FED7D7;color:#742A2A','Normal':'background:#EBF4FF;color:#2B6CB0','Critical':'background:#FAF5FF;color:#553C9A'};
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+    <div>
+      <h5 style="margin:0;">🤝 Co-Approvals</h5>
+      <div class="sub" style="margin:0;">Delegated approval workflow — one person approving on behalf of another with full audit trail</div>
+    </div>
+    <button onclick="showNewCoApproveForm()" style="padding:8px 18px;background:#1B2A4A;color:#fff;border:none;border-radius:8px;font-size:.76rem;font-weight:700;cursor:pointer;">+ New Co-Approval Request</button>
+  </div>
+
+  <!-- KPI row -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;">
+    ${[
+      {l:'Pending Approval',v:pending.length,c:'#D69E2E',i:'⏳'},
+      {l:'Approved',v:approved.length,c:'#38A169',i:'✅'},
+      {l:'Rejected',v:rejected.length,c:'#E53E3E',i:'❌'},
+      {l:'Total Requests',v:coApproveRequests.length,c:'#1B2A4A',i:'📋'},
+    ].map(k=>`<div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
+      <div style="font-size:1.5rem;margin-bottom:4px;">${k.i}</div>
+      <div style="font-size:1.5rem;font-weight:900;color:${k.c};">${k.v}</div>
+      <div style="font-size:.7rem;color:#718096;font-weight:700;">${k.l}</div>
+    </div>`).join('')}
+  </div>
+
+  <!-- New request form (hidden by default) -->
+  <div id="coapprove-form" style="display:none;background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:24px;border-left:4px solid #805AD5;">
+    <h6 style="margin:0 0 16px;font-size:.88rem;font-weight:800;color:#1B2A4A;">New Co-Approval Request</h6>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+      <div>
+        <label style="font-size:.72rem;font-weight:700;color:#4A5568;display:block;margin-bottom:4px;">Request Type *</label>
+        <select id="car-type" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:.78rem;">
+          <option>Contract Change</option><option>Invoice Approval</option><option>Resource Request</option><option>Expense Claim</option><option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:.72rem;font-weight:700;color:#4A5568;display:block;margin-bottom:4px;">Urgency *</label>
+        <select id="car-urgency" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:.78rem;">
+          <option>Normal</option><option>Urgent</option><option>Critical</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:.72rem;font-weight:700;color:#4A5568;display:block;margin-bottom:4px;">Reference (Contract/Invoice No.) *</label>
+        <input id="car-ref" type="text" placeholder="e.g. CTR-001 or INV-2026-034" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:.78rem;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="font-size:.72rem;font-weight:700;color:#4A5568;display:block;margin-bottom:4px;">Subject *</label>
+        <input id="car-subject" type="text" placeholder="Brief title for this request" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:.78rem;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="font-size:.72rem;font-weight:700;color:#4A5568;display:block;margin-bottom:4px;">Your Name (Requestor) *</label>
+        <select id="car-requestor" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:.78rem;">
+          <option>Siobhán Murphy</option><option>David Walsh</option><option>Aoife Gallagher</option><option>Ciarán O'Brien</option><option>Niamh Kelly</option><option>Mark O'Brien</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:.72rem;font-weight:700;color:#4A5568;display:block;margin-bottom:4px;">Delegate Approver *</label>
+        <select id="car-delegate" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:.78rem;">
+          <option>David Walsh</option><option>Siobhán Murphy</option><option>Aoife Gallagher</option><option>Ciarán O'Brien</option><option>Niamh Kelly</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <label style="font-size:.72rem;font-weight:700;color:#4A5568;display:block;margin-bottom:4px;">Description of what needs approving *</label>
+      <textarea id="car-desc" rows="3" placeholder="Describe exactly what is being approved and why..." style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:.78rem;box-sizing:border-box;resize:vertical;"></textarea>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:.72rem;font-weight:700;color:#4A5568;display:block;margin-bottom:4px;">Justification for Delegation *</label>
+      <textarea id="car-justification" rows="2" placeholder="Why is a delegate approving? e.g. 'Primary approver is on leave, delegate has full authority per policy 3.2'" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:.78rem;box-sizing:border-box;resize:vertical;"></textarea>
+    </div>
+    <div style="background:#FFFBEB;border:1px solid #FBD38D;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:.72rem;color:#744210;">
+      ⚠️ By submitting this request you confirm that the delegate approver has been verbally notified and has agreed to act on your behalf. Both parties accept joint responsibility for this decision. A full audit trail will be recorded.
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="submitCoApproveRequest()" style="padding:9px 22px;background:#805AD5;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer;">Submit Co-Approval Request</button>
+      <button onclick="document.getElementById('coapprove-form').style.display='none'" style="padding:9px 16px;background:#fff;color:#4A5568;border:1px solid var(--border);border-radius:8px;font-size:.78rem;cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Pending approvals -->
+  ${pending.length?`
+  <h6 style="font-size:.82rem;font-weight:800;color:#1B2A4A;margin:0 0 12px;">⏳ Pending Approvals (${pending.length})</h6>
+  <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
+    ${pending.map(r=>renderCoApproveCard(r,sc,uc)).join('')}
+  </div>`:''}
+
+  <!-- History -->
+  <h6 style="font-size:.82rem;font-weight:800;color:#1B2A4A;margin:0 0 12px;">📜 Approval History</h6>
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    ${coApproveRequests.filter(r=>r.status!=='Pending').map(r=>renderCoApproveCard(r,sc,uc)).join('')}
+  </div>`;
+}
+
+function renderCoApproveCard(r, sc, uc) {
+  const s = sc[r.status];
+  return `<div style="background:${s.bg};border:1px solid ${s.border};border-left:4px solid ${s.dot};border-radius:10px;padding:16px 18px;">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <span style="font-size:.72rem;font-weight:800;color:#718096;font-family:monospace;">${r.id}</span>
+          <span style="font-size:.72rem;font-weight:800;padding:2px 8px;border-radius:4px;background:#E9D8FD;color:#553C9A;">${r.type}</span>
+          <span style="font-size:.72rem;font-weight:800;padding:2px 8px;border-radius:4px;${uc[r.urgency]||''}">${r.urgency}</span>
+        </div>
+        <div style="font-size:.88rem;font-weight:800;color:#1B2A4A;">${r.subject}</div>
+        <div style="font-size:.72rem;color:#718096;margin-top:2px;">Ref: ${r.ref} · Raised: ${r.raised} · Deadline: ${r.approvalDeadline}</div>
+      </div>
+      <span style="font-size:.72rem;font-weight:800;padding:3px 10px;border-radius:6px;background:${s.dot}20;color:${s.tc};white-space:nowrap;">${r.status==='Pending'?'⏳ Pending':r.status==='Approved'?'✅ Approved':'❌ Rejected'}</span>
+    </div>
+    <div style="font-size:.76rem;color:#4A5568;margin-bottom:10px;line-height:1.5;">${r.description}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+      <div style="background:rgba(255,255,255,.6);border-radius:6px;padding:8px 12px;">
+        <div style="font-size:.62rem;font-weight:700;color:#718096;margin-bottom:2px;">REQUESTOR</div>
+        <div style="font-size:.76rem;font-weight:700;color:#2D3748;">${r.requestor}</div>
+      </div>
+      <div style="background:rgba(255,255,255,.6);border-radius:6px;padding:8px 12px;">
+        <div style="font-size:.62rem;font-weight:700;color:#718096;margin-bottom:2px;">DELEGATE APPROVER</div>
+        <div style="font-size:.76rem;font-weight:700;color:#2D3748;">${r.delegate}</div>
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,.5);border-radius:6px;padding:8px 12px;margin-bottom:${r.status==='Pending'?'12':'0'}px;font-size:.72rem;color:#4A5568;">
+      <strong style="color:#2D3748;">Justification:</strong> ${r.justification}
+    </div>
+    ${r.status==='Pending'?`
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button onclick="processCoApprove('${r.id}','approve')" style="padding:7px 18px;background:#38A169;color:#fff;border:none;border-radius:7px;font-size:.76rem;font-weight:700;cursor:pointer;">✅ Approve on Behalf</button>
+      <button onclick="processCoApprove('${r.id}','reject')" style="padding:7px 16px;background:#E53E3E;color:#fff;border:none;border-radius:7px;font-size:.76rem;font-weight:700;cursor:pointer;">❌ Reject</button>
+      <button onclick="processCoApprove('${r.id}','query')" style="padding:7px 16px;background:#fff;color:#4A5568;border:1px solid var(--border);border-radius:7px;font-size:.76rem;cursor:pointer;">❓ Query / Request Info</button>
+    </div>`:`
+    <div style="background:rgba(255,255,255,.5);border-radius:6px;padding:8px 12px;font-size:.72rem;color:#4A5568;border-left:3px solid ${s.dot};">
+      <strong>${r.status==='Approved'?'✅ Approved':'❌ Rejected'} by ${r.approvedBy||''}</strong> on ${r.approvedDate||''}<br>${r.approvedNote||''}
+    </div>`}
+  </div>`;
+}
+
+function showNewCoApproveForm() {
+  const f = document.getElementById('coapprove-form');
+  if(f) { f.style.display = f.style.display==='none'?'block':'none'; if(f.style.display==='block') f.scrollIntoView({behavior:'smooth'}); }
+}
+
+function submitCoApproveRequest() {
+  const type = document.getElementById('car-type')?.value;
+  const ref = document.getElementById('car-ref')?.value;
+  const subject = document.getElementById('car-subject')?.value;
+  const requestor = document.getElementById('car-requestor')?.value;
+  const delegate = document.getElementById('car-delegate')?.value;
+  const desc = document.getElementById('car-desc')?.value;
+  const just = document.getElementById('car-justification')?.value;
+  const urgency = document.getElementById('car-urgency')?.value;
+  if(!ref||!subject||!desc||!just){ alert('Please complete all required fields.'); return; }
+  const newReq = {
+    id:'CAR-00'+(coApproveRequests.length+1),type,ref,subject,requestor,delegate,
+    justification:just,description:desc,urgency,status:'Pending',
+    raised:'2026-03-07',approvalDeadline:'2026-03-10',value:'—'
+  };
+  coApproveRequests.unshift(newReq);
+  document.getElementById('coapprove-form').style.display='none';
+  renderCoApprove();
+}
+
+function processCoApprove(id, action) {
+  const req = coApproveRequests.find(r=>r.id===id);
+  if(!req) return;
+  if(action==='approve') {
+    req.status='Approved';
+    req.approvedBy=req.delegate;
+    req.approvedDate='2026-03-07';
+    req.approvedNote='Approved on behalf of '+req.requestor+'. Delegate approval recorded per company policy.';
+  } else if(action==='reject') {
+    const reason = prompt('Reason for rejection:','Please provide additional documentation.');
+    if(reason===null) return;
+    req.status='Rejected';
+    req.approvedBy=req.delegate;
+    req.approvedDate='2026-03-07';
+    req.approvedNote=reason||'Rejected by delegate approver.';
+  } else {
+    alert('Query sent to '+req.requestor+' — they will be notified to provide additional information.');
+    return;
+  }
+  renderCoApprove();
+}
+
+// ══════════════════════════════════════════════════════════
 // PORTFOLIO GANTT — AMENDMENTS DATA
 // ══════════════════════════════════════════════════════════
 const ganttAmendments = [
@@ -3596,85 +4021,185 @@ function generateNewWeeklyReport() {
 function renderContracts() {
   const el = document.querySelector('#contracts-content');
   if(!el) return;
+  const now = new Date('2026-03-07');
   const tv = contractsData.reduce((s,c)=>s+c.value,0);
   const ti = contractsData.reduce((s,c)=>s+c.invoiced,0);
   const to = contractsData.reduce((s,c)=>s+c.outstanding,0);
-  const now = new Date('2026-03-07');
   const expiring = contractsData.filter(c=>{const d=new Date(c.endDate);const dy=Math.ceil((d-now)/86400000);return dy>=0&&dy<=90&&c.status==='Active';});
   const customers = [...new Set(contractsData.map(c=>c.customer))];
   const ss = s=>s==='Active'?'background:#C6F6D5;color:#276749':s==='Overdue'?'background:#FED7D7;color:#742A2A':'background:#E2E8F0;color:#718096';
-  const pp = (a,b)=>Math.min(100,Math.round(a/b*100));
+  const pp = (a,b)=>b?Math.min(100,Math.round(a/b*100)):0;
+  const daysLeft = c => Math.ceil((new Date(c.endDate)-now)/86400000);
+
   el.innerHTML = `
   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
-    <div><h5 style="margin:0;">📋 Contracts Management</h5>
-    <div class="sub" style="margin:0;">${contractsData.length} contracts · Total portfolio value £${(tv/1000000).toFixed(2)}M</div></div>
+    <div>
+      <h5 style="margin:0;">📑 Contracts Management</h5>
+      <div class="sub" style="margin:0;">${contractsData.length} contracts · Total portfolio value £${(tv/1000000).toFixed(2)}M · ${expiring.length} expiring within 90 days</div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="alert('New contract wizard — coming soon')" style="padding:8px 16px;background:#1B2A4A;color:#fff;border:none;border-radius:8px;font-size:.76rem;font-weight:700;cursor:pointer;">+ New Contract</button>
+      <button onclick="showPage('pg-coapprove')" style="padding:8px 16px;background:#805AD5;color:#fff;border:none;border-radius:8px;font-size:.76rem;font-weight:700;cursor:pointer;">🤝 Co-Approvals</button>
+    </div>
   </div>
+
+  <!-- KPI Cards -->
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;">
     ${[
-      {l:'Total Contract Value',v:'£'+Number(tv).toLocaleString(),s:'Across '+contractsData.length+' contracts',i:'💼',c:'#1B2A4A'},
+      {l:'Total Contract Value',v:'£'+Number(tv).toLocaleString(),s:contractsData.length+' active contracts',i:'💼',c:'#1B2A4A'},
       {l:'Total Invoiced',v:'£'+Number(ti).toLocaleString(),s:pp(ti,tv)+'% of portfolio billed',i:'📄',c:'#2B6CB0'},
       {l:'Outstanding Receivables',v:'£'+Number(to).toLocaleString(),s:'Currently due from clients',i:'⏰',c:to>80000?'#C53030':'#276749'},
-      {l:'Expiring in 90 Days',v:expiring.length+' contracts',s:expiring.length?expiring.map(c=>c.customer).join(', '):'None expiring soon',i:'📅',c:expiring.length?'#744210':'#276749'},
-    ].map(k=>`<div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;">
+      {l:'Expiring ≤ 90 Days',v:expiring.length+' contracts',s:expiring.length?expiring.map(c=>c.customer).join(', '):'None expiring soon',i:'📅',c:expiring.length?'#744210':'#276749'},
+    ].map(k=>`<div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;border-top:3px solid ${k.c};">
       <div style="font-size:1.4rem;margin-bottom:6px;">${k.i}</div>
-      <div style="font-size:.66rem;color:#718096;font-weight:700;margin-bottom:4px;">${k.l.toUpperCase()}</div>
-      <div style="font-size:1.25rem;font-weight:900;color:${k.c};">${k.v}</div>
-      <div style="font-size:.7rem;color:#718096;margin-top:2px;">${k.s}</div></div>`).join('')}
+      <div style="font-size:.66rem;color:#718096;font-weight:700;text-transform:uppercase;margin-bottom:4px;">${k.l}</div>
+      <div style="font-size:1.3rem;font-weight:900;color:${k.c};">${k.v}</div>
+      <div style="font-size:.7rem;color:#718096;margin-top:2px;">${k.s}</div>
+    </div>`).join('')}
   </div>
+
+  <!-- Expiry warning banner -->
+  ${expiring.length?`
+  <div style="background:#FFFBEB;border:1px solid #FBD38D;border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+    <span style="font-size:1.3rem;">⚠️</span>
+    <div>
+      <div style="font-size:.8rem;font-weight:800;color:#744210;">${expiring.length} contract${expiring.length>1?'s':''} expiring within 90 days — renewal action required</div>
+      <div style="font-size:.72rem;color:#744210;margin-top:2px;">${expiring.map(c=>c.customer+' ('+daysLeft(c)+'d)').join(' · ')}</div>
+    </div>
+    <button onclick="showPage('pg-coapprove')" style="margin-left:auto;padding:6px 14px;background:#D69E2E;color:#fff;border:none;border-radius:6px;font-size:.72rem;font-weight:700;cursor:pointer;">Raise Renewal Request</button>
+  </div>`:''}
+
+  <!-- Contracts grouped by customer -->
   <div style="display:flex;flex-direction:column;gap:20px;">
   ${customers.map(cust=>{
-    const cc=contractsData.filter(c=>c.customer===cust);
-    const cv=cc.reduce((s,c)=>s+c.value,0);
-    const ci=cc.reduce((s,c)=>s+c.invoiced,0);
+    const cc = contractsData.filter(c=>c.customer===cust);
+    const cv = cc.reduce((s,c)=>s+c.value,0);
+    const ci = cc.reduce((s,c)=>s+c.invoiced,0);
+    const co = cc.reduce((s,c)=>s+c.outstanding,0);
+    const custColor2 = {'AIB Group':'#3182CE','Bank of Ireland':'#805AD5','Ryanair':'#E53E3E','ESB':'#319795'};
+    const hc = custColor2[cust]||'#1B2A4A';
     return `<div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#1B2A4A;color:#fff;">
-        <div><div style="font-size:.88rem;font-weight:800;">${cust}</div>
-        <div style="font-size:.72rem;color:#90CDF4;margin-top:2px;">${cc.length} contract${cc.length>1?'s':''} · £${Number(cv).toLocaleString()} total</div></div>
-        <div style="text-align:right;"><div style="font-size:.78rem;font-weight:700;color:#68D391;">£${Number(ci).toLocaleString()} invoiced</div>
-        <div style="font-size:.68rem;color:#90CDF4;">${pp(ci,cv)}% billed</div></div>
+      <!-- Customer header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#1B2A4A;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:12px;height:12px;background:${hc};border-radius:50%;"></div>
+          <div>
+            <div style="font-size:.9rem;font-weight:800;color:#fff;">${cust}</div>
+            <div style="font-size:.72rem;color:#90CDF4;">${cc.length} contract${cc.length>1?'s':''} · £${Number(cv).toLocaleString()} total value</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;text-align:right;">
+          <div><div style="font-size:.62rem;color:#90CDF4;font-weight:700;">INVOICED</div><div style="font-size:.88rem;font-weight:800;color:#68D391;">£${Number(ci).toLocaleString()}</div></div>
+          <div><div style="font-size:.62rem;color:#90CDF4;font-weight:700;">OUTSTANDING</div><div style="font-size:.88rem;font-weight:800;color:${co>0?'#FBD38D':'#68D391'};">£${Number(co).toLocaleString()}</div></div>
+          <div><div style="font-size:.62rem;color:#90CDF4;font-weight:700;">BILLED</div><div style="font-size:.88rem;font-weight:800;color:#90CDF4;">${pp(ci,cv)}%</div></div>
+        </div>
       </div>
-      <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.75rem;min-width:820px;">
-        <thead><tr style="background:#F7FAFC;">
-          <th style="padding:8px 12px;text-align:left;color:#4A5568;">Contract No.</th>
-          <th style="padding:8px 12px;text-align:left;color:#4A5568;">Project</th>
-          <th style="padding:8px 12px;text-align:left;color:#4A5568;">Type</th>
-          <th style="padding:8px 12px;text-align:right;color:#4A5568;">Value</th>
-          <th style="padding:8px 12px;text-align:right;color:#4A5568;">Invoiced</th>
-          <th style="padding:8px 12px;text-align:right;color:#4A5568;">Outstanding</th>
-          <th style="padding:8px 12px;text-align:center;color:#4A5568;">Billed %</th>
-          <th style="padding:8px 12px;text-align:left;color:#4A5568;">End Date</th>
-          <th style="padding:8px 12px;text-align:center;color:#4A5568;">Status</th>
-        </tr></thead><tbody>
-        ${cc.map(c=>{
-          const dl=Math.ceil((new Date(c.endDate)-now)/86400000);
-          return `<tr style="border-bottom:1px solid var(--border);">
-            <td style="padding:8px 12px;font-family:monospace;font-weight:700;color:#1B2A4A;font-size:.72rem;">${c.contractNo}</td>
-            <td style="padding:8px 12px;color:#2D3748;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.projectName}</td>
-            <td style="padding:8px 12px;"><span style="background:#EBF4FF;color:#2B6CB0;font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:4px;">${c.type}</span></td>
-            <td style="padding:8px 12px;text-align:right;font-weight:700;">£${Number(c.value).toLocaleString()}</td>
-            <td style="padding:8px 12px;text-align:right;color:#2B6CB0;font-weight:600;">£${Number(c.invoiced).toLocaleString()}</td>
-            <td style="padding:8px 12px;text-align:right;color:${c.outstanding>0?'#C53030':'#276749'};font-weight:600;">£${Number(c.outstanding).toLocaleString()}</td>
-            <td style="padding:8px 12px;"><div style="display:flex;align-items:center;gap:5px;"><div style="flex:1;height:5px;background:#E2E8F0;border-radius:3px;overflow:hidden;"><div style="width:${pp(c.invoiced,c.value)}%;height:100%;background:#3182CE;border-radius:3px;"></div></div><span style="font-size:.68rem;font-weight:700;color:#4A5568;">${pp(c.invoiced,c.value)}%</span></div></td>
-            <td style="padding:8px 12px;font-size:.73rem;color:${dl<30?'#C53030':dl<90?'#744210':'#4A5568'};">${c.endDate}${dl>=0&&dl<90?' ('+dl+'d)':''}</td>
-            <td style="padding:8px 12px;text-align:center;"><span style="font-size:.66rem;font-weight:800;padding:2px 8px;border-radius:4px;${ss(c.status)}">${c.status}</span></td>
-          </tr>`;
-        }).join('')}
-        </tbody></table></div>
-      <div style="padding:14px 18px;border-top:1px solid var(--border);background:#FAFAFA;">
-        <div style="font-size:.7rem;font-weight:800;color:#4A5568;margin-bottom:10px;">PAYMENT MILESTONE TRACKER</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        ${cc.flatMap(c=>c.milestones.map(m=>({...m,cno:c.contractNo.split('-').slice(-2).join('-')}))).map(m=>`
-        <div style="background:#fff;border:1px solid ${m.paid?'#68D391':m.invoiced?'#90CDF4':'#E2E8F0'};border-radius:7px;padding:8px 11px;min-width:138px;">
-          <div style="font-size:.62rem;color:#718096;margin-bottom:2px;">${m.cno}</div>
-          <div style="font-size:.72rem;font-weight:700;color:#2D3748;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:130px;">${m.name}</div>
-          <div style="font-size:.66rem;color:#718096;">${m.date}</div>
-          <div style="font-size:.64rem;font-weight:800;margin-top:3px;color:${m.paid?'#276749':m.invoiced?'#2B6CB0':'#718096'};">${m.paid?'✅ Paid':m.invoiced?'⏳ Invoiced':'○ Pending'} · £${Number(m.value).toLocaleString()}</div>
-        </div>`).join('')}
+
+      <!-- Contract rows -->
+      ${cc.map(c=>{
+        const dl = daysLeft(c);
+        const amendCount = ganttAmendments.filter(a=>a.projectId===c.projectId).length;
+        const paidMs = c.milestones.filter(m=>m.paid).reduce((s,m)=>s+m.value,0);
+        const invMs = c.milestones.filter(m=>m.invoiced&&!m.paid).reduce((s,m)=>s+m.value,0);
+        const pendMs = c.milestones.filter(m=>!m.invoiced).reduce((s,m)=>s+m.value,0);
+        return `
+        <div style="border-bottom:1px solid #F7FAFC;">
+          <!-- Contract summary row -->
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 18px;cursor:pointer;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            <div style="width:4px;height:40px;background:${hc};border-radius:2px;flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;">
+                <span style="font-size:.72rem;font-family:monospace;font-weight:700;color:#1B2A4A;">${c.contractNo}</span>
+                <span style="font-size:.68rem;font-weight:700;padding:1px 7px;border-radius:4px;background:#EBF4FF;color:#2B6CB0;">${c.type}</span>
+                <span style="font-size:.68rem;font-weight:800;padding:1px 7px;border-radius:4px;${ss(c.status)}">${c.status}</span>
+                ${amendCount?`<span style="font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:10px;background:#E9D8FD;color:#553C9A;">${amendCount} amendment${amendCount>1?'s':''}</span>`:''}
+                ${dl>=0&&dl<=60?`<span style="font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:10px;background:#FEFCBF;color:#744210;">⏰ ${dl}d to expiry</span>`:''}
+              </div>
+              <div style="font-size:.82rem;font-weight:700;color:#2D3748;">${c.projectName}</div>
+              <div style="font-size:.68rem;color:#718096;">PM: ${c.pm} · Signed by: ${c.sigCodec} (Codec), ${c.sigClient}</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0;">
+              <div style="font-size:1rem;font-weight:900;color:#1B2A4A;">£${Number(c.value).toLocaleString()}</div>
+              <div style="font-size:.68rem;color:#718096;">${pp(c.invoiced,c.value)}% billed</div>
+            </div>
+            <div style="width:80px;">
+              <div style="height:6px;background:#E2E8F0;border-radius:3px;overflow:hidden;margin-bottom:2px;">
+                <div style="width:${pp(c.invoiced,c.value)}%;height:100%;background:${hc};border-radius:3px;"></div>
+              </div>
+              <div style="font-size:.6rem;color:#718096;text-align:right;">£${Number(c.invoiced).toLocaleString()} invoiced</div>
+            </div>
+            <div style="color:#A0AEC0;font-size:.8rem;">▼</div>
+          </div>
+
+          <!-- Contract detail (expandable) -->
+          <div style="display:none;padding:0 18px 16px 36px;background:#FAFAFA;">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;">
+              ${[
+                {l:'Contract Period',v:c.startDate+' → '+c.endDate},
+                {l:'Retention Held',v:'£'+Number(c.retentionHeld||0).toLocaleString()},
+                {l:'Outstanding',v:'£'+Number(c.outstanding).toLocaleString(),bold:true},
+              ].map(k=>`<div style="background:#fff;border:1px solid var(--border);border-radius:7px;padding:8px 12px;">
+                <div style="font-size:.62rem;font-weight:700;color:#718096;text-transform:uppercase;margin-bottom:2px;">${k.l}</div>
+                <div style="font-size:.8rem;font-weight:${k.bold?'800':'600'};color:#2D3748;">${k.v}</div>
+              </div>`).join('')}
+            </div>
+
+            <!-- Milestone tracker -->
+            <div style="font-size:.72rem;font-weight:800;color:#4A5568;margin-bottom:8px;text-transform:uppercase;">Payment Milestones</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+              ${c.milestones.map((m,mi)=>`
+              <div style="background:#fff;border:1.5px solid ${m.paid?'#68D391':m.invoiced?'#90CDF4':'#E2E8F0'};border-radius:8px;padding:8px 12px;min-width:150px;flex:1;">
+                <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px;">
+                  <span style="font-size:.9rem;">${m.paid?'✅':m.invoiced?'⏳':'⭕'}</span>
+                  <span style="font-size:.62rem;font-weight:800;color:${m.paid?'#276749':m.invoiced?'#2B6CB0':'#718096'};">${m.paid?'PAID':m.invoiced?'INVOICED':'PENDING'}</span>
+                </div>
+                <div style="font-size:.74rem;font-weight:700;color:#2D3748;margin-bottom:2px;">${m.name}</div>
+                <div style="font-size:.66rem;color:#718096;">${m.date}</div>
+                <div style="font-size:.8rem;font-weight:800;color:${m.paid?'#276749':m.invoiced?'#2B6CB0':'#4A5568'};margin-top:3px;">£${Number(m.value).toLocaleString()}</div>
+              </div>`).join('')}
+            </div>
+
+            <!-- Milestone value bar -->
+            <div style="display:flex;height:10px;border-radius:5px;overflow:hidden;margin-bottom:4px;">
+              <div style="width:${pp(paidMs,c.value)}%;background:#38A169;" title="Paid: £${Number(paidMs).toLocaleString()}"></div>
+              <div style="width:${pp(invMs,c.value)}%;background:#3182CE;" title="Invoiced: £${Number(invMs).toLocaleString()}"></div>
+              <div style="width:${pp(pendMs,c.value)}%;background:#E2E8F0;" title="Pending: £${Number(pendMs).toLocaleString()}"></div>
+            </div>
+            <div style="display:flex;gap:12px;font-size:.64rem;color:#718096;">
+              <span><span style="color:#276749;font-weight:700;">■</span> Paid £${Number(paidMs).toLocaleString()}</span>
+              <span><span style="color:#3182CE;font-weight:700;">■</span> Invoiced £${Number(invMs).toLocaleString()}</span>
+              <span><span style="color:#A0AEC0;font-weight:700;">■</span> Pending £${Number(pendMs).toLocaleString()}</span>
+            </div>
+
+            <!-- Amendments for this contract -->
+            ${ganttAmendments.filter(a=>a.projectId===c.projectId).length?`
+            <div style="font-size:.72rem;font-weight:800;color:#4A5568;margin:12px 0 6px;text-transform:uppercase;">Contract Amendments (${ganttAmendments.filter(a=>a.projectId===c.projectId).length})</div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              ${ganttAmendments.filter(a=>a.projectId===c.projectId).map(a=>`
+              <div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:7px 12px;display:flex;align-items:center;gap:8px;font-size:.72rem;">
+                <span style="color:#718096;">${a.date}</span>
+                <span style="font-weight:700;color:#2D3748;">${a.label}</span>
+                <span style="color:#4A5568;flex:1;">${a.desc}</span>
+                <span style="color:#718096;">${a.approvedBy}</span>
+              </div>`).join('')}
+            </div>`:''}
+          </div>
+        </div>`;
+      }).join('')}
+
+      <!-- Customer billing progress -->
+      <div style="padding:12px 18px;background:#F7FAFC;border-top:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;font-size:.7rem;color:#718096;margin-bottom:4px;">
+          <span>Overall billing progress</span><span>${pp(ci,cv)}%</span>
+        </div>
+        <div style="height:6px;background:#E2E8F0;border-radius:3px;overflow:hidden;">
+          <div style="width:${pp(ci,cv)}%;height:100%;background:${hc};border-radius:3px;"></div>
         </div>
       </div>
     </div>`;
   }).join('')}
-  </div>`;}
+  </div>`;
+}
 
 // ══════════════════════════════════════════════════════════
 // EARNED VALUE MANAGEMENT ENGINE
