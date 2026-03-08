@@ -2913,6 +2913,52 @@ const engagementProjects = [
    startDate:'2024-10-01',endDate:'2025-09-30',duration:12,
    bac:702000,spent:687000,invoiced:702000,percComplete:100,percPlanned:100,teamSize:3,
    description:'Azure Synapse + Power BI analytics — completed Oct 2025, in hypercare.'},
+  // ── PERMANENT TSB ──────────────────────────────────────────────────────────
+  {id:'ptsb-mobile',customerId:'ptsb',customer:'Permanent TSB',programme:'Digital Retail Banking Transformation',
+   name:'Mobile Banking App Rebuild',type:'T&M',pm:'Declan Farrell',rag:'Green',
+   startDate:'2025-09-01',endDate:'2026-08-31',
+   bac:480000,spent:210000,invoiced:190000,
+   percComplete:44,percPlanned:50,teamSize:5,
+   description:'Full rebuild of PTSB consumer mobile banking app on React Native — account management, payments, push notifications, biometric auth.'},
+  {id:'ptsb-core',customerId:'ptsb',customer:'Permanent TSB',programme:'Digital Retail Banking Transformation',
+   name:'Core Banking Migration (Temenos T24)',type:'Fixed Fee',pm:'Fiona Doherty',rag:'Amber',
+   startDate:'2026-01-15',endDate:'2027-03-31',
+   bac:1850000,spent:185000,invoiced:185000,
+   percComplete:12,percPlanned:10,teamSize:8,
+   description:'Migration from legacy Finacle core banking to Temenos T24 — accounts, loans, deposits, GL integration.'},
+  // ── KERRY GROUP ────────────────────────────────────────────────────────────
+  {id:'kerry-sap',customerId:'kerry',customer:'Kerry Group',programme:'Global Data & Analytics Transformation',
+   name:'SAP S/4HANA Finance Rollout (EMEA)',type:'T&M',pm:'Siobhán Murphy',rag:'Amber',
+   startDate:'2024-11-01',endDate:'2026-12-31',
+   bac:3200000,spent:1680000,invoiced:1520000,
+   percComplete:55,percPlanned:60,teamSize:12,
+   description:'SAP S/4HANA Finance implementation across 14 EMEA entities — GL, AP, AR, fixed assets, intercompany consolidation.'},
+  {id:'kerry-data',customerId:'kerry',customer:'Kerry Group',programme:'Global Data & Analytics Transformation',
+   name:'Azure Data Lake & Analytics Platform',type:'T&M',pm:'Niamh Kelly',rag:'Green',
+   startDate:'2025-06-01',endDate:'2026-09-30',
+   bac:920000,spent:460000,invoiced:420000,
+   percComplete:50,percPlanned:55,teamSize:6,
+   description:'Azure Data Lake Gen2 + Synapse Analytics — centralising data from SAP, Salesforce, and supply chain systems for group-wide reporting.'},
+  // ── AER LINGUS ─────────────────────────────────────────────────────────────
+  {id:'al-crew',customerId:'al',customer:'Aer Lingus',programme:'Workforce & Operations Modernisation',
+   name:'Crew Management System Replacement',type:'Fixed Fee',pm:"Ciarán O'Brien",rag:'Red',
+   startDate:'2025-04-01',endDate:'2026-06-30',
+   bac:2100000,spent:1890000,invoiced:1680000,
+   percComplete:90,percPlanned:95,teamSize:9,
+   description:'End-to-end replacement of legacy crew scheduling, pairing, and rostering systems — integration with FlightGlobal, HR, and payroll.'},
+  {id:'al-pax',customerId:'al',customer:'Aer Lingus',programme:'Workforce & Operations Modernisation',
+   name:'Passenger Experience Platform',type:'T&M',pm:"Mark O'Brien",rag:'Green',
+   startDate:'2026-02-01',endDate:'2027-01-31',
+   bac:760000,spent:95000,invoiced:76000,
+   percComplete:12,percPlanned:10,teamSize:4,
+   description:'New digital passenger experience layer — check-in flow redesign, ancillary upsell, disruption management self-service portal.'},
+  // ── CRH PLC ────────────────────────────────────────────────────────────────
+  {id:'crh-erp',customerId:'crh',customer:'CRH plc',programme:'Enterprise Digital Backbone Programme',
+   name:'SAP Global ERP Standardisation',type:'T&M',pm:'David Walsh',rag:'Green',
+   startDate:'2024-07-01',endDate:'2027-06-30',
+   bac:4500000,spent:1125000,invoiced:1000000,
+   percComplete:26,percPlanned:28,teamSize:14,
+   description:'Global SAP S/4HANA standardisation across 45 operating companies in Europe and Americas — finance, procurement, plant maintenance.'},
 ];
 
 // ══════════════════════════════════════════════════════════
@@ -2990,6 +3036,38 @@ const weeklyReportsData = [
    highlights:['UAT Phase 2 commenced — 63/89 test cases passed (71%)','Offline map caching implemented and performing well in field tests','Job dispatch UI redesign accepted by ESB field operations lead','Performance test: 500 concurrent users — 98% of requests within SLA'],
    nextPeriod:['Resolve 2 critical UAT defects (offline sync, dispatch latency) by 12 Mar','UAT Phase 2 completion meeting and sign-off 13 Mar','App release candidate for ESB security review 14 Mar','Go-live planning workshop with ESB 16 Mar'],
    customerRisks:[{id:'R-ESB-01',title:'UAT critical defects may delay 28 Mar go-live',rag:'Amber',mitigation:'Engineering team fully assigned to fixes. Target resolution 12 Mar. 16 calendar days buffer before go-live.'}]},
+  {id:'wr-ptsb-0307',projectId:'ptsb-mobile',projectName:'Mobile Banking App Rebuild',
+   customer:'Permanent TSB',pm:'Declan Farrell',weekEnding:'2026-03-07',rag:'Green',
+   percComplete:44,percPlanned:50,budgetDays:160,forecastDays:162,
+   invoiced:190000,contractValue:480000,
+   execSummary:'Phase 2 development progressing well. Biometric authentication module completed ahead of schedule. Payments integration underway with PTSB core banking team.',
+   highlights:['Biometric auth (Face ID / Touch ID) shipped to internal test','Payments SDK integrated with 98.7% success rate in test','Performance: app cold-start time reduced to 1.2s (target: <2s)'],
+   nextPeriod:['Complete open banking (PSD2) integration','Submit to Apple App Store for TestFlight review','Phase 2 UAT kick-off with PTSB QA team'],
+   customerRisks:[{r:'Core banking API latency spikes in peak hours',i:'Medium',s:'Ongoing — PTSB infra team investigating'}]},
+  {id:'wr-kerry-0307',projectId:'kerry-sap',projectName:'SAP S/4HANA Finance Rollout (EMEA)',
+   customer:'Kerry Group',pm:'Siobhán Murphy',weekEnding:'2026-03-07',rag:'Amber',
+   percComplete:55,percPlanned:60,budgetDays:640,forecastDays:668,
+   invoiced:1520000,contractValue:3200000,
+   execSummary:'Phase 3 (France & Iberia) progressing but 5% behind plan. Tax configuration complexity in France higher than estimated. Mitigations in place with additional resource.',
+   highlights:['Phase 2 DACH & Benelux successfully closed — signed off by client','French VAT configuration 80% complete','Iberian entity data migration: 12 of 18 legal entities completed'],
+   nextPeriod:['Complete French VAT and intrastat configuration','Final data migration rehearsal for 6 remaining Iberian entities','Phase 3 steering committee presentation'],
+   customerRisks:[{r:'French tax complexity may extend Phase 3 by 2–3 weeks',i:'High',s:'Escalated — additional SAP tax consultant engaged'}]},
+  {id:'wr-al-0307',projectId:'al-crew',projectName:'Crew Management System Replacement',
+   customer:'Aer Lingus',pm:"Ciarán O'Brien",weekEnding:'2026-03-07',rag:'Red',
+   percComplete:90,percPlanned:95,budgetDays:420,forecastDays:448,
+   invoiced:1680000,contractValue:2100000,
+   execSummary:'Project is 90% complete but 5% behind plan and tracking over budget due to scope additions during UAT. Go-live date under review. Change Request being raised.',
+   highlights:['UAT 94% complete — 23 defects resolved this week','Payroll integration fully tested and signed off','Disaster recovery runbook completed and approved'],
+   nextPeriod:['Resolve remaining 8 UAT defects (P1×1, P2×3, P3×4)','Raise CR for 28-day go-live extension','Final parallel run with legacy system'],
+   customerRisks:[{r:'P1 defect in crew pairing algorithm under investigation',i:'Critical',s:'Workaround in place — full fix expected by 10 Mar'}]},
+  {id:'wr-crh-0307',projectId:'crh-erp',projectName:'SAP Global ERP Standardisation',
+   customer:'CRH plc',pm:'David Walsh',weekEnding:'2026-03-07',rag:'Green',
+   percComplete:26,percPlanned:28,budgetDays:900,forecastDays:905,
+   invoiced:1000000,contractValue:4500000,
+   execSummary:'Phase 2 Americas rollout scoping complete. Template solution from Phase 1 EMEA being adapted for US GAAP and local tax requirements. On track.',
+   highlights:['Americas design workshops completed in Chicago and Atlanta','US GAAP delta analysis: 43 configuration changes identified','Phase 1 EMEA hypercare successfully closed — handed to support'],
+   nextPeriod:['Begin Americas system build — FI/CO modules','Align with CRH North America finance team on chart of accounts','Phase 2 project kick-off in Dallas'],
+   customerRisks:[{r:'US tax localisation complexity — SALT compliance',i:'Medium',s:'SAP tax partner engaged to support'}]},
 ];
 
 // ══════════════════════════════════════════════════════════
@@ -3085,6 +3163,84 @@ const contractsData = [
      {name:'MVP — Core Job Dispatch',date:'2024-12-31',value:386000,invoiced:true,paid:true},
      {name:'Phase 2 — Offline & Asset Scanning',date:'2025-06-30',value:386000,invoiced:true,paid:true},
      {name:'Phase 3 — UAT & Go-Live',date:'2026-01-31',value:515000,invoiced:false,paid:false}]},
+  // ── PERMANENT TSB ──
+  {id:'CTR-009',contractNo:'CODEC-PTSB-2025-031',customer:'Permanent TSB',customerId:'ptsb',
+   projectId:'ptsb-mobile',projectName:'Mobile Banking App Rebuild',type:'T&M',value:480000,
+   startDate:'2025-09-01',endDate:'2026-08-31',status:'Active',
+   invoiced:190000,paid:160000,outstanding:30000,retentionHeld:0,
+   pm:'Declan Farrell',sigCodec:'David Walsh',sigClient:'Orla Cunningham (CTO)',
+   milestones:[
+     {name:'Discovery & Architecture',date:'2025-10-15',value:48000,invoiced:true,paid:true},
+     {name:'Phase 1 — Core Features',date:'2026-01-31',value:144000,invoiced:true,paid:true},
+     {name:'Phase 2 — Payments & Auth',date:'2026-04-30',value:144000,invoiced:true,paid:false},
+     {name:'Phase 3 — Launch & Hypercare',date:'2026-08-31',value:144000,invoiced:false,paid:false}]},
+  {id:'CTR-010',contractNo:'CODEC-PTSB-2026-002',customer:'Permanent TSB',customerId:'ptsb',
+   projectId:'ptsb-core',projectName:'Core Banking Migration (Temenos T24)',type:'Fixed Fee',value:1850000,
+   startDate:'2026-01-15',endDate:'2027-03-31',status:'Active',
+   invoiced:185000,paid:185000,outstanding:0,retentionHeld:92500,
+   pm:'Fiona Doherty',sigCodec:'David Walsh',sigClient:'Paul Sheridan (CFO)',
+   milestones:[
+     {name:'Mobilisation & Blueprint',date:'2026-02-28',value:185000,invoiced:true,paid:true},
+     {name:'Phase 1 — Accounts & Deposits',date:'2026-06-30',value:370000,invoiced:false,paid:false},
+     {name:'Phase 2 — Loans & Credit',date:'2026-10-31',value:555000,invoiced:false,paid:false},
+     {name:'Phase 3 — GL & Reporting',date:'2027-01-31',value:555000,invoiced:false,paid:false},
+     {name:'UAT, Migration & Go-Live',date:'2027-03-31',value:185000,invoiced:false,paid:false}]},
+  // ── KERRY GROUP ──
+  {id:'CTR-011',contractNo:'CODEC-KERRY-2024-089',customer:'Kerry Group',customerId:'kerry',
+   projectId:'kerry-sap',projectName:'SAP S/4HANA Finance Rollout (EMEA)',type:'T&M',value:3200000,
+   startDate:'2024-11-01',endDate:'2026-12-31',status:'Active',
+   invoiced:1520000,paid:1360000,outstanding:160000,retentionHeld:0,
+   pm:'Siobhán Murphy',sigCodec:'David Walsh',sigClient:'Brendan Hayes (Group CFO)',
+   milestones:[
+     {name:'Phase 1 — Core Finance (IE/UK)',date:'2025-04-30',value:640000,invoiced:true,paid:true},
+     {name:'Phase 2 — DACH & Benelux',date:'2025-09-30',value:640000,invoiced:true,paid:true},
+     {name:'Phase 3 — France & Iberia',date:'2026-03-31',value:640000,invoiced:true,paid:false},
+     {name:'Phase 4 — Nordics & CEE',date:'2026-07-31',value:640000,invoiced:false,paid:false},
+     {name:'Phase 5 — Consolidation & Close',date:'2026-12-31',value:640000,invoiced:false,paid:false}]},
+  {id:'CTR-012',contractNo:'CODEC-KERRY-2025-044',customer:'Kerry Group',customerId:'kerry',
+   projectId:'kerry-data',projectName:'Azure Data Lake & Analytics Platform',type:'T&M',value:920000,
+   startDate:'2025-06-01',endDate:'2026-09-30',status:'Active',
+   invoiced:420000,paid:378000,outstanding:42000,retentionHeld:46000,
+   pm:'Niamh Kelly',sigCodec:'David Walsh',sigClient:'Niamh Carroll (Group CIO)',
+   milestones:[
+     {name:'Foundation & Ingestion Layer',date:'2025-09-30',value:184000,invoiced:true,paid:true},
+     {name:'Transformation & Modelling',date:'2026-01-31',value:276000,invoiced:true,paid:true},
+     {name:'Analytics & Reporting Layer',date:'2026-05-31',value:276000,invoiced:true,paid:false},
+     {name:'Rollout & Training',date:'2026-09-30',value:184000,invoiced:false,paid:false}]},
+  // ── AER LINGUS ──
+  {id:'CTR-013',contractNo:'CODEC-AL-2025-012',customer:'Aer Lingus',customerId:'al',
+   projectId:'al-crew',projectName:'Crew Management System Replacement',type:'Fixed Fee',value:2100000,
+   startDate:'2025-04-01',endDate:'2026-06-30',status:'Active',
+   invoiced:1680000,paid:1470000,outstanding:210000,retentionHeld:105000,
+   pm:"Ciarán O'Brien",sigCodec:'David Walsh',sigClient:'Seán Doyle (CEO)',
+   milestones:[
+     {name:'Design & Architecture',date:'2025-07-31',value:420000,invoiced:true,paid:true},
+     {name:'Core Build — Scheduling Engine',date:'2025-11-30',value:630000,invoiced:true,paid:true},
+     {name:'Integration — HR & Payroll',date:'2026-02-28',value:420000,invoiced:true,paid:true},
+     {name:'UAT & Parallel Run',date:'2026-05-31',value:420000,invoiced:true,paid:false},
+     {name:'Go-Live & Hypercare',date:'2026-06-30',value:210000,invoiced:false,paid:false}]},
+  {id:'CTR-014',contractNo:'CODEC-AL-2026-003',customer:'Aer Lingus',customerId:'al',
+   projectId:'al-pax',projectName:'Passenger Experience Platform',type:'T&M',value:760000,
+   startDate:'2026-02-01',endDate:'2027-01-31',status:'Active',
+   invoiced:76000,paid:76000,outstanding:0,retentionHeld:38000,
+   pm:"Mark O'Brien",sigCodec:'David Walsh',sigClient:'Niamh Buckley (Chief Digital Officer)',
+   milestones:[
+     {name:'Discovery & UX Research',date:'2026-03-31',value:76000,invoiced:true,paid:true},
+     {name:'UX Design & Prototyping',date:'2026-06-30',value:152000,invoiced:false,paid:false},
+     {name:'Development Sprint 1–3',date:'2026-10-31',value:304000,invoiced:false,paid:false},
+     {name:'Launch & Optimisation',date:'2027-01-31',value:228000,invoiced:false,paid:false}]},
+  // ── CRH PLC ──
+  {id:'CTR-015',contractNo:'CODEC-CRH-2024-067',customer:'CRH plc',customerId:'crh',
+   projectId:'crh-erp',projectName:'SAP Global ERP Standardisation',type:'T&M',value:4500000,
+   startDate:'2024-07-01',endDate:'2027-06-30',status:'Active',
+   invoiced:1000000,paid:900000,outstanding:100000,retentionHeld:0,
+   pm:'David Walsh',sigCodec:'David Walsh',sigClient:'Jim Mintern (Group CFO)',
+   milestones:[
+     {name:'Blueprint & Design Authority',date:'2024-12-31',value:450000,invoiced:true,paid:true},
+     {name:'Phase 1 — EMEA Core Countries',date:'2025-09-30',value:900000,invoiced:true,paid:true},
+     {name:'Phase 2 — Americas Rollout',date:'2026-06-30',value:1350000,invoiced:true,paid:false},
+     {name:'Phase 3 — APAC & MEA',date:'2027-03-31',value:1350000,invoiced:false,paid:false},
+     {name:'Global Hypercare & Support',date:'2027-06-30',value:450000,invoiced:false,paid:false}]},
 ];
 
 // ══════════════════════════════════════════════════════════
@@ -3099,6 +3255,27 @@ const evmData = [
   {id:'ryr-hr',    name:'HR Transformation (Workday)',    customer:'Ryanair',         bac:2457000, pv:663000,  ev:713000,  ac:727000, invoiced:679000, percComplete:29, percPlanned:27,  startDate:'2025-03-01',endDate:'2027-02-28'},
   {id:'ryr-fin',   name:'Finance Upgrade (Oracle)',       customer:'Ryanair',         bac:1053000, pv:84000,   ev:126000,  ac:131000, invoiced:105000, percComplete:12, percPlanned:8,   startDate:'2026-01-06',endDate:'2026-12-31'},
   {id:'esb-field', name:'Field Operations Mobile App',    customer:'ESB',             bac:1287000, pv:1094000, ev:1004000, ac:1020000, invoiced:959000, percComplete:78, percPlanned:85,  startDate:'2024-07-01',endDate:'2026-01-31'},
+  {id:'ptsb-mobile',name:'Mobile Banking App Rebuild',customer:'Permanent TSB',
+   bac:480000,pv:240000,ev:211200,ac:210000,invoiced:190000,
+   percComplete:44,percPlanned:50,startDate:'2025-09-01',endDate:'2026-08-31'},
+  {id:'ptsb-core',name:'Core Banking Migration (Temenos T24)',customer:'Permanent TSB',
+   bac:1850000,pv:185000,ev:222000,ac:185000,invoiced:185000,
+   percComplete:12,percPlanned:10,startDate:'2026-01-15',endDate:'2027-03-31'},
+  {id:'kerry-sap',name:'SAP S/4HANA Finance Rollout (EMEA)',customer:'Kerry Group',
+   bac:3200000,pv:1920000,ev:1760000,ac:1680000,invoiced:1520000,
+   percComplete:55,percPlanned:60,startDate:'2024-11-01',endDate:'2026-12-31'},
+  {id:'kerry-data',name:'Azure Data Lake & Analytics Platform',customer:'Kerry Group',
+   bac:920000,pv:506000,ev:460000,ac:460000,invoiced:420000,
+   percComplete:50,percPlanned:55,startDate:'2025-06-01',endDate:'2026-09-30'},
+  {id:'al-crew',name:'Crew Management System Replacement',customer:'Aer Lingus',
+   bac:2100000,pv:1995000,ev:1890000,ac:1890000,invoiced:1680000,
+   percComplete:90,percPlanned:95,startDate:'2025-04-01',endDate:'2026-06-30'},
+  {id:'al-pax',name:'Passenger Experience Platform',customer:'Aer Lingus',
+   bac:760000,pv:76000,ev:91200,ac:95000,invoiced:76000,
+   percComplete:12,percPlanned:10,startDate:'2026-02-01',endDate:'2027-01-31'},
+  {id:'crh-erp',name:'SAP Global ERP Standardisation',customer:'CRH plc',
+   bac:4500000,pv:1260000,ev:1170000,ac:1125000,invoiced:1000000,
+   percComplete:26,percPlanned:28,startDate:'2024-07-01',endDate:'2027-06-30'},
 ];
 
 // STATUS REPORT ENGINE
@@ -3254,9 +3431,9 @@ function renderShowcase() {
       <div style="display:flex;gap:16px;flex-wrap:wrap;">
         ${[
           {v:'10',l:'Modules'},
-          {v:'4',l:'Customers'},
-          {v:'10',l:'Active Projects'},
-          {v:'€10M+',l:'Portfolio Value'},
+          {v:'8',l:'Customers'},
+          {v:'17',l:'Active Projects'},
+          {v:'€25M+',l:'Portfolio Value'},
           {v:'EUR',l:'Primary Currency'},
           {v:'IFRS 15',l:'Revenue Std'},
           {v:'60s',l:'Monitor Interval'},
@@ -3803,6 +3980,18 @@ const ganttAmendments = [
   {id:'am-012',projectId:'boi-digital',date:'2025-11-15',type:'paused',label:'Paused 6wk',
    desc:'BOI Digital Transformation paused Nov–Dec 2025 during internal BOI restructure. Resumed Jan 2026.',
    oldVal:'Active',newVal:'Paused → Resumed Jan 2026',severity:'amber',approvedBy:'Claire Doyle (BOI)'},
+  {id:'am-013',projectId:'ptsb-core',date:'2026-03-01',type:'added',label:'New Project',
+   desc:'PTSB Core Banking Migration approved — second major engagement with Permanent TSB following successful Mobile App delivery.',
+   oldVal:'—',newVal:'€1.85M Fixed Fee contract',severity:'green',approvedBy:'David Walsh'},
+  {id:'am-014',projectId:'kerry-sap',date:'2026-02-15',type:'extended',label:'Extended +6wk',
+   desc:'Phase 3 France & Iberia extended 6 weeks due to French tax complexity. End date revised.',
+   oldVal:'30 Nov 2026',newVal:'31 Dec 2026',severity:'amber',approvedBy:'Brendan Hayes (Kerry Group)'},
+  {id:'am-015',projectId:'al-crew',date:'2026-02-20',type:'rag-change',label:'RAG → Red',
+   desc:'Crew Management project escalated to Red — UAT P1 defect in pairing algorithm and forecast overrun identified.',
+   oldVal:'Amber',newVal:'Red',severity:'red',approvedBy:"Ciarán O'Brien"},
+  {id:'am-016',projectId:'crh-erp',date:'2026-01-10',type:'scope-increase',label:'Scope +€450K',
+   desc:'CR-CRH-008: Additional Americas tax localisation scope approved — SALT, state apportionment, and intercompany transfer pricing.',
+   oldVal:'€4,050,000',newVal:'€4,500,000',severity:'amber',approvedBy:'Jim Mintern (CRH)'},
 ];
 
 // ══════════════════════════════════════════════════════════
@@ -3845,8 +4034,8 @@ function renderPortfolioGantt(zoom, showAmends) {
   });
 
   const rc = {Green:'#38A169',Amber:'#D69E2E',Red:'#E53E3E'};
-  const custColor = {'AIB Group':'#3182CE','Bank of Ireland':'#805AD5','Ryanair':'#E53E3E','ESB':'#319795'};
-  const custOrder = ['AIB Group','Bank of Ireland','Ryanair','ESB'];
+  const custColor = {'AIB Group':'#3182CE','Bank of Ireland':'#805AD5','Ryanair':'#E53E3E','ESB':'#319795','Permanent TSB':'#DD6B20','Kerry Group':'#276749','Aer Lingus':'#0072B1','CRH plc':'#97266D'};
+  const custOrder = ['AIB Group','Bank of Ireland','Ryanair','ESB','Permanent TSB','Kerry Group','Aer Lingus','CRH plc'];
 
   // Amendment type → display config
   const amendCfg = {
@@ -4300,7 +4489,7 @@ function renderContracts() {
     const cv = cc.reduce((s,c)=>s+c.value,0);
     const ci = cc.reduce((s,c)=>s+c.invoiced,0);
     const co = cc.reduce((s,c)=>s+c.outstanding,0);
-    const custColor2 = {'AIB Group':'#3182CE','Bank of Ireland':'#805AD5','Ryanair':'#E53E3E','ESB':'#319795'};
+    const custColor2 = {'AIB Group':'#3182CE','Bank of Ireland':'#805AD5','Ryanair':'#E53E3E','ESB':'#319795','Permanent TSB':'#DD6B20','Kerry Group':'#276749','Aer Lingus':'#0072B1','CRH plc':'#97266D'};
     const hc = custColor2[cust]||'#1B2A4A';
     return `<div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
       <!-- Customer header -->
