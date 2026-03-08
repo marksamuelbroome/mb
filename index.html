@@ -366,7 +366,7 @@
       <div style="padding:14px 16px;border-top:1px solid rgba(255,255,255,.1);margin-top:8px;">
         <div style="font-size:.62rem;color:rgba(255,255,255,.35);font-weight:700;letter-spacing:.06em;margin-bottom:3px;">BUILD INFO</div>
         <div id="build-stamp" style="font-size:.65rem;color:rgba(255,255,255,.45);font-family:monospace;line-height:1.6;">
-          v3.1 · 07 Mar 2026<br>
+          v3.5 · 08 Mar 2026<br>
           <span id="build-time"></span>
         </div>
       </div>
@@ -3244,6 +3244,71 @@ const contractsData = [
 ];
 
 // ══════════════════════════════════════════════════════════
+// PROJECT PHASES DATA
+// ══════════════════════════════════════════════════════════
+const projectPhases = [
+  // AIB ERP Implementation — 4 phases
+  {projectId:'erp',id:'erp-ph1',name:'Phase I – Discovery & Design',startDate:'2025-10-01',endDate:'2025-12-15',bac:80000,spent:80000,percComplete:100,rag:'Green',deliverable:'Architecture & SOW Signed Off'},
+  {projectId:'erp',id:'erp-ph2',name:'Phase II – Build & Configure',startDate:'2025-12-16',endDate:'2026-02-15',bac:150000,spent:123000,percComplete:82,rag:'Amber',deliverable:'Core Build Complete'},
+  {projectId:'erp',id:'erp-ph3',name:'Phase III – Test & Validate',startDate:'2026-02-16',endDate:'2026-03-15',bac:80000,spent:40000,percComplete:50,rag:'Amber',deliverable:'UAT Sign-Off'},
+  {projectId:'erp',id:'erp-ph4',name:'Phase IV – Go-Live & Stabilise',startDate:'2026-03-16',endDate:'2026-03-31',bac:64000,spent:7000,percComplete:11,rag:'Green',deliverable:'Production Go-Live'},
+  // AIB Data Migration — 2 phases
+  {projectId:'aib-dm',id:'aib-dm-ph1',name:'Phase I – Assessment & Design',startDate:'2025-07-01',endDate:'2025-12-31',bac:400000,spent:400000,percComplete:100,rag:'Green',deliverable:'Data Quality & Migration Blueprint'},
+  {projectId:'aib-dm',id:'aib-dm-ph2',name:'Phase II – Migration Execution',startDate:'2026-01-01',endDate:'2026-06-30',bac:595000,spent:210000,percComplete:35,rag:'Green',deliverable:'All Data Migrated & Validated'},
+  // BOI Digital Banking — 3 phases
+  {projectId:'boi-digital',id:'boi-dig-ph1',name:'Phase I – Foundation & UX',startDate:'2025-04-01',endDate:'2025-09-30',bac:450000,spent:450000,percComplete:100,rag:'Green',deliverable:'Design System & Core Platform'},
+  {projectId:'boi-digital',id:'boi-dig-ph2',name:'Phase II – Core Banking Integration',startDate:'2025-10-01',endDate:'2026-03-31',bac:600000,spent:280000,percComplete:47,rag:'Amber',deliverable:'Live Core Banking APIs'},
+  {projectId:'boi-digital',id:'boi-dig-ph3',name:'Phase III – Launch & Optimise',startDate:'2026-04-01',endDate:'2026-09-30',bac:354000,spent:28000,percComplete:8,rag:'Green',deliverable:'Public App Store Launch'},
+  // BOI CRM — 2 phases
+  {projectId:'crm',id:'crm-ph1',name:'Phase I – Salesforce Configuration',startDate:'2025-01-15',endDate:'2025-09-30',bac:1000000,spent:820000,percComplete:82,rag:'Green',deliverable:'SF Core Configured & Tested'},
+  {projectId:'crm',id:'crm-ph2',name:'Phase II – Integration & Rollout',startDate:'2025-10-01',endDate:'2026-12-31',bac:1106000,spent:392000,percComplete:35,rag:'Amber',deliverable:'Full CRM Rollout Across All Branches'},
+  // Kerry Group SAP — 4 phases
+  {projectId:'kerry-sap',id:'kerry-sap-ph1',name:'Phase I – Blueprint & Global Template',startDate:'2024-07-01',endDate:'2025-01-31',bac:640000,spent:640000,percComplete:100,rag:'Green',deliverable:'Global Template Defined'},
+  {projectId:'kerry-sap',id:'kerry-sap-ph2',name:'Phase II – EMEA Realization',startDate:'2025-02-01',endDate:'2026-04-30',bac:1280000,spent:1040000,percComplete:81,rag:'Amber',deliverable:'EMEA Go-Live'},
+  {projectId:'kerry-sap',id:'kerry-sap-ph3',name:'Phase III – Americas Rollout',startDate:'2026-05-01',endDate:'2026-12-31',bac:800000,spent:0,percComplete:0,rag:'Green',deliverable:'Americas Countries Live'},
+  {projectId:'kerry-sap',id:'kerry-sap-ph4',name:'Phase IV – APAC & MEA Rollout',startDate:'2027-01-01',endDate:'2027-06-30',bac:480000,spent:0,percComplete:0,rag:'Green',deliverable:'Global SAP Coverage'},
+  // CRH plc SAP — 4 phases
+  {projectId:'crh-erp',id:'crh-erp-ph1',name:'Phase I – Global Template Design',startDate:'2024-09-01',endDate:'2025-06-30',bac:900000,spent:900000,percComplete:100,rag:'Green',deliverable:'Approved Global Template'},
+  {projectId:'crh-erp',id:'crh-erp-ph2',name:'Phase II – EMEA Pilot Rollout',startDate:'2025-07-01',endDate:'2026-06-30',bac:1350000,spent:225000,percComplete:17,rag:'Green',deliverable:'3 EMEA Countries Live'},
+  {projectId:'crh-erp',id:'crh-erp-ph3',name:'Phase III – Americas Rollout',startDate:'2026-07-01',endDate:'2027-03-31',bac:1350000,spent:0,percComplete:0,rag:'Green',deliverable:'Americas Division Live'},
+  {projectId:'crh-erp',id:'crh-erp-ph4',name:'Phase IV – APAC & Africa',startDate:'2027-04-01',endDate:'2027-12-31',bac:900000,spent:0,percComplete:0,rag:'Green',deliverable:'Global Deployment Complete'},
+  // Aer Lingus Crew Mgmt — 3 phases
+  {projectId:'al-crew',id:'al-crew-ph1',name:'Phase I – Process Analysis & Design',startDate:'2025-01-01',endDate:'2025-06-30',bac:630000,spent:630000,percComplete:100,rag:'Green',deliverable:'Approved Process Design Docs'},
+  {projectId:'al-crew',id:'al-crew-ph2',name:'Phase II – System Build & Config',startDate:'2025-07-01',endDate:'2025-12-31',bac:840000,spent:840000,percComplete:100,rag:'Green',deliverable:'Configured System in Staging'},
+  {projectId:'al-crew',id:'al-crew-ph3',name:'Phase III – UAT & Go-Live',startDate:'2026-01-01',endDate:'2026-04-30',bac:630000,spent:420000,percComplete:67,rag:'Red',deliverable:'Live in Production'},
+  // Permanent TSB Core Banking — 3 phases
+  {projectId:'ptsb-core',id:'ptsb-core-ph1',name:'Phase I – Current State Assessment',startDate:'2026-01-01',endDate:'2026-05-31',bac:370000,spent:185000,percComplete:50,rag:'Amber',deliverable:'Assessment Report & Roadmap'},
+  {projectId:'ptsb-core',id:'ptsb-core-ph2',name:'Phase II – Migration Design & Build',startDate:'2026-06-01',endDate:'2026-12-31',bac:740000,spent:0,percComplete:0,rag:'Green',deliverable:'Migration Blueprint & Test Env'},
+  {projectId:'ptsb-core',id:'ptsb-core-ph3',name:'Phase III – Execution & Cutover',startDate:'2027-01-01',endDate:'2027-09-30',bac:740000,spent:0,percComplete:0,rag:'Green',deliverable:'Full Core Banking Migration'},
+  // ESB Smart Portal — 2 phases
+  {projectId:'esb-portal',id:'esb-portal-ph1',name:'Phase I – Discovery & Design',startDate:'2025-09-01',endDate:'2025-11-30',bac:120000,spent:120000,percComplete:100,rag:'Green',deliverable:'Approved Design Specification'},
+  {projectId:'esb-portal',id:'esb-portal-ph2',name:'Phase II – Build & Launch',startDate:'2025-12-01',endDate:'2026-04-30',bac:469000,spent:268000,percComplete:57,rag:'Green',deliverable:'Customer Portal Live'},
+  // Ryanair HR — 2 phases
+  {projectId:'ryr-hr',id:'ryr-hr-ph1',name:'Phase I – Workday Configuration',startDate:'2025-03-01',endDate:'2025-12-31',bac:1300000,spent:1100000,percComplete:85,rag:'Amber',deliverable:'Core HR Module Live'},
+  {projectId:'ryr-hr',id:'ryr-hr-ph2',name:'Phase II – Payroll & Self-Service',startDate:'2026-01-01',endDate:'2027-02-28',bac:1157000,spent:605000,percComplete:52,rag:'Amber',deliverable:'Full Payroll & ESS Live'},
+];
+
+// ══════════════════════════════════════════════════════════
+// CHANGE REQUESTS DATA
+// ══════════════════════════════════════════════════════════
+const changeRequestsData = [
+  {id:'CR-001',projectId:'erp',customerId:'aib',customer:'AIB Group',title:'Additional Legacy System Integration',type:'Scope Change',status:'Approved',value:45000,impactDays:14,raised:'2026-01-10',approvedDate:'2026-01-20',approvedBy:'David Walsh',description:'Scope expansion to include 3 additional legacy mainframe interfaces not in original SOW.'},
+  {id:'CR-002',projectId:'aib-dm',customerId:'aib',customer:'AIB Group',title:'Extended Data Cleansing Scope',type:'Scope Change',status:'Pending',value:28000,impactDays:7,raised:'2026-02-15',approvedDate:null,approvedBy:null,description:'Additional data quality remediation required following Phase I assessment findings.'},
+  {id:'CR-003',projectId:'boi-digital',customerId:'boi',customer:'Bank of Ireland',title:'Biometric Authentication Layer',type:'New Feature',status:'Approved',value:85000,impactDays:21,raised:'2025-12-01',approvedDate:'2025-12-15',approvedBy:'David Walsh',description:'Face ID and fingerprint authentication added to mobile app scope.'},
+  {id:'CR-004',projectId:'boi-digital',customerId:'boi',customer:'Bank of Ireland',title:'Open Banking API Extension (PSD2)',type:'Regulatory',status:'Under Review',value:62000,impactDays:14,raised:'2026-02-20',approvedDate:null,approvedBy:null,description:'PSD2 compliance requires additional Open Banking API endpoints beyond original specification.'},
+  {id:'CR-005',projectId:'crm',customerId:'boi',customer:'Bank of Ireland',title:'AI-Powered Lead Scoring Module',type:'New Feature',status:'Pending',value:110000,impactDays:28,raised:'2026-03-01',approvedDate:null,approvedBy:null,description:'Business request for ML-based lead scoring not in original Salesforce implementation scope.'},
+  {id:'CR-006',projectId:'ryr-hr',customerId:'ryr',customer:'Ryanair',title:'Cabin Crew Variable Pay Module',type:'New Feature',status:'Approved',value:65000,impactDays:28,raised:'2025-11-15',approvedDate:'2025-12-01',approvedBy:'David Walsh',description:'Additional payroll processing module for cabin crew variable pay components.'},
+  {id:'CR-007',projectId:'esb-portal',customerId:'esb',customer:'ESB',title:'Smart Meter Data Integration',type:'Scope Change',status:'Pending',value:118000,impactDays:35,raised:'2026-01-28',approvedDate:null,approvedBy:null,description:'Integration with 750K smart meter network for real-time data ingestion not in original brief.'},
+  {id:'CR-008',projectId:'ptsb-mobile',customerId:'ptsb',customer:'Permanent TSB',title:'PSD2 Open Banking Compliance',type:'Regulatory',status:'Approved',value:95000,impactDays:21,raised:'2026-01-05',approvedDate:'2026-01-20',approvedBy:'David Walsh',description:'CBI-mandated PSD2 Open Banking API compliance requirement added post contract signing.'},
+  {id:'CR-009',projectId:'ptsb-core',customerId:'ptsb',customer:'Permanent TSB',title:'CBI Regulatory Reporting Feeds',type:'Regulatory',status:'Approved',value:175000,impactDays:14,raised:'2026-02-10',approvedDate:'2026-02-25',approvedBy:'David Walsh',description:'Central Bank of Ireland reporting requirements mandate additional regulatory data feeds.'},
+  {id:'CR-010',projectId:'al-crew',customerId:'al',customer:'Aer Lingus',title:'Crew Self-Service Bidding Module',type:'New Feature',status:'Rejected',value:180000,impactDays:45,raised:'2025-10-01',approvedDate:'2025-10-20',approvedBy:'David Walsh',description:'Request for self-service crew bid module declined — out of scope for current programme.'},
+  {id:'CR-011',projectId:'al-pax',customerId:'al',customer:'Aer Lingus',title:'Real-Time Flight Status Integration',type:'Scope Change',status:'Under Review',value:90000,impactDays:18,raised:'2026-02-25',approvedDate:null,approvedBy:null,description:'Integration with live flight data feeds for passenger experience personalisation.'},
+  {id:'CR-012',projectId:'kerry-sap',customerId:'kerry',customer:'Kerry Group',title:'Italy & Spain Country Rollout',type:'Scope Change',status:'Approved',value:220000,impactDays:30,raised:'2025-09-15',approvedDate:'2025-10-01',approvedBy:'David Walsh',description:'Additional EMEA countries added to Phase II scope following board approval.'},
+  {id:'CR-013',projectId:'kerry-sap',customerId:'kerry',customer:'Kerry Group',title:'Executive Analytics Dashboard',type:'New Feature',status:'Pending',value:145000,impactDays:20,raised:'2026-02-28',approvedDate:null,approvedBy:null,description:'C-suite request for embedded Power BI real-time analytics not in original SAP scope.'},
+  {id:'CR-014',projectId:'crh-erp',customerId:'crh',customer:'CRH plc',title:'APAC Phase Acceleration',type:'Timeline Change',status:'Under Review',value:350000,impactDays:-42,raised:'2026-02-01',approvedDate:null,approvedBy:null,description:'Board mandate to accelerate APAC rollout by 6 weeks; requires parallel-running Phases III and IV.'},
+];
+
+// ══════════════════════════════════════════════════════════
 // EARNED VALUE MANAGEMENT DATA
 // ══════════════════════════════════════════════════════════
 const evmData = [
@@ -3997,11 +4062,12 @@ const ganttAmendments = [
 // ══════════════════════════════════════════════════════════
 // PORTFOLIO GANTT ENGINE
 // ══════════════════════════════════════════════════════════
-function renderPortfolioGantt(zoom, showAmends) {
+function renderPortfolioGantt(zoom, showAmends, showPhases) {
   const el = document.querySelector('#portfolio-gantt-content');
   if(!el) return;
   zoom = zoom || 'all';
   showAmends = (showAmends === undefined) ? true : showAmends;
+  showPhases = (showPhases === undefined) ? false : showPhases;
 
   const today = new Date('2026-03-07');
   const zr = {
@@ -4077,11 +4143,12 @@ function renderPortfolioGantt(zoom, showAmends) {
       </div>
     </div>
     <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
-      ${Object.entries(zr).map(([k,v])=>`<button onclick="renderPortfolioGantt('${k}',${showAmends})" style="padding:6px 14px;border:1.5px solid ${k===zoom?'#1B2A4A':'var(--border)'};background:${k===zoom?'#1B2A4A':'#fff'};color:${k===zoom?'#fff':'#4A5568'};border-radius:6px;font-size:.74rem;font-weight:700;cursor:pointer;">${v.label}</button>`).join('')}
+      ${Object.entries(zr).map(([k,v])=>`<button onclick="renderPortfolioGantt('${k}',${showAmends},${showPhases})" style="padding:6px 14px;border:1.5px solid ${k===zoom?'#1B2A4A':'var(--border)'};background:${k===zoom?'#1B2A4A':'#fff'};color:${k===zoom?'#fff':'#4A5568'};border-radius:6px;font-size:.74rem;font-weight:700;cursor:pointer;">${v.label}</button>`).join('')}
       <div style="width:1px;height:22px;background:#E2E8F0;margin:0 4px;"></div>
-      <button onclick="renderPortfolioGantt('${zoom}',${!showAmends})" style="padding:6px 14px;border:1.5px solid ${showAmends?'#805AD5':'var(--border)'};background:${showAmends?'#805AD5':'#fff'};color:${showAmends?'#fff':'#4A5568'};border-radius:6px;font-size:.74rem;font-weight:700;cursor:pointer;">
+      <button onclick="renderPortfolioGantt('${zoom}',${!showAmends},${showPhases})" style="padding:6px 14px;border:1.5px solid ${showAmends?'#805AD5':'var(--border)'};background:${showAmends?'#805AD5':'#fff'};color:${showAmends?'#fff':'#4A5568'};border-radius:6px;font-size:.74rem;font-weight:700;cursor:pointer;">
         📋 ${showAmends?'Hide':'Show'} Changes
       </button>
+      <button id="pg-phases-toggle" onclick="renderPortfolioGantt('${zoom}',${showAmends},${!showPhases})" style="background:${showPhases?'#553C9A':'#4A5568'};color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;">⚙ ${showPhases ? 'Collapse Phases' : 'Expand Phases'}</button>
     </div>
   </div>
 
@@ -4223,7 +4290,30 @@ function renderPortfolioGantt(zoom, showAmends) {
                   return `<div title="${ms.name}&#10;${ms.date}&#10;€${Number(ms.value).toLocaleString()}&#10;${ms.paid?'✅ Paid':ms.invoiced?'⏳ Invoiced':'Pending'}" style="position:absolute;top:50%;transform:translateY(-50%) rotate(45deg);left:calc(${ml2}% - 7px);width:14px;height:14px;background:${mc2};border:2px solid ${mBorder};border-radius:2px;z-index:6;cursor:default;box-shadow:0 1px 3px rgba(0,0,0,.2);"></div>`;
                 }).join('')}
               </div>
-            </div>`;
+            </div>
+            ${(()=>{
+              if(!showPhases) return '';
+              const phases = projectPhases.filter(ph => ph.projectId === proj.id);
+              if(!phases.length) return '';
+              return phases.map(ph => {
+                const phLeft = toLeft(ph.startDate);
+                const phWidth = toWidth(ph.startDate, ph.endDate);
+                const phRagColor = ph.rag==='Green'?'#48BB78':ph.rag==='Amber'?'#ECC94B':'#FC8181';
+                const phAlpha = ph.percComplete===100 ? '0.55' : '0.75';
+                return `<div style="display:flex;align-items:center;border-bottom:1px solid #2D3748;min-height:36px;background:#1A202C;">
+                  <div style="width:250px;min-width:250px;padding:4px 8px 4px 28px;font-size:11px;color:#A0AEC0;display:flex;align-items:center;gap:6px;border-right:1px solid #2D3748;">
+                    <span style="color:${phRagColor};font-size:9px;">●</span>
+                    <span style="font-weight:500;">${ph.name}</span>
+                    <span style="margin-left:auto;font-size:10px;opacity:0.7;">${ph.percComplete}%</span>
+                  </div>
+                  <div style="flex:1;position:relative;height:36px;overflow:hidden;">
+                    ${phWidth>0?`<div style="position:absolute;left:${phLeft}%;width:${phWidth}%;top:8px;height:14px;background:${ragC};opacity:${phAlpha};border-radius:3px;min-width:3px;display:flex;align-items:center;padding:0 4px;">
+                      <span style="color:#fff;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${ph.deliverable}</span>
+                    </div>`:''}
+                  </div>
+                </div>`;
+              }).join('');
+            })()}`;
           }).join('')}`;
         }).join('')}
 
@@ -4599,6 +4689,34 @@ function renderContracts() {
           </div>
         </div>`;
       }).join('')}
+
+      <!-- Change Requests for this customer -->
+      ${(()=>{
+        const crs = changeRequestsData.filter(cr => cr.customer === cust);
+        if(!crs.length) return '';
+        const crApproved = crs.filter(c=>c.status==='Approved');
+        const crPending = crs.filter(c=>c.status==='Pending'||c.status==='Under Review');
+        const crTotal = crs.reduce((s,c)=>s+(c.status!=='Rejected'?c.value:0),0);
+        return `<div style="padding:12px 18px;border-top:1px solid #2D3748;background:#171E2D;">
+          <div style="font-size:12px;font-weight:700;color:#90CDF4;margin-bottom:6px;display:flex;align-items:center;gap:8px;">
+            📋 Change Requests (${crs.length})
+            <span style="font-size:11px;font-weight:400;color:#A0AEC0;">€${crTotal.toLocaleString()} active value</span>
+            <span style="margin-left:auto;font-size:11px;background:#553C9A;color:#E9D8FD;padding:2px 8px;border-radius:10px;">${crPending.length} pending approval</span>
+          </div>
+          ${crs.map(cr=>{
+            const stCol = cr.status==='Approved'?'#276749':cr.status==='Rejected'?'#742A2A':cr.status==='Under Review'?'#2C5282':'#553C9A';
+            const stBg = cr.status==='Approved'?'#C6F6D5':cr.status==='Rejected'?'#FED7D7':cr.status==='Under Review'?'#BEE3F8':'#E9D8FD';
+            const stTx = cr.status==='Approved'?'#276749':cr.status==='Rejected'?'#742A2A':cr.status==='Under Review'?'#2C5282':'#553C9A';
+            return `<div style="display:flex;align-items:center;gap:8px;padding:5px 8px;margin-bottom:3px;background:#1A202C;border-radius:5px;border-left:3px solid ${stCol};">
+              <span style="font-size:10px;color:#718096;min-width:52px;">${cr.id}</span>
+              <span style="font-size:12px;color:#E2E8F0;flex:1;">${cr.title}</span>
+              <span style="font-size:11px;color:#68D391;">+€${cr.value.toLocaleString()}</span>
+              <span style="font-size:11px;color:#718096;">${cr.impactDays>0?'+'+cr.impactDays+'d':cr.impactDays<0?cr.impactDays+'d':'0d'}</span>
+              <span style="font-size:10px;font-weight:600;background:${stBg};color:${stTx};padding:2px 7px;border-radius:8px;">${cr.status}</span>
+            </div>`;
+          }).join('')}
+        </div>`;
+      })()}
 
       <!-- Customer billing progress -->
       <div style="padding:12px 18px;background:#F7FAFC;border-top:1px solid var(--border);">
