@@ -50,6 +50,22 @@
     font-size:.78rem;transition:all .15s;}
   .nav-sub:hover{color:rgba(255,255,255,.85);}
 
+  /* ── Collapsible Sidebar ── */
+  .drawer{transition:width .2s ease;}
+  .drawer.collapsed{width:60px;overflow:hidden;}
+  .drawer.collapsed .section-label{display:none;}
+  .drawer.collapsed .nav-label{display:none;}
+  .drawer.collapsed .nav-badge{display:none;}
+  .drawer.collapsed .nav-item{padding:10px 0;justify-content:center;gap:0;border-left:3px solid transparent;}
+  .drawer.collapsed .nav-item.active{border-left-color:var(--teal);}
+  .drawer.collapsed .nav-group{display:none;}
+  .drawer.collapsed .nav-sub{display:none;}
+  .drawer.collapsed #build-stamp{display:none;}
+  .drawer.collapsed .sidebar-toggle-wrap{justify-content:center;padding:8px 0;}
+  .sidebar-toggle-wrap{display:flex;justify-content:flex-end;padding:6px 10px 2px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:4px;}
+  .sidebar-toggle-btn{background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.7);width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+  .sidebar-toggle-btn:hover{background:rgba(255,255,255,.15);color:#fff;}
+
   /* ── Main ── */
   .main{flex:1;overflow-y:auto;padding:24px;}
 
@@ -283,93 +299,105 @@
         <button onclick="document.getElementById('cm-toast').style.display='none'" style="padding:6px 12px;background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:6px;font-size:.72rem;cursor:pointer;">Dismiss</button>
       </div>
     </div>
-    <div class="drawer">
-      <div class="section-label">👤 My Workspace</div>
-      <div class="nav-item" id="nav-my-dash" onclick="showPage('pg-my-dashboard')"><span class="ico">⬛</span> My Dashboard</div>
-      <div class="nav-item" id="nav-timesheet" onclick="showPage('pg-timesheet')"><span class="ico">⏱</span> My Timesheet</div>
-      <div class="nav-item" id="nav-my-assign" onclick="showPage('pg-my-assignments')"><span class="ico">📋</span> My Assignments</div>
-      <div class="nav-item" id="nav-expenses" onclick="showPage('pg-my-expenses')"><span class="ico">🧾</span> My Expenses</div>
-      <div class="nav-item" id="nav-leave" onclick="showPage('pg-my-leave')"><span class="ico">🌴</span> My Leave</div>
+    <div class="drawer" id="app-drawer">
+  <div class="sidebar-toggle-wrap">
+    <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Toggle sidebar" id="sidebar-toggle-btn">☰</button>
+  </div>
+  <!-- Section: Workspace -->
+  <div class="section-label">🏠 Workspace</div>
+  <div class="nav-item" id="nav-dashboard" onclick="showPage('pg-dashboard')"><span class="ico">📊</span><span class="nav-label"> My Dashboard</span></div>
+  <div class="nav-item" id="nav-timesheet" onclick="showPage('pg-timesheet')"><span class="ico">⏱</span><span class="nav-label"> My Timesheet</span></div>
+  <div class="nav-item" id="nav-assignments" onclick="showPage('pg-assignments')"><span class="ico">📋</span><span class="nav-label"> My Assignments</span></div>
+  <div class="nav-item" id="nav-expenses" onclick="showPage('pg-expenses')"><span class="ico">🧾</span><span class="nav-label"> My Expenses</span></div>
+  <div class="nav-item" id="nav-leave" onclick="showPage('pg-leave')"><span class="ico">🌴</span><span class="nav-label"> My Leave</span></div>
 
-      <div class="section-label">📊 Portfolio & Executive</div>
-      <div class="nav-item active" id="nav-exec" onclick="showPage('pg-executive')"><span class="ico">📊</span> Executive Dashboard</div>
-      <div class="nav-item" id="nav-health" onclick="showPage('pg-health')"><span class="ico">🎯</span> Project Health</div>
-      <div class="nav-item" id="nav-variance" onclick="showPage('pg-variance')"><span class="ico">🔍</span> What Changed</div>
-      <div class="nav-item" id="nav-raid" onclick="showPage('pg-raid')"><span class="ico">⚠️</span> RAID Log</div>
+  <!-- Section: Portfolio -->
+  <div class="section-label">📊 Portfolio</div>
+  <div class="nav-item" id="nav-executive" onclick="showPage('pg-executive')"><span class="ico">🏛</span><span class="nav-label"> Executive Dashboard</span></div>
+  <div class="nav-item" id="nav-health" onclick="showPage('pg-health')"><span class="ico">🎯</span><span class="nav-label"> Project Health</span></div>
+  <div class="nav-item" id="nav-whatchanged" onclick="showPage('pg-whatchanged')"><span class="ico">🔍</span><span class="nav-label"> What Changed</span></div>
+  <div class="nav-item" id="nav-raid" onclick="showPage('pg-raid')"><span class="ico">⚠️</span><span class="nav-label"> RAID Log</span></div>
+  <div class="nav-item" id="nav-change-monitor" onclick="showPage('pg-change-monitor')"><span class="ico">🤖</span><span class="nav-label"> Change Monitor <span id="cm-nav-badge" style="background:#E53E3E;color:#fff;border-radius:10px;padding:1px 6px;font-size:.65rem;margin-left:4px;display:none;">0</span></span></div>
 
-      <div class="section-label">📁 Customers & Engagements</div>
-      <div class="nav-item" id="nav-customers" onclick="showPage('pg-customers')"><span class="ico">🏢</span> Customers</div>
-      <div class="nav-item" id="nav-projects" onclick="showPage('pg-projects')"><span class="ico">📁</span> Projects</div>
-      <div class="nav-item" id="nav-pipeline" onclick="showPage('pg-pipeline')"><span class="ico">📈</span> Pipeline</div>
-      <div class="nav-item" id="nav-contracts" onclick="showPage('pg-contracts')"><span class="ico">📑</span> Contracts</div>
-      <div class="nav-item" id="nav-ado" onclick="showPage('pg-ado')"><span class="ico">🔷</span> ADO Tasks &amp; Sizing</div>
+  <!-- Section: Clients -->
+  <div class="section-label">🤝 Clients</div>
+  <div class="nav-item" id="nav-customers" onclick="showPage('pg-customers')"><span class="ico">🏢</span><span class="nav-label"> Customers</span></div>
+  <div class="nav-item" id="nav-contracts" onclick="showPage('pg-contracts')"><span class="ico">📄</span><span class="nav-label"> Contracts & CRs</span></div>
+  <div class="nav-item" id="nav-pipeline" onclick="showPage('pg-pipeline')"><span class="ico">📈</span><span class="nav-label"> Pipeline</span></div>
 
-      <div class="section-label">🗓 Delivery</div>
-      <div class="nav-item" id="nav-portfolio-gantt" onclick="showPage('pg-portfolio-gantt')"><span class="ico">🗓</span> Portfolio Gantt</div>
-      <div class="nav-item" id="nav-gantt" onclick="showPage('pg-gantt')"><span class="ico">📊</span> Gantt Chart</div>
-      <div class="nav-item" id="nav-kanban" onclick="showPage('pg-kanban')"><span class="ico">📋</span> Kanban Board</div>
+  <!-- Section: Projects & Delivery -->
+  <div class="section-label">📋 Projects & Delivery</div>
+  <div class="nav-item" id="nav-projects" onclick="showPage('pg-projects')"><span class="ico">🗂</span><span class="nav-label"> Projects</span></div>
+  <div class="nav-item" id="nav-portfolio-gantt" onclick="showPage('pg-portfolio-gantt')"><span class="ico">🗓</span><span class="nav-label"> Portfolio Gantt</span></div>
+  <div class="nav-item" id="nav-gantt" onclick="showPage('pg-gantt')"><span class="ico">📅</span><span class="nav-label"> Gantt Chart</span></div>
+  <div class="nav-item" id="nav-kanban" onclick="showPage('pg-kanban')"><span class="ico">🟦</span><span class="nav-label"> Kanban Board</span></div>
+  <div class="nav-item" id="nav-ado" onclick="showPage('pg-ado')"><span class="ico">🔧</span><span class="nav-label"> ADO Tasks</span></div>
 
-      <div class="section-label">👥 Resourcing & HR</div>
-      <div class="nav-item" id="nav-avail" onclick="showPage('pg-availability')"><span class="ico">👥</span> Availability</div>
-      <div class="nav-item" id="nav-consultants" onclick="showPage('pg-consultants')"><span class="ico">🧑‍💼</span> Consultants</div>
-      <div class="nav-item" id="nav-resourcing" onclick="showPage('pg-resourcing')"><span class="ico">🔍</span> Resource Requests</div>
-      <div class="nav-item" id="nav-skills" onclick="showPage('pg-skills')"><span class="ico">🎯</span> Skills Matrix</div>
-      <div class="nav-item" id="nav-bench" onclick="showPage('pg-bench')"><span class="ico">🪑</span> Bench & Demand</div>
-      <div class="nav-item" id="nav-orgchart" onclick="showPage('pg-orgchart')"><span class="ico">🏢</span> Org Chart</div>
-      <div class="nav-item" id="nav-performance" onclick="showPage('pg-performance')"><span class="ico">⭐</span> Performance Reviews</div>
+  <!-- Section: People -->
+  <div class="section-label">👥 People</div>
+  <div class="nav-item" id="nav-availability" onclick="showPage('pg-availability')"><span class="ico">📆</span><span class="nav-label"> Availability</span></div>
+  <div class="nav-item" id="nav-consultants" onclick="showPage('pg-consultants')"><span class="ico">👤</span><span class="nav-label"> Consultants</span></div>
+  <div class="nav-item" id="nav-resources" onclick="showPage('pg-resources')"><span class="ico">🧩</span><span class="nav-label"> Resources</span></div>
+  <div class="nav-item" id="nav-skills" onclick="showPage('pg-skills')"><span class="ico">⭐</span><span class="nav-label"> Skills Matrix</span></div>
+  <div class="nav-item" id="nav-bench" onclick="showPage('pg-bench')"><span class="ico">🪑</span><span class="nav-label"> Bench</span></div>
+  <div class="nav-item" id="nav-orgchart" onclick="showPage('pg-orgchart')"><span class="ico">🌿</span><span class="nav-label"> Org Chart</span></div>
+  <div class="nav-item" id="nav-performance" onclick="showPage('pg-performance')"><span class="ico">🏆</span><span class="nav-label"> Performance</span></div>
 
-      <div class="section-label">📅 Reporting</div>
-      <div class="nav-item" id="nav-weekly-reports" onclick="showPage('pg-weekly-reports')"><span class="ico">📅</span> Weekly Reports</div>
-      <div class="nav-item" id="nav-status-customer" onclick="showPage('pg-status-customer')"><span class="ico">📄</span> Customer Report</div>
-      <div class="nav-item" id="nav-status-internal" onclick="showPage('pg-status-internal')"><span class="ico">🔒</span> Internal Report</div>
-      <div class="nav-item" id="nav-portal" onclick="showPage('pg-portal')"><span class="ico">🌐</span> Customer Portal</div>
+  <!-- Section: Reporting -->
+  <div class="section-label">📄 Reporting</div>
+  <div class="nav-item" id="nav-weekly" onclick="showPage('pg-weekly')"><span class="ico">📰</span><span class="nav-label"> Weekly Reports</span></div>
+  <div class="nav-item" id="nav-customer-report" onclick="showPage('pg-customer-report')"><span class="ico">📊</span><span class="nav-label"> Customer Report</span></div>
+  <div class="nav-item" id="nav-internal-report" onclick="showPage('pg-internal-report')"><span class="ico">📑</span><span class="nav-label"> Internal Report</span></div>
+  <div class="nav-item" id="nav-portal" onclick="showPage('pg-portal')"><span class="ico">🌐</span><span class="nav-label"> Customer Portal</span></div>
 
-      <div class="section-label">✅ Approvals</div>
-      <div class="nav-item" id="nav-approval" onclick="showPage('pg-approval')"><span class="ico">✅</span> Timesheet Approval</div>
-      <div class="nav-item" id="nav-coapprove" onclick="showPage('pg-coapprove')"><span class="ico">🤝</span> Co-Approvals <span style="background:#805AD5;color:#fff;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:auto;">NEW</span></div>
+  <!-- Section: Finance -->
+  <div class="section-label">💰 Finance</div>
+  <div class="nav-group" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><span class="ico">📥</span><span class="nav-label"> Accounts Receivable</span></div>
+  <div>
+    <div class="nav-sub" id="nav-ar-invoices" onclick="showPage('pg-ar-invoices')"><span class="nav-label">Invoices</span></div>
+    <div class="nav-sub" id="nav-ar-aged" onclick="showPage('pg-ar-aged')"><span class="nav-label">Aged Debtors</span></div>
+    <div class="nav-sub" id="nav-ar-cashflow" onclick="showPage('pg-ar-cashflow')"><span class="nav-label">Cash Flow</span></div>
+    <div class="nav-sub" id="nav-evm" onclick="showPage('pg-evm')"><span class="nav-label">EVM / Revenue</span></div>
+  </div>
+  <div class="nav-group" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><span class="ico">📤</span><span class="nav-label"> Accounts Payable</span></div>
+  <div>
+    <div class="nav-sub" id="nav-ap-bills" onclick="showPage('pg-ap-bills')"><span class="nav-label">Bills</span></div>
+    <div class="nav-sub" id="nav-ap-suppliers" onclick="showPage('pg-ap-suppliers')"><span class="nav-label">Suppliers</span></div>
+  </div>
+  <div class="nav-group" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><span class="ico">💳</span><span class="nav-label"> Expense Management</span></div>
+  <div>
+    <div class="nav-sub" id="nav-exp-submit" onclick="showPage('pg-exp-submit')"><span class="nav-label">Submit Expenses</span></div>
+    <div class="nav-sub" id="nav-exp-approve" onclick="showPage('pg-exp-approve')"><span class="nav-label">Approve Expenses</span></div>
+    <div class="nav-sub" id="nav-exp-report" onclick="showPage('pg-exp-report')"><span class="nav-label">Expense Reports</span></div>
+  </div>
 
-      <div class="section-label">💰 Finance</div>
-      <div class="nav-group">💳 Accounts Receivable</div>
-      <div class="nav-sub" id="nav-invoices" onclick="showPage('pg-invoices')">Invoices</div>
-      <div class="nav-sub" onclick="showPage('pg-ar-aging')">AR Aging</div>
-      <div class="nav-sub" id="nav-billing-rules" onclick="showPage('pg-billing-rules')">Billing Rules</div>
-      <div class="nav-sub" id="nav-revenue-rec" onclick="showPage('pg-revenue-rec')">Revenue Recognition</div>
-      <div class="nav-sub" id="nav-evm" onclick="showPage('pg-evm')">Earned Value (EVM)</div>
-      <div class="nav-group">🏭 Accounts Payable</div>
-      <div class="nav-sub" onclick="showPage('pg-suppliers')">Suppliers</div>
-      <div class="nav-sub" onclick="showPage('pg-purchase-orders')">Purchase Orders</div>
-      <div class="nav-sub" id="nav-cashflow" onclick="showPage('pg-cashflow')">Cash Forecast</div>
-      <div class="nav-group">🧾 Expenses</div>
-      <div class="nav-sub" onclick="showPage('pg-expense-approval')">Expense Approval</div>
+  <!-- Section: Approvals -->
+  <div class="section-label">✅ Approvals</div>
+  <div class="nav-item" id="nav-ts-approve" onclick="showPage('pg-ts-approve')"><span class="ico">✔️</span><span class="nav-label"> Timesheet Approval</span></div>
+  <div class="nav-item" id="nav-coapprove" onclick="showPage('pg-coapprove')"><span class="ico">🤝</span><span class="nav-label"> Co-Approvals</span></div>
 
-      <div class="section-label">🤖 AI & Intelligence</div>
-      <div class="nav-item" id="nav-agents" onclick="showPage('pg-agents')"><span class="ico">🤖</span> AI Agents <span style="background:#00A9CE;color:#fff;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:auto;">6</span></div>
-      <div class="nav-item" id="nav-change-monitor" onclick="showPage('pg-change-monitor')"><span class="ico">📡</span> Change Monitor <span id="cm-nav-badge" style="display:none;background:#E53E3E;color:#fff;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:auto;">0</span></div>
+  <!-- Section: AI -->
+  <div class="section-label">🤖 AI</div>
+  <div class="nav-item" id="nav-ai" onclick="showPage('pg-ai')"><span class="ico">✨</span><span class="nav-label"> AI Agents <span style="background:#553C9A;color:#E9D8FD;border-radius:10px;padding:1px 6px;font-size:.65rem;margin-left:4px;">6</span></span></div>
 
-      <div class="section-label">⚙️ Admin</div>
-      <div class="nav-item" id="nav-roles" onclick="showPage('pg-roles')"><span class="ico">⚙️</span> Roles & Rates</div>
-      <div class="nav-item" id="nav-security" onclick="showPage('pg-security')"><span class="ico">🔐</span> Security & Roles</div>
-      <div class="nav-item" id="nav-changelog" onclick="showPage('pg-changelog')"><span class="ico">📜</span> Change Log</div>
-      <div class="nav-item" id="nav-database" onclick="showPage('pg-database')"><span class="ico">🗄️</span> Database Explorer</div>
+  <!-- Section: Admin & Help -->
+  <div class="section-label">⚙️ Admin & Help</div>
+  <div class="nav-item" id="nav-admin" onclick="showPage('pg-admin')"><span class="ico">⚙️</span><span class="nav-label"> Admin</span></div>
+  <div class="nav-item" id="nav-demo" onclick="showPage('pg-demo')"><span class="ico">🎬</span><span class="nav-label"> Platform Demo</span></div>
+  <div class="nav-item" id="nav-showcase" onclick="showPage('pg-showcase')"><span class="ico">🎯</span><span class="nav-label"> Platform Showcase</span></div>
+  <div class="nav-item" id="nav-tutorial" onclick="showPage('pg-tutorial')"><span class="ico">📖</span><span class="nav-label"> Tutorial</span></div>
+  <div class="nav-item" id="nav-faq" onclick="showPage('pg-faq')"><span class="ico">❓</span><span class="nav-label"> FAQ</span></div>
+  <div class="nav-item" id="nav-features" onclick="showPage('pg-features')"><span class="ico">📋</span><span class="nav-label"> Feature Coverage</span></div>
+  <div class="nav-item" id="nav-selftest" onclick="showPage('pg-selftest')"><span class="ico">🔬</span><span class="nav-label"> Self-Test</span></div>
+  <div class="nav-item" id="nav-overview" onclick="showPage('pg-overview')"><span class="ico">ℹ️</span><span class="nav-label"> Overview</span></div>
+  <div class="nav-item" id="nav-tech" onclick="showPage('pg-tech')"><span class="ico">🏗</span><span class="nav-label"> Tech Architecture</span></div>
+  <div class="nav-item" id="nav-erd" onclick="showPage('pg-erd')"><span class="ico">🗃</span><span class="nav-label"> ERD</span></div>
 
-      <div class="section-label">❓ Help & About</div>
-      <div class="nav-item" id="nav-showcase" onclick="showPage('pg-showcase')"><span class="ico">🎯</span> Platform Showcase</div>
-      <div class="nav-item" id="nav-tutorial" onclick="showPage('pg-tutorial')"><span class="ico">📘</span> User Tutorial</div>
-      <div class="nav-item" id="nav-faq" onclick="showPage('pg-faq')"><span class="ico">❓</span> FAQ</div>
-      <div class="nav-item" id="nav-coverage" onclick="showPage('pg-coverage')"><span class="ico">✅</span> Feature Coverage</div>
-      <div class="nav-item" id="nav-selftest" onclick="showPage('pg-selftest')"><span class="ico">🧪</span> Self-Test</div>
-      <div class="nav-item" id="nav-overview" onclick="showPage('pg-overview')"><span class="ico">📋</span> Executive Overview</div>
-      <div class="nav-item" id="nav-tech" onclick="showPage('pg-tech')"><span class="ico">🏗️</span> Technical Notes</div>
-      <div class="nav-item" id="nav-erd" onclick="showPage('pg-erd')"><span class="ico">🔗</span> Data Model (ERD)</div>
-
-      <!-- Build stamp -->
-      <div style="padding:14px 16px;border-top:1px solid rgba(255,255,255,.1);margin-top:8px;">
-        <div style="font-size:.62rem;color:rgba(255,255,255,.35);font-weight:700;letter-spacing:.06em;margin-bottom:3px;">BUILD INFO</div>
-        <div id="build-stamp" style="font-size:.65rem;color:rgba(255,255,255,.45);font-family:monospace;line-height:1.6;">
-          v3.5 · 08 Mar 2026<br>
-          <span id="build-time"></span>
-        </div>
-      </div>
+  <!-- Build stamp -->
+  <div id="build-stamp" style="padding:16px 20px 8px;font-size:.62rem;color:rgba(255,255,255,.25);border-top:1px solid rgba(255,255,255,.06);margin-top:16px;">
+    v3.6 · 09 Mar 2026<br/>
+    <span id="build-time">Loading…</span>
+  </div>
     </div>
 
     <!-- Main Content -->
@@ -407,10 +435,10 @@
             <table>
               <thead><tr><th>Project</th><th>Customer</th><th class="tr">Budget</th><th class="tr">Billed</th><th style="min-width:120px">Usage</th></tr></thead>
               <tbody>
-                <tr><td><strong>ERP Implementation</strong></td><td>AIB Group</td><td class="tr">€480,000</td><td class="tr">€312,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:65%;background:var(--warning);"></div></div><small style="color:var(--muted)">65%</small></td></tr>
-                <tr><td><strong>Cloud Migration</strong></td><td>CRH plc</td><td class="tr">€350,000</td><td class="tr">€294,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:84%;background:var(--error);"></div></div><small style="color:var(--muted)">84%</small></td></tr>
-                <tr><td><strong>Analytics Platform</strong></td><td>Ryanair</td><td class="tr">€220,000</td><td class="tr">€88,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:40%;background:var(--success);"></div></div><small style="color:var(--muted)">40%</small></td></tr>
-                <tr><td><strong>CRM Rollout</strong></td><td>Bank of Ireland</td><td class="tr">€195,000</td><td class="tr">€176,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:90%;background:var(--error);"></div></div><small style="color:var(--muted)">90%</small></td></tr>
+                <tr><td><strong>ERP Implementation</strong></td><td>Clearwater Bank</td><td class="tr">€480,000</td><td class="tr">€312,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:65%;background:var(--warning);"></div></div><small style="color:var(--muted)">65%</small></td></tr>
+                <tr><td><strong>Cloud Migration</strong></td><td>Stonewall Holdings</td><td class="tr">€350,000</td><td class="tr">€294,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:84%;background:var(--error);"></div></div><small style="color:var(--muted)">84%</small></td></tr>
+                <tr><td><strong>Analytics Platform</strong></td><td>SkyBridge Airlines</td><td class="tr">€220,000</td><td class="tr">€88,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:40%;background:var(--success);"></div></div><small style="color:var(--muted)">40%</small></td></tr>
+                <tr><td><strong>CRM Rollout</strong></td><td>Atlantic Financial</td><td class="tr">€195,000</td><td class="tr">€176,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:90%;background:var(--error);"></div></div><small style="color:var(--muted)">90%</small></td></tr>
                 <tr><td><strong>Data Warehouse</strong></td><td>Glanbia</td><td class="tr">€310,000</td><td class="tr">€155,000</td><td><div class="progress-bar"><div class="progress-fill" style="width:50%;background:var(--success);"></div></div><small style="color:var(--muted)">50%</small></td></tr>
               </tbody>
             </table>
@@ -430,10 +458,10 @@
           <table>
             <thead><tr><th>Invoice #</th><th>Customer</th><th>Project</th><th>Due</th><th class="tr">Amount</th><th>Status</th></tr></thead>
             <tbody>
-              <tr><td><a style="color:var(--teal);cursor:pointer" onclick="showPage('pg-invoices')">INV-00023</a></td><td>AIB Group</td><td>ERP Implementation</td><td>28 Feb</td><td class="tr"><strong>€48,200</strong></td><td><span class="chip chip-error">Overdue</span></td></tr>
-              <tr><td><a style="color:var(--teal);">INV-00024</a></td><td>CRH plc</td><td>Cloud Migration</td><td>15 Mar</td><td class="tr"><strong>€62,400</strong></td><td><span class="chip chip-info">Sent</span></td></tr>
-              <tr><td><a style="color:var(--teal);">INV-00025</a></td><td>Ryanair</td><td>Analytics Platform</td><td>22 Mar</td><td class="tr"><strong>€31,800</strong></td><td><span class="chip chip-default">Draft</span></td></tr>
-              <tr><td><a style="color:var(--teal);">INV-00022</a></td><td>Bank of Ireland</td><td>CRM Rollout</td><td>10 Feb</td><td class="tr"><strong>€55,600</strong></td><td><span class="chip chip-success">Paid</span></td></tr>
+              <tr><td><a style="color:var(--teal);cursor:pointer" onclick="showPage('pg-invoices')">INV-00023</a></td><td>Clearwater Bank</td><td>ERP Implementation</td><td>28 Feb</td><td class="tr"><strong>€48,200</strong></td><td><span class="chip chip-error">Overdue</span></td></tr>
+              <tr><td><a style="color:var(--teal);">INV-00024</a></td><td>Stonewall Holdings</td><td>Cloud Migration</td><td>15 Mar</td><td class="tr"><strong>€62,400</strong></td><td><span class="chip chip-info">Sent</span></td></tr>
+              <tr><td><a style="color:var(--teal);">INV-00025</a></td><td>SkyBridge Airlines</td><td>Analytics Platform</td><td>22 Mar</td><td class="tr"><strong>€31,800</strong></td><td><span class="chip chip-default">Draft</span></td></tr>
+              <tr><td><a style="color:var(--teal);">INV-00022</a></td><td>Atlantic Financial</td><td>CRM Rollout</td><td>10 Feb</td><td class="tr"><strong>€55,600</strong></td><td><span class="chip chip-success">Paid</span></td></tr>
             </tbody>
           </table>
         </div>
@@ -495,8 +523,8 @@
           </div>
           <div class="card">
             <div style="font-size:.9rem;font-weight:600;margin-bottom:12px;">My Assignments</div>
-            <div class="fin-row"><div><div style="font-weight:600;font-size:.85rem;">ERP Implementation</div><div style="font-size:.72rem;color:var(--muted);">AIB Group · 32hrs/wk · Jan–Jun 2026</div></div></div>
-            <div class="fin-row"><div><div style="font-weight:600;font-size:.85rem;">Analytics Platform</div><div style="font-size:.72rem;color:var(--muted);">Ryanair · 16hrs/wk · Feb–Aug 2026</div></div></div>
+            <div class="fin-row"><div><div style="font-weight:600;font-size:.85rem;">ERP Implementation</div><div style="font-size:.72rem;color:var(--muted);">Clearwater Bank · 32hrs/wk · Jan–Jun 2026</div></div></div>
+            <div class="fin-row"><div><div style="font-weight:600;font-size:.85rem;">Analytics Platform</div><div style="font-size:.72rem;color:var(--muted);">SkyBridge Airlines · 16hrs/wk · Feb–Aug 2026</div></div></div>
             <div class="fin-row"><div><div style="font-weight:600;font-size:.85rem;">CRM Discovery</div><div style="font-size:.72rem;color:var(--muted);">Glanbia · 8hrs/wk · Mar 2026 (Pre-sales)</div></div></div>
           </div>
         </div>
@@ -530,7 +558,7 @@
             </thead>
             <tbody>
               <tr>
-                <td><strong>ERP Implementation</strong><br/><small style="color:var(--muted);">AIB Group</small></td>
+                <td><strong>ERP Implementation</strong><br/><small style="color:var(--muted);">Clearwater Bank</small></td>
                 <td><select style="border:1.5px solid var(--border);border-radius:6px;padding:4px;font-size:.78rem;"><option>Billable</option><option>Non-Billable</option></select></td>
                 <td style="text-align:center;"><input class="ts-input" value="8" /></td>
                 <td style="text-align:center;"><input class="ts-input" value="7.5" /></td>
@@ -541,7 +569,7 @@
                 <td class="ts-total tr">31.5</td>
               </tr>
               <tr>
-                <td><strong>Analytics Platform</strong><br/><small style="color:var(--muted);">Ryanair</small></td>
+                <td><strong>Analytics Platform</strong><br/><small style="color:var(--muted);">SkyBridge Airlines</small></td>
                 <td><select style="border:1.5px solid var(--border);border-radius:6px;padding:4px;font-size:.78rem;"><option>Billable</option></select></td>
                 <td style="text-align:center;"><input class="ts-input" value="" /></td>
                 <td style="text-align:center;"><input class="ts-input" value="" /></td>
@@ -620,10 +648,10 @@
           <table>
             <thead><tr><th>Customer</th><th>Industry</th><th>Account Manager</th><th class="tr">Active Projects</th><th class="tr">Revenue YTD</th><th>Status</th></tr></thead>
             <tbody>
-              <tr onclick="showPage('pg-customer-detail')" style="cursor:pointer;"><td><strong>AIB Group</strong><br/><small style="color:var(--muted);">aiib.ie</small></td><td>Financial Services</td><td>Seán Gallagher</td><td class="tr">4</td><td class="tr"><strong>€312,000</strong></td><td><span class="chip chip-success">Active</span></td></tr>
-              <tr onclick="showPage('pg-customer-detail')" style="cursor:pointer;"><td><strong>CRH plc</strong></td><td>Manufacturing</td><td>Aoife Walsh</td><td class="tr">3</td><td class="tr"><strong>€294,000</strong></td><td><span class="chip chip-success">Active</span></td></tr>
-              <tr onclick="showPage('pg-customer-detail')" style="cursor:pointer;"><td><strong>Ryanair</strong></td><td>Technology</td><td>Sarah Murphy</td><td class="tr">2</td><td class="tr"><strong>€196,000</strong></td><td><span class="chip chip-success">Active</span></td></tr>
-              <tr onclick="showPage('pg-customer-detail')" style="cursor:pointer;"><td><strong>Bank of Ireland</strong></td><td>Financial Services</td><td>Fionnuala Burke</td><td class="tr">3</td><td class="tr"><strong>€176,000</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr onclick="showPage('pg-customer-detail')" style="cursor:pointer;"><td><strong>Clearwater Bank</strong><br/><small style="color:var(--muted);">aiib.ie</small></td><td>Financial Services</td><td>Seán Gallagher</td><td class="tr">4</td><td class="tr"><strong>€312,000</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr onclick="showPage('pg-customer-detail')" style="cursor:pointer;"><td><strong>Stonewall Holdings</strong></td><td>Manufacturing</td><td>Aoife Walsh</td><td class="tr">3</td><td class="tr"><strong>€294,000</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr onclick="showPage('pg-customer-detail')" style="cursor:pointer;"><td><strong>SkyBridge Airlines</strong></td><td>Technology</td><td>Sarah Murphy</td><td class="tr">2</td><td class="tr"><strong>€196,000</strong></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr onclick="showPage('pg-customer-detail')" style="cursor:pointer;"><td><strong>Atlantic Financial</strong></td><td>Financial Services</td><td>Fionnuala Burke</td><td class="tr">3</td><td class="tr"><strong>€176,000</strong></td><td><span class="chip chip-success">Active</span></td></tr>
               <tr onclick="showPage('pg-customer-detail')" style="cursor:pointer;"><td><strong>Glanbia</strong></td><td>Manufacturing</td><td>Ciarán O'Brien</td><td class="tr">2</td><td class="tr"><strong>€155,000</strong></td><td><span class="chip chip-success">Active</span></td></tr>
             </tbody>
           </table>
@@ -635,7 +663,7 @@
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
           <button class="btn-ghost" onclick="showPage('pg-customers')" style="font-size:.8rem;">← Customers</button>
         </div>
-        <h5>AIB Group <span class="chip chip-success" style="vertical-align:middle;">Active</span></h5>
+        <h5>Clearwater Bank <span class="chip chip-success" style="vertical-align:middle;">Active</span></h5>
         <div class="sub">Financial Services · Account Manager: Seán Gallagher</div>
         <div class="grid g4" style="margin-bottom:20px;">
           <div class="card kpi-card"><div class="kpi-label">Revenue YTD</div><div class="kpi-value">€312,000</div></div>
@@ -679,10 +707,10 @@
           <table>
             <thead><tr><th>Project</th><th>Customer</th><th>Programme</th><th>Code</th><th class="tr">Budget</th><th>Usage</th><th>Status</th></tr></thead>
             <tbody>
-              <tr><td><strong>ERP Implementation</strong></td><td>AIB Group</td><td>Digital Transformation</td><td>PRJ-0001</td><td class="tr">€480,000</td><td><div class="progress-bar" style="width:100px;display:inline-block;"><div class="progress-fill" style="width:65%;background:var(--warning);"></div></div><small> 65%</small></td><td><span class="chip chip-success">Active</span></td></tr>
-              <tr><td><strong>Cloud Migration</strong></td><td>CRH plc</td><td>—</td><td>PRJ-0002</td><td class="tr">€350,000</td><td><div class="progress-bar" style="width:100px;display:inline-block;"><div class="progress-fill" style="width:84%;background:var(--error);"></div></div><small> 84%</small></td><td><span class="chip chip-success">Active</span></td></tr>
-              <tr><td><strong>Analytics Platform</strong></td><td>Ryanair</td><td>—</td><td>PRJ-0003</td><td class="tr">€220,000</td><td><div class="progress-bar" style="width:100px;display:inline-block;"><div class="progress-fill" style="width:40%;background:var(--success);"></div></div><small> 40%</small></td><td><span class="chip chip-success">Active</span></td></tr>
-              <tr><td><strong>CRM Rollout</strong></td><td>Bank of Ireland</td><td>Core Banking Upgrade</td><td>PRJ-0004</td><td class="tr">€195,000</td><td><div class="progress-bar" style="width:100px;display:inline-block;"><div class="progress-fill" style="width:90%;background:var(--error);"></div></div><small> 90%</small></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>ERP Implementation</strong></td><td>Clearwater Bank</td><td>Digital Transformation</td><td>PRJ-0001</td><td class="tr">€480,000</td><td><div class="progress-bar" style="width:100px;display:inline-block;"><div class="progress-fill" style="width:65%;background:var(--warning);"></div></div><small> 65%</small></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>Cloud Migration</strong></td><td>Stonewall Holdings</td><td>—</td><td>PRJ-0002</td><td class="tr">€350,000</td><td><div class="progress-bar" style="width:100px;display:inline-block;"><div class="progress-fill" style="width:84%;background:var(--error);"></div></div><small> 84%</small></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>Analytics Platform</strong></td><td>SkyBridge Airlines</td><td>—</td><td>PRJ-0003</td><td class="tr">€220,000</td><td><div class="progress-bar" style="width:100px;display:inline-block;"><div class="progress-fill" style="width:40%;background:var(--success);"></div></div><small> 40%</small></td><td><span class="chip chip-success">Active</span></td></tr>
+              <tr><td><strong>CRM Rollout</strong></td><td>Atlantic Financial</td><td>Core Banking Upgrade</td><td>PRJ-0004</td><td class="tr">€195,000</td><td><div class="progress-bar" style="width:100px;display:inline-block;"><div class="progress-fill" style="width:90%;background:var(--error);"></div></div><small> 90%</small></td><td><span class="chip chip-success">Active</span></td></tr>
               <tr><td><strong>Data Warehouse</strong></td><td>Glanbia</td><td>—</td><td>PRJ-0005</td><td class="tr">€310,000</td><td><div class="progress-bar" style="width:100px;display:inline-block;"><div class="progress-fill" style="width:50%;background:var(--success);"></div></div><small> 50%</small></td><td><span class="chip chip-success">Active</span></td></tr>
             </tbody>
           </table>
@@ -703,10 +731,10 @@
           <table>
             <thead><tr><th>Engagement</th><th>Customer</th><th>Stage</th><th>Owner</th><th class="tr">Est. Value</th><th class="tr">Probability</th><th class="tr">Weighted</th><th>Expected Start</th></tr></thead>
             <tbody>
-              <tr><td><strong>Digital Workplace Suite</strong></td><td>ESB Networks</td><td><span class="chip chip-info">Proposal</span></td><td>Seán Gallagher</td><td class="tr">€420,000</td><td class="tr">70%</td><td class="tr"><strong>€294,000</strong></td><td>May 2026</td></tr>
+              <tr><td><strong>Digital Workplace Suite</strong></td><td>GridCore Energy Networks</td><td><span class="chip chip-info">Proposal</span></td><td>Seán Gallagher</td><td class="tr">€420,000</td><td class="tr">70%</td><td class="tr"><strong>€294,000</strong></td><td>May 2026</td></tr>
               <tr><td><strong>Finance System Upgrade</strong></td><td>Kingspan</td><td><span class="chip" style="background:#e9d8fd;color:#553c9a;">Negotiation</span></td><td>Sarah Murphy</td><td class="tr">€280,000</td><td class="tr">85%</td><td class="tr"><strong>€238,000</strong></td><td>Apr 2026</td></tr>
-              <tr><td><strong>HR Platform Implementation</strong></td><td>Kerry Group</td><td><span class="chip chip-info">Qualification</span></td><td>Aoife Walsh</td><td class="tr">€175,000</td><td class="tr">40%</td><td class="tr"><strong>€70,000</strong></td><td>Jun 2026</td></tr>
-              <tr><td><strong>Cybersecurity Assessment</strong></td><td>Permanent TSB</td><td><span class="chip chip-success">Won</span></td><td>Fionnuala Burke</td><td class="tr">€95,000</td><td class="tr">100%</td><td class="tr"><strong>€95,000</strong></td><td>Mar 2026</td></tr>
+              <tr><td><strong>HR Platform Implementation</strong></td><td>Meridian Foods</td><td><span class="chip chip-info">Qualification</span></td><td>Aoife Walsh</td><td class="tr">€175,000</td><td class="tr">40%</td><td class="tr"><strong>€70,000</strong></td><td>Jun 2026</td></tr>
+              <tr><td><strong>Cybersecurity Assessment</strong></td><td>Broadstone Bank</td><td><span class="chip chip-success">Won</span></td><td>Fionnuala Burke</td><td class="tr">€95,000</td><td class="tr">100%</td><td class="tr"><strong>€95,000</strong></td><td>Mar 2026</td></tr>
             </tbody>
           </table>
         </div>
@@ -727,7 +755,7 @@
         </div>
         <div class="rr-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div class="rr-title">Senior Developer needed — ERP Implementation (AIB)</div><span class="chip chip-error">Critical</span></div><div class="rr-meta"><span>📅 Start: 16 Mar 2026</span><span>⏱ 40hrs/wk</span><span>👤 Raised by: Fionnuala Burke</span><span>🕐 2 days ago</span><span>💬 3 comments</span></div><div style="margin-top:10px;display:flex;gap:8px;"><span class="chip chip-info">New</span><button class="btn btn-teal" style="padding:4px 12px;font-size:.75rem;">Review →</button></div></div>
         <div class="rr-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div class="rr-title">Business Analyst — Finance System Upgrade (Kingspan)</div><span class="chip chip-warning">High</span></div><div class="rr-meta"><span>📅 Start: 1 Apr 2026</span><span>⏱ 32hrs/wk</span><span>👤 Raised by: Seán Gallagher</span><span>🕐 1 day ago</span><span>💬 1 comment</span></div><div style="margin-top:10px;display:flex;gap:8px;"><span class="chip chip-warning">In Review</span><button class="btn btn-teal" style="padding:4px 12px;font-size:.75rem;">Review →</button></div></div>
-        <div class="rr-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div class="rr-title">Solution Architect — HR Platform (Kerry Group)</div><span class="chip chip-default">Medium</span></div><div class="rr-meta"><span>📅 Start: 15 Jun 2026</span><span>⏱ 24hrs/wk</span><span>👤 Raised by: Aoife Walsh</span><span>🕐 5 days ago</span><span>💬 0 comments</span></div><div style="margin-top:10px;display:flex;gap:8px;"><span class="chip chip-info">New</span><button class="btn btn-teal" style="padding:4px 12px;font-size:.75rem;">Review →</button></div></div>
+        <div class="rr-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div class="rr-title">Solution Architect — HR Platform (Meridian Foods)</div><span class="chip chip-default">Medium</span></div><div class="rr-meta"><span>📅 Start: 15 Jun 2026</span><span>⏱ 24hrs/wk</span><span>👤 Raised by: Aoife Walsh</span><span>🕐 5 days ago</span><span>💬 0 comments</span></div><div style="margin-top:10px;display:flex;gap:8px;"><span class="chip chip-info">New</span><button class="btn btn-teal" style="padding:4px 12px;font-size:.75rem;">Review →</button></div></div>
       </div>
 
       <!-- ══ INVOICES ══ -->
@@ -746,10 +774,10 @@
           <table>
             <thead><tr><th>Invoice #</th><th>Customer</th><th>Project</th><th>Issued</th><th>Due</th><th class="tr">Total</th><th class="tr">Outstanding</th><th>Status</th><th>Actions</th></tr></thead>
             <tbody>
-              <tr><td><strong>INV-00023</strong></td><td>AIB Group</td><td>ERP Implementation</td><td>1 Feb</td><td>28 Feb</td><td class="tr">€48,200</td><td class="tr" style="color:var(--error);">€48,200</td><td><span class="chip chip-error">Overdue</span></td><td><button class="btn btn-teal" style="padding:4px 10px;font-size:.75rem;">Mark Paid</button></td></tr>
-              <tr><td><strong>INV-00024</strong></td><td>CRH plc</td><td>Cloud Migration</td><td>14 Feb</td><td>15 Mar</td><td class="tr">€62,400</td><td class="tr">€62,400</td><td><span class="chip chip-info">Sent</span></td><td><button class="btn btn-teal" style="padding:4px 10px;font-size:.75rem;">Mark Paid</button></td></tr>
-              <tr><td><strong>INV-00025</strong></td><td>Ryanair</td><td>Analytics Platform</td><td>5 Mar</td><td>4 Apr</td><td class="tr">€31,800</td><td class="tr">€31,800</td><td><span class="chip chip-default">Draft</span></td><td><button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;">Send</button></td></tr>
-              <tr><td><strong>INV-00022</strong></td><td>Bank of Ireland</td><td>CRM Rollout</td><td>11 Jan</td><td>10 Feb</td><td class="tr">€55,600</td><td class="tr" style="color:var(--success);">€0</td><td><span class="chip chip-success">Paid</span></td><td>—</td></tr>
+              <tr><td><strong>INV-00023</strong></td><td>Clearwater Bank</td><td>ERP Implementation</td><td>1 Feb</td><td>28 Feb</td><td class="tr">€48,200</td><td class="tr" style="color:var(--error);">€48,200</td><td><span class="chip chip-error">Overdue</span></td><td><button class="btn btn-teal" style="padding:4px 10px;font-size:.75rem;">Mark Paid</button></td></tr>
+              <tr><td><strong>INV-00024</strong></td><td>Stonewall Holdings</td><td>Cloud Migration</td><td>14 Feb</td><td>15 Mar</td><td class="tr">€62,400</td><td class="tr">€62,400</td><td><span class="chip chip-info">Sent</span></td><td><button class="btn btn-teal" style="padding:4px 10px;font-size:.75rem;">Mark Paid</button></td></tr>
+              <tr><td><strong>INV-00025</strong></td><td>SkyBridge Airlines</td><td>Analytics Platform</td><td>5 Mar</td><td>4 Apr</td><td class="tr">€31,800</td><td class="tr">€31,800</td><td><span class="chip chip-default">Draft</span></td><td><button class="btn btn-outline" style="padding:4px 10px;font-size:.75rem;">Send</button></td></tr>
+              <tr><td><strong>INV-00022</strong></td><td>Atlantic Financial</td><td>CRM Rollout</td><td>11 Jan</td><td>10 Feb</td><td class="tr">€55,600</td><td class="tr" style="color:var(--success);">€0</td><td><span class="chip chip-success">Paid</span></td><td>—</td></tr>
               <tr><td><strong>INV-00021</strong></td><td>Glanbia</td><td>Data Warehouse</td><td>15 Jan</td><td>14 Feb</td><td class="tr">€41,200</td><td class="tr">€41,200</td><td><span class="chip chip-info">Sent</span></td><td><button class="btn btn-teal" style="padding:4px 10px;font-size:.75rem;">Mark Paid</button></td></tr>
             </tbody>
           </table>
@@ -810,14 +838,14 @@
         <div class="grid g2">
           <div class="card" style="border-left:4px solid var(--teal);">
             <div style="display:flex;justify-content:space-between;"><strong>ERP Implementation</strong><span class="chip chip-success">Active</span></div>
-            <div style="font-size:.82rem;color:var(--muted);margin:6px 0;">AIB Group · PRJ-0001</div>
+            <div style="font-size:.82rem;color:var(--muted);margin:6px 0;">Clearwater Bank · PRJ-0001</div>
             <div style="font-size:.82rem;">📅 Jan 2026 – Jun 2026 &nbsp;·&nbsp; ⏱ 32 hrs/wk &nbsp;·&nbsp; 👤 Business Analyst</div>
             <hr class="divider"/>
             <div style="font-size:.8rem;display:flex;gap:16px;"><span>Billed this month: <strong>€8,800</strong></span><span>My hours: <strong>80hrs</strong></span></div>
           </div>
           <div class="card" style="border-left:4px solid var(--teal);">
             <div style="display:flex;justify-content:space-between;"><strong>Analytics Platform</strong><span class="chip chip-success">Active</span></div>
-            <div style="font-size:.82rem;color:var(--muted);margin:6px 0;">Ryanair · PRJ-0003</div>
+            <div style="font-size:.82rem;color:var(--muted);margin:6px 0;">SkyBridge Airlines · PRJ-0003</div>
             <div style="font-size:.82rem;">📅 Feb 2026 – Aug 2026 &nbsp;·&nbsp; ⏱ 16 hrs/wk &nbsp;·&nbsp; 👤 Business Analyst</div>
             <hr class="divider"/>
             <div style="font-size:.8rem;display:flex;gap:16px;"><span>Billed this month: <strong>€4,400</strong></span><span>My hours: <strong>44hrs</strong></span></div>
@@ -924,9 +952,9 @@
           <table>
             <thead><tr><th>Invoice</th><th>Customer</th><th>Invoice Date</th><th>Due Date</th><th class="tr">Amount</th><th class="tr">Outstanding</th><th>Age</th><th>Action</th></tr></thead>
             <tbody>
-              <tr><td><strong>INV-00025</strong></td><td>Ryanair</td><td>14 Feb</td><td>16 Mar</td><td class="tr">€31,800</td><td class="tr"><strong>€31,800</strong></td><td><span class="chip chip-success">Current</span></td><td><button class="btn btn-outline" style="padding:3px 8px;font-size:.72rem;" onclick="chaseInvoice(this)">Send Reminder</button></td></tr>
-              <tr><td><strong>INV-00024</strong></td><td>CRH plc</td><td>13 Feb</td><td>15 Mar</td><td class="tr">€62,400</td><td class="tr"><strong>€62,400</strong></td><td><span class="chip chip-success">Current</span></td><td><button class="btn btn-outline" style="padding:3px 8px;font-size:.72rem;" onclick="chaseInvoice(this)">Send Reminder</button></td></tr>
-              <tr><td><strong>INV-00023</strong></td><td>AIB Group</td><td>29 Jan</td><td>28 Feb</td><td class="tr">€48,200</td><td class="tr"><strong>€48,200</strong></td><td><span class="chip chip-error">6 days overdue</span></td><td><button class="btn btn-teal" style="padding:3px 8px;font-size:.72rem;" onclick="chaseInvoice(this)">Chase Now</button></td></tr>
+              <tr><td><strong>INV-00025</strong></td><td>SkyBridge Airlines</td><td>14 Feb</td><td>16 Mar</td><td class="tr">€31,800</td><td class="tr"><strong>€31,800</strong></td><td><span class="chip chip-success">Current</span></td><td><button class="btn btn-outline" style="padding:3px 8px;font-size:.72rem;" onclick="chaseInvoice(this)">Send Reminder</button></td></tr>
+              <tr><td><strong>INV-00024</strong></td><td>Stonewall Holdings</td><td>13 Feb</td><td>15 Mar</td><td class="tr">€62,400</td><td class="tr"><strong>€62,400</strong></td><td><span class="chip chip-success">Current</span></td><td><button class="btn btn-outline" style="padding:3px 8px;font-size:.72rem;" onclick="chaseInvoice(this)">Send Reminder</button></td></tr>
+              <tr><td><strong>INV-00023</strong></td><td>Clearwater Bank</td><td>29 Jan</td><td>28 Feb</td><td class="tr">€48,200</td><td class="tr"><strong>€48,200</strong></td><td><span class="chip chip-error">6 days overdue</span></td><td><button class="btn btn-teal" style="padding:3px 8px;font-size:.72rem;" onclick="chaseInvoice(this)">Chase Now</button></td></tr>
               <tr><td><strong>INV-00019</strong></td><td>Glanbia</td><td>5 Jan</td><td>4 Feb</td><td class="tr">€13,700</td><td class="tr"><strong>€13,700</strong></td><td><span class="chip chip-error">30 days overdue</span></td><td><button class="btn btn-teal" style="padding:3px 8px;font-size:.72rem;" onclick="chaseInvoice(this)">Escalate</button></td></tr>
             </tbody>
           </table>
@@ -1067,6 +1095,7 @@
       <div id="pg-contracts" class="page"><div id="contracts-content"></div></div>
       <div id="pg-evm" class="page"><div id="evm-content"></div></div>
       <div id="pg-showcase" class="page"><div id="showcase-content"></div></div>
+      <div id="pg-demo" class="page"><div id="demo-content"></div></div>
       <div id="pg-coapprove" class="page"><div id="coapprove-content"></div></div>
       <div id="pg-change-monitor" class="page"><div id="change-monitor-content"></div></div>
       <div id="pg-ado" class="page"><div id="ado-content"></div></div>
@@ -1234,6 +1263,7 @@ const navMap = {
   'pg-gantt':'nav-gantt','pg-kanban':'nav-kanban','pg-billing-rules':'nav-billing-rules','pg-revenue-rec':'nav-revenue-rec','pg-coverage':'nav-coverage','pg-selftest':'nav-selftest',
   'pg-portfolio-gantt':'nav-portfolio-gantt','pg-weekly-reports':'nav-weekly-reports','pg-contracts':'nav-contracts','pg-evm':'nav-evm',
   'pg-showcase':'nav-showcase',
+  'pg-demo':'nav-demo',
   'pg-coapprove':'nav-coapprove','pg-change-monitor':'nav-change-monitor',
   'pg-my-dashboard':'nav-my-dash','pg-timesheet':'nav-timesheet',
   'pg-my-assignments':'nav-my-assign','pg-my-expenses':'nav-expenses','pg-my-leave':'nav-leave',
@@ -1277,9 +1307,17 @@ function showPage(id){
   if(id==='pg-contracts') renderContracts();
   if(id==='pg-evm') renderEVM();
   if(id==='pg-showcase') renderShowcase();
+  if(id==='pg-demo') renderDemo();
   if(id==='pg-coapprove') renderCoApprove();
   if(id==='pg-change-monitor') renderChangeMonitor();
   window.scrollTo(0,0);
+}
+
+function toggleSidebar(){
+  const d=document.getElementById('app-drawer');
+  const btn=document.getElementById('sidebar-toggle-btn');
+  d.classList.toggle('collapsed');
+  btn.textContent=d.classList.contains('collapsed')?'→':'☰';
 }
 
 function showApp(){
@@ -1325,10 +1363,10 @@ const dbTables = {
   'Customers': {
     cols:['Id','Name','Industry','ContactEmail','AccountManager','IsActive'],
     rows:[
-      ['1','AIB Group','Financial Services','procurement@aib.ie','Seán Gallagher','✅'],
-      ['2','CRH plc','Construction','it@crh.com','Fionnuala Burke','✅'],
-      ['3','Ryanair','Aviation','vendor@ryanair.com','Ciarán O\'Brien','✅'],
-      ['4','Bank of Ireland','Financial Services','suppliers@boi.ie','Aoife Walsh','✅'],
+      ['1','Clearwater Bank','Financial Services','procurement@aib.ie','Seán Gallagher','✅'],
+      ['2','Stonewall Holdings','Construction','it@crh.com','Fionnuala Burke','✅'],
+      ['3','SkyBridge Airlines','Aviation','vendor@ryanair.com','Ciarán O\'Brien','✅'],
+      ['4','Atlantic Financial','Financial Services','suppliers@boi.ie','Aoife Walsh','✅'],
       ['5','Glanbia','Food & Nutrition','procurement@glanbia.ie','Seán Gallagher','✅'],
       ['...','...','...','...','...',''],
       ['25','— (25 total rows) —','','','',''],
@@ -1337,10 +1375,10 @@ const dbTables = {
   'Projects': {
     cols:['Id','Name','Code','Customer','Status','Budget','BilledToDate'],
     rows:[
-      ['1','ERP Implementation','PRJ-0001','AIB Group','Active','€480,000','€312,000'],
-      ['2','Cloud Migration','PRJ-0002','CRH plc','Active','€350,000','€294,000'],
-      ['3','Analytics Platform','PRJ-0003','Ryanair','Active','€220,000','€88,000'],
-      ['4','CRM Rollout','PRJ-0004','Bank of Ireland','Active','€195,000','€176,000'],
+      ['1','ERP Implementation','PRJ-0001','Clearwater Bank','Active','€480,000','€312,000'],
+      ['2','Cloud Migration','PRJ-0002','Stonewall Holdings','Active','€350,000','€294,000'],
+      ['3','Analytics Platform','PRJ-0003','SkyBridge Airlines','Active','€220,000','€88,000'],
+      ['4','CRM Rollout','PRJ-0004','Atlantic Financial','Active','€195,000','€176,000'],
       ['5','Data Warehouse','PRJ-0005','Glanbia','Active','€310,000','€155,000'],
       ['...','...','...','...','...','...','...'],
       ['62','— (62 total rows) —','','','','',''],
@@ -1361,10 +1399,10 @@ const dbTables = {
   'Invoices': {
     cols:['Id','Number','Customer','Project','Amount','Status','DueDate'],
     rows:[
-      ['1','INV-00023','AIB Group','ERP Implementation','€48,200','Overdue','2026-02-28'],
-      ['2','INV-00024','CRH plc','Cloud Migration','€62,400','Sent','2026-03-15'],
-      ['3','INV-00025','Ryanair','Analytics Platform','€31,800','Draft','2026-03-22'],
-      ['4','INV-00022','Bank of Ireland','CRM Rollout','€55,600','Paid','2026-02-10'],
+      ['1','INV-00023','Clearwater Bank','ERP Implementation','€48,200','Overdue','2026-02-28'],
+      ['2','INV-00024','Stonewall Holdings','Cloud Migration','€62,400','Sent','2026-03-15'],
+      ['3','INV-00025','SkyBridge Airlines','Analytics Platform','€31,800','Draft','2026-03-22'],
+      ['4','INV-00022','Atlantic Financial','CRM Rollout','€55,600','Paid','2026-02-10'],
       ['5','INV-00021','Glanbia','Data Warehouse','€38,400','Paid','2026-01-31'],
       ['...','...','...','...','...','...',''],
       ['15','— (15 total rows) —','','','','',''],
@@ -1374,10 +1412,10 @@ const dbTables = {
     cols:['Id','Name','Customer','Stage','EstValue','Probability','WeightedValue'],
     rows:[
       ['1','CRM Discovery','Glanbia','Qualification','€180,000','40%','€72,000'],
-      ['2','Cloud Strategy','Kerry Group','Proposal','€320,000','60%','€192,000'],
-      ['3','ERP Phase 2','AIB Group','Negotiation','€540,000','80%','€432,000'],
+      ['2','Cloud Strategy','Meridian Foods','Proposal','€320,000','60%','€192,000'],
+      ['3','ERP Phase 2','Clearwater Bank','Negotiation','€540,000','80%','€432,000'],
       ['4','Data Platform','Smurfit Kappa','Qualification','€210,000','30%','€63,000'],
-      ['5','HR Transformation','ESB','Proposal','€280,000','55%','€154,000'],
+      ['5','HR Transformation','GridCore Energy','Proposal','€280,000','55%','€154,000'],
       ['...','...','...','...','...','...',''],
       ['15','— (15 total rows) —','','','','',''],
     ]
@@ -1506,7 +1544,7 @@ function openNewClaim(){
       <div class="form-row"><label>Amount (€)</label><input class="form-input" id="exp-amount" type="number" placeholder="0.00"/></div>
     </div>
     <div class="form-row"><label>Category</label>${sel(['Travel','Accommodation','Entertainment','Training','Equipment','Other'],'exp-cat','Select category…')}</div>
-    <div class="form-row"><label>Project</label>${sel(['ERP Implementation – AIB Group','Cloud Migration – CRH plc','Analytics Platform – Ryanair','CRM Rollout – Bank of Ireland','Internal'],'exp-proj','Select project…')}</div>
+    <div class="form-row"><label>Project</label>${sel(['ERP Implementation – Clearwater Bank','Cloud Migration – Stonewall Holdings','Analytics Platform – SkyBridge Airlines','CRM Rollout – Atlantic Financial','Internal'],'exp-proj','Select project…')}</div>
     <div class="form-row"><label>Notes</label><textarea class="form-input" id="exp-notes" rows="2" placeholder="Additional details…"></textarea></div>
     <div class="form-row"><label>Receipt</label><input class="form-input" id="exp-receipt" type="file" accept="image/*,.pdf"/></div>
   `,[{label:'Submit Claim', action:()=>{
@@ -1646,7 +1684,7 @@ function saveRoleRow(btn, cells){
 function openNewRequest(){
   openModal('New Resource Request',`
     <div class="form-row"><label>Role Required</label>${sel(['Developer','Senior Developer','Solution Architect','Business Analyst','Project Manager','QA Engineer','Functional Analyst'],'rr-role')}</div>
-    <div class="form-row"><label>Project / Engagement</label>${sel(['ERP Implementation – AIB Group','Cloud Migration – CRH plc','Analytics Platform – Ryanair','CRM Discovery – Glanbia (Pipeline)'],'rr-proj')}</div>
+    <div class="form-row"><label>Project / Engagement</label>${sel(['ERP Implementation – Clearwater Bank','Cloud Migration – Stonewall Holdings','Analytics Platform – SkyBridge Airlines','CRM Discovery – Glanbia (Pipeline)'],'rr-proj')}</div>
     <div class="form-row-2">
       <div class="form-row"><label>Start Date</label><input class="form-input" id="rr-start" type="date" value="2026-03-17"/></div>
       <div class="form-row"><label>End Date</label><input class="form-input" id="rr-end" type="date" value="2026-06-30"/></div>
@@ -1741,7 +1779,7 @@ function submitTimesheet(){
 // ══ INVOICES — Generate Invoice ════════════════════════════
 function openGenerateInvoice(){
   openModal('Generate Invoice',`
-    <div class="form-row"><label>Project</label>${sel(['ERP Implementation – AIB Group','Cloud Migration – CRH plc','Analytics Platform – Ryanair','CRM Rollout – Bank of Ireland','Data Warehouse – Glanbia'],'inv-proj')}</div>
+    <div class="form-row"><label>Project</label>${sel(['ERP Implementation – Clearwater Bank','Cloud Migration – Stonewall Holdings','Analytics Platform – SkyBridge Airlines','CRM Rollout – Atlantic Financial','Data Warehouse – Glanbia'],'inv-proj')}</div>
     <div class="form-row-2">
       <div class="form-row"><label>From Date</label><input class="form-input" id="inv-from" type="date" value="2026-02-01"/></div>
       <div class="form-row"><label>To Date</label><input class="form-input" id="inv-to" type="date" value="2026-02-28"/></div>
@@ -1795,19 +1833,19 @@ const healthDimensions = [
 
 const projectHealthData = [
   {
-    id:'P001', name:'ERP Implementation', customer:'AIB Group', code:'PRJ-0001',
+    id:'P001', name:'ERP Implementation', customer:'Clearwater Bank', code:'PRJ-0001',
     pm:'Fionnuala Burke', value:480000, startDate:'Jan 2026', endDate:'Jun 2026',
     pctComplete:65, daysElapsed:64, totalDays:182,
     scores:{ budget:52, timeline:68, resourcing:30, chargeability:72, ar:25, scope:60 },
     flags:[
       {
         sev:'red', dim:'ar',
-        msg:'INV-00023 is 6 days overdue — €48,200 outstanding from AIB Group',
+        msg:'INV-00023 is 6 days overdue — €48,200 outstanding from Clearwater Bank',
         impact:'Cash flow impact of €48,200. Risk of further delays if not escalated this week.',
         owner:'Seán Gallagher (Account Manager)',
         by:'Today',
         actions:[
-          'Call AIB Group accounts payable directly: +353 1 660 0311 — ref INV-00023',
+          'Call Clearwater Bank accounts payable directly: +353 1 660 0311 — ref INV-00023',
           'Send formal overdue notice email from Finance to procurement@aib.ie with invoice attached',
           'Escalate to Account Manager Seán Gallagher to contact the AIB project sponsor',
           'If no response within 48hrs, engage MB legal team re payment terms clause',
@@ -1838,7 +1876,7 @@ const projectHealthData = [
           'Run weekly budget review — identify which workstreams are consuming most hours',
           'Freeze all non-critical activity until burn rate is back in line with plan',
           'Review timesheet entries for last 2 weeks — check for misallocated hours from other projects',
-          'Present revised forecast to AIB Group sponsor and request budget uplift approval if overrun is confirmed',
+          'Present revised forecast to Clearwater Bank sponsor and request budget uplift approval if overrun is confirmed',
           'Identify scope items that can be deferred to Phase 2 to reduce remaining burn',
         ]
       },
@@ -1849,7 +1887,7 @@ const projectHealthData = [
         owner:'Fionnuala Burke (PM)',
         by:'By Mar 10',
         actions:[
-          'Send all 3 CRs to AIB Group project sponsor for formal written approval this week',
+          'Send all 3 CRs to Clearwater Bank project sponsor for formal written approval this week',
           'Do not commence any CR work until signed approval is received',
           'If AIB declines CRs, descope from current sprint and log as Phase 2 items',
           'Update project plan to reflect +2 weeks if CRs are approved',
@@ -1859,7 +1897,7 @@ const projectHealthData = [
     ]
   },
   {
-    id:'P002', name:'Cloud Migration', customer:'CRH plc', code:'PRJ-0002',
+    id:'P002', name:'Cloud Migration', customer:'Stonewall Holdings', code:'PRJ-0002',
     pm:'Ciarán O\'Brien', value:350000, startDate:'Nov 2025', endDate:'Apr 2026',
     pctComplete:84, daysElapsed:118, totalDays:152,
     scores:{ budget:22, timeline:35, resourcing:75, chargeability:80, ar:88, scope:30 },
@@ -1871,7 +1909,7 @@ const projectHealthData = [
         owner:'Ciarán O\'Brien (PM) + Finance',
         by:'Immediately',
         actions:[
-          'Schedule emergency budget review meeting with CRH plc sponsor by Mar 8',
+          'Schedule emergency budget review meeting with Stonewall Holdings sponsor by Mar 8',
           'Prepare a formal Change Request for the additional €29K — do not absorb internally',
           'Identify which deliverables can be descoped, deferred or simplified to bring back within budget',
           'Freeze discretionary spend (travel, overtime) on this project immediately',
@@ -1887,10 +1925,10 @@ const projectHealthData = [
         actions:[
           'Convene a recovery planning workshop with the full project team by end of this week',
           'Identify the 3 critical path items causing delay — assign a dedicated owner to each',
-          'Request CRH plc waive non-critical UAT items to accelerate sign-off',
+          'Request Stonewall Holdings waive non-critical UAT items to accelerate sign-off',
           'Propose a phased go-live: core functionality by Apr deadline, remaining features by May 15',
           'Increase daily standups to twice daily until delay is recovered',
-          'Formally notify CRH plc of revised timeline in writing — do not let this be a surprise',
+          'Formally notify Stonewall Holdings of revised timeline in writing — do not let this be a surprise',
         ]
       },
       {
@@ -1902,7 +1940,7 @@ const projectHealthData = [
         actions:[
           'Stop all work on any task not explicitly in the original SOW immediately',
           'Document all 7 CRs with time spent to date — calculate cost already incurred',
-          'Present CRs to CRH plc with full pricing — minimum €42K additional contract value',
+          'Present CRs to Stonewall Holdings with full pricing — minimum €42K additional contract value',
           'Retrospectively invoice for any CR work already delivered without approval',
           'Implement a formal change control gate: nothing outside SOW starts without a signed CR',
           'Add scope change process to weekly status report going forward',
@@ -1917,36 +1955,36 @@ const projectHealthData = [
         actions:[
           'Meet with Seán Gallagher (Lead Architect) to confirm availability for April critical path work',
           'Identify a backup architect who can shadow for knowledge transfer starting now',
-          'Negotiate with ESB HR Transformation PM to delay architect\'s start on that project by 2 weeks',
+          'Negotiate with GridCore Energy HR Transformation PM to delay architect\'s start on that project by 2 weeks',
           'Create architecture decision records (ADRs) immediately to reduce key-person dependency',
         ]
       },
     ]
   },
   {
-    id:'P003', name:'Analytics Platform', customer:'Ryanair', code:'PRJ-0003',
+    id:'P003', name:'Analytics Platform', customer:'SkyBridge Airlines', code:'PRJ-0003',
     pm:'Seán Gallagher', value:220000, startDate:'Feb 2026', endDate:'Aug 2026',
     pctComplete:40, daysElapsed:33, totalDays:181,
     scores:{ budget:85, timeline:88, resourcing:90, chargeability:92, ar:95, scope:82 },
     flags:[
       {
         sev:'amber', dim:'timeline',
-        msg:'Dependency on Ryanair data team — handover milestone due Mar 14, not confirmed',
+        msg:'Dependency on SkyBridge Airlines data team — handover milestone due Mar 14, not confirmed',
         impact:'If data handover slips, sprint 4 cannot start — risk of 1-2 week delay downstream.',
         owner:'Seán Gallagher (PM)',
         by:'By Mar 10',
         actions:[
-          'Email Ryanair data team lead today to confirm Mar 14 handover date — get written confirmation',
-          'Request a brief call with Ryanair\'s data architect to review readiness of the data extract',
+          'Email SkyBridge Airlines data team lead today to confirm Mar 14 handover date — get written confirmation',
+          'Request a brief call with SkyBridge Airlines\'s data architect to review readiness of the data extract',
           'Prepare a contingency plan: if data is not ready by Mar 14, what mock data can be used to progress?',
-          'Escalate to Ryanair project sponsor if no confirmation received by Mar 10',
+          'Escalate to SkyBridge Airlines project sponsor if no confirmation received by Mar 10',
           'Flag in weekly status report — do not let this slip without client awareness',
         ]
       },
     ]
   },
   {
-    id:'P004', name:'CRM Rollout', customer:'Bank of Ireland', code:'PRJ-0004',
+    id:'P004', name:'CRM Rollout', customer:'Atlantic Financial', code:'PRJ-0004',
     pm:'Aoife Walsh', value:195000, startDate:'Sep 2025', endDate:'Mar 2026',
     pctComplete:90, daysElapsed:178, totalDays:182,
     scores:{ budget:18, timeline:20, resourcing:65, chargeability:70, ar:78, scope:25 },
@@ -2045,7 +2083,7 @@ const projectHealthData = [
     ]
   },
   {
-    id:'P006', name:'HR Transformation', customer:'ESB', code:'PRJ-0006',
+    id:'P006', name:'HR Transformation', customer:'GridCore Energy', code:'PRJ-0006',
     pm:'Fionnuala Burke', value:280000, startDate:'Mar 2026', endDate:'Oct 2026',
     pctComplete:5, daysElapsed:6, totalDays:245,
     scores:{ budget:90, timeline:92, resourcing:55, chargeability:60, ar:100, scope:88 },
@@ -2059,8 +2097,8 @@ const projectHealthData = [
         actions:[
           'Identify 2 Business Analysts available from Mar 17 — check internal bench and upcoming rollovers',
           'If no internal resource: engage Hays Recruitment immediately for 2 contract BAs',
-          'Discuss with ESB PM whether sprint 1 scope can be reduced to match 1 BA availability',
-          'Fionnuala Burke (PM) to confirm resourcing plan to ESB sponsor by Mar 13 at latest',
+          'Discuss with GridCore Energy PM whether sprint 1 scope can be reduced to match 1 BA availability',
+          'Fionnuala Burke (PM) to confirm resourcing plan to GridCore Energy sponsor by Mar 13 at latest',
           'Consider temporarily assigning Aoife Walsh post-CRM rollout sign-off (~Mar 13)',
         ]
       },
@@ -2860,100 +2898,100 @@ function addMitigationAsAction(id, title, riskRef) {
 // ══════════════════════════════════════════════════════════
 const engagementProjects = [
   // ── AIB GROUP ──────────────────────────────────────────────────────────────
-  {id:'erp',customerId:'aib',customer:'AIB Group',programme:'Digital Core Programme',
+  {id:'erp',customerId:'clw',customer:'Clearwater Bank',programme:'Digital Core Programme',
    name:'ERP Implementation (SAP S/4HANA)',type:'T&M',pm:'Siobhán Murphy',rag:'Amber',
    startDate:'2025-10-01',endDate:'2026-03-31',duration:6,
    bac:374000,spent:250000,invoiced:170000,percComplete:62,percPlanned:78,teamSize:6,
    description:'Full SAP S/4HANA implementation covering GL, AP, AR, Treasury and Reporting.'},
-  {id:'aib-dm',customerId:'aib',customer:'AIB Group',programme:'Digital Core Programme',
+  {id:'aib-dm',customerId:'clw',customer:'Clearwater Bank',programme:'Digital Core Programme',
    name:'Data Migration & ETL Programme',type:'Fixed Fee',pm:"Ciarán O'Brien",rag:'Green',
    startDate:'2025-07-01',endDate:'2026-06-30',duration:12,
    bac:995000,spent:447000,invoiced:398000,percComplete:45,percPlanned:42,teamSize:4,
    description:'Enterprise data migration from legacy mainframe to SAP. 14 entity types, 8 years history.'},
   // ── BANK OF IRELAND ─────────────────────────────────────────────────────────
-  {id:'crm',customerId:'boi',customer:'Bank of Ireland',programme:'Customer Experience Programme',
+  {id:'crm',customerId:'atl',customer:'Atlantic Financial',programme:'Customer Experience Programme',
    name:'CRM Transformation (Salesforce)',type:'T&M',pm:'Aoife Gallagher',rag:'Green',
    startDate:'2025-01-15',endDate:'2026-12-31',duration:24,
    bac:2106000,spent:800000,invoiced:716000,percComplete:38,percPlanned:36,teamSize:9,
    description:'Full Salesforce CRM implementation across Retail and Business Banking, replacing Siebel.'},
-  {id:'boi-digital',customerId:'boi',customer:'Bank of Ireland',programme:'Customer Experience Programme',
+  {id:'boi-digital',customerId:'atl',customer:'Atlantic Financial',programme:'Customer Experience Programme',
    name:'Digital Banking Portal',type:'Fixed Fee',pm:'Seamus Connolly',rag:'Amber',
    startDate:'2025-04-01',endDate:'2026-09-30',duration:18,
    bac:1404000,spent:758000,invoiced:632000,percComplete:52,percPlanned:56,teamSize:7,
    description:'Customer-facing digital banking portal — mobile-first, open banking API integration.'},
-  {id:'boi-compliance',customerId:'boi',customer:'Bank of Ireland',programme:'Customer Experience Programme',
+  {id:'boi-compliance',customerId:'atl',customer:'Atlantic Financial',programme:'Customer Experience Programme',
    name:'Regulatory Compliance Reporting',type:'Fixed Fee',pm:'Aoife Gallagher',rag:'Red',
    startDate:'2025-09-01',endDate:'2026-02-28',duration:6,
    bac:410000,spent:388000,invoiced:363000,percComplete:88,percPlanned:100,teamSize:3,
-   description:'Central Bank of Ireland NIRA/COREP/FINREP regulatory reporting automation.'},
+   description:'Central Atlantic Financial NIRA/COREP/FINREP regulatory reporting automation.'},
   // ── RYANAIR ─────────────────────────────────────────────────────────────────
-  {id:'ryr-hr',customerId:'ryr',customer:'Ryanair',programme:'People & Operations',
+  {id:'ryr-hr',customerId:'sky',customer:'SkyBridge Airlines',programme:'People & Operations',
    name:'HR Transformation Programme (Workday)',type:'T&M',pm:'Niamh Kelly',rag:'Green',
    startDate:'2025-03-01',endDate:'2027-02-28',duration:24,
    bac:2457000,spent:727000,invoiced:679000,percComplete:29,percPlanned:27,teamSize:8,
    description:'Workday HCM implementation for 22,000 employees across 82 bases. Phase 1 complete.'},
-  {id:'ryr-fin',customerId:'ryr',customer:'Ryanair',programme:'People & Operations',
+  {id:'ryr-fin',customerId:'sky',customer:'SkyBridge Airlines',programme:'People & Operations',
    name:'Finance System Upgrade (Oracle Fusion)',type:'Fixed Fee',pm:'Patrick Dunne',rag:'Amber',
    startDate:'2026-01-06',endDate:'2026-12-31',duration:12,
    bac:1053000,spent:131000,invoiced:105000,percComplete:12,percPlanned:8,teamSize:5,
    description:'Oracle Fusion Finance replacing legacy Oracle R12 — GL, AP, AR, Fixed Assets, Cash Mgmt.'},
-  // ── ESB ─────────────────────────────────────────────────────────────────────
-  {id:'esb-portal',customerId:'esb',customer:'ESB',programme:'Digital Transformation Programme',
+  // ── GridCore Energy ─────────────────────────────────────────────────────────────────────
+  {id:'esb-portal',customerId:'gce',customer:'GridCore Energy',programme:'Digital Transformation Programme',
    name:'Customer Self-Service Portal',type:'Fixed Fee',pm:'Roisin Byrne',rag:'Green',
    startDate:'2024-07-01',endDate:'2025-12-31',duration:18,
    bac:878000,spent:838000,invoiced:819000,percComplete:96,percPlanned:100,teamSize:4,
    description:'Self-service portal for 1.2M residential customers — billing, meter reading, outage alerts.'},
-  {id:'esb-field',customerId:'esb',customer:'ESB',programme:'Digital Transformation Programme',
+  {id:'esb-field',customerId:'gce',customer:'GridCore Energy',programme:'Digital Transformation Programme',
    name:'Field Operations Mobile App',type:'T&M',pm:'Roisin Byrne',rag:'Amber',
    startDate:'2024-07-01',endDate:'2026-01-31',duration:19,
    bac:1287000,spent:1020000,invoiced:959000,percComplete:78,percPlanned:85,teamSize:6,
    description:'iOS/Android field app for 4,000 engineers — job dispatch, asset scanning, offline mode.'},
-  {id:'esb-analytics',customerId:'esb',customer:'ESB',programme:'Digital Transformation Programme',
+  {id:'esb-analytics',customerId:'gce',customer:'GridCore Energy',programme:'Digital Transformation Programme',
    name:'Analytics & Reporting Platform',type:'Fixed Fee',pm:"Ciarán O'Brien",rag:'Green',
    startDate:'2024-10-01',endDate:'2025-09-30',duration:12,
    bac:702000,spent:687000,invoiced:702000,percComplete:100,percPlanned:100,teamSize:3,
    description:'Azure Synapse + Power BI analytics — completed Oct 2025, in hypercare.'},
   // ── PERMANENT TSB ──────────────────────────────────────────────────────────
-  {id:'ptsb-mobile',customerId:'ptsb',customer:'Permanent TSB',programme:'Digital Retail Banking Transformation',
+  {id:'brd-mobile',customerId:'brd',customer:'Broadstone Bank',programme:'Digital Retail Banking Transformation',
    name:'Mobile Banking App Rebuild',type:'T&M',pm:'Declan Farrell',rag:'Green',
    startDate:'2025-09-01',endDate:'2026-08-31',
    bac:480000,spent:210000,invoiced:190000,
    percComplete:44,percPlanned:50,teamSize:5,
    description:'Full rebuild of PTSB consumer mobile banking app on React Native — account management, payments, push notifications, biometric auth.'},
-  {id:'ptsb-core',customerId:'ptsb',customer:'Permanent TSB',programme:'Digital Retail Banking Transformation',
+  {id:'brd-core',customerId:'brd',customer:'Broadstone Bank',programme:'Digital Retail Banking Transformation',
    name:'Core Banking Migration (Temenos T24)',type:'Fixed Fee',pm:'Fiona Doherty',rag:'Amber',
    startDate:'2026-01-15',endDate:'2027-03-31',
    bac:1850000,spent:185000,invoiced:185000,
    percComplete:12,percPlanned:10,teamSize:8,
    description:'Migration from legacy Finacle core banking to Temenos T24 — accounts, loans, deposits, GL integration.'},
   // ── KERRY GROUP ────────────────────────────────────────────────────────────
-  {id:'kerry-sap',customerId:'kerry',customer:'Kerry Group',programme:'Global Data & Analytics Transformation',
+  {id:'mer-sap',customerId:'mer',customer:'Meridian Foods',programme:'Global Data & Analytics Transformation',
    name:'SAP S/4HANA Finance Rollout (EMEA)',type:'T&M',pm:'Siobhán Murphy',rag:'Amber',
    startDate:'2024-11-01',endDate:'2026-12-31',
    bac:3200000,spent:1680000,invoiced:1520000,
    percComplete:55,percPlanned:60,teamSize:12,
    description:'SAP S/4HANA Finance implementation across 14 EMEA entities — GL, AP, AR, fixed assets, intercompany consolidation.'},
-  {id:'kerry-data',customerId:'kerry',customer:'Kerry Group',programme:'Global Data & Analytics Transformation',
+  {id:'mer-data',customerId:'mer',customer:'Meridian Foods',programme:'Global Data & Analytics Transformation',
    name:'Azure Data Lake & Analytics Platform',type:'T&M',pm:'Niamh Kelly',rag:'Green',
    startDate:'2025-06-01',endDate:'2026-09-30',
    bac:920000,spent:460000,invoiced:420000,
    percComplete:50,percPlanned:55,teamSize:6,
    description:'Azure Data Lake Gen2 + Synapse Analytics — centralising data from SAP, Salesforce, and supply chain systems for group-wide reporting.'},
   // ── AER LINGUS ─────────────────────────────────────────────────────────────
-  {id:'al-crew',customerId:'al',customer:'Aer Lingus',programme:'Workforce & Operations Modernisation',
+  {id:'tav-crew',customerId:'tav',customer:'TerraAir',programme:'Workforce & Operations Modernisation',
    name:'Crew Management System Replacement',type:'Fixed Fee',pm:"Ciarán O'Brien",rag:'Red',
    startDate:'2025-04-01',endDate:'2026-06-30',
    bac:2100000,spent:1890000,invoiced:1680000,
    percComplete:90,percPlanned:95,teamSize:9,
    description:'End-to-end replacement of legacy crew scheduling, pairing, and rostering systems — integration with FlightGlobal, HR, and payroll.'},
-  {id:'al-pax',customerId:'al',customer:'Aer Lingus',programme:'Workforce & Operations Modernisation',
+  {id:'tav-pax',customerId:'tav',customer:'TerraAir',programme:'Workforce & Operations Modernisation',
    name:'Passenger Experience Platform',type:'T&M',pm:"Mark O'Brien",rag:'Green',
    startDate:'2026-02-01',endDate:'2027-01-31',
    bac:760000,spent:95000,invoiced:76000,
    percComplete:12,percPlanned:10,teamSize:4,
    description:'New digital passenger experience layer — check-in flow redesign, ancillary upsell, disruption management self-service portal.'},
   // ── CRH PLC ────────────────────────────────────────────────────────────────
-  {id:'crh-erp',customerId:'crh',customer:'CRH plc',programme:'Enterprise Digital Backbone Programme',
+  {id:'stn-erp',customerId:'stn',customer:'Stonewall Holdings',programme:'Enterprise Digital Backbone Programme',
    name:'SAP Global ERP Standardisation',type:'T&M',pm:'David Walsh',rag:'Green',
    startDate:'2024-07-01',endDate:'2027-06-30',
    bac:4500000,spent:1125000,invoiced:1000000,
@@ -2965,7 +3003,7 @@ const engagementProjects = [
 // WEEKLY STATUS REPORTS ARCHIVE
 // ══════════════════════════════════════════════════════════
 const weeklyReportsData = [
-  {id:'wr-erp-0307',projectId:'erp',projectName:'ERP Implementation (SAP S/4HANA)',customer:'AIB Group',
+  {id:'wr-erp-0307',projectId:'erp',projectName:'ERP Implementation (SAP S/4HANA)',customer:'Clearwater Bank',
    pm:'Siobhán Murphy',weekEnding:'2026-03-07',rag:'Amber',percComplete:62,percPlanned:65,
    budgetDays:180,forecastDays:192,invoiced:170000,contractValue:374000,
    execSummary:'Sprint 5 in progress with 12 of 15 planned items on track. SAP FI period-close configuration issue extends sprint by 3 days (approved by both parties). Go-live target 31 Mar remains achievable. Phase completion at 62% vs 65% target.',
@@ -2973,7 +3011,7 @@ const weeklyReportsData = [
    nextPeriod:['Complete SAP FI period-close logic (ERP-041) — target 9 Mar','Begin Sprint 6 UAT preparation — test scripts due 12 Mar','Submit Invoice INV-00023 to AIB (€68,400) this week','Confirm hypercare resource plan for Sprint 7'],
    customerRisks:[{id:'R-001',title:'ERP go-live at risk from SAP FI config complexity',rag:'Amber',mitigation:'3-day sprint extension approved. Tracking daily. 31 Mar go-live remains achievable.'}]},
 
-  {id:'wr-erp-0228',projectId:'erp',projectName:'ERP Implementation (SAP S/4HANA)',customer:'AIB Group',
+  {id:'wr-erp-0228',projectId:'erp',projectName:'ERP Implementation (SAP S/4HANA)',customer:'Clearwater Bank',
    pm:'Siobhán Murphy',weekEnding:'2026-02-28',rag:'Amber',percComplete:58,percPlanned:62,
    budgetDays:180,forecastDays:188,invoiced:146000,contractValue:374000,
    execSummary:'Phase 2 Finance Module declared complete and formally accepted by AIB this week. Sprint 5 planning completed with SAP FI configuration identified as the primary schedule risk. Overall 58% complete against a 62% target.',
@@ -2981,7 +3019,7 @@ const weeklyReportsData = [
    nextPeriod:['Sprint 5 kick-off 2 Mar — GL close and period-end processing focus','SAP FI config review workshop with AIB Finance 4 Mar','Submit Invoice INV-00022 (€20,000 milestone invoice)','Begin UAT test script drafting'],
    customerRisks:[{id:'R-001',title:'SAP FI period-end configuration risk',rag:'Amber',mitigation:'Workshop scheduled 4 Mar. Risk being actively tracked and managed.'}]},
 
-  {id:'wr-erp-0221',projectId:'erp',projectName:'ERP Implementation (SAP S/4HANA)',customer:'AIB Group',
+  {id:'wr-erp-0221',projectId:'erp',projectName:'ERP Implementation (SAP S/4HANA)',customer:'Clearwater Bank',
    pm:'Siobhán Murphy',weekEnding:'2026-02-21',rag:'Green',percComplete:52,percPlanned:55,
    budgetDays:180,forecastDays:184,invoiced:146000,contractValue:374000,
    execSummary:'Strong progress this week. Sprint 4 is 86% complete with all high-priority deliverables accepted. Phase 2 Finance Module on track for formal sign-off next week. Overall 52% complete vs a 55% target — within acceptable tolerance.',
@@ -2989,7 +3027,7 @@ const weeklyReportsData = [
    nextPeriod:['Complete Sprint 4 — 5 remaining stories by 27 Feb','Phase 2 milestone review & sign-off 28 Feb','Sprint 5 planning and kick-off 28 Feb'],
    customerRisks:[]},
 
-  {id:'wr-erp-0214',projectId:'erp',projectName:'ERP Implementation (SAP S/4HANA)',customer:'AIB Group',
+  {id:'wr-erp-0214',projectId:'erp',projectName:'ERP Implementation (SAP S/4HANA)',customer:'Clearwater Bank',
    pm:'Siobhán Murphy',weekEnding:'2026-02-14',rag:'Green',percComplete:46,percPlanned:45,
    budgetDays:180,forecastDays:182,invoiced:123000,contractValue:374000,
    execSummary:'Sprint 4 started strongly. All team members fully onboarded after the Phase 1→2 transition. Phase 2 Finance work tracking slightly ahead of plan at 46% overall completion against a 45% target.',
@@ -2997,7 +3035,7 @@ const weeklyReportsData = [
    nextPeriod:['Sprint 4 mid-sprint review 18 Feb','AP Payment Run delivery target 20 Feb','Submit Invoice INV-00021 to AIB by 16 Feb'],
    customerRisks:[]},
 
-  {id:'wr-crm-0307',projectId:'crm',projectName:'CRM Transformation (Salesforce)',customer:'Bank of Ireland',
+  {id:'wr-crm-0307',projectId:'crm',projectName:'CRM Transformation (Salesforce)',customer:'Atlantic Financial',
    pm:'Aoife Gallagher',weekEnding:'2026-03-07',rag:'Green',percComplete:38,percPlanned:36,
    budgetDays:320,forecastDays:326,invoiced:716000,contractValue:2106000,
    execSummary:'Sprint 12 in progress. Contact Management module completed and accepted this week. Data migration to Salesforce 45% complete. BOI core banking API integration live in DEV. On track for Phase 3 Email Integration starting 14 Mar.',
@@ -3005,7 +3043,7 @@ const weeklyReportsData = [
    nextPeriod:['Complete data migration Phase A (all contacts) by 12 Mar','Begin Sprint 13 — Email Integration module 14 Mar','API regression test suite 10–12 Mar','Quarterly Business Review with BOI CIO 15 Mar'],
    customerRisks:[{id:'R-CRM-01',title:'Data migration volume larger than initially scoped',rag:'Amber',mitigation:'Parallel migration streams added. Completion by 12 Mar remains on track.'}]},
 
-  {id:'wr-crm-0228',projectId:'crm',projectName:'CRM Transformation (Salesforce)',customer:'Bank of Ireland',
+  {id:'wr-crm-0228',projectId:'crm',projectName:'CRM Transformation (Salesforce)',customer:'Atlantic Financial',
    pm:'Aoife Gallagher',weekEnding:'2026-02-28',rag:'Green',percComplete:36,percPlanned:35,
    budgetDays:320,forecastDays:324,invoiced:690000,contractValue:2106000,
    execSummary:'Sprint 11 successfully completed with all 18 stories accepted — zero carry-overs. Sales Dashboard v2 delivered and very well received by BOI sales leadership. Integration design approved. 36% overall complete, on track.',
@@ -3013,31 +3051,31 @@ const weeklyReportsData = [
    nextPeriod:['Sprint 12 kick-off 2 Mar — Contact Management module','BOI core banking API integration development commences','Data migration Phase A kick-off 3 Mar'],
    customerRisks:[]},
 
-  {id:'wr-ryr-0307',projectId:'ryr-hr',projectName:'HR Transformation Programme (Workday)',customer:'Ryanair',
+  {id:'wr-ryr-0307',projectId:'ryr-hr',projectName:'HR Transformation Programme (Workday)',customer:'SkyBridge Airlines',
    pm:'Niamh Kelly',weekEnding:'2026-03-07',rag:'Green',percComplete:29,percPlanned:27,
    budgetDays:480,forecastDays:475,invoiced:679000,contractValue:2457000,
    execSummary:'Phase 2 (Talent & Performance Management) design sprints underway. Phase 1 (Core HR) in hypercare with stable metrics — 99.8% system availability, 0 P1 incidents this week. 29% overall programme complete, tracking slightly ahead of plan.',
-   highlights:['Phase 1 hypercare — 0 P1 incidents, 99.8% SLA this week','Phase 2 design sprint 3 complete — Talent module blueprint approved by Ryanair People team','Workday tenant configuration for Phase 2 commenced','Payroll integration design with Sage agreed at technical level'],
+   highlights:['Phase 1 hypercare — 0 P1 incidents, 99.8% SLA this week','Phase 2 design sprint 3 complete — Talent module blueprint approved by SkyBridge Airlines People team','Workday tenant configuration for Phase 2 commenced','Payroll integration design with Sage agreed at technical level'],
    nextPeriod:['Phase 2 design sprint 4 — Performance Reviews module','Payroll integration technical design document (Sage ↔ Workday)','Phase 1 hypercare sign-off scheduled 14 Mar','Monthly SteerCo 17 Mar'],
    customerRisks:[]},
 
-  {id:'wr-ryr-0228',projectId:'ryr-hr',projectName:'HR Transformation Programme (Workday)',customer:'Ryanair',
+  {id:'wr-ryr-0228',projectId:'ryr-hr',projectName:'HR Transformation Programme (Workday)',customer:'SkyBridge Airlines',
    pm:'Niamh Kelly',weekEnding:'2026-02-28',rag:'Green',percComplete:27,percPlanned:25,
    budgetDays:480,forecastDays:476,invoiced:653000,contractValue:2457000,
-   execSummary:'Phase 1 Core HR officially completed and signed off. 22,000 Ryanair employees now live on Workday. Phase 2 kick-off workshop held this week with Ryanair People Leadership — strong engagement and clear priorities identified.',
-   highlights:['Phase 1 sign-off received — 22,000 employees live on Workday across 82 bases','Phase 2 kick-off workshop — 45 Ryanair stakeholders attended over 2 days','Absence management module praised by Ryanair HR Director','NPS from Ryanair executive sponsor: 9/10'],
+   execSummary:'Phase 1 Core HR officially completed and signed off. 22,000 SkyBridge Airlines employees now live on Workday. Phase 2 kick-off workshop held this week with SkyBridge Airlines People Leadership — strong engagement and clear priorities identified.',
+   highlights:['Phase 1 sign-off received — 22,000 employees live on Workday across 82 bases','Phase 2 kick-off workshop — 45 SkyBridge Airlines stakeholders attended over 2 days','Absence management module praised by SkyBridge Airlines HR Director','NPS from SkyBridge Airlines executive sponsor: 9/10'],
    nextPeriod:['Phase 2 design sprint 1 — Talent & Succession Planning module','Phase 1 hypercare monitoring (30-day window, ends 14 Mar)','Phase 2 high-level timeline shared with SteerCo'],
    customerRisks:[]},
 
-  {id:'wr-esb-0307',projectId:'esb-field',projectName:'Field Operations Mobile App',customer:'ESB',
+  {id:'wr-esb-0307',projectId:'esb-field',projectName:'Field Operations Mobile App',customer:'GridCore Energy',
    pm:'Roisin Byrne',weekEnding:'2026-03-07',rag:'Amber',percComplete:78,percPlanned:85,
    budgetDays:240,forecastDays:258,invoiced:959000,contractValue:1287000,
    execSummary:'UAT Phase 2 in progress. 63 of 89 test cases passed. 6 defects raised — 2 classified Critical (offline sync failure under poor signal; job dispatch latency >3s). Both under active resolution with fixes targeted for 12 Mar. App go-live planned 28 Mar.',
-   highlights:['UAT Phase 2 commenced — 63/89 test cases passed (71%)','Offline map caching implemented and performing well in field tests','Job dispatch UI redesign accepted by ESB field operations lead','Performance test: 500 concurrent users — 98% of requests within SLA'],
-   nextPeriod:['Resolve 2 critical UAT defects (offline sync, dispatch latency) by 12 Mar','UAT Phase 2 completion meeting and sign-off 13 Mar','App release candidate for ESB security review 14 Mar','Go-live planning workshop with ESB 16 Mar'],
-   customerRisks:[{id:'R-ESB-01',title:'UAT critical defects may delay 28 Mar go-live',rag:'Amber',mitigation:'Engineering team fully assigned to fixes. Target resolution 12 Mar. 16 calendar days buffer before go-live.'}]},
+   highlights:['UAT Phase 2 commenced — 63/89 test cases passed (71%)','Offline map caching implemented and performing well in field tests','Job dispatch UI redesign accepted by GridCore Energy field operations lead','Performance test: 500 concurrent users — 98% of requests within SLA'],
+   nextPeriod:['Resolve 2 critical UAT defects (offline sync, dispatch latency) by 12 Mar','UAT Phase 2 completion meeting and sign-off 13 Mar','App release candidate for GridCore Energy security review 14 Mar','Go-live planning workshop with GridCore Energy 16 Mar'],
+   customerRisks:[{id:'R-GridCore Energy-01',title:'UAT critical defects may delay 28 Mar go-live',rag:'Amber',mitigation:'Engineering team fully assigned to fixes. Target resolution 12 Mar. 16 calendar days buffer before go-live.'}]},
   {id:'wr-ptsb-0307',projectId:'ptsb-mobile',projectName:'Mobile Banking App Rebuild',
-   customer:'Permanent TSB',pm:'Declan Farrell',weekEnding:'2026-03-07',rag:'Green',
+   customer:'Broadstone Bank',pm:'Declan Farrell',weekEnding:'2026-03-07',rag:'Green',
    percComplete:44,percPlanned:50,budgetDays:160,forecastDays:162,
    invoiced:190000,contractValue:480000,
    execSummary:'Phase 2 development progressing well. Biometric authentication module completed ahead of schedule. Payments integration underway with PTSB core banking team.',
@@ -3045,7 +3083,7 @@ const weeklyReportsData = [
    nextPeriod:['Complete open banking (PSD2) integration','Submit to Apple App Store for TestFlight review','Phase 2 UAT kick-off with PTSB QA team'],
    customerRisks:[{r:'Core banking API latency spikes in peak hours',i:'Medium',s:'Ongoing — PTSB infra team investigating'}]},
   {id:'wr-kerry-0307',projectId:'kerry-sap',projectName:'SAP S/4HANA Finance Rollout (EMEA)',
-   customer:'Kerry Group',pm:'Siobhán Murphy',weekEnding:'2026-03-07',rag:'Amber',
+   customer:'Meridian Foods',pm:'Siobhán Murphy',weekEnding:'2026-03-07',rag:'Amber',
    percComplete:55,percPlanned:60,budgetDays:640,forecastDays:668,
    invoiced:1520000,contractValue:3200000,
    execSummary:'Phase 3 (France & Iberia) progressing but 5% behind plan. Tax configuration complexity in France higher than estimated. Mitigations in place with additional resource.',
@@ -3053,7 +3091,7 @@ const weeklyReportsData = [
    nextPeriod:['Complete French VAT and intrastat configuration','Final data migration rehearsal for 6 remaining Iberian entities','Phase 3 steering committee presentation'],
    customerRisks:[{r:'French tax complexity may extend Phase 3 by 2–3 weeks',i:'High',s:'Escalated — additional SAP tax consultant engaged'}]},
   {id:'wr-al-0307',projectId:'al-crew',projectName:'Crew Management System Replacement',
-   customer:'Aer Lingus',pm:"Ciarán O'Brien",weekEnding:'2026-03-07',rag:'Red',
+   customer:'TerraAir',pm:"Ciarán O'Brien",weekEnding:'2026-03-07',rag:'Red',
    percComplete:90,percPlanned:95,budgetDays:420,forecastDays:448,
    invoiced:1680000,contractValue:2100000,
    execSummary:'Project is 90% complete but 5% behind plan and tracking over budget due to scope additions during UAT. Go-live date under review. Change Request being raised.',
@@ -3061,7 +3099,7 @@ const weeklyReportsData = [
    nextPeriod:['Resolve remaining 8 UAT defects (P1×1, P2×3, P3×4)','Raise CR for 28-day go-live extension','Final parallel run with legacy system'],
    customerRisks:[{r:'P1 defect in crew pairing algorithm under investigation',i:'Critical',s:'Workaround in place — full fix expected by 10 Mar'}]},
   {id:'wr-crh-0307',projectId:'crh-erp',projectName:'SAP Global ERP Standardisation',
-   customer:'CRH plc',pm:'David Walsh',weekEnding:'2026-03-07',rag:'Green',
+   customer:'Stonewall Holdings',pm:'David Walsh',weekEnding:'2026-03-07',rag:'Green',
    percComplete:26,percPlanned:28,budgetDays:900,forecastDays:905,
    invoiced:1000000,contractValue:4500000,
    execSummary:'Phase 2 Americas rollout scoping complete. Template solution from Phase 1 EMEA being adapted for US GAAP and local tax requirements. On track.',
@@ -3074,7 +3112,7 @@ const weeklyReportsData = [
 // CONTRACTS DATA
 // ══════════════════════════════════════════════════════════
 const contractsData = [
-  {id:'CTR-001',contractNo:'MB-AIB-2025-047',customer:'AIB Group',customerId:'aib',
+  {id:'CTR-001',contractNo:'MB-CLW-2025-047',customer:'Clearwater Bank',customerId:'clw',
    projectId:'erp',projectName:'ERP Implementation (SAP S/4HANA)',type:'T&M',value:374000,
    startDate:'2025-10-01',endDate:'2026-03-31',status:'Active',
    invoiced:170000,paid:125000,outstanding:23000,retentionHeld:0,
@@ -3085,7 +3123,7 @@ const contractsData = [
      {name:'Phase 1 — ERP Core Foundation',date:'2026-01-31',value:88000,invoiced:true,paid:true},
      {name:'Phase 2 — Finance Module',date:'2026-02-28',value:29000,invoiced:true,paid:false},
      {name:'Phase 3–5 — Build & Go-Live',date:'2026-03-31',value:228000,invoiced:false,paid:false}]},
-  {id:'CTR-002',contractNo:'MB-AIB-2025-031',customer:'AIB Group',customerId:'aib',
+  {id:'CTR-002',contractNo:'MB-CLW-2025-031',customer:'Clearwater Bank',customerId:'clw',
    projectId:'aib-dm',projectName:'Data Migration & ETL Programme',type:'Fixed Fee',value:995000,
    startDate:'2025-07-01',endDate:'2026-06-30',status:'Active',
    invoiced:398000,paid:320000,outstanding:23000,retentionHeld:50000,
@@ -3097,7 +3135,7 @@ const contractsData = [
      {name:'Migration Rehearsal 1',date:'2026-02-28',value:99000,invoiced:true,paid:false},
      {name:'Migration Rehearsal 2',date:'2026-04-30',value:99000,invoiced:false,paid:false},
      {name:'Production Migration & Sign-off',date:'2026-06-30',value:497000,invoiced:false,paid:false}]},
-  {id:'CTR-003',contractNo:'MB-BOI-2025-012',customer:'Bank of Ireland',customerId:'boi',
+  {id:'CTR-003',contractNo:'MB-ATL-2025-012',customer:'Atlantic Financial',customerId:'atl',
    projectId:'crm',projectName:'CRM Transformation (Salesforce)',type:'T&M',value:2106000,
    startDate:'2025-01-15',endDate:'2026-12-31',status:'Active',
    invoiced:716000,paid:580000,outstanding:37000,retentionHeld:0,
@@ -3108,7 +3146,7 @@ const contractsData = [
      {name:'Phase 2 — Data Migration (Year 1)',date:'2025-12-31',value:468000,invoiced:true,paid:true},
      {name:'Phase 3 — Email Integration',date:'2026-06-30',value:702000,invoiced:false,paid:false},
      {name:'Phase 4 — UAT & Go-Live',date:'2026-12-31',value:702000,invoiced:false,paid:false}]},
-  {id:'CTR-004',contractNo:'MB-BOI-2025-028',customer:'Bank of Ireland',customerId:'boi',
+  {id:'CTR-004',contractNo:'MB-ATL-2025-028',customer:'Atlantic Financial',customerId:'atl',
    projectId:'boi-digital',projectName:'Digital Banking Portal',type:'Fixed Fee',value:1404000,
    startDate:'2025-04-01',endDate:'2026-09-30',status:'Active',
    invoiced:632000,paid:510000,outstanding:35000,retentionHeld:70000,
@@ -3120,7 +3158,7 @@ const contractsData = [
      {name:'Frontend Development Phase 1',date:'2025-12-31',value:211000,invoiced:true,paid:false},
      {name:'Frontend Development Phase 2',date:'2026-03-31',value:281000,invoiced:false,paid:false},
      {name:'UAT, Go-Live & Retention Release',date:'2026-09-30',value:491000,invoiced:false,paid:false}]},
-  {id:'CTR-005',contractNo:'MB-BOI-2025-039',customer:'Bank of Ireland',customerId:'boi',
+  {id:'CTR-005',contractNo:'MB-ATL-2025-039',customer:'Atlantic Financial',customerId:'atl',
    projectId:'boi-compliance',projectName:'Regulatory Compliance Reporting',type:'Fixed Fee',value:410000,
    startDate:'2025-09-01',endDate:'2026-02-28',status:'Overdue',
    invoiced:363000,paid:280000,outstanding:35000,retentionHeld:20000,
@@ -3131,7 +3169,7 @@ const contractsData = [
      {name:'COREP/FINREP Reports',date:'2025-12-31',value:164000,invoiced:true,paid:true},
      {name:'NIRA Reports & UAT',date:'2026-01-31',value:82000,invoiced:true,paid:false},
      {name:'Final Sign-off & Retention Release',date:'2026-02-28',value:82000,invoiced:false,paid:false}]},
-  {id:'CTR-006',contractNo:'MB-RYR-2025-007',customer:'Ryanair',customerId:'ryr',
+  {id:'CTR-006',contractNo:'MB-SKY-2025-007',customer:'SkyBridge Airlines',customerId:'sky',
    projectId:'ryr-hr',projectName:'HR Transformation Programme (Workday)',type:'T&M',value:2457000,
    startDate:'2025-03-01',endDate:'2027-02-28',status:'Active',
    invoiced:679000,paid:560000,outstanding:23000,retentionHeld:0,
@@ -3142,7 +3180,7 @@ const contractsData = [
      {name:'Phase 2 — Talent & Performance',date:'2026-09-30',value:702000,invoiced:false,paid:false},
      {name:'Phase 3 — Payroll Integration',date:'2027-01-31',value:819000,invoiced:false,paid:false},
      {name:'Phase 4 — Analytics & Hypercare',date:'2027-02-28',value:351000,invoiced:false,paid:false}]},
-  {id:'CTR-007',contractNo:'MB-RYR-2026-001',customer:'Ryanair',customerId:'ryr',
+  {id:'CTR-007',contractNo:'MB-SKY-2026-001',customer:'SkyBridge Airlines',customerId:'sky',
    projectId:'ryr-fin',projectName:'Finance System Upgrade (Oracle Fusion)',type:'Fixed Fee',value:1053000,
    startDate:'2026-01-06',endDate:'2026-12-31',status:'Active',
    invoiced:105000,paid:90000,outstanding:0,retentionHeld:53000,
@@ -3153,18 +3191,18 @@ const contractsData = [
      {name:'GL, AP, AR Development',date:'2026-06-30',value:316000,invoiced:false,paid:false},
      {name:'Fixed Assets & Cash Management',date:'2026-09-30',value:211000,invoiced:false,paid:false},
      {name:'UAT, Go-Live & Retention',date:'2026-12-31',value:421000,invoiced:false,paid:false}]},
-  {id:'CTR-008',contractNo:'MB-ESB-2024-018',customer:'ESB',customerId:'esb',
+  {id:'CTR-008',contractNo:'MB-GCE-2024-018',customer:'GridCore Energy',customerId:'gce',
    projectId:'esb-field',projectName:'Field Operations Mobile App',type:'T&M',value:1287000,
    startDate:'2024-07-01',endDate:'2026-01-31',status:'Active',
    invoiced:959000,paid:800000,outstanding:23000,retentionHeld:0,
    pm:'Roisin Byrne',sigMB:'David Walsh',sigClient:'Tom Fitzpatrick (COO)',
-   description:'T&M mobile app for ESB field engineers. Contract extended +1 month per Change Order 004 due to UAT scope increase.',
+   description:'T&M mobile app for GridCore Energy field engineers. Contract extended +1 month per Change Order 004 due to UAT scope increase.',
    milestones:[
      {name:'MVP — Core Job Dispatch',date:'2024-12-31',value:386000,invoiced:true,paid:true},
      {name:'Phase 2 — Offline & Asset Scanning',date:'2025-06-30',value:386000,invoiced:true,paid:true},
      {name:'Phase 3 — UAT & Go-Live',date:'2026-01-31',value:515000,invoiced:false,paid:false}]},
   // ── PERMANENT TSB ──
-  {id:'CTR-009',contractNo:'MB-PTSB-2025-031',customer:'Permanent TSB',customerId:'ptsb',
+  {id:'CTR-009',contractNo:'MB-BRD-2025-031',customer:'Broadstone Bank',customerId:'brd',
    projectId:'ptsb-mobile',projectName:'Mobile Banking App Rebuild',type:'T&M',value:480000,
    startDate:'2025-09-01',endDate:'2026-08-31',status:'Active',
    invoiced:190000,paid:160000,outstanding:30000,retentionHeld:0,
@@ -3174,7 +3212,7 @@ const contractsData = [
      {name:'Phase 1 — Core Features',date:'2026-01-31',value:144000,invoiced:true,paid:true},
      {name:'Phase 2 — Payments & Auth',date:'2026-04-30',value:144000,invoiced:true,paid:false},
      {name:'Phase 3 — Launch & Hypercare',date:'2026-08-31',value:144000,invoiced:false,paid:false}]},
-  {id:'CTR-010',contractNo:'MB-PTSB-2026-002',customer:'Permanent TSB',customerId:'ptsb',
+  {id:'CTR-010',contractNo:'MB-BRD-2026-002',customer:'Broadstone Bank',customerId:'brd',
    projectId:'ptsb-core',projectName:'Core Banking Migration (Temenos T24)',type:'Fixed Fee',value:1850000,
    startDate:'2026-01-15',endDate:'2027-03-31',status:'Active',
    invoiced:185000,paid:185000,outstanding:0,retentionHeld:92500,
@@ -3186,7 +3224,7 @@ const contractsData = [
      {name:'Phase 3 — GL & Reporting',date:'2027-01-31',value:555000,invoiced:false,paid:false},
      {name:'UAT, Migration & Go-Live',date:'2027-03-31',value:185000,invoiced:false,paid:false}]},
   // ── KERRY GROUP ──
-  {id:'CTR-011',contractNo:'MB-KERRY-2024-089',customer:'Kerry Group',customerId:'kerry',
+  {id:'CTR-011',contractNo:'MB-MER-2024-089',customer:'Meridian Foods',customerId:'mer',
    projectId:'kerry-sap',projectName:'SAP S/4HANA Finance Rollout (EMEA)',type:'T&M',value:3200000,
    startDate:'2024-11-01',endDate:'2026-12-31',status:'Active',
    invoiced:1520000,paid:1360000,outstanding:160000,retentionHeld:0,
@@ -3197,7 +3235,7 @@ const contractsData = [
      {name:'Phase 3 — France & Iberia',date:'2026-03-31',value:640000,invoiced:true,paid:false},
      {name:'Phase 4 — Nordics & CEE',date:'2026-07-31',value:640000,invoiced:false,paid:false},
      {name:'Phase 5 — Consolidation & Close',date:'2026-12-31',value:640000,invoiced:false,paid:false}]},
-  {id:'CTR-012',contractNo:'MB-KERRY-2025-044',customer:'Kerry Group',customerId:'kerry',
+  {id:'CTR-012',contractNo:'MB-MER-2025-044',customer:'Meridian Foods',customerId:'mer',
    projectId:'kerry-data',projectName:'Azure Data Lake & Analytics Platform',type:'T&M',value:920000,
    startDate:'2025-06-01',endDate:'2026-09-30',status:'Active',
    invoiced:420000,paid:378000,outstanding:42000,retentionHeld:46000,
@@ -3208,7 +3246,7 @@ const contractsData = [
      {name:'Analytics & Reporting Layer',date:'2026-05-31',value:276000,invoiced:true,paid:false},
      {name:'Rollout & Training',date:'2026-09-30',value:184000,invoiced:false,paid:false}]},
   // ── AER LINGUS ──
-  {id:'CTR-013',contractNo:'MB-AL-2025-012',customer:'Aer Lingus',customerId:'al',
+  {id:'CTR-013',contractNo:'MB-TAV-2025-012',customer:'TerraAir',customerId:'tav',
    projectId:'al-crew',projectName:'Crew Management System Replacement',type:'Fixed Fee',value:2100000,
    startDate:'2025-04-01',endDate:'2026-06-30',status:'Active',
    invoiced:1680000,paid:1470000,outstanding:210000,retentionHeld:105000,
@@ -3219,7 +3257,7 @@ const contractsData = [
      {name:'Integration — HR & Payroll',date:'2026-02-28',value:420000,invoiced:true,paid:true},
      {name:'UAT & Parallel Run',date:'2026-05-31',value:420000,invoiced:true,paid:false},
      {name:'Go-Live & Hypercare',date:'2026-06-30',value:210000,invoiced:false,paid:false}]},
-  {id:'CTR-014',contractNo:'MB-AL-2026-003',customer:'Aer Lingus',customerId:'al',
+  {id:'CTR-014',contractNo:'MB-TAV-2026-003',customer:'TerraAir',customerId:'tav',
    projectId:'al-pax',projectName:'Passenger Experience Platform',type:'T&M',value:760000,
    startDate:'2026-02-01',endDate:'2027-01-31',status:'Active',
    invoiced:76000,paid:76000,outstanding:0,retentionHeld:38000,
@@ -3230,7 +3268,7 @@ const contractsData = [
      {name:'Development Sprint 1–3',date:'2026-10-31',value:304000,invoiced:false,paid:false},
      {name:'Launch & Optimisation',date:'2027-01-31',value:228000,invoiced:false,paid:false}]},
   // ── CRH PLC ──
-  {id:'CTR-015',contractNo:'MB-CRH-2024-067',customer:'CRH plc',customerId:'crh',
+  {id:'CTR-015',contractNo:'MB-STN-2024-067',customer:'Stonewall Holdings',customerId:'stn',
    projectId:'crh-erp',projectName:'SAP Global ERP Standardisation',type:'T&M',value:4500000,
    startDate:'2024-07-01',endDate:'2027-06-30',status:'Active',
    invoiced:1000000,paid:900000,outstanding:100000,retentionHeld:0,
@@ -3262,28 +3300,28 @@ const projectPhases = [
   // BOI CRM — 2 phases
   {projectId:'crm',id:'crm-ph1',name:'Phase I – Salesforce Configuration',startDate:'2025-01-15',endDate:'2025-09-30',bac:1000000,spent:820000,percComplete:82,rag:'Green',deliverable:'SF Core Configured & Tested'},
   {projectId:'crm',id:'crm-ph2',name:'Phase II – Integration & Rollout',startDate:'2025-10-01',endDate:'2026-12-31',bac:1106000,spent:392000,percComplete:35,rag:'Amber',deliverable:'Full CRM Rollout Across All Branches'},
-  // Kerry Group SAP — 4 phases
-  {projectId:'kerry-sap',id:'kerry-sap-ph1',name:'Phase I – Blueprint & Global Template',startDate:'2024-07-01',endDate:'2025-01-31',bac:640000,spent:640000,percComplete:100,rag:'Green',deliverable:'Global Template Defined'},
-  {projectId:'kerry-sap',id:'kerry-sap-ph2',name:'Phase II – EMEA Realization',startDate:'2025-02-01',endDate:'2026-04-30',bac:1280000,spent:1040000,percComplete:81,rag:'Amber',deliverable:'EMEA Go-Live'},
-  {projectId:'kerry-sap',id:'kerry-sap-ph3',name:'Phase III – Americas Rollout',startDate:'2026-05-01',endDate:'2026-12-31',bac:800000,spent:0,percComplete:0,rag:'Green',deliverable:'Americas Countries Live'},
-  {projectId:'kerry-sap',id:'kerry-sap-ph4',name:'Phase IV – APAC & MEA Rollout',startDate:'2027-01-01',endDate:'2027-06-30',bac:480000,spent:0,percComplete:0,rag:'Green',deliverable:'Global SAP Coverage'},
-  // CRH plc SAP — 4 phases
-  {projectId:'crh-erp',id:'crh-erp-ph1',name:'Phase I – Global Template Design',startDate:'2024-09-01',endDate:'2025-06-30',bac:900000,spent:900000,percComplete:100,rag:'Green',deliverable:'Approved Global Template'},
-  {projectId:'crh-erp',id:'crh-erp-ph2',name:'Phase II – EMEA Pilot Rollout',startDate:'2025-07-01',endDate:'2026-06-30',bac:1350000,spent:225000,percComplete:17,rag:'Green',deliverable:'3 EMEA Countries Live'},
-  {projectId:'crh-erp',id:'crh-erp-ph3',name:'Phase III – Americas Rollout',startDate:'2026-07-01',endDate:'2027-03-31',bac:1350000,spent:0,percComplete:0,rag:'Green',deliverable:'Americas Division Live'},
-  {projectId:'crh-erp',id:'crh-erp-ph4',name:'Phase IV – APAC & Africa',startDate:'2027-04-01',endDate:'2027-12-31',bac:900000,spent:0,percComplete:0,rag:'Green',deliverable:'Global Deployment Complete'},
-  // Aer Lingus Crew Mgmt — 3 phases
-  {projectId:'al-crew',id:'al-crew-ph1',name:'Phase I – Process Analysis & Design',startDate:'2025-01-01',endDate:'2025-06-30',bac:630000,spent:630000,percComplete:100,rag:'Green',deliverable:'Approved Process Design Docs'},
-  {projectId:'al-crew',id:'al-crew-ph2',name:'Phase II – System Build & Config',startDate:'2025-07-01',endDate:'2025-12-31',bac:840000,spent:840000,percComplete:100,rag:'Green',deliverable:'Configured System in Staging'},
-  {projectId:'al-crew',id:'al-crew-ph3',name:'Phase III – UAT & Go-Live',startDate:'2026-01-01',endDate:'2026-04-30',bac:630000,spent:420000,percComplete:67,rag:'Red',deliverable:'Live in Production'},
-  // Permanent TSB Core Banking — 3 phases
-  {projectId:'ptsb-core',id:'ptsb-core-ph1',name:'Phase I – Current State Assessment',startDate:'2026-01-01',endDate:'2026-05-31',bac:370000,spent:185000,percComplete:50,rag:'Amber',deliverable:'Assessment Report & Roadmap'},
-  {projectId:'ptsb-core',id:'ptsb-core-ph2',name:'Phase II – Migration Design & Build',startDate:'2026-06-01',endDate:'2026-12-31',bac:740000,spent:0,percComplete:0,rag:'Green',deliverable:'Migration Blueprint & Test Env'},
-  {projectId:'ptsb-core',id:'ptsb-core-ph3',name:'Phase III – Execution & Cutover',startDate:'2027-01-01',endDate:'2027-09-30',bac:740000,spent:0,percComplete:0,rag:'Green',deliverable:'Full Core Banking Migration'},
-  // ESB Smart Portal — 2 phases
+  // Meridian Foods SAP — 4 phases
+  {projectId:'kerry-sap',id:'mer-sap-ph1',name:'Phase I – Blueprint & Global Template',startDate:'2024-07-01',endDate:'2025-01-31',bac:640000,spent:640000,percComplete:100,rag:'Green',deliverable:'Global Template Defined'},
+  {projectId:'kerry-sap',id:'mer-sap-ph2',name:'Phase II – EMEA Realization',startDate:'2025-02-01',endDate:'2026-04-30',bac:1280000,spent:1040000,percComplete:81,rag:'Amber',deliverable:'EMEA Go-Live'},
+  {projectId:'kerry-sap',id:'mer-sap-ph3',name:'Phase III – Americas Rollout',startDate:'2026-05-01',endDate:'2026-12-31',bac:800000,spent:0,percComplete:0,rag:'Green',deliverable:'Americas Countries Live'},
+  {projectId:'kerry-sap',id:'mer-sap-ph4',name:'Phase IV – APAC & MEA Rollout',startDate:'2027-01-01',endDate:'2027-06-30',bac:480000,spent:0,percComplete:0,rag:'Green',deliverable:'Global SAP Coverage'},
+  // Stonewall Holdings SAP — 4 phases
+  {projectId:'crh-erp',id:'stn-erp-ph1',name:'Phase I – Global Template Design',startDate:'2024-09-01',endDate:'2025-06-30',bac:900000,spent:900000,percComplete:100,rag:'Green',deliverable:'Approved Global Template'},
+  {projectId:'crh-erp',id:'stn-erp-ph2',name:'Phase II – EMEA Pilot Rollout',startDate:'2025-07-01',endDate:'2026-06-30',bac:1350000,spent:225000,percComplete:17,rag:'Green',deliverable:'3 EMEA Countries Live'},
+  {projectId:'crh-erp',id:'stn-erp-ph3',name:'Phase III – Americas Rollout',startDate:'2026-07-01',endDate:'2027-03-31',bac:1350000,spent:0,percComplete:0,rag:'Green',deliverable:'Americas Division Live'},
+  {projectId:'crh-erp',id:'stn-erp-ph4',name:'Phase IV – APAC & Africa',startDate:'2027-04-01',endDate:'2027-12-31',bac:900000,spent:0,percComplete:0,rag:'Green',deliverable:'Global Deployment Complete'},
+  // TerraAir Crew Mgmt — 3 phases
+  {projectId:'al-crew',id:'tav-crew-ph1',name:'Phase I – Process Analysis & Design',startDate:'2025-01-01',endDate:'2025-06-30',bac:630000,spent:630000,percComplete:100,rag:'Green',deliverable:'Approved Process Design Docs'},
+  {projectId:'al-crew',id:'tav-crew-ph2',name:'Phase II – System Build & Config',startDate:'2025-07-01',endDate:'2025-12-31',bac:840000,spent:840000,percComplete:100,rag:'Green',deliverable:'Configured System in Staging'},
+  {projectId:'al-crew',id:'tav-crew-ph3',name:'Phase III – UAT & Go-Live',startDate:'2026-01-01',endDate:'2026-04-30',bac:630000,spent:420000,percComplete:67,rag:'Red',deliverable:'Live in Production'},
+  // Broadstone Bank Core Banking — 3 phases
+  {projectId:'ptsb-core',id:'brd-core-ph1',name:'Phase I – Current State Assessment',startDate:'2026-01-01',endDate:'2026-05-31',bac:370000,spent:185000,percComplete:50,rag:'Amber',deliverable:'Assessment Report & Roadmap'},
+  {projectId:'ptsb-core',id:'brd-core-ph2',name:'Phase II – Migration Design & Build',startDate:'2026-06-01',endDate:'2026-12-31',bac:740000,spent:0,percComplete:0,rag:'Green',deliverable:'Migration Blueprint & Test Env'},
+  {projectId:'ptsb-core',id:'brd-core-ph3',name:'Phase III – Execution & Cutover',startDate:'2027-01-01',endDate:'2027-09-30',bac:740000,spent:0,percComplete:0,rag:'Green',deliverable:'Full Core Banking Migration'},
+  // GridCore Energy Smart Portal — 2 phases
   {projectId:'esb-portal',id:'esb-portal-ph1',name:'Phase I – Discovery & Design',startDate:'2025-09-01',endDate:'2025-11-30',bac:120000,spent:120000,percComplete:100,rag:'Green',deliverable:'Approved Design Specification'},
   {projectId:'esb-portal',id:'esb-portal-ph2',name:'Phase II – Build & Launch',startDate:'2025-12-01',endDate:'2026-04-30',bac:469000,spent:268000,percComplete:57,rag:'Green',deliverable:'Customer Portal Live'},
-  // Ryanair HR — 2 phases
+  // SkyBridge Airlines HR — 2 phases
   {projectId:'ryr-hr',id:'ryr-hr-ph1',name:'Phase I – Workday Configuration',startDate:'2025-03-01',endDate:'2025-12-31',bac:1300000,spent:1100000,percComplete:85,rag:'Amber',deliverable:'Core HR Module Live'},
   {projectId:'ryr-hr',id:'ryr-hr-ph2',name:'Phase II – Payroll & Self-Service',startDate:'2026-01-01',endDate:'2027-02-28',bac:1157000,spent:605000,percComplete:52,rag:'Amber',deliverable:'Full Payroll & ESS Live'},
 ];
@@ -3292,53 +3330,53 @@ const projectPhases = [
 // CHANGE REQUESTS DATA
 // ══════════════════════════════════════════════════════════
 const changeRequestsData = [
-  {id:'CR-001',projectId:'erp',customerId:'aib',customer:'AIB Group',title:'Additional Legacy System Integration',type:'Scope Change',status:'Approved',value:45000,impactDays:14,raised:'2026-01-10',approvedDate:'2026-01-20',approvedBy:'David Walsh',description:'Scope expansion to include 3 additional legacy mainframe interfaces not in original SOW.'},
-  {id:'CR-002',projectId:'aib-dm',customerId:'aib',customer:'AIB Group',title:'Extended Data Cleansing Scope',type:'Scope Change',status:'Pending',value:28000,impactDays:7,raised:'2026-02-15',approvedDate:null,approvedBy:null,description:'Additional data quality remediation required following Phase I assessment findings.'},
-  {id:'CR-003',projectId:'boi-digital',customerId:'boi',customer:'Bank of Ireland',title:'Biometric Authentication Layer',type:'New Feature',status:'Approved',value:85000,impactDays:21,raised:'2025-12-01',approvedDate:'2025-12-15',approvedBy:'David Walsh',description:'Face ID and fingerprint authentication added to mobile app scope.'},
-  {id:'CR-004',projectId:'boi-digital',customerId:'boi',customer:'Bank of Ireland',title:'Open Banking API Extension (PSD2)',type:'Regulatory',status:'Under Review',value:62000,impactDays:14,raised:'2026-02-20',approvedDate:null,approvedBy:null,description:'PSD2 compliance requires additional Open Banking API endpoints beyond original specification.'},
-  {id:'CR-005',projectId:'crm',customerId:'boi',customer:'Bank of Ireland',title:'AI-Powered Lead Scoring Module',type:'New Feature',status:'Pending',value:110000,impactDays:28,raised:'2026-03-01',approvedDate:null,approvedBy:null,description:'Business request for ML-based lead scoring not in original Salesforce implementation scope.'},
-  {id:'CR-006',projectId:'ryr-hr',customerId:'ryr',customer:'Ryanair',title:'Cabin Crew Variable Pay Module',type:'New Feature',status:'Approved',value:65000,impactDays:28,raised:'2025-11-15',approvedDate:'2025-12-01',approvedBy:'David Walsh',description:'Additional payroll processing module for cabin crew variable pay components.'},
-  {id:'CR-007',projectId:'esb-portal',customerId:'esb',customer:'ESB',title:'Smart Meter Data Integration',type:'Scope Change',status:'Pending',value:118000,impactDays:35,raised:'2026-01-28',approvedDate:null,approvedBy:null,description:'Integration with 750K smart meter network for real-time data ingestion not in original brief.'},
-  {id:'CR-008',projectId:'ptsb-mobile',customerId:'ptsb',customer:'Permanent TSB',title:'PSD2 Open Banking Compliance',type:'Regulatory',status:'Approved',value:95000,impactDays:21,raised:'2026-01-05',approvedDate:'2026-01-20',approvedBy:'David Walsh',description:'CBI-mandated PSD2 Open Banking API compliance requirement added post contract signing.'},
-  {id:'CR-009',projectId:'ptsb-core',customerId:'ptsb',customer:'Permanent TSB',title:'CBI Regulatory Reporting Feeds',type:'Regulatory',status:'Approved',value:175000,impactDays:14,raised:'2026-02-10',approvedDate:'2026-02-25',approvedBy:'David Walsh',description:'Central Bank of Ireland reporting requirements mandate additional regulatory data feeds.'},
-  {id:'CR-010',projectId:'al-crew',customerId:'al',customer:'Aer Lingus',title:'Crew Self-Service Bidding Module',type:'New Feature',status:'Rejected',value:180000,impactDays:45,raised:'2025-10-01',approvedDate:'2025-10-20',approvedBy:'David Walsh',description:'Request for self-service crew bid module declined — out of scope for current programme.'},
-  {id:'CR-011',projectId:'al-pax',customerId:'al',customer:'Aer Lingus',title:'Real-Time Flight Status Integration',type:'Scope Change',status:'Under Review',value:90000,impactDays:18,raised:'2026-02-25',approvedDate:null,approvedBy:null,description:'Integration with live flight data feeds for passenger experience personalisation.'},
-  {id:'CR-012',projectId:'kerry-sap',customerId:'kerry',customer:'Kerry Group',title:'Italy & Spain Country Rollout',type:'Scope Change',status:'Approved',value:220000,impactDays:30,raised:'2025-09-15',approvedDate:'2025-10-01',approvedBy:'David Walsh',description:'Additional EMEA countries added to Phase II scope following board approval.'},
-  {id:'CR-013',projectId:'kerry-sap',customerId:'kerry',customer:'Kerry Group',title:'Executive Analytics Dashboard',type:'New Feature',status:'Pending',value:145000,impactDays:20,raised:'2026-02-28',approvedDate:null,approvedBy:null,description:'C-suite request for embedded Power BI real-time analytics not in original SAP scope.'},
-  {id:'CR-014',projectId:'crh-erp',customerId:'crh',customer:'CRH plc',title:'APAC Phase Acceleration',type:'Timeline Change',status:'Under Review',value:350000,impactDays:-42,raised:'2026-02-01',approvedDate:null,approvedBy:null,description:'Board mandate to accelerate APAC rollout by 6 weeks; requires parallel-running Phases III and IV.'},
+  {id:'CR-001',projectId:'erp',customerId:'clw',customer:'Clearwater Bank',title:'Additional Legacy System Integration',type:'Scope Change',status:'Approved',value:45000,impactDays:14,raised:'2026-01-10',approvedDate:'2026-01-20',approvedBy:'David Walsh',description:'Scope expansion to include 3 additional legacy mainframe interfaces not in original SOW.'},
+  {id:'CR-002',projectId:'aib-dm',customerId:'clw',customer:'Clearwater Bank',title:'Extended Data Cleansing Scope',type:'Scope Change',status:'Pending',value:28000,impactDays:7,raised:'2026-02-15',approvedDate:null,approvedBy:null,description:'Additional data quality remediation required following Phase I assessment findings.'},
+  {id:'CR-003',projectId:'boi-digital',customerId:'atl',customer:'Atlantic Financial',title:'Biometric Authentication Layer',type:'New Feature',status:'Approved',value:85000,impactDays:21,raised:'2025-12-01',approvedDate:'2025-12-15',approvedBy:'David Walsh',description:'Face ID and fingerprint authentication added to mobile app scope.'},
+  {id:'CR-004',projectId:'boi-digital',customerId:'atl',customer:'Atlantic Financial',title:'Open Banking API Extension (PSD2)',type:'Regulatory',status:'Under Review',value:62000,impactDays:14,raised:'2026-02-20',approvedDate:null,approvedBy:null,description:'PSD2 compliance requires additional Open Banking API endpoints beyond original specification.'},
+  {id:'CR-005',projectId:'crm',customerId:'atl',customer:'Atlantic Financial',title:'AI-Powered Lead Scoring Module',type:'New Feature',status:'Pending',value:110000,impactDays:28,raised:'2026-03-01',approvedDate:null,approvedBy:null,description:'Business request for ML-based lead scoring not in original Salesforce implementation scope.'},
+  {id:'CR-006',projectId:'ryr-hr',customerId:'sky',customer:'SkyBridge Airlines',title:'Cabin Crew Variable Pay Module',type:'New Feature',status:'Approved',value:65000,impactDays:28,raised:'2025-11-15',approvedDate:'2025-12-01',approvedBy:'David Walsh',description:'Additional payroll processing module for cabin crew variable pay components.'},
+  {id:'CR-007',projectId:'esb-portal',customerId:'gce',customer:'GridCore Energy',title:'Smart Meter Data Integration',type:'Scope Change',status:'Pending',value:118000,impactDays:35,raised:'2026-01-28',approvedDate:null,approvedBy:null,description:'Integration with 750K smart meter network for real-time data ingestion not in original brief.'},
+  {id:'CR-008',projectId:'ptsb-mobile',customerId:'brd',customer:'Broadstone Bank',title:'PSD2 Open Banking Compliance',type:'Regulatory',status:'Approved',value:95000,impactDays:21,raised:'2026-01-05',approvedDate:'2026-01-20',approvedBy:'David Walsh',description:'CBI-mandated PSD2 Open Banking API compliance requirement added post contract signing.'},
+  {id:'CR-009',projectId:'ptsb-core',customerId:'brd',customer:'Broadstone Bank',title:'CBI Regulatory Reporting Feeds',type:'Regulatory',status:'Approved',value:175000,impactDays:14,raised:'2026-02-10',approvedDate:'2026-02-25',approvedBy:'David Walsh',description:'Central Atlantic Financial reporting requirements mandate additional regulatory data feeds.'},
+  {id:'CR-010',projectId:'al-crew',customerId:'tav',customer:'TerraAir',title:'Crew Self-Service Bidding Module',type:'New Feature',status:'Rejected',value:180000,impactDays:45,raised:'2025-10-01',approvedDate:'2025-10-20',approvedBy:'David Walsh',description:'Request for self-service crew bid module declined — out of scope for current programme.'},
+  {id:'CR-011',projectId:'al-pax',customerId:'tav',customer:'TerraAir',title:'Real-Time Flight Status Integration',type:'Scope Change',status:'Under Review',value:90000,impactDays:18,raised:'2026-02-25',approvedDate:null,approvedBy:null,description:'Integration with live flight data feeds for passenger experience personalisation.'},
+  {id:'CR-012',projectId:'kerry-sap',customerId:'mer',customer:'Meridian Foods',title:'Italy & Spain Country Rollout',type:'Scope Change',status:'Approved',value:220000,impactDays:30,raised:'2025-09-15',approvedDate:'2025-10-01',approvedBy:'David Walsh',description:'Additional EMEA countries added to Phase II scope following board approval.'},
+  {id:'CR-013',projectId:'kerry-sap',customerId:'mer',customer:'Meridian Foods',title:'Executive Analytics Dashboard',type:'New Feature',status:'Pending',value:145000,impactDays:20,raised:'2026-02-28',approvedDate:null,approvedBy:null,description:'C-suite request for embedded Power BI real-time analytics not in original SAP scope.'},
+  {id:'CR-014',projectId:'crh-erp',customerId:'stn',customer:'Stonewall Holdings',title:'APAC Phase Acceleration',type:'Timeline Change',status:'Under Review',value:350000,impactDays:-42,raised:'2026-02-01',approvedDate:null,approvedBy:null,description:'Board mandate to accelerate APAC rollout by 6 weeks; requires parallel-running Phases III and IV.'},
 ];
 
 // ══════════════════════════════════════════════════════════
 // EARNED VALUE MANAGEMENT DATA
 // ══════════════════════════════════════════════════════════
 const evmData = [
-  {id:'erp',       name:'ERP Implementation (SAP)',       customer:'AIB Group',       bac:374000,  pv:292000,  ev:232000,  ac:250000, invoiced:170000, percComplete:62, percPlanned:78,  startDate:'2025-10-01',endDate:'2026-03-31'},
-  {id:'aib-dm',    name:'Data Migration & ETL',           customer:'AIB Group',       bac:995000,  pv:418000,  ev:448000,  ac:447000, invoiced:398000, percComplete:45, percPlanned:42,  startDate:'2025-07-01',endDate:'2026-06-30'},
-  {id:'crm',       name:'CRM Transformation (SF)',        customer:'Bank of Ireland', bac:2106000, pv:758000,  ev:800000,  ac:800000, invoiced:716000, percComplete:38, percPlanned:36,  startDate:'2025-01-15',endDate:'2026-12-31'},
-  {id:'boi-digital',name:'Digital Banking Portal',        customer:'Bank of Ireland', bac:1404000, pv:786000,  ev:730000,  ac:758000, invoiced:632000, percComplete:52, percPlanned:56,  startDate:'2025-04-01',endDate:'2026-09-30'},
-  {id:'boi-compliance',name:'Regulatory Compliance',      customer:'Bank of Ireland', bac:410000,  pv:410000,  ev:360000,  ac:388000, invoiced:363000, percComplete:88, percPlanned:100, startDate:'2025-09-01',endDate:'2026-02-28'},
-  {id:'ryr-hr',    name:'HR Transformation (Workday)',    customer:'Ryanair',         bac:2457000, pv:663000,  ev:713000,  ac:727000, invoiced:679000, percComplete:29, percPlanned:27,  startDate:'2025-03-01',endDate:'2027-02-28'},
-  {id:'ryr-fin',   name:'Finance Upgrade (Oracle)',       customer:'Ryanair',         bac:1053000, pv:84000,   ev:126000,  ac:131000, invoiced:105000, percComplete:12, percPlanned:8,   startDate:'2026-01-06',endDate:'2026-12-31'},
-  {id:'esb-field', name:'Field Operations Mobile App',    customer:'ESB',             bac:1287000, pv:1094000, ev:1004000, ac:1020000, invoiced:959000, percComplete:78, percPlanned:85,  startDate:'2024-07-01',endDate:'2026-01-31'},
-  {id:'ptsb-mobile',name:'Mobile Banking App Rebuild',customer:'Permanent TSB',
+  {id:'erp',       name:'ERP Implementation (SAP)',       customer:'Clearwater Bank',       bac:374000,  pv:292000,  ev:232000,  ac:250000, invoiced:170000, percComplete:62, percPlanned:78,  startDate:'2025-10-01',endDate:'2026-03-31'},
+  {id:'aib-dm',    name:'Data Migration & ETL',           customer:'Clearwater Bank',       bac:995000,  pv:418000,  ev:448000,  ac:447000, invoiced:398000, percComplete:45, percPlanned:42,  startDate:'2025-07-01',endDate:'2026-06-30'},
+  {id:'crm',       name:'CRM Transformation (SF)',        customer:'Atlantic Financial', bac:2106000, pv:758000,  ev:800000,  ac:800000, invoiced:716000, percComplete:38, percPlanned:36,  startDate:'2025-01-15',endDate:'2026-12-31'},
+  {id:'boi-digital',name:'Digital Banking Portal',        customer:'Atlantic Financial', bac:1404000, pv:786000,  ev:730000,  ac:758000, invoiced:632000, percComplete:52, percPlanned:56,  startDate:'2025-04-01',endDate:'2026-09-30'},
+  {id:'boi-compliance',name:'Regulatory Compliance',      customer:'Atlantic Financial', bac:410000,  pv:410000,  ev:360000,  ac:388000, invoiced:363000, percComplete:88, percPlanned:100, startDate:'2025-09-01',endDate:'2026-02-28'},
+  {id:'ryr-hr',    name:'HR Transformation (Workday)',    customer:'SkyBridge Airlines',         bac:2457000, pv:663000,  ev:713000,  ac:727000, invoiced:679000, percComplete:29, percPlanned:27,  startDate:'2025-03-01',endDate:'2027-02-28'},
+  {id:'ryr-fin',   name:'Finance Upgrade (Oracle)',       customer:'SkyBridge Airlines',         bac:1053000, pv:84000,   ev:126000,  ac:131000, invoiced:105000, percComplete:12, percPlanned:8,   startDate:'2026-01-06',endDate:'2026-12-31'},
+  {id:'esb-field', name:'Field Operations Mobile App',    customer:'GridCore Energy',             bac:1287000, pv:1094000, ev:1004000, ac:1020000, invoiced:959000, percComplete:78, percPlanned:85,  startDate:'2024-07-01',endDate:'2026-01-31'},
+  {id:'brd-mobile',name:'Mobile Banking App Rebuild',customer:'Broadstone Bank',
    bac:480000,pv:240000,ev:211200,ac:210000,invoiced:190000,
    percComplete:44,percPlanned:50,startDate:'2025-09-01',endDate:'2026-08-31'},
-  {id:'ptsb-core',name:'Core Banking Migration (Temenos T24)',customer:'Permanent TSB',
+  {id:'brd-core',name:'Core Banking Migration (Temenos T24)',customer:'Broadstone Bank',
    bac:1850000,pv:185000,ev:222000,ac:185000,invoiced:185000,
    percComplete:12,percPlanned:10,startDate:'2026-01-15',endDate:'2027-03-31'},
-  {id:'kerry-sap',name:'SAP S/4HANA Finance Rollout (EMEA)',customer:'Kerry Group',
+  {id:'mer-sap',name:'SAP S/4HANA Finance Rollout (EMEA)',customer:'Meridian Foods',
    bac:3200000,pv:1920000,ev:1760000,ac:1680000,invoiced:1520000,
    percComplete:55,percPlanned:60,startDate:'2024-11-01',endDate:'2026-12-31'},
-  {id:'kerry-data',name:'Azure Data Lake & Analytics Platform',customer:'Kerry Group',
+  {id:'mer-data',name:'Azure Data Lake & Analytics Platform',customer:'Meridian Foods',
    bac:920000,pv:506000,ev:460000,ac:460000,invoiced:420000,
    percComplete:50,percPlanned:55,startDate:'2025-06-01',endDate:'2026-09-30'},
-  {id:'al-crew',name:'Crew Management System Replacement',customer:'Aer Lingus',
+  {id:'tav-crew',name:'Crew Management System Replacement',customer:'TerraAir',
    bac:2100000,pv:1995000,ev:1890000,ac:1890000,invoiced:1680000,
    percComplete:90,percPlanned:95,startDate:'2025-04-01',endDate:'2026-06-30'},
-  {id:'al-pax',name:'Passenger Experience Platform',customer:'Aer Lingus',
+  {id:'tav-pax',name:'Passenger Experience Platform',customer:'TerraAir',
    bac:760000,pv:76000,ev:91200,ac:95000,invoiced:76000,
    percComplete:12,percPlanned:10,startDate:'2026-02-01',endDate:'2027-01-31'},
-  {id:'crh-erp',name:'SAP Global ERP Standardisation',customer:'CRH plc',
+  {id:'stn-erp',name:'SAP Global ERP Standardisation',customer:'Stonewall Holdings',
    bac:4500000,pv:1260000,ev:1170000,ac:1125000,invoiced:1000000,
    percComplete:26,percPlanned:28,startDate:'2024-07-01',endDate:'2027-06-30'},
 ];
@@ -3347,7 +3385,7 @@ const evmData = [
 // ══════════════════════════════════════════════════════════
 
 const statusProjects = [
-  {id:'erp', name:'ERP Implementation', customer:'AIB Group', pm:'Siobhán Murphy', period:'Week Ending 7 Mar 2026',
+  {id:'erp', name:'ERP Implementation', customer:'Clearwater Bank', pm:'Siobhán Murphy', period:'Week Ending 7 Mar 2026',
    rag:'Amber', ragNote:'Sprint 5 SAP FI config risk — schedule extension of 3 days approved. Go-live target 31 Mar remains achievable.',
    execSummary:'Sprint 5 is progressing well with 12 of 15 planned work items on track. A SAP FI period-close configuration issue has been identified which resulted in a 3-day extension to Sprint 5, approved by both parties. Invoice processing, AP payment runs, and cost centre hierarchy features are complete. Phase completion is currently at 62% against a target of 65% at this stage. One invoice (INV-00023) is overdue and being processed this week.',
    milestones:[
@@ -3363,7 +3401,7 @@ const statusProjects = [
    internalNotes:'CONFIDENTIAL: Aoife Walsh BA on ERP supplementary support role is logging above SoW hours cap — CR-008 needed. Margin currently 23% vs target 31%. Three consultants over their hour caps — PM to manage. Cash position tight — INV-00023 delay is causing cash flow issue this week.',
    internalRisks:['Margin eroding — forecast days at 192 vs budget 180. Each free day costs ~€800. Currently 12 free days = €9,600 unrecovered.','Aoife Walsh retention risk flagged by HR. If she exits before 28 Mar, significant knowledge gap in Phase 3-4.','3 consultants at >10% over SoW cap — unrecoverable unless CR-008 approved by AIB.','INV-00023 (€68,400) 18 days overdue — finance to action today. Cash flow impact material.'],
   },
-  {id:'crm', name:'CRM Rollout', customer:'Bank of Ireland', pm:'Aoife Walsh', period:'Week Ending 7 Mar 2026',
+  {id:'crm', name:'CRM Rollout', customer:'Atlantic Financial', pm:'Aoife Walsh', period:'Week Ending 7 Mar 2026',
    rag:'Red', ragNote:'Critical blocker: CRM-024 duplicate contacts bug must be resolved by 14 Mar or go-live slips by 2 sprints to 13 Apr.',
    execSummary:'The CRM Rollout project is currently rated Red due to a critical bug (CRM-024) impacting the data import pipeline for the Email Integration module. This bug, if unresolved by end of Sprint 4 (14 Mar), will result in the go-live date slipping from 30 Mar to 13 Apr. A fix is in code review and the team is targeting resolution by 10 Mar. All other workstreams remain on track.',
    milestones:[
@@ -3380,6 +3418,134 @@ const statusProjects = [
    internalRisks:['Aoife Walsh HR risk — only PM/BA on this project. Departure before 28 Mar = critical.','Margin 18% vs 28% target. 12 free days adding unrecovered cost of ~€9,600.','CR-007 with BOI unsigned — if rejected, full €9,600 absorbed by MB margin.','CRM-024 bug: if not closed by 10 Mar, go-live slips and SLA penalties may apply.'],
   },
 ];
+
+// PLATFORM DEMO ENGINE
+// ══════════════════════════════════════════════════════════
+let demoTourActive = false;
+let demoTourStep = 0;
+const demoTourPages = [
+  {page:'pg-executive',  label:'Executive Dashboard', desc:'C-suite view of portfolio health across all customers'},
+  {page:'pg-portfolio-gantt', label:'Portfolio Gantt',  desc:'Visual timeline of all 17 projects across 8 customers'},
+  {page:'pg-health',     label:'Project Health',       desc:'RAG status, EVM metrics and risk indicators per project'},
+  {page:'pg-contracts',  label:'Contracts & CRs',      desc:'15 contracts, €23.9M portfolio, with Change Requests'},
+  {page:'pg-evm',        label:'EVM / Revenue',        desc:'IFRS 15 earned value, billing variance and cash position'},
+  {page:'pg-weekly',     label:'Weekly Reports',       desc:'Structured weekly status reports per project'},
+  {page:'pg-coapprove',  label:'Co-Approvals',         desc:'Dual-approval workflow for contract changes'},
+  {page:'pg-change-monitor', label:'Change Monitor',   desc:'Live AI-powered portfolio change detection agent'},
+  {page:'pg-showcase',   label:'Platform Showcase',    desc:'Full platform overview: modules, flows, architecture'},
+];
+
+function startDemoTour(){
+  demoTourActive=true;
+  demoTourStep=0;
+  runDemoStep();
+}
+function stopDemoTour(){
+  demoTourActive=false;
+  renderDemo();
+}
+function runDemoStep(){
+  if(!demoTourActive||demoTourStep>=demoTourPages.length){demoTourActive=false;renderDemo();return;}
+  const step=demoTourPages[demoTourStep];
+  showPage(step.page);
+  // Show tour overlay badge
+  const badge=document.getElementById('demo-tour-badge');
+  if(badge){badge.style.display='flex';badge.innerHTML=`<span style="font-size:12px;opacity:.7;">Step ${demoTourStep+1}/${demoTourPages.length}</span><strong style="font-size:14px;margin:2px 0;">${step.label}</strong><span style="font-size:11px;opacity:.8;">${step.desc}</span><div style="display:flex;gap:8px;margin-top:6px;"><button onclick="stopDemoTour()" style="background:rgba(255,255,255,.15);border:none;color:#fff;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">✕ Stop</button><button onclick="demoTourStep++;runDemoStep()" style="background:#00A9CE;border:none;color:#fff;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:11px;">Next →</button></div>`;}
+  demoTourStep++;
+}
+
+function renderDemo(){
+  const el=document.getElementById('demo-content');
+  if(!el)return;
+
+  const personas=[
+    {icon:'📊',role:'Executive / Partner',color:'#3182CE',desc:'Track portfolio health, revenue performance, and client RAG status across all engagements.',pages:['pg-executive','pg-health','pg-portfolio-gantt'],labels:['Executive Dashboard','Project Health','Portfolio Gantt']},
+    {icon:'📋',role:'Project Manager',color:'#319795',desc:'Manage timelines, raise change requests, track earned value, and report weekly status.',pages:['pg-portfolio-gantt','pg-weekly','pg-contracts'],labels:['Portfolio Gantt','Weekly Reports','Contracts & CRs']},
+    {icon:'💰',role:'Finance Director',color:'#276749',desc:'Monitor invoicing, cash flow, EVM revenue recognition and contract billing positions.',pages:['pg-evm','pg-contracts','pg-ar-invoices'],labels:['EVM / Revenue','Contracts','AR Invoices']},
+    {icon:'✅',role:'Delivery Lead',color:'#553C9A',desc:'Handle approvals, co-sign change requests, monitor delivery risk and resource capacity.',pages:['pg-coapprove','pg-health','pg-availability'],labels:['Co-Approvals','Project Health','Availability']},
+  ];
+
+  const steps=demoTourPages;
+
+  el.innerHTML=`
+  <!-- Tour Badge (fixed overlay) -->
+  <div id="demo-tour-badge" style="display:none;position:fixed;bottom:24px;right:24px;z-index:999;background:linear-gradient(135deg,#1a365d,#2d3748);color:#fff;padding:14px 18px;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.4);min-width:260px;flex-direction:column;gap:4px;border:1px solid rgba(255,255,255,.15);"></div>
+
+  <!-- Hero -->
+  <div style="background:linear-gradient(135deg,#1a365d 0%,#2d3748 60%,#1a1a2e 100%);border-radius:12px;padding:40px;margin-bottom:24px;color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+    <div>
+      <div style="font-size:.75rem;letter-spacing:.15em;color:#90CDF4;font-weight:700;margin-bottom:8px;">MB PSA · INTERACTIVE DEMO</div>
+      <h1 style="font-size:2rem;font-weight:800;margin:0 0 8px;">Platform Walkthrough</h1>
+      <p style="color:#A0AEC0;font-size:1rem;margin:0 0 20px;max-width:480px;">Explore the full MB PSA platform. Click any module card to jump straight in, or launch the guided auto-tour to see every section in sequence.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button onclick="startDemoTour()" style="background:linear-gradient(135deg,#00A9CE,#0077A8);border:none;color:#fff;padding:12px 24px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700;box-shadow:0 4px 15px rgba(0,169,206,.4);">▶ Start Guided Tour (${steps.length} stops)</button>
+        <button onclick="showPage('pg-showcase')" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:12px 24px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;">🎯 Platform Showcase</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;min-width:220px;">
+      <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:14px;text-align:center;"><div style="font-size:1.6rem;font-weight:800;color:#68D391;">17</div><div style="font-size:.75rem;color:#A0AEC0;">Projects</div></div>
+      <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:14px;text-align:center;"><div style="font-size:1.6rem;font-weight:800;color:#90CDF4;">8</div><div style="font-size:.75rem;color:#A0AEC0;">Customers</div></div>
+      <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:14px;text-align:center;"><div style="font-size:1.6rem;font-weight:800;color:#FBD38D;">€24M</div><div style="font-size:.75rem;color:#A0AEC0;">Portfolio</div></div>
+      <div style="background:rgba(255,255,255,.07);border-radius:8px;padding:14px;text-align:center;"><div style="font-size:1.6rem;font-weight:800;color:#E9D8FD;">10</div><div style="font-size:.75rem;color:#A0AEC0;">Modules</div></div>
+    </div>
+  </div>
+
+  <!-- Persona Cards -->
+  <h2 style="color:#E2E8F0;font-size:1rem;font-weight:700;margin:0 0 12px;">View as a Role</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:28px;">
+    ${personas.map(p=>`
+      <div style="background:#1E2A3A;border-radius:10px;padding:18px;border:1px solid #2D3748;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='${p.color}'" onmouseout="this.style.borderColor='#2D3748'">
+        <div style="font-size:2rem;margin-bottom:10px;">${p.icon}</div>
+        <div style="font-weight:700;color:#E2E8F0;font-size:.95rem;margin-bottom:6px;">${p.role}</div>
+        <div style="font-size:.8rem;color:#A0AEC0;margin-bottom:14px;line-height:1.5;">${p.desc}</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          ${p.pages.map((pg,i)=>`<button onclick="showPage('${pg}')" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#90CDF4;padding:5px 10px;border-radius:5px;cursor:pointer;font-size:.78rem;text-align:left;">→ ${p.labels[i]}</button>`).join('')}
+        </div>
+      </div>
+    `).join('')}
+  </div>
+
+  <!-- Guided Tour Steps -->
+  <h2 style="color:#E2E8F0;font-size:1rem;font-weight:700;margin:0 0 12px;">Tour Stops (${steps.length} modules)</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:28px;">
+    ${steps.map((s,i)=>`
+      <div onclick="showPage('${s.page}')" style="background:#1E2A3A;border:1px solid #2D3748;border-radius:8px;padding:14px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;transition:background .15s;" onmouseover="this.style.background='#243448'" onmouseout="this.style.background='#1E2A3A'">
+        <div style="background:#2D3748;color:#90CDF4;font-weight:800;font-size:.85rem;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${i+1}</div>
+        <div>
+          <div style="font-weight:600;color:#E2E8F0;font-size:.88rem;margin-bottom:3px;">${s.label}</div>
+          <div style="font-size:.75rem;color:#718096;line-height:1.4;">${s.desc}</div>
+        </div>
+      </div>
+    `).join('')}
+  </div>
+
+  <!-- What's built section -->
+  <h2 style="color:#E2E8F0;font-size:1rem;font-weight:700;margin:0 0 12px;">What's in the Platform</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;">
+    ${[
+      {icon:'📊',name:'Executive Dashboard',tag:'Live',desc:'Portfolio RAG, EVM summary, revenue trends, customer card grid with drill-down'},
+      {icon:'🗓',name:'Portfolio Gantt',tag:'Multi-phase',desc:'17 projects, 8 customers, expandable phase rows, amendment overlays, 3 zoom levels'},
+      {icon:'📄',name:'Contracts & CRs',tag:'IFRS 15',desc:'15 contracts, €23.9M, milestone billing, 14 Change Requests, expiry alerts'},
+      {icon:'📈',name:'EVM / Revenue',tag:'Finance',desc:'IFRS 15 earned value, SPI/CPI health, billing variance, contract vs cash position'},
+      {icon:'🤖',name:'Change Monitor',tag:'AI Agent',desc:'Scans portfolio every 60s for deadline, RAG, contract and invoice changes'},
+      {icon:'✅',name:'Co-Approvals',tag:'Workflow',desc:'Dual-approval delegation, full audit trail, CR-linked approval requests'},
+      {icon:'📰',name:'Weekly Reports',tag:'Reporting',desc:'Structured PM status reports with financials, RAG, risks and actions per project'},
+      {icon:'👥',name:'Resourcing & HR',tag:'People',desc:'Availability heatmap, skills matrix, org chart, bench management, performance'},
+    ].map(m=>`
+      <div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:8px;padding:16px;display:flex;gap:14px;align-items:flex-start;">
+        <div style="font-size:1.6rem;flex-shrink:0;">${m.icon}</div>
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span style="font-weight:700;color:#E2E8F0;font-size:.9rem;">${m.name}</span>
+            <span style="background:#2D3748;color:#90CDF4;font-size:.65rem;padding:2px 7px;border-radius:8px;font-weight:600;">${m.tag}</span>
+          </div>
+          <div style="font-size:.78rem;color:#A0AEC0;line-height:1.5;">${m.desc}</div>
+        </div>
+      </div>
+    `).join('')}
+  </div>
+  `;
+}
 
 // ══════════════════════════════════════════════════════════
 // PLATFORM SHOWCASE — FUNCTIONAL OVERVIEW
@@ -3799,16 +3965,16 @@ const coApproveRequests = [
    urgency:'Urgent',status:'Pending',raised:'2026-03-05',approvalDeadline:'2026-03-09',value:'€0 (date change only)'},
   {id:'CAR-002',type:'Invoice Approval',ref:'INV-2026-034',subject:'BOI Digital Transformation — Invoice €43,500',
    requestor:'Aoife Gallagher',delegate:'David Walsh',justification:'Finance Director approval required but she is on annual leave. David has delegated sign-off authority.',
-   description:'Approve invoice MB-BOI-INV-034 for €43,500 covering February T&M — 15 consultant days × 5 staff.',
+   description:'Approve invoice MB-ATL-INV-034 for €43,500 covering February T&M — 15 consultant days × 5 staff.',
    urgency:'Normal',status:'Approved',raised:'2026-02-28',approvalDeadline:'2026-03-07',value:'€43,500',
    approvedBy:'David Walsh',approvedDate:'2026-03-02',approvedNote:'Approved on behalf of Aoife Gallagher. Invoice matches timesheet records.'},
-  {id:'CAR-003',type:'Resource Request',ref:'RR-2026-018',subject:'Ryanair — Additional Senior Developer',
-   requestor:'James Murphy (Ryanair PM)',delegate:'Siobhán Murphy',justification:'Requesting team lead to co-approve additional resource as project is cross-functional.',
-   description:'Approve allocation of 1 × Senior Developer (Mark O\'Brien) to Ryanair Finance Integration from 16 Mar 2026.',
+  {id:'CAR-003',type:'Resource Request',ref:'RR-2026-018',subject:'SkyBridge Airlines — Additional Senior Developer',
+   requestor:'James Murphy (SkyBridge Airlines PM)',delegate:'Siobhán Murphy',justification:'Requesting team lead to co-approve additional resource as project is cross-functional.',
+   description:'Approve allocation of 1 × Senior Developer (Mark O\'Brien) to SkyBridge Airlines Finance Integration from 16 Mar 2026.',
    urgency:'Urgent',status:'Pending',raised:'2026-03-06',approvalDeadline:'2026-03-10',value:'€130/hr est. 40 days'},
-  {id:'CAR-004',type:'Expense Claim',ref:'EXP-2026-112',subject:'ESB Field Operations — Travel Expenses €2,840',
+  {id:'CAR-004',type:'Expense Claim',ref:'EXP-2026-112',subject:'GridCore Energy Field Operations — Travel Expenses €2,840',
    requestor:'Ciarán O\'Brien',delegate:'David Walsh',justification:'Line manager is away at a conference. Finance requires approval within 5 days of submission.',
-   description:'Travel and accommodation expenses for 3-week ESB field deployment. Dublin–Cork rail, hotel, subsistence.',
+   description:'Travel and accommodation expenses for 3-week GridCore Energy field deployment. Dublin–Cork rail, hotel, subsistence.',
    urgency:'Normal',status:'Rejected',raised:'2026-02-20',approvalDeadline:'2026-02-25',value:'€2,840',
    approvedBy:'David Walsh',approvedDate:'2026-02-23',approvedNote:'Rejected — receipts missing for hotel nights 18–19 Feb. Please resubmit with full documentation.'},
 ];
@@ -4031,26 +4197,26 @@ const ganttAmendments = [
    desc:'Central Bank updated regulatory framework — additional controls required.',
    oldVal:'28 Jun 2026',newVal:'23 Aug 2026',severity:'amber',approvedBy:'Claire Doyle (BOI)'},
   {id:'am-008',projectId:'esb-portal',date:'2026-02-10',type:'compressed',label:'Fast-tracked',
-   desc:'ESB board approved accelerated delivery. End date brought forward 6 weeks.',
-   oldVal:'30 Nov 2026',newVal:'15 Oct 2026',severity:'green',approvedBy:'Patrick Nolan (ESB)'},
+   desc:'GridCore Energy board approved accelerated delivery. End date brought forward 6 weeks.',
+   oldVal:'30 Nov 2026',newVal:'15 Oct 2026',severity:'green',approvedBy:'Patrick Nolan (GridCore Energy)'},
   {id:'am-009',projectId:'ryr-fin',date:'2026-01-25',type:'scope-increase',label:'Scope +€70K',
    desc:'CR-023: Automated reconciliation module added to Finance Integration scope.',
-   oldVal:'€339,000',newVal:'€410,000',severity:'amber',approvedBy:'James Murphy (Ryanair)'},
+   oldVal:'€339,000',newVal:'€410,000',severity:'amber',approvedBy:'James Murphy (SkyBridge Airlines)'},
   {id:'am-010',projectId:'esb-field',date:'2026-02-20',type:'milestone-added',label:'New Milestone',
-   desc:'"Field Trial Sign-off" interim milestone added per ESB governance requirements.',
-   oldVal:'—',newVal:'€146,000 payment milestone',severity:'info',approvedBy:'Patrick Nolan (ESB)'},
+   desc:'"Field Trial Sign-off" interim milestone added per GridCore Energy governance requirements.',
+   oldVal:'—',newVal:'€146,000 payment milestone',severity:'info',approvedBy:'Patrick Nolan (GridCore Energy)'},
   {id:'am-011',projectId:'esb-analytics',date:'2026-03-03',type:'added',label:'New Project',
-   desc:'ESB Analytics & Reporting platform approved — third workstream in ESB programme.',
+   desc:'GridCore Energy Analytics & Reporting platform approved — third workstream in GridCore Energy programme.',
    oldVal:'—',newVal:'€725,000 contract',severity:'green',approvedBy:'David Walsh'},
   {id:'am-012',projectId:'boi-digital',date:'2025-11-15',type:'paused',label:'Paused 6wk',
    desc:'BOI Digital Transformation paused Nov–Dec 2025 during internal BOI restructure. Resumed Jan 2026.',
    oldVal:'Active',newVal:'Paused → Resumed Jan 2026',severity:'amber',approvedBy:'Claire Doyle (BOI)'},
   {id:'am-013',projectId:'ptsb-core',date:'2026-03-01',type:'added',label:'New Project',
-   desc:'PTSB Core Banking Migration approved — second major engagement with Permanent TSB following successful Mobile App delivery.',
+   desc:'PTSB Core Banking Migration approved — second major engagement with Broadstone Bank following successful Mobile App delivery.',
    oldVal:'—',newVal:'€1.85M Fixed Fee contract',severity:'green',approvedBy:'David Walsh'},
   {id:'am-014',projectId:'kerry-sap',date:'2026-02-15',type:'extended',label:'Extended +6wk',
    desc:'Phase 3 France & Iberia extended 6 weeks due to French tax complexity. End date revised.',
-   oldVal:'30 Nov 2026',newVal:'31 Dec 2026',severity:'amber',approvedBy:'Brendan Hayes (Kerry Group)'},
+   oldVal:'30 Nov 2026',newVal:'31 Dec 2026',severity:'amber',approvedBy:'Brendan Hayes (Meridian Foods)'},
   {id:'am-015',projectId:'al-crew',date:'2026-02-20',type:'rag-change',label:'RAG → Red',
    desc:'Crew Management project escalated to Red — UAT P1 defect in pairing algorithm and forecast overrun identified.',
    oldVal:'Amber',newVal:'Red',severity:'red',approvedBy:"Ciarán O'Brien"},
@@ -4100,8 +4266,8 @@ function renderPortfolioGantt(zoom, showAmends, showPhases) {
   });
 
   const rc = {Green:'#38A169',Amber:'#D69E2E',Red:'#E53E3E'};
-  const custColor = {'AIB Group':'#3182CE','Bank of Ireland':'#805AD5','Ryanair':'#E53E3E','ESB':'#319795','Permanent TSB':'#DD6B20','Kerry Group':'#276749','Aer Lingus':'#0072B1','CRH plc':'#97266D'};
-  const custOrder = ['AIB Group','Bank of Ireland','Ryanair','ESB','Permanent TSB','Kerry Group','Aer Lingus','CRH plc'];
+  const custColor = {'Clearwater Bank':'#3182CE','Atlantic Financial':'#805AD5','SkyBridge Airlines':'#E53E3E','GridCore Energy':'#319795','Broadstone Bank':'#DD6B20','Meridian Foods':'#276749','TerraAir':'#0072B1','Stonewall Holdings':'#97266D'};
+  const custOrder = ['Clearwater Bank','Atlantic Financial','SkyBridge Airlines','GridCore Energy','Broadstone Bank','Meridian Foods','TerraAir','Stonewall Holdings'];
 
   // Amendment type → display config
   const amendCfg = {
@@ -4579,7 +4745,7 @@ function renderContracts() {
     const cv = cc.reduce((s,c)=>s+c.value,0);
     const ci = cc.reduce((s,c)=>s+c.invoiced,0);
     const co = cc.reduce((s,c)=>s+c.outstanding,0);
-    const custColor2 = {'AIB Group':'#3182CE','Bank of Ireland':'#805AD5','Ryanair':'#E53E3E','ESB':'#319795','Permanent TSB':'#DD6B20','Kerry Group':'#276749','Aer Lingus':'#0072B1','CRH plc':'#97266D'};
+    const custColor2 = {'Clearwater Bank':'#3182CE','Atlantic Financial':'#805AD5','SkyBridge Airlines':'#E53E3E','GridCore Energy':'#319795','Broadstone Bank':'#DD6B20','Meridian Foods':'#276749','TerraAir':'#0072B1','Stonewall Holdings':'#97266D'};
     const hc = custColor2[cust]||'#1B2A4A';
     return `<div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
       <!-- Customer header -->
@@ -5166,9 +5332,9 @@ function renderPortal(customerId) {
   const el = document.querySelector('#portal-content');
   if(!el) return;
   const customers = [
-    {id:'aib',name:'AIB Group',projectId:'erp',projectName:'ERP Implementation',pm:'Siobhán Murphy',logo:'🏦',color:'#1B3A7A',since:'Jan 2026',status:'Amber'},
-    {id:'boi',name:'Bank of Ireland',projectId:'crm',projectName:'CRM Rollout',pm:'Aoife Walsh',logo:'🏛️',color:'#003366',since:'Feb 2026',status:'Red'},
-    {id:'crh',name:'CRH plc',projectId:'cloud',projectName:'Cloud Migration',pm:'Ronan Maguire',logo:'🏗️',color:'#E53E3E',since:'Dec 2025',status:'Amber'},
+    {id:'aib',name:'Clearwater Bank',projectId:'erp',projectName:'ERP Implementation',pm:'Siobhán Murphy',logo:'🏦',color:'#1B3A7A',since:'Jan 2026',status:'Amber'},
+    {id:'boi',name:'Atlantic Financial',projectId:'crm',projectName:'CRM Rollout',pm:'Aoife Walsh',logo:'🏛️',color:'#003366',since:'Feb 2026',status:'Red'},
+    {id:'crh',name:'Stonewall Holdings',projectId:'cloud',projectName:'Cloud Migration',pm:'Ronan Maguire',logo:'🏗️',color:'#E53E3E',since:'Dec 2025',status:'Amber'},
   ];
   const cust = customers.find(c=>c.id===customerId)||customers[0];
   const ragColors = {Green:'#38A169',Amber:'#D69E2E',Red:'#E53E3E'};
@@ -5371,9 +5537,9 @@ function renderPortalTab(tab, cust, proj, visRaid, docs, closedDecisions) {
 function switchPortalTab(tab) {
   const cId = document.querySelector('#portal-content select') ? document.querySelector('#portal-content select').value : 'aib';
   const customers = [
-    {id:'aib',name:'AIB Group',projectId:'erp',projectName:'ERP Implementation',pm:'Siobhán Murphy',logo:'🏦',color:'#1B3A7A',since:'Jan 2026',status:'Amber'},
-    {id:'boi',name:'Bank of Ireland',projectId:'crm',projectName:'CRM Rollout',pm:'Aoife Walsh',logo:'🏛️',color:'#003366',since:'Feb 2026',status:'Red'},
-    {id:'crh',name:'CRH plc',projectId:'cloud',projectName:'Cloud Migration',pm:'Ronan Maguire',logo:'🏗️',color:'#E53E3E',since:'Dec 2025',status:'Amber'},
+    {id:'aib',name:'Clearwater Bank',projectId:'erp',projectName:'ERP Implementation',pm:'Siobhán Murphy',logo:'🏦',color:'#1B3A7A',since:'Jan 2026',status:'Amber'},
+    {id:'boi',name:'Atlantic Financial',projectId:'crm',projectName:'CRM Rollout',pm:'Aoife Walsh',logo:'🏛️',color:'#003366',since:'Feb 2026',status:'Red'},
+    {id:'crh',name:'Stonewall Holdings',projectId:'cloud',projectName:'Cloud Migration',pm:'Ronan Maguire',logo:'🏗️',color:'#E53E3E',since:'Dec 2025',status:'Amber'},
   ];
   const cust = customers.find(c=>c.id===cId)||customers[0];
   const proj = statusProjects.find(p=>p.id===cust.projectId);
@@ -5532,7 +5698,7 @@ function renderBenchDemand() {
   ];
   const demand = [
     {project:'ERP Implementation Phase 4',role:'Senior Developer',skills:['SAP FI','.NET'],startDate:'24 Mar 2026',duration:'6 weeks',dayRate:1040,status:'Urgent'},
-    {project:'New Bid — ESB Networks',role:'Solution Architect',skills:['Azure','TOGAF'],startDate:'1 Apr 2026',duration:'12 weeks',dayRate:1400,status:'Pipeline'},
+    {project:'New Bid — GridCore Energy Networks',role:'Solution Architect',skills:['Azure','TOGAF'],startDate:'1 Apr 2026',duration:'12 weeks',dayRate:1400,status:'Pipeline'},
     {project:'BOI CRM Phase 3',role:'Business Analyst',skills:['CRM','BRD'],startDate:'17 Mar 2026',duration:'4 weeks',dayRate:880,status:'Confirmed'},
     {project:'CRH Cloud Phase 2',role:'DevOps Engineer',skills:['Terraform','Azure','CI/CD'],startDate:'1 Apr 2026',duration:'8 weeks',dayRate:960,status:'Pipeline'},
     {project:'Greenfield — HSE',role:'Project Manager',skills:['Prince2','ITIL'],startDate:'14 Apr 2026',duration:'16 weeks',dayRate:1120,status:'Bid Stage'},
@@ -5762,7 +5928,7 @@ function renderGantt(projectId) {
   const el = document.querySelector('#gantt-content');
   if(!el) return;
   const ganttProjects = {
-    erp:{name:'ERP Implementation',customer:'AIB Group',
+    erp:{name:'ERP Implementation',customer:'Clearwater Bank',
       phases:[
         {name:'Phase 1 — Core ERP Foundation',start:0,duration:28,color:'#38A169',complete:100,owner:'Niamh R.'},
         {name:'Phase 2 — Finance Module',start:28,duration:28,color:'#3182CE',complete:100,owner:'Ciarán O.'},
@@ -5772,7 +5938,7 @@ function renderGantt(projectId) {
         {name:'Phase 5 — Go-Live & Hypercare',start:84,duration:14,color:'#276749',complete:0,owner:'Siobhán M.'},
         {name:'Milestone: Go-Live',start:84,duration:1,color:'#1B2A4A',complete:0,owner:'',isMilestone:true},
       ]},
-    crm:{name:'CRM Rollout',customer:'Bank of Ireland',
+    crm:{name:'CRM Rollout',customer:'Atlantic Financial',
       phases:[
         {name:'Phase 1 — CRM Core Setup',start:0,duration:28,color:'#38A169',complete:100,owner:'Seán D.'},
         {name:'Phase 2 — Data Migration',start:28,duration:14,color:'#E53E3E',complete:60,owner:'Aoife W.',atRisk:true},
@@ -5937,9 +6103,9 @@ function renderBillingRules() {
   const el = document.querySelector('#billing-rules-content');
   if(!el) return;
   const rules = [
-    {id:'BR-001',project:'ERP Implementation',customer:'AIB Group',type:'T&M',description:'Time & Materials — invoice monthly for all approved timesheets. Chargeable roles only. Rate per role per contract.',rate:'Per role (see Roles & Rates)',invoiceTrigger:'Monthly — last Friday',status:'Active',wip:0},
-    {id:'BR-002',project:'CRM Rollout',customer:'Bank of Ireland',type:'Fixed Fee',description:'Fixed fee per phase — Phase 1: €45,000. Phase 2: €55,000. Phase 3: €35,000. Invoiced on phase sign-off.',rate:'Phase-based (fixed)',invoiceTrigger:'Phase completion & sign-off',status:'Active',wip:35000},
-    {id:'BR-003',project:'Cloud Migration',customer:'CRH plc',type:'Milestone',description:'Invoice on delivery of agreed milestones: M1 Discovery (€18k), M2 Architecture (€22k), M3 Migration (€45k), M4 Go-Live (€28k).',rate:'Milestone-based',invoiceTrigger:'Milestone acceptance sign-off',status:'Active',wip:22000},
+    {id:'BR-001',project:'ERP Implementation',customer:'Clearwater Bank',type:'T&M',description:'Time & Materials — invoice monthly for all approved timesheets. Chargeable roles only. Rate per role per contract.',rate:'Per role (see Roles & Rates)',invoiceTrigger:'Monthly — last Friday',status:'Active',wip:0},
+    {id:'BR-002',project:'CRM Rollout',customer:'Atlantic Financial',type:'Fixed Fee',description:'Fixed fee per phase — Phase 1: €45,000. Phase 2: €55,000. Phase 3: €35,000. Invoiced on phase sign-off.',rate:'Phase-based (fixed)',invoiceTrigger:'Phase completion & sign-off',status:'Active',wip:35000},
+    {id:'BR-003',project:'Cloud Migration',customer:'Stonewall Holdings',type:'Milestone',description:'Invoice on delivery of agreed milestones: M1 Discovery (€18k), M2 Architecture (€22k), M3 Migration (€45k), M4 Go-Live (€28k).',rate:'Milestone-based',invoiceTrigger:'Milestone acceptance sign-off',status:'Active',wip:22000},
     {id:'BR-004',project:'Managed Services — MB Clients',customer:'Multiple',type:'Retainer',description:'Monthly retainer for support services. 40 hours/month included. Overage billed at €120/hr. Auto-renewing 3-month rolling.',rate:'€4,800/month + overage',invoiceTrigger:'1st of each month',status:'Active',wip:0},
     {id:'BR-005',project:'SharePoint Migration',customer:'Greenfield Ltd',type:'Fixed Fee',description:'Fixed scope — €32,000 for full migration. 50% upfront (€16k), 50% on completion. Additional classification work billed T&M.',rate:'€32,000 total',invoiceTrigger:'Project kick-off + completion',status:'Active',wip:16000},
   ];
@@ -5998,9 +6164,9 @@ function renderRevenueRec() {
   const el = document.querySelector('#revenue-rec-content');
   if(!el) return;
   const revData = [
-    {project:'ERP Implementation',customer:'AIB Group',type:'T&M',contractValue:320000,recognised:198560,deferred:0,wip:0,period:'Mar 2026',method:'Percentage of completion (hours delivered vs contracted)',recThisMonth:24800,status:'On Track'},
-    {project:'CRM Rollout',customer:'Bank of Ireland',type:'Fixed Fee',contractValue:135000,recognised:81000,deferred:54000,wip:35000,period:'Mar 2026',method:'Milestone-based: Phase 1 (€45k ✅), Phase 2 (€55k — 64% complete → €35.2k recognised), Phase 3 (deferred)',recThisMonth:12500,status:'On Track'},
-    {project:'Cloud Migration',customer:'CRH plc',type:'Milestone',contractValue:113000,recognised:40000,deferred:73000,wip:22000,period:'Mar 2026',method:'Milestone acceptance: M1 (€18k ✅), M2 (€22k ✅), M3 & M4 deferred until delivery',recThisMonth:0,status:'M3 Pending'},
+    {project:'ERP Implementation',customer:'Clearwater Bank',type:'T&M',contractValue:320000,recognised:198560,deferred:0,wip:0,period:'Mar 2026',method:'Percentage of completion (hours delivered vs contracted)',recThisMonth:24800,status:'On Track'},
+    {project:'CRM Rollout',customer:'Atlantic Financial',type:'Fixed Fee',contractValue:135000,recognised:81000,deferred:54000,wip:35000,period:'Mar 2026',method:'Milestone-based: Phase 1 (€45k ✅), Phase 2 (€55k — 64% complete → €35.2k recognised), Phase 3 (deferred)',recThisMonth:12500,status:'On Track'},
+    {project:'Cloud Migration',customer:'Stonewall Holdings',type:'Milestone',contractValue:113000,recognised:40000,deferred:73000,wip:22000,period:'Mar 2026',method:'Milestone acceptance: M1 (€18k ✅), M2 (€22k ✅), M3 & M4 deferred until delivery',recThisMonth:0,status:'M3 Pending'},
     {project:'Managed Services',customer:'Multiple',type:'Retainer',contractValue:57600,recognised:14400,deferred:43200,wip:0,period:'Mar 2026',method:'Straight-line monthly recognition — €4,800/month per retainer contract',recThisMonth:4800,status:'On Track'},
   ];
   const totalRecognised = revData.reduce((s,r)=>s+r.recognised,0);
@@ -6426,7 +6592,7 @@ function renderFeatureCoverage() {
 // ══════════════════════════════════════════════════════════
 
 const adoProjects = [
-  { id:'erp', name:'ERP Implementation', customer:'AIB Group', color:'#E53E3E',
+  { id:'erp', name:'ERP Implementation', customer:'Clearwater Bank', color:'#E53E3E',
     totalSP:320, completedSP:198, inProgressSP:42, sprintCurrent:'Sprint 5 of 8',
     sprintStart:'24 Feb', sprintEnd:'7 Mar', budget_days:180, forecast_days:192,
     tasks:[
@@ -6444,7 +6610,7 @@ const adoProjects = [
       {id:'ERP-037',title:'User acceptance testing — Sprint 3 scope',type:'Test',priority:'High',assignee:'Niamh Ryan',sp:5,sprint:'Sprint 3',status:'Done'},
     ]
   },
-  { id:'cloud', name:'Cloud Migration', customer:'CRH plc', color:'#3182CE',
+  { id:'cloud', name:'Cloud Migration', customer:'Stonewall Holdings', color:'#3182CE',
     totalSP:240, completedSP:134, inProgressSP:38, sprintCurrent:'Sprint 4 of 6',
     sprintStart:'17 Feb', sprintEnd:'28 Feb', budget_days:120, forecast_days:138,
     tasks:[
@@ -6458,7 +6624,7 @@ const adoProjects = [
       {id:'CLO-030',title:'Backup and DR validation — RTO test',type:'Test',priority:'High',assignee:'Declan Byrne',sp:5,sprint:'Sprint 3',status:'Done'},
     ]
   },
-  { id:'crm', name:'CRM Rollout', customer:'Bank of Ireland', color:'#D69E2E',
+  { id:'crm', name:'CRM Rollout', customer:'Atlantic Financial', color:'#D69E2E',
     totalSP:180, completedSP:58, inProgressSP:34, sprintCurrent:'Sprint 3 of 8',
     sprintStart:'10 Feb', sprintEnd:'21 Feb', budget_days:90, forecast_days:108,
     tasks:[
@@ -6485,7 +6651,7 @@ const adoProjects = [
       {id:'DW-010',title:'Data quality framework — rule engine',type:'Feature',priority:'Medium',assignee:'Niamh Ryan',sp:8,sprint:'Sprint 1',status:'Done'},
     ]
   },
-  { id:'analytics', name:'Analytics Platform', customer:'Ryanair', color:'#805AD5',
+  { id:'analytics', name:'Analytics Platform', customer:'SkyBridge Airlines', color:'#805AD5',
     totalSP:160, completedSP:148, inProgressSP:5, sprintCurrent:'Sprint 7 of 8',
     sprintStart:'24 Feb', sprintEnd:'7 Mar', budget_days:80, forecast_days:80,
     tasks:[
@@ -6497,7 +6663,7 @@ const adoProjects = [
       {id:'ANL-040',title:'Penetration test remediation',type:'Task',priority:'Critical',assignee:'Fionnuala Burke',sp:5,sprint:'Sprint 6',status:'Done'},
     ]
   },
-  { id:'hr', name:'HR Transformation', customer:'ESB', color:'#718096',
+  { id:'hr', name:'HR Transformation', customer:'GridCore Energy', color:'#718096',
     totalSP:280, completedSP:42, inProgressSP:18, sprintCurrent:'Sprint 1 of 10',
     sprintStart:'3 Mar', sprintEnd:'14 Mar', budget_days:140, forecast_days:140,
     tasks:[
@@ -6679,7 +6845,7 @@ function filterADO(projectId, status){
 // ══════════════════════════════════════════════════════════
 
 const varianceEvents = [
-  { id:'V001', date:'2026-03-05', project:'CRM Rollout', projectId:'crm', customer:'Bank of Ireland',
+  { id:'V001', date:'2026-03-05', project:'CRM Rollout', projectId:'crm', customer:'Atlantic Financial',
     type:'Free Days', severity:'red', icon:'🕐',
     title:'6 unbudgeted forecast days added — Phase 2 Analysis',
     who:'Aoife Walsh', triggeredBy:'Timesheet entries vs. budget tracking',
@@ -6689,7 +6855,7 @@ const varianceEvents = [
     action:'Raise CR-007 to BOI for additional analysis scope or descope equivalent work items from Sprint 3–4.',
     adoRef:'CRM-022, CRM-023'
   },
-  { id:'V002', date:'2026-03-04', project:'Cloud Migration', projectId:'cloud', customer:'CRH plc',
+  { id:'V002', date:'2026-03-04', project:'Cloud Migration', projectId:'cloud', customer:'Stonewall Holdings',
     type:'Scope Creep', severity:'red', icon:'📦',
     title:'Data centre decommission added to scope — 18 days unbudgeted',
     who:'Ronan McCarthy (PM)', triggeredBy:'Client change request accepted without formal CR',
@@ -6699,7 +6865,7 @@ const varianceEvents = [
     action:'Escalate to CRH account director. Raise formal CR for DC decommission scope. If client won\'t fund, remove CLO-031–035 from sprint.',
     adoRef:'CLO-031, CLO-032, CLO-033, CLO-034, CLO-035'
   },
-  { id:'V003', date:'2026-03-03', project:'ERP Implementation', projectId:'erp', customer:'AIB Group',
+  { id:'V003', date:'2026-03-03', project:'ERP Implementation', projectId:'erp', customer:'Clearwater Bank',
     type:'Invoice Delay', severity:'amber', icon:'🧾',
     title:'Sprint 4 invoice delayed — €68,400 held 18 days past planned issue date',
     who:'Finance (auto-detected by Invoice Intelligence agent)', triggeredBy:'Invoice not raised within 5 days of sprint completion',
@@ -6710,7 +6876,7 @@ const varianceEvents = [
     action:'Finance to review INV-00023 immediately. Send to AIB today. Add automated alert for invoices >5 days in Draft.',
     adoRef:'ERP-038, ERP-039, ERP-040'
   },
-  { id:'V004', date:'2026-03-02', project:'CRM Rollout', projectId:'crm', customer:'Bank of Ireland',
+  { id:'V004', date:'2026-03-02', project:'CRM Rollout', projectId:'crm', customer:'Atlantic Financial',
     type:'Blocked Task', severity:'red', icon:'🚫',
     title:'CRM-024 blocked 9 days — duplicate contacts bug delaying Phase 2',
     who:'Seán Gallagher', triggeredBy:'ADO task status changed to Blocked',
@@ -6730,7 +6896,7 @@ const varianceEvents = [
     action:'Confirm Niamh\'s formal assignment split with HR Transformation project. Update Data Warehouse sprint capacity. Recalculate sprint 2 end date.',
     adoRef:'DW-011, DW-013'
   },
-  { id:'V006', date:'2026-02-28', project:'Cloud Migration', projectId:'cloud', customer:'CRH plc',
+  { id:'V006', date:'2026-02-28', project:'Cloud Migration', projectId:'cloud', customer:'Stonewall Holdings',
     type:'Budget Reforecast', severity:'amber', icon:'💰',
     title:'Sprint 4 subcontractor cost €6,800 above budget',
     who:'Fionnuala Burke (Finance)', triggeredBy:'PO-0018 raised for network consultant day rate',
@@ -6740,18 +6906,18 @@ const varianceEvents = [
     action:'Finance to note the €1,600 variance on the project P&L. PM to use standard-rate subcontractors for remaining work. Review subcontractor approval workflow.',
     adoRef:'CLO-032'
   },
-  { id:'V007', date:'2026-02-27', project:'Analytics Platform', projectId:'analytics', customer:'Ryanair',
+  { id:'V007', date:'2026-02-27', project:'Analytics Platform', projectId:'analytics', customer:'SkyBridge Airlines',
     type:'Scope Reduction', severity:'amber', icon:'✂️',
     title:'Mobile reporting module descoped — revenue reduction of €18,000',
     who:'Fionnuala Burke (PM) + Seán Gallagher', triggeredBy:'Client change request CR-ANL-006',
-    what:'Ryanair formally requested to remove the mobile Power BI app module from the project scope via CR-ANL-006. This reduces the contract value by €18,000 but also removes 22 story points (3 sprints of work) and saves ~22 delivery days. Net margin impact is positive (+4.2%).',
+    what:'SkyBridge Airlines formally requested to remove the mobile Power BI app module from the project scope via CR-ANL-006. This reduces the contract value by €18,000 but also removes 22 story points (3 sprints of work) and saves ~22 delivery days. Net margin impact is positive (+4.2%).',
     financialImpact:18000, marginImpact:4.2, revenueImpact:-18000, costImpact:-17600,
     metric:'Scope / Revenue', from:'Contract: €220,000', to:'Revised: €202,000',
     note:'Positive margin impact because descoped work was low-margin mobile development.',
-    action:'Issue revised SoW to Ryanair. Update project budget in PSA. Remove ANL tasks from backlog.',
+    action:'Issue revised SoW to SkyBridge Airlines. Update project budget in PSA. Remove ANL tasks from backlog.',
     adoRef:'ANL-041 (removed)'
   },
-  { id:'V008', date:'2026-02-25', project:'ERP Implementation', projectId:'erp', customer:'AIB Group',
+  { id:'V008', date:'2026-02-25', project:'ERP Implementation', projectId:'erp', customer:'Clearwater Bank',
     type:'Free Days', severity:'red', icon:'🕐',
     title:'Senior developer overtime — 12 days unplanned effort in Sprint 4',
     who:'Ciarán O\'Brien', triggeredBy:'Timesheet entries exceeded assignment hours',
@@ -8036,9 +8202,9 @@ const agentDefs = [
       'Sending alerts to Project Managers…',
     ],
     findings_data:[
-      {sev:'red', msg:'CRM Rollout budget at 112% — immediate action required', project:'CRM Rollout · Bank of Ireland', time:'08:01'},
-      {sev:'red', msg:'Cloud Migration timeline slipped 3 weeks — risk to go-live', project:'Cloud Migration · CRH plc', time:'08:01'},
-      {sev:'amber', msg:'ERP Implementation resourcing gap — 2 Senior Developers needed', project:'ERP Implementation · AIB Group', time:'08:02'},
+      {sev:'red', msg:'CRM Rollout budget at 112% — immediate action required', project:'CRM Rollout · Atlantic Financial', time:'08:01'},
+      {sev:'red', msg:'Cloud Migration timeline slipped 3 weeks — risk to go-live', project:'Cloud Migration · Stonewall Holdings', time:'08:01'},
+      {sev:'amber', msg:'ERP Implementation resourcing gap — 2 Senior Developers needed', project:'ERP Implementation · Clearwater Bank', time:'08:02'},
       {sev:'amber', msg:'Data Warehouse AR invoicing delayed — €42,000 not yet raised', project:'Data Warehouse · Glanbia', time:'08:02'},
     ]
   },
@@ -8065,8 +8231,8 @@ const agentDefs = [
       'Notifying Finance team via email…',
     ],
     findings_data:[
-      {sev:'amber', msg:'Draft invoice generated: AIB Group ERP — €68,400 (340 hrs × senior/mid rates)', project:'ERP Implementation · AIB Group', time:'Mon 07:01'},
-      {sev:'amber', msg:'Draft invoice generated: CRH Cloud Migration — €31,500 (180 hrs)', project:'Cloud Migration · CRH plc', time:'Mon 07:01'},
+      {sev:'amber', msg:'Draft invoice generated: Clearwater Bank ERP — €68,400 (340 hrs × senior/mid rates)', project:'ERP Implementation · Clearwater Bank', time:'Mon 07:01'},
+      {sev:'amber', msg:'Draft invoice generated: CRH Cloud Migration — €31,500 (180 hrs)', project:'Cloud Migration · Stonewall Holdings', time:'Mon 07:01'},
       {sev:'amber', msg:'Draft invoice generated: Glanbia Data Warehouse — €18,200 (104 hrs)', project:'Data Warehouse · Glanbia', time:'Mon 07:02'},
     ]
   },
@@ -8120,10 +8286,10 @@ const agentDefs = [
       'Posting match recommendations to Resourcing inbox…',
     ],
     findings_data:[
-      {sev:'amber', msg:'RR-0041 (Senior Dev, ERP): Top match — Ciarán O\'Brien (87% fit, 40% available)', project:'ERP Implementation · AIB Group', time:'08:01'},
-      {sev:'amber', msg:'RR-0042 (Solution Arch, Cloud): Top match — Fionnuala Burke (92% fit, currently free)', project:'Cloud Migration · CRH plc', time:'08:01'},
-      {sev:'amber', msg:'RR-0043 (BA, CRM): No strong match found — 2 consultants below 60% fit', project:'CRM Rollout · Bank of Ireland', time:'08:02'},
-      {sev:'red', msg:'RR-0044 (QA Lead, ERP): Unmatched for 12 days — escalating to Resourcing Manager', project:'ERP Implementation · AIB Group', time:'08:02'},
+      {sev:'amber', msg:'RR-0041 (Senior Dev, ERP): Top match — Ciarán O\'Brien (87% fit, 40% available)', project:'ERP Implementation · Clearwater Bank', time:'08:01'},
+      {sev:'amber', msg:'RR-0042 (Solution Arch, Cloud): Top match — Fionnuala Burke (92% fit, currently free)', project:'Cloud Migration · Stonewall Holdings', time:'08:01'},
+      {sev:'amber', msg:'RR-0043 (BA, CRM): No strong match found — 2 consultants below 60% fit', project:'CRM Rollout · Atlantic Financial', time:'08:02'},
+      {sev:'red', msg:'RR-0044 (QA Lead, ERP): Unmatched for 12 days — escalating to Resourcing Manager', project:'ERP Implementation · Clearwater Bank', time:'08:02'},
       {sev:'amber', msg:'RR-0045 (PM, Data Warehouse): Top match — Aoife Walsh (79% fit)', project:'Data Warehouse · Glanbia', time:'08:03'},
     ]
   },
@@ -8150,12 +8316,12 @@ const agentDefs = [
       'Logging chase actions to audit trail…',
     ],
     findings_data:[
-      {sev:'red', msg:'Ronan McCarthy — 0 hrs submitted for w/e 28 Feb (Cloud Migration)', project:'Cloud Migration · CRH plc', time:'Fri 17:01'},
-      {sev:'red', msg:'Brian Doyle — 0 hrs submitted for w/e 28 Feb (ERP Implementation)', project:'ERP Implementation · AIB Group', time:'Fri 17:01'},
-      {sev:'amber', msg:'Sarah Murphy — 24 hrs submitted, expected 40 hrs', project:'Analytics Platform · Ryanair', time:'Fri 17:02'},
-      {sev:'amber', msg:'Ciarán O\'Brien — 16 hrs submitted, expected 40 hrs (partial leave?)', project:'CRM Rollout · Bank of Ireland', time:'Fri 17:02'},
+      {sev:'red', msg:'Ronan McCarthy — 0 hrs submitted for w/e 28 Feb (Cloud Migration)', project:'Cloud Migration · Stonewall Holdings', time:'Fri 17:01'},
+      {sev:'red', msg:'Brian Doyle — 0 hrs submitted for w/e 28 Feb (ERP Implementation)', project:'ERP Implementation · Clearwater Bank', time:'Fri 17:01'},
+      {sev:'amber', msg:'Sarah Murphy — 24 hrs submitted, expected 40 hrs', project:'Analytics Platform · SkyBridge Airlines', time:'Fri 17:02'},
+      {sev:'amber', msg:'Ciarán O\'Brien — 16 hrs submitted, expected 40 hrs (partial leave?)', project:'CRM Rollout · Atlantic Financial', time:'Fri 17:02'},
       {sev:'amber', msg:'Niamh Ryan — 32 hrs submitted, expected 40 hrs', project:'Data Warehouse · Glanbia', time:'Fri 17:03'},
-      {sev:'amber', msg:'Declan Byrne — no timesheet opened for w/e 28 Feb', project:'HR Transformation · ESB', time:'Fri 17:03'},
+      {sev:'amber', msg:'Declan Byrne — no timesheet opened for w/e 28 Feb', project:'HR Transformation · GridCore Energy', time:'Fri 17:03'},
     ]
   },
   {
@@ -8181,9 +8347,9 @@ const agentDefs = [
       'Updating margin trend charts…',
     ],
     findings_data:[
-      {sev:'red', msg:'CRM Rollout margin at 8% — well below 20% minimum. Subcontractor costs over-running.', project:'CRM Rollout · Bank of Ireland', time:'Fri 08:16'},
-      {sev:'amber', msg:'Cloud Migration margin at 17% — approaching threshold. Monitor closely.', project:'Cloud Migration · CRH plc', time:'Fri 08:16'},
-      {sev:'amber', msg:'ERP Implementation forecast margin 22% — on track but budget pressure building', project:'ERP Implementation · AIB Group', time:'Fri 08:17'},
+      {sev:'red', msg:'CRM Rollout margin at 8% — well below 20% minimum. Subcontractor costs over-running.', project:'CRM Rollout · Atlantic Financial', time:'Fri 08:16'},
+      {sev:'amber', msg:'Cloud Migration margin at 17% — approaching threshold. Monitor closely.', project:'Cloud Migration · Stonewall Holdings', time:'Fri 08:16'},
+      {sev:'amber', msg:'ERP Implementation forecast margin 22% — on track but budget pressure building', project:'ERP Implementation · Clearwater Bank', time:'Fri 08:17'},
     ]
   },
 ];
