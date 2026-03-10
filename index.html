@@ -246,23 +246,42 @@
 
 <!-- ═══════════════════════════════════════════════════ LOGIN ═══ -->
 <div id="pg-login" class="page active" style="position:fixed;inset:0;z-index:999;background:#fff;">
-  <div class="login-bg" style="min-height:100vh;">
-    <div class="login-card">
+  <div class="login-bg" style="min-height:100vh;display:flex;align-items:center;justify-content:center;">
+    <div class="login-card" style="width:400px;">
       <div class="login-logo">C</div>
       <div class="login-title">MB PSA</div>
-      <div class="login-sub">Professional Services Accounting<br/>Sign in with your MB Microsoft account</div>
-      <button class="ms-btn" onclick="showApp()">
-        <div class="ms-squares">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;">
-            <div class="ms-sq" style="background:#f25022;"></div>
-            <div class="ms-sq" style="background:#7fba00;"></div>
-            <div class="ms-sq" style="background:#00a4ef;"></div>
-            <div class="ms-sq" style="background:#ffb900;"></div>
-          </div>
+      <div class="login-sub" style="margin-bottom:24px;">Professional Services Accounting</div>
+
+      <!-- Quick-select demo accounts -->
+      <div style="background:#F7FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:12px 14px;margin-bottom:20px;text-align:left;">
+        <div style="font-size:.68rem;font-weight:800;color:#718096;letter-spacing:.1em;margin-bottom:8px;">DEMO ACCOUNTS — CLICK TO FILL</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <button onclick="fillLogin('sarah.molloy','pass1')" style="background:#fff;border:1px solid #E2E8F0;border-radius:7px;padding:8px 12px;text-align:left;cursor:pointer;font-size:.78rem;transition:all .15s;" onmouseover="this.style.borderColor='#00A9CE'" onmouseout="this.style.borderColor='#E2E8F0'">
+            <strong>Sarah Molloy</strong> <span style="color:#718096;">· Senior Developer</span><br/>
+            <span style="color:#A0AEC0;font-size:.7rem;">sarah.molloy / pass1</span>
+          </button>
+          <button onclick="fillLogin('siobhan.murphy','pass2')" style="background:#fff;border:1px solid #E2E8F0;border-radius:7px;padding:8px 12px;text-align:left;cursor:pointer;font-size:.78rem;transition:all .15s;" onmouseover="this.style.borderColor='#00A9CE'" onmouseout="this.style.borderColor='#E2E8F0'">
+            <strong>Siobhán Murphy</strong> <span style="color:#718096;">· Project Manager</span><br/>
+            <span style="color:#A0AEC0;font-size:.7rem;">siobhan.murphy / pass2</span>
+          </button>
+          <button onclick="fillLogin('david.walsh','pass3')" style="background:#fff;border:1px solid #E2E8F0;border-radius:7px;padding:8px 12px;text-align:left;cursor:pointer;font-size:.78rem;transition:all .15s;" onmouseover="this.style.borderColor='#00A9CE'" onmouseout="this.style.borderColor='#E2E8F0'">
+            <strong>David Walsh</strong> <span style="color:#718096;">· Practice Director (SLT)</span><br/>
+            <span style="color:#A0AEC0;font-size:.7rem;">david.walsh / pass3</span>
+          </button>
         </div>
-        Sign in with Microsoft
-      </button>
-      <p style="color:#cbd5e0;font-size:.72rem;margin-top:24px;">© 2026 MB. All rights reserved.</p>
+      </div>
+
+      <!-- Login form -->
+      <div style="text-align:left;">
+        <label style="font-size:.75rem;font-weight:700;color:#4A5568;display:block;margin-bottom:4px;">Username</label>
+        <input id="login-username" type="text" placeholder="firstname.lastname" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #E2E8F0;border-radius:8px;font-size:.88rem;margin-bottom:12px;outline:none;" onkeydown="if(event.key==='Enter')doLogin()"/>
+        <label style="font-size:.75rem;font-weight:700;color:#4A5568;display:block;margin-bottom:4px;">Password</label>
+        <input id="login-password" type="password" placeholder="••••••" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid #E2E8F0;border-radius:8px;font-size:.88rem;margin-bottom:8px;outline:none;" onkeydown="if(event.key==='Enter')doLogin()"/>
+        <div id="login-error" style="display:none;color:#E53E3E;font-size:.75rem;margin-bottom:8px;">⚠️ Invalid username or password.</div>
+        <button onclick="doLogin()" style="width:100%;background:linear-gradient(135deg,var(--navy),var(--teal));color:#fff;border:none;padding:12px;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;margin-top:4px;">Sign In →</button>
+      </div>
+
+      <p style="color:#cbd5e0;font-size:.72rem;margin-top:20px;text-align:center;">© 2026 MB. All rights reserved.</p>
     </div>
   </div>
 </div>
@@ -279,7 +298,7 @@
     <div class="spacer"></div>
     <span style="color:rgba(255,255,255,.5);font-size:.72rem;margin-right:12px;">Professional Services Accounting</span>
     <button class="notif-btn" title="Notifications">🔔</button>
-    <span style="color:rgba(255,255,255,.7);font-size:.75rem;margin-right:8px;font-weight:600;">Mark Broome</span><button class="user-btn" title="Mark Broome" onclick="showPage('pg-my-dashboard')">MB</button>
+    <span id="appbar-user-name" style="color:rgba(255,255,255,.7);font-size:.75rem;margin-right:8px;font-weight:600;">Mark Broome</span><button id="appbar-user-btn" class="user-btn" title="Mark Broome" onclick="showPage('pg-my-dashboard')">MB</button><button onclick="signOut()" title="Sign Out" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.6);padding:4px 10px;border-radius:6px;font-size:.7rem;cursor:pointer;margin-left:8px;">⏏ Sign Out</button>
   </div>
 
   <div class="body-row">
@@ -345,9 +364,9 @@
 
   <!-- Section: Reporting -->
   <div class="section-label">📄 Reporting</div>
-  <div class="nav-item" id="nav-weekly" onclick="showPage('pg-weekly')"><span class="ico">📰</span><span class="nav-label"> Weekly Reports</span></div>
-  <div class="nav-item" id="nav-customer-report" onclick="showPage('pg-customer-report')"><span class="ico">📊</span><span class="nav-label"> Customer Report</span></div>
-  <div class="nav-item" id="nav-internal-report" onclick="showPage('pg-internal-report')"><span class="ico">📑</span><span class="nav-label"> Internal Report</span></div>
+  <div class="nav-item" id="nav-weekly" onclick="showPage('pg-weekly-reports')"><span class="ico">📰</span><span class="nav-label"> Weekly Reports</span></div>
+  <div class="nav-item" id="nav-customer-report" onclick="showPage('pg-status-customer')"><span class="ico">📊</span><span class="nav-label"> Customer Report</span></div>
+  <div class="nav-item" id="nav-internal-report" onclick="showPage('pg-status-internal')"><span class="ico">📑</span><span class="nav-label"> Internal Report</span></div>
   <div class="nav-item" id="nav-portal" onclick="showPage('pg-portal')"><span class="ico">🌐</span><span class="nav-label"> Customer Portal</span></div>
 
   <!-- Section: Finance -->
@@ -378,7 +397,7 @@
 
   <!-- Section: AI -->
   <div class="section-label">🤖 AI</div>
-  <div class="nav-item" id="nav-ai" onclick="showPage('pg-ai')"><span class="ico">✨</span><span class="nav-label"> AI Agents <span style="background:#553C9A;color:#E9D8FD;border-radius:10px;padding:1px 6px;font-size:.65rem;margin-left:4px;">6</span></span></div>
+  <div class="nav-item" id="nav-ai" onclick="showPage('pg-agents')"><span class="ico">✨</span><span class="nav-label"> AI Agents <span style="background:#553C9A;color:#E9D8FD;border-radius:10px;padding:1px 6px;font-size:.65rem;margin-left:4px;">6</span></span></div>
 
   <!-- Section: Admin & Help -->
   <div class="section-label">⚙️ Admin & Help</div>
@@ -501,33 +520,7 @@
 
       <!-- ══ MY DASHBOARD ══ -->
       <div id="pg-my-dashboard" class="page">
-        <h5>Welcome back, Mark Broome 👋</h5>
-        <div class="sub">Here's your snapshot for this week</div>
-        <div class="grid g4" style="margin-bottom:20px;">
-          <div class="card kpi-card"><div class="kpi-label">This Week Hours</div><div class="kpi-value">31.5</div><div class="kpi-sub">of 40 target</div></div>
-          <div class="card kpi-card"><div class="kpi-label">This Month</div><div class="kpi-value">124.0</div><div class="kpi-sub">hrs logged</div></div>
-          <div class="card kpi-card"><div class="kpi-label">Chargeability</div><div class="kpi-value" style="color:var(--success);">82%</div><div class="kpi-sub">target: 75%</div></div>
-          <div class="card kpi-card"><div class="kpi-label">Assignments</div><div class="kpi-value">3</div><div class="kpi-sub">active projects</div></div>
-        </div>
-        <div class="grid g2">
-          <div class="card">
-            <div style="font-size:.9rem;font-weight:600;margin-bottom:12px;">Timesheet Status</div>
-            <div style="background:#FEFCBF;border:1px solid #D69E2E;border-radius:8px;padding:10px 14px;font-size:.82rem;color:#744210;margin-bottom:12px;">
-              ⚠️ You have 3 unsubmitted entries this week
-            </div>
-            <div class="fin-row"><span>Mon 2 Mar — 8hrs (ERP Implementation)</span><span class="chip chip-success">Approved</span></div>
-            <div class="fin-row"><span>Tue 3 Mar — 7.5hrs (ERP Implementation)</span><span class="chip chip-info">Submitted</span></div>
-            <div class="fin-row"><span>Wed 4 Mar — 8hrs (Analytics Platform)</span><span class="chip chip-default">Draft</span></div>
-            <div class="fin-row"><span>Thu 5 Mar — 8hrs (Analytics Platform)</span><span class="chip chip-default">Draft</span></div>
-            <button class="btn-ghost" onclick="showPage('pg-timesheet')" style="margin-top:8px;">Go to Timesheet →</button>
-          </div>
-          <div class="card">
-            <div style="font-size:.9rem;font-weight:600;margin-bottom:12px;">My Assignments</div>
-            <div class="fin-row"><div><div style="font-weight:600;font-size:.85rem;">ERP Implementation</div><div style="font-size:.72rem;color:var(--muted);">Clearwater Bank · 32hrs/wk · Jan–Jun 2026</div></div></div>
-            <div class="fin-row"><div><div style="font-weight:600;font-size:.85rem;">Analytics Platform</div><div style="font-size:.72rem;color:var(--muted);">SkyBridge Airlines · 16hrs/wk · Feb–Aug 2026</div></div></div>
-            <div class="fin-row"><div><div style="font-weight:600;font-size:.85rem;">CRM Discovery</div><div style="font-size:.72rem;color:var(--muted);">Glanbia · 8hrs/wk · Mar 2026 (Pre-sales)</div></div></div>
-          </div>
-        </div>
+        <div id="my-dashboard-content"></div>
       </div>
 
       <!-- ══ TIMESHEET ══ -->
@@ -834,7 +827,7 @@
       <!-- ══ MY ASSIGNMENTS ══ -->
       <div id="pg-my-assignments" class="page">
         <h5>My Assignments</h5>
-        <div class="sub">Mark Broome · Business Analyst · Technology Practice</div>
+        <div id="my-assignments-sub" class="sub">Mark Broome · Business Analyst · Technology Practice</div>
         <div class="grid g2">
           <div class="card" style="border-left:4px solid var(--teal);">
             <div style="display:flex;justify-content:space-between;"><strong>ERP Implementation</strong><span class="chip chip-success">Active</span></div>
@@ -888,7 +881,7 @@
       <!-- ══ MY EXPENSES ══ -->
       <div id="pg-my-expenses" class="page">
         <div style="display:flex;align-items:center;margin-bottom:20px;">
-          <div><h5 style="margin:0;">My Expenses</h5><div class="sub" style="margin:0;">Mark Broome · March 2026</div></div>
+          <div><h5 style="margin:0;">My Expenses</h5><div id="my-expenses-sub" class="sub" style="margin:0;">Mark Broome · March 2026</div></div>
           <div style="flex:1;"></div>
           <button class="btn btn-teal" onclick="openNewClaim()">+ New Claim</button>
         </div>
@@ -915,7 +908,7 @@
       <!-- ══ MY LEAVE ══ -->
       <div id="pg-my-leave" class="page">
         <div style="display:flex;align-items:center;margin-bottom:20px;">
-          <div><h5 style="margin:0;">My Leave</h5><div class="sub" style="margin:0;">Mark Broome · Leave Entitlements 2026</div></div>
+          <div><h5 style="margin:0;">My Leave</h5><div id="my-leave-sub" class="sub" style="margin:0;">Mark Broome · Leave Entitlements 2026</div></div>
           <div style="flex:1;"></div>
           <button class="btn btn-teal" onclick="openRequestLeave()">+ Request Leave</button>
         </div>
@@ -1254,14 +1247,14 @@ const navMap = {
   'pg-executive':'nav-exec','pg-availability':'nav-avail','pg-consultants':'nav-consultants',
   'pg-health':'nav-health','pg-approval':'nav-approval','pg-customers':'nav-customers','pg-projects':'nav-projects',
   'pg-pipeline':'nav-pipeline','pg-resourcing':'nav-resourcing','pg-invoices':'nav-invoices',
-  'pg-cashflow':'nav-cashflow','pg-roles':'nav-roles','pg-database':'nav-database','pg-agents':'nav-agents',
+  'pg-cashflow':'nav-cashflow','pg-roles':'nav-roles','pg-database':'nav-database','pg-agents':'nav-ai',
   'pg-security':'nav-security','pg-tutorial':'nav-tutorial','pg-faq':'nav-faq',
   'pg-overview':'nav-overview','pg-tech':'nav-tech','pg-erd':'nav-erd',
   'pg-ado':'nav-ado','pg-variance':'nav-variance','pg-changelog':'nav-changelog',
-  'pg-raid':'nav-raid','pg-status-customer':'nav-status-customer','pg-status-internal':'nav-status-internal','pg-portal':'nav-portal',
+  'pg-raid':'nav-raid','pg-status-customer':'nav-customer-report','pg-status-internal':'nav-internal-report','pg-portal':'nav-portal',
   'pg-skills':'nav-skills','pg-bench':'nav-bench','pg-orgchart':'nav-orgchart','pg-performance':'nav-performance',
   'pg-gantt':'nav-gantt','pg-kanban':'nav-kanban','pg-billing-rules':'nav-billing-rules','pg-revenue-rec':'nav-revenue-rec','pg-coverage':'nav-coverage','pg-selftest':'nav-selftest',
-  'pg-portfolio-gantt':'nav-portfolio-gantt','pg-weekly-reports':'nav-weekly-reports','pg-contracts':'nav-contracts','pg-evm':'nav-evm',
+  'pg-portfolio-gantt':'nav-portfolio-gantt','pg-weekly-reports':'nav-weekly','pg-contracts':'nav-contracts','pg-evm':'nav-evm',
   'pg-showcase':'nav-showcase',
   'pg-demo':'nav-demo',
   'pg-coapprove':'nav-coapprove','pg-change-monitor':'nav-change-monitor',
@@ -1276,6 +1269,7 @@ function showPage(id){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   const navId = navMap[id];
   if(navId) document.getElementById(navId)?.classList.add('active');
+  if(id==='pg-my-dashboard') renderMyDashboard();
   if(id==='pg-database') buildDatabase('Consultants');
   if(id==='pg-health') renderHealth();
   if(id==='pg-agents') renderAgents();
@@ -1320,14 +1314,293 @@ function toggleSidebar(){
   btn.textContent=d.classList.contains('collapsed')?'→':'☰';
 }
 
-function showApp(){
+// ═══════════════════════════════════════════════════════════════════
+// USER AUTHENTICATION & ROLE-BASED ACCESS
+// ═══════════════════════════════════════════════════════════════════
+const appUsers = [
+  {
+    username:'sarah.molloy', password:'pass1',
+    name:'Sarah Molloy', initials:'SM',
+    role:'Consultant', roleLabel:'Senior Developer', practice:'Technology Practice',
+    landingPage:'pg-my-dashboard',
+    dashboard:{
+      weekHours:31.5, monthHours:124.0, chargeability:82, chargeabilityTarget:75, assignments:2,
+      timesheetAlert:'You have 2 unsubmitted entries this week',
+      timesheetEntries:[
+        {date:'Mon 3 Mar',hours:'8hrs',project:'ERP Implementation',status:'Approved'},
+        {date:'Tue 4 Mar',hours:'7.5hrs',project:'ERP Implementation',status:'Submitted'},
+        {date:'Wed 5 Mar',hours:'8hrs',project:'Field Operations Mobile App',status:'Draft'},
+        {date:'Thu 6 Mar',hours:'8hrs',project:'Field Operations Mobile App',status:'Draft'},
+      ],
+      myAssignments:[
+        {name:'ERP Implementation',client:'Clearwater Bank',hours:'32hrs/wk',period:'Jan–Jun 2026'},
+        {name:'Field Operations Mobile App',client:'GridCore Energy',hours:'16hrs/wk',period:'Feb–Apr 2026'},
+      ],
+      extraCards:[
+        {label:'Leave Balance',value:'14.5',sub:'Days remaining 2026',action:"showPage('pg-my-leave')",actionLabel:'Request Leave'},
+        {label:'Pending Expenses',value:'€342',sub:'2 claims awaiting approval',action:"showPage('pg-my-expenses')",actionLabel:'View Expenses'},
+      ],
+    },
+    hideNav:['nav-executive','nav-whatchanged','nav-raid','nav-change-monitor',
+      'nav-contracts','nav-pipeline',
+      'nav-portfolio-gantt','nav-ado',
+      'nav-availability','nav-consultants','nav-resources','nav-skills','nav-bench','nav-orgchart','nav-performance',
+      'nav-weekly','nav-customer-report','nav-internal-report',
+      'nav-ar-invoices','nav-ar-aged','nav-ar-cashflow','nav-evm',
+      'nav-ap-bills','nav-ap-suppliers','nav-exp-approve','nav-exp-report',
+      'nav-ts-approve','nav-coapprove',
+      'nav-ai',
+      'nav-admin','nav-demo','nav-showcase','nav-selftest','nav-database','nav-security','nav-erd','nav-features','nav-overview','nav-tech','nav-tutorial','nav-faq'],
+  },
+  {
+    username:'siobhan.murphy', password:'pass2',
+    name:'Siobhán Murphy', initials:'SiM',
+    role:'ProjectManager', roleLabel:'Project Manager', practice:'Delivery',
+    landingPage:'pg-my-dashboard',
+    dashboard:{
+      weekHours:40, monthHours:156.0, chargeability:71, chargeabilityTarget:70, assignments:2,
+      timesheetAlert:null,
+      timesheetEntries:[
+        {date:'Mon 3 Mar',hours:'8hrs',project:'ERP Implementation',status:'Approved'},
+        {date:'Tue 4 Mar',hours:'8hrs',project:'ERP Implementation',status:'Approved'},
+        {date:'Wed 5 Mar',hours:'8hrs',project:'ERP Implementation',status:'Approved'},
+        {date:'Thu 6 Mar',hours:'8hrs',project:'Kerry SAP Rollout',status:'Approved'},
+        {date:'Fri 7 Mar',hours:'8hrs',project:'Kerry SAP Rollout',status:'Submitted'},
+      ],
+      myAssignments:[
+        {name:'ERP Implementation (SAP S/4HANA)',client:'Clearwater Bank',hours:'40hrs/wk',period:'Oct 2025–Mar 2026'},
+        {name:'SAP Finance Rollout (EMEA)',client:'Meridian Foods',hours:'16hrs/wk',period:'Jan–Dec 2026'},
+      ],
+      extraCards:[
+        {label:'Timesheets Pending',value:'6',sub:'Awaiting your approval',action:"showPage('pg-approval')",actionLabel:'Review Now',color:'var(--warning)'},
+        {label:'Weekly Reports Due',value:'2',sub:'Not yet submitted this week',action:"showPage('pg-weekly-reports')",actionLabel:'Write Reports'},
+      ],
+    },
+    hideNav:['nav-pipeline',
+      'nav-ar-invoices','nav-ar-aged','nav-ar-cashflow',
+      'nav-ap-bills','nav-ap-suppliers','nav-exp-approve','nav-exp-report',
+      'nav-admin','nav-selftest','nav-database','nav-security','nav-erd','nav-features','nav-tech'],
+  },
+  {
+    username:'david.walsh', password:'pass3',
+    name:'David Walsh', initials:'DW',
+    role:'SLT', roleLabel:'Practice Director', practice:'Technology & Delivery',
+    landingPage:'pg-executive',
+    dashboard:{
+      weekHours:38, monthHours:148.0, chargeability:55, chargeabilityTarget:45, assignments:1,
+      timesheetAlert:null,
+      timesheetEntries:[
+        {date:'Mon 3 Mar',hours:'8hrs',project:'SAP Global ERP Standardisation',status:'Approved'},
+        {date:'Tue 4 Mar',hours:'8hrs',project:'SAP Global ERP Standardisation',status:'Approved'},
+        {date:'Wed 5 Mar',hours:'6hrs',project:'SAP Global ERP Standardisation',status:'Submitted'},
+        {date:'Thu 6 Mar',hours:'8hrs',project:'Business Development',status:'Submitted'},
+        {date:'Fri 7 Mar',hours:'8hrs',project:'Business Development',status:'Draft'},
+      ],
+      myAssignments:[
+        {name:'SAP Global ERP Standardisation',client:'Stonewall Holdings',hours:'20hrs/wk',period:'Jan 2026–Dec 2027'},
+        {name:'Business Development',client:'Internal',hours:'8hrs/wk',period:'Ongoing'},
+      ],
+      extraCards:[
+        {label:'Portfolio Value',value:'€23.9M',sub:'17 active projects, 8 clients',action:"showPage('pg-executive')",actionLabel:'Executive View'},
+        {label:'Team Chargeability',value:'74%',sub:'Portfolio avg vs 75% target',action:"showPage('pg-availability')",actionLabel:'View Team'},
+      ],
+    },
+    hideNav:[],
+  },
+];
+
+let currentUser = null;
+
+function fillLogin(username, password){
+  document.getElementById('login-username').value = username;
+  document.getElementById('login-password').value = password;
+  document.getElementById('login-error').style.display = 'none';
+}
+
+function doLogin(){
+  const username = document.getElementById('login-username').value.trim();
+  const password = document.getElementById('login-password').value;
+  const user = appUsers.find(u => u.username===username && u.password===password);
+  if(!user){
+    document.getElementById('login-error').style.display = 'block';
+    return;
+  }
+  showApp(user);
+}
+
+function signOut(){
+  currentUser = null;
+  document.getElementById('app-shell').style.display = 'none';
+  const loginEl = document.getElementById('pg-login');
+  loginEl.style.display = 'block';
+  loginEl.classList.add('active');
+  document.getElementById('login-username').value = '';
+  document.getElementById('login-password').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+function applyRoleNav(user){
+  // Show all first
+  document.querySelectorAll('.nav-item,.nav-sub,.nav-group').forEach(el=>el.style.display='');
+  document.querySelectorAll('.section-label').forEach(el=>el.style.display='');
+  // Hide role-specific items
+  (user.hideNav||[]).forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+  // Hide section labels if all children hidden
+  document.querySelectorAll('.section-label').forEach(label=>{
+    let sib=label.nextElementSibling, hasVisible=false;
+    while(sib && !sib.classList.contains('section-label')){
+      const isItem = sib.classList.contains('nav-item')||sib.classList.contains('nav-group');
+      if(isItem && sib.style.display!=='none') hasVisible=true;
+      // check children of collapsible groups
+      if(!isItem){ const kids=[...sib.querySelectorAll('.nav-sub')]; if(kids.some(k=>k.style.display!=='none')) hasVisible=true; }
+      sib=sib.nextElementSibling;
+    }
+    if(!hasVisible) label.style.display='none';
+  });
+}
+
+function renderMyDashboard(){
+  const el=document.getElementById('my-dashboard-content');
+  if(!el||!currentUser) return;
+  const u=currentUser;
+  const d=u.dashboard;
+  const chipClass = s=>s==='Approved'?'chip-success':s==='Submitted'?'chip-info':s==='Draft'?'chip-default':'chip-default';
+  const chargeColor = d.chargeability>=d.chargeabilityTarget?'var(--success)':'var(--warning)';
+
+  const timesheetAlert = d.timesheetAlert
+    ? `<div style="background:#FEFCBF;border:1px solid #D69E2E;border-radius:8px;padding:10px 14px;font-size:.82rem;color:#744210;margin-bottom:12px;">⚠️ ${d.timesheetAlert}</div>`
+    : `<div style="background:#F0FFF4;border:1px solid #38A169;border-radius:8px;padding:10px 14px;font-size:.82rem;color:#276749;margin-bottom:12px;">✅ Timesheet fully up to date this week</div>`;
+
+  const extraCardsHTML = (d.extraCards||[]).map(c=>`
+    <div class="card kpi-card" style="cursor:pointer;" onclick="${c.action}">
+      <div class="kpi-label">${c.label}</div>
+      <div class="kpi-value" style="${c.color?'color:'+c.color:''}">${c.value}</div>
+      <div class="kpi-sub">${c.sub}</div>
+      <button class="btn-ghost" style="margin-top:8px;font-size:.72rem;">${c.actionLabel} →</button>
+    </div>`).join('');
+
+  // Role-specific extra panel
+  let extraPanel='';
+  if(u.role==='ProjectManager'){
+    extraPanel=`
+    <div class="card" style="margin-top:20px;">
+      <div style="font-size:.9rem;font-weight:700;margin-bottom:12px;">🚨 Actions Required</div>
+      <div class="fin-row" style="cursor:pointer;" onclick="showPage('pg-approval')">
+        <span>📋 <strong>6 timesheets</strong> pending your approval (ERP, Kerry SAP teams)</span>
+        <button class="btn btn-teal" style="padding:4px 12px;font-size:.75rem;" onclick="event.stopPropagation();showPage('pg-approval')">Review →</button>
+      </div>
+      <div class="fin-row" style="cursor:pointer;" onclick="showPage('pg-weekly-reports')">
+        <span>📰 <strong>2 weekly reports</strong> due by EOD Friday</span>
+        <button class="btn btn-outline" style="padding:4px 12px;font-size:.75rem;" onclick="event.stopPropagation();showPage('pg-weekly-reports')">Write →</button>
+      </div>
+      <div class="fin-row" style="cursor:pointer;" onclick="showPage('pg-raid')">
+        <span>⚠️ <strong>RAID item R-001</strong> — ERP go-live risk needs update</span>
+        <button class="btn btn-outline" style="padding:4px 12px;font-size:.75rem;" onclick="event.stopPropagation();showPage('pg-raid')">Update →</button>
+      </div>
+      <div class="fin-row" style="cursor:pointer;" onclick="showPage('pg-contracts')">
+        <span>📄 <strong>CR-008</strong> (AIB ERP) requires your sign-off</span>
+        <button class="btn btn-outline" style="padding:4px 12px;font-size:.75rem;" onclick="event.stopPropagation();showPage('pg-contracts')">Review CR →</button>
+      </div>
+    </div>`;
+  } else if(u.role==='SLT'){
+    extraPanel=`
+    <div class="card" style="margin-top:20px;">
+      <div style="font-size:.9rem;font-weight:700;margin-bottom:12px;">📊 Portfolio Highlights — Week 10</div>
+      <div class="fin-row" style="cursor:pointer;" onclick="showPage('pg-health')">
+        <span>🔴 <strong>2 projects Red</strong> — CRM Rollout & Crew Management need attention</span>
+        <button class="btn btn-outline" style="padding:4px 12px;font-size:.75rem;color:var(--error);border-color:var(--error);" onclick="event.stopPropagation();showPage('pg-health')">View Health →</button>
+      </div>
+      <div class="fin-row" style="cursor:pointer;" onclick="showPage('pg-evm')">
+        <span>💰 <strong>€1.32M</strong> invoiced this month — €486K outstanding AR</span>
+        <button class="btn btn-outline" style="padding:4px 12px;font-size:.75rem;" onclick="event.stopPropagation();showPage('pg-evm')">EVM Report →</button>
+      </div>
+      <div class="fin-row" style="cursor:pointer;" onclick="showPage('pg-coapprove')">
+        <span>🤝 <strong>3 change requests</strong> awaiting co-sign (Niamh Kelly, Aoife Gallagher)</span>
+        <button class="btn btn-teal" style="padding:4px 12px;font-size:.75rem;" onclick="event.stopPropagation();showPage('pg-coapprove')">Co-Approve →</button>
+      </div>
+    </div>`;
+  }
+
+  el.innerHTML=`
+    <h5>Welcome back, ${u.name} 👋</h5>
+    <div class="sub" style="margin-bottom:20px;">${u.roleLabel} · ${u.practice} &nbsp;·&nbsp; Week Ending 7 Mar 2026</div>
+    <div class="grid g4" style="margin-bottom:20px;">
+      <div class="card kpi-card">
+        <div class="kpi-label">This Week Hours</div>
+        <div class="kpi-value">${d.weekHours}</div>
+        <div class="kpi-sub">of 40 target</div>
+      </div>
+      <div class="card kpi-card">
+        <div class="kpi-label">This Month</div>
+        <div class="kpi-value">${d.monthHours}</div>
+        <div class="kpi-sub">hrs logged</div>
+      </div>
+      <div class="card kpi-card">
+        <div class="kpi-label">Chargeability</div>
+        <div class="kpi-value" style="color:${chargeColor};">${d.chargeability}%</div>
+        <div class="kpi-sub">target: ${d.chargeabilityTarget}%</div>
+      </div>
+      <div class="card kpi-card">
+        <div class="kpi-label">Assignments</div>
+        <div class="kpi-value">${d.assignments}</div>
+        <div class="kpi-sub">active projects</div>
+      </div>
+      ${extraCardsHTML}
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <div style="font-size:.9rem;font-weight:600;margin-bottom:12px;">Timesheet Status</div>
+        ${timesheetAlert}
+        ${d.timesheetEntries.map(e=>`
+          <div class="fin-row">
+            <span>${e.date} — ${e.hours} (${e.project})</span>
+            <span class="chip ${chipClass(e.status)}">${e.status}</span>
+          </div>`).join('')}
+        <div style="display:flex;gap:8px;margin-top:12px;">
+          <button class="btn-ghost" onclick="showPage('pg-timesheet')">Go to Timesheet →</button>
+          ${d.timesheetAlert?`<button class="btn btn-teal" style="padding:5px 14px;font-size:.78rem;" onclick="submitTimesheet()">📤 Submit Now</button>`:''}
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:.9rem;font-weight:600;margin-bottom:12px;">My Assignments</div>
+        ${d.myAssignments.map(a=>`
+          <div class="fin-row">
+            <div>
+              <div style="font-weight:600;font-size:.85rem;">${a.name}</div>
+              <div style="font-size:.72rem;color:var(--muted);">${a.client} · ${a.hours} · ${a.period}</div>
+            </div>
+          </div>`).join('')}
+        <button class="btn-ghost" onclick="showPage('pg-my-assignments')" style="margin-top:8px;">View All Assignments →</button>
+      </div>
+    </div>
+    ${extraPanel}
+  `;
+}
+
+function showApp(user){
+  currentUser = user || appUsers[2];
   document.getElementById('pg-login').style.display='none';
   document.getElementById('app-shell').style.display='block';
+  // Update appbar
+  document.getElementById('appbar-user-name').textContent = currentUser.name;
+  const btn = document.getElementById('appbar-user-btn');
+  btn.textContent = currentUser.initials;
+  btn.title = currentUser.name;
+  // Update personal page subtitles
+  const month = 'March 2026';
+  const subText = `${currentUser.name} · ${currentUser.roleLabel} · ${currentUser.practice}`;
+  const asgSub = document.getElementById('my-assignments-sub');
+  if(asgSub) asgSub.textContent = subText;
+  const expSub = document.getElementById('my-expenses-sub');
+  if(expSub) expSub.textContent = `${currentUser.name} · ${month}`;
+  const lvSub = document.getElementById('my-leave-sub');
+  if(lvSub) lvSub.textContent = `${currentUser.name} · Leave Entitlements 2026`;
+  // Apply nav
+  applyRoleNav(currentUser);
   buildHeatmap();
-  showPage('pg-executive');
+  showPage(currentUser.landingPage);
   const bt = document.getElementById('build-time');
-  if(bt) bt.textContent = 'Loaded: ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  // Start Change Monitor agent
+  if(bt) bt.textContent = 'Signed in: ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
   startChangeMonitor();
 }
 
@@ -3417,6 +3690,70 @@ const statusProjects = [
    internalNotes:'CONFIDENTIAL: Aoife Walsh (PM/BA on this project) HR retention issue. If she leaves, project is severely at risk. Project margin down to 18% vs 28% target due to 12 unbudgeted analysis days. CR-007 must be approved by BOI or MB absorbs €9,600 loss.',
    internalRisks:['Aoife Walsh HR risk — only PM/BA on this project. Departure before 28 Mar = critical.','Margin 18% vs 28% target. 12 free days adding unrecovered cost of ~€9,600.','CR-007 with BOI unsigned — if rejected, full €9,600 absorbed by MB margin.','CRM-024 bug: if not closed by 10 Mar, go-live slips and SLA penalties may apply.'],
   },
+  {id:'ryr-hr', name:'HR Transformation Programme (Workday)', customer:'SkyBridge Airlines', pm:'Niamh Kelly', period:'Week Ending 7 Mar 2026',
+   rag:'Green', ragNote:'Phase 1 hypercare stable — 0 P1 incidents. Phase 2 design on track.',
+   execSummary:'Phase 1 (Core HR) is in hypercare with excellent stability metrics: 99.8% system availability and zero Priority 1 incidents this week. 22,000 SkyBridge Airlines employees are live on Workday across 82 bases. Phase 2 (Talent & Performance Management) design is progressing well, with sprint 3 complete and the Talent module blueprint approved by the SkyBridge Airlines People team. Overall programme is 29% complete, tracking slightly ahead of plan at 27%.',
+   milestones:[
+     {name:'Phase 1 — Core HR Go-Live',date:'31 Jan 2026',status:'Complete'},
+     {name:'Phase 2 — Talent & Performance Design',date:'31 Mar 2026',status:'In Progress'},
+     {name:'Phase 2 — Build & Config',date:'30 Sep 2026',status:'On Track'},
+     {name:'Phase 3 — Payroll Integration',date:'31 Jan 2027',status:'On Track'},
+     {name:'Phase 4 — Analytics & Hypercare',date:'28 Feb 2027',status:'On Track'},
+   ],
+   highlights:['Phase 1 hypercare — 0 P1 incidents, 99.8% SLA this week','Talent module blueprint formally approved by SkyBridge Airlines People leadership','Workday Phase 2 tenant configuration commenced','Payroll integration design (Sage ↔ Workday) agreed at technical level'],
+   nextPeriod:['Phase 2 design sprint 4 — Performance Reviews module (w/c 9 Mar)','Payroll integration technical design document due 14 Mar','Phase 1 hypercare formal sign-off scheduled 14 Mar','Monthly SteerCo with SkyBridge Airlines CPO — 17 Mar'],
+   budgetStatus:{contracted:480, forecast:475, spent:139, invoiced:679000, totalContract:2457000},
+   internalNotes:'CONFIDENTIAL: Phase 1 delivered under budget — 5 days saved, which partially offsets early team mobilisation costs. Margin currently at 34% — best performing project in portfolio. Niamh Kelly due maternity leave in June; succession plan needed for Phase 2 PM handover by April.',
+   internalRisks:['Niamh Kelly (PM) going on maternity leave June 2026 — Phase 2 PM succession plan must be confirmed by April.','Phase 2 velocity lower than Phase 1 due to complexity of Talent module — monitor sprint throughput.','SkyBridge Airlines stakeholder availability lower than expected for Phase 2 workshops — risk of delayed sign-offs.'],
+  },
+  {id:'esb-field', name:'Field Operations Mobile App', customer:'GridCore Energy', pm:'Roisin Byrne', period:'Week Ending 7 Mar 2026',
+   rag:'Amber', ragNote:'2 critical UAT defects under active resolution. Go-live 28 Mar at risk if not closed by 12 Mar.',
+   execSummary:'UAT Phase 2 is progressing with 63 of 89 test cases passed (71%). Two critical defects have been identified: an offline sync failure under poor signal conditions (ESB-D-041) and job dispatch latency exceeding 3 seconds (ESB-D-047). Both defects are under active engineering resolution with fixes targeted for 12 March. App go-live remains planned for 28 March but is at risk if the critical defects are not resolved by 12 March, allowing sufficient regression test time.',
+   milestones:[
+     {name:'MVP — Core Job Dispatch',date:'31 Dec 2024',status:'Complete'},
+     {name:'Phase 2 — Offline & Asset Scanning',date:'30 Jun 2025',status:'Complete'},
+     {name:'Phase 3 — UAT Phase 1',date:'14 Feb 2026',status:'Complete'},
+     {name:'Phase 3 — UAT Phase 2 & Sign-off',date:'13 Mar 2026',status:'At Risk'},
+     {name:'Go-Live',date:'28 Mar 2026',status:'At Risk'},
+   ],
+   highlights:['UAT Phase 2 commenced — 63 of 89 test cases passed (71%)','Offline map caching performing well in field tests','Job dispatch UI redesign accepted by GridCore Energy field operations lead','Performance test passed: 500 concurrent users within SLA'],
+   nextPeriod:['Resolve 2 critical UAT defects (ESB-D-041, ESB-D-047) by 12 Mar','UAT Phase 2 completion meeting and sign-off 13 Mar','App release candidate for GridCore Energy security review 14 Mar','Go-live planning workshop with GridCore Energy 16 Mar'],
+   budgetStatus:{contracted:240, forecast:258, spent:198, invoiced:959000, totalContract:1287000},
+   internalNotes:'CONFIDENTIAL: Forecast over budget by 18 days due to 4 scope additions absorbed during UAT without formal CRs being raised. Margin has dropped to 19% vs 26% target. Two further CRs (ESB-CR-005 and ESB-CR-006) in draft — must be agreed before go-live or MB absorbs ~€14,400 additional cost. Roisin to raise urgently.',
+   internalRisks:['18 days over budget — €14,400 unrecovered cost unless CR-005/006 approved by GridCore Energy.','Critical UAT defects: if not resolved by 12 Mar, go-live slips to at least 11 Apr.','Margin at 19% vs 26% target. Roisin must escalate CR situation to David Walsh today.'],
+  },
+  {id:'ptsb-mobile', name:'Mobile Banking App Rebuild', customer:'Broadstone Bank', pm:'Declan Farrell', period:'Week Ending 7 Mar 2026',
+   rag:'Green', ragNote:'Phase 2 progressing well — biometric auth delivered ahead of schedule. On track for May go-live.',
+   execSummary:'Phase 2 development is progressing strongly, with biometric authentication (Face ID and Touch ID) shipped to internal test ahead of schedule. The payments SDK has been integrated with a 98.7% success rate in testing, and app cold-start performance has been reduced to 1.2 seconds against a 2-second target. The project is currently 44% complete against a 50% plan target, a slight lag attributed to a 4-day delay in receiving core banking API credentials from Broadstone Bank IT.',
+   milestones:[
+     {name:'Phase 1 — App Foundation & Design System',date:'31 Jan 2026',status:'Complete'},
+     {name:'Phase 2 — Core Banking Features',date:'31 Mar 2026',status:'In Progress'},
+     {name:'Phase 3 — Open Banking & PSD2',date:'30 Apr 2026',status:'On Track'},
+     {name:'Phase 4 — UAT & App Store',date:'30 Apr 2026',status:'On Track'},
+     {name:'Go-Live',date:'31 May 2026',status:'On Track'},
+   ],
+   highlights:['Biometric authentication (Face ID / Touch ID) shipped to internal test — ahead of schedule','Payments SDK integrated with 98.7% success rate in test','App cold-start time reduced to 1.2s (target: <2s)','Phase 1 design system adopted by Broadstone Bank internal design team'],
+   nextPeriod:['Complete open banking (PSD2) integration — target 20 Mar','Submit to Apple App Store for TestFlight review','Phase 2 UAT kick-off with Broadstone Bank QA team 17 Mar','Monthly project review with Broadstone Bank CTO 18 Mar'],
+   budgetStatus:{contracted:160, forecast:162, spent:70, invoiced:190000, totalContract:480000},
+   internalNotes:'CONFIDENTIAL: Margin healthy at 28% — on target. 4-day lag in schedule is entirely attributable to client-side API credential delay; MB has documented this for record. If Broadstone Bank raises this as a MB delivery issue, we have evidence to refute. Declan to ensure client sign-off on Phase 1 completion certificate is received this week.',
+   internalRisks:['Core banking API latency spikes in peak hours — Broadstone Bank infra team investigating. Could impact Phase 3 integration.','Broadstone Bank IT resource constraints may cause similar delays in open banking API delivery — monitor closely.'],
+  },
+  {id:'crh-erp', name:'SAP Global ERP Standardisation', customer:'Stonewall Holdings', pm:'David Walsh', period:'Week Ending 7 Mar 2026',
+   rag:'Green', ragNote:'Phase 2 Americas scoping complete. Template adaption for US GAAP underway. On track.',
+   execSummary:'Phase 2 (Americas rollout) scoping is complete following design workshops in Chicago and Atlanta. The Phase 1 EMEA template solution is being adapted for US GAAP and local tax requirements, with 43 configuration changes identified through delta analysis. Phase 1 EMEA hypercare has been successfully closed and handed to support. The programme is 26% complete against a 28% plan target, within acceptable variance for a programme of this scale and complexity.',
+   milestones:[
+     {name:'Phase 1 — EMEA Rollout (18 countries)',date:'31 Jan 2026',status:'Complete'},
+     {name:'Phase 1 — EMEA Hypercare Close',date:'28 Feb 2026',status:'Complete'},
+     {name:'Phase 2 — Americas Design & Build',date:'31 Dec 2026',status:'In Progress'},
+     {name:'Phase 3 — APAC Rollout',date:'30 Jun 2027',status:'On Track'},
+     {name:'Programme Close',date:'31 Dec 2027',status:'On Track'},
+   ],
+   highlights:['Americas design workshops completed in Chicago and Atlanta — strong stakeholder engagement','US GAAP delta analysis complete: 43 configuration changes identified','Phase 1 EMEA hypercare formally closed — handed to BAU support team','APAC scoping kickoff agreed for Q3 2026'],
+   nextPeriod:['Begin Phase 2 Americas system build — FI/CO modules (w/c 9 Mar)','Align with Stonewall North America finance team on chart of accounts','Phase 2 project kick-off event in Dallas — 23 Mar','Confirm APAC scoping team for Q3'],
+   budgetStatus:{contracted:900, forecast:905, spent:234, invoiced:1000000, totalContract:4500000},
+   internalNotes:'CONFIDENTIAL: Largest engagement in MB portfolio. Margin forecast at 29% — in line with target. David Walsh is executive sponsor and active PM, which carries key-man risk for a programme of this duration. Board discussion required re: bringing in a dedicated programme director for Phase 2 onwards. US tax localisation complexity (SALT) is being supported by a specialist SAP partner — costs to be recharged to client per SoW clause 7.4.',
+   internalRisks:['Key-man risk: David Walsh as both executive sponsor and PM on a 2-year programme is unsustainable. Dedicated programme director required.','US SALT tax complexity may require additional specialist resource — cost recharge clause in SoW must be invoked promptly.','APAC scoping not yet resourced — pipeline gap in Q3 2026 if not planned now.'],
+  },
 ];
 
 // PLATFORM DEMO ENGINE
@@ -3429,7 +3766,7 @@ const demoTourPages = [
   {page:'pg-health',     label:'Project Health',       desc:'RAG status, EVM metrics and risk indicators per project'},
   {page:'pg-contracts',  label:'Contracts & CRs',      desc:'15 contracts, €23.9M portfolio, with Change Requests'},
   {page:'pg-evm',        label:'EVM / Revenue',        desc:'IFRS 15 earned value, billing variance and cash position'},
-  {page:'pg-weekly',     label:'Weekly Reports',       desc:'Structured weekly status reports per project'},
+  {page:'pg-weekly-reports', label:'Weekly Reports',    desc:'Structured weekly status reports per project'},
   {page:'pg-coapprove',  label:'Co-Approvals',         desc:'Dual-approval workflow for contract changes'},
   {page:'pg-change-monitor', label:'Change Monitor',   desc:'Live AI-powered portfolio change detection agent'},
   {page:'pg-showcase',   label:'Platform Showcase',    desc:'Full platform overview: modules, flows, architecture'},
@@ -3460,7 +3797,7 @@ function renderDemo(){
 
   const personas=[
     {icon:'📊',role:'Executive / Partner',color:'#3182CE',desc:'Track portfolio health, revenue performance, and client RAG status across all engagements.',pages:['pg-executive','pg-health','pg-portfolio-gantt'],labels:['Executive Dashboard','Project Health','Portfolio Gantt']},
-    {icon:'📋',role:'Project Manager',color:'#319795',desc:'Manage timelines, raise change requests, track earned value, and report weekly status.',pages:['pg-portfolio-gantt','pg-weekly','pg-contracts'],labels:['Portfolio Gantt','Weekly Reports','Contracts & CRs']},
+    {icon:'📋',role:'Project Manager',color:'#319795',desc:'Manage timelines, raise change requests, track earned value, and report weekly status.',pages:['pg-portfolio-gantt','pg-weekly-reports','pg-contracts'],labels:['Portfolio Gantt','Weekly Reports','Contracts & CRs']},
     {icon:'💰',role:'Finance Director',color:'#276749',desc:'Monitor invoicing, cash flow, EVM revenue recognition and contract billing positions.',pages:['pg-evm','pg-contracts','pg-ar-invoices'],labels:['EVM / Revenue','Contracts','AR Invoices']},
     {icon:'✅',role:'Delivery Lead',color:'#553C9A',desc:'Handle approvals, co-sign change requests, monitor delivery risk and resource capacity.',pages:['pg-coapprove','pg-health','pg-availability'],labels:['Co-Approvals','Project Health','Availability']},
   ];
