@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MB PSA – Business Overview</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f0f4f8;
+    color: #1a202c;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ─────────────────────────────────────────────────────────── */
+  header {
+    background: linear-gradient(135deg, #0a2342 0%, #1a4a7a 60%, #00A9CE 100%);
+    color: #fff;
+    padding: 36px 48px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .logo-block { display: flex; align-items: center; gap: 18px; }
+  .logo-icon {
+    width: 64px; height: 64px;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 900; letter-spacing: -1px;
+    color: #fff;
+  }
+  .logo-text h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+  .logo-text p  { font-size: 13px; opacity: 0.75; margin-top: 2px; letter-spacing: 0.3px; }
+
+  .header-stats { display: flex; gap: 14px; flex-wrap: wrap; }
+  .stat-pill {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .stat-pill .num { font-size: 18px; font-weight: 800; color: #7ee8ff; }
+
+  /* ── HERO ────────────────────────────────────────────────────────────── */
+  .hero {
+    text-align: center;
+    padding: 52px 24px 36px;
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: #e6f6ff;
+    color: #0a2342;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 100px;
+    margin-bottom: 16px;
+  }
+  .hero h2 { font-size: 36px; font-weight: 800; color: #0a2342; line-height: 1.2; }
+  .hero h2 span { color: #00A9CE; }
+  .hero p {
+    max-width: 640px; margin: 14px auto 0;
+    font-size: 16px; color: #4a5568; line-height: 1.7;
+  }
+
+  /* ── WHEEL SECTION ───────────────────────────────────────────────────── */
+  .wheel-section {
+    background: #fff;
+    padding: 20px 24px 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .wheel-wrap { width: 100%; max-width: 760px; }
+  .wheel-wrap svg { width: 100%; height: auto; }
+
+  /* SVG styles */
+  .spoke-line { stroke: #cbd5e0; stroke-width: 2; stroke-dasharray: 6 4; }
+  .hub-glow { filter: drop-shadow(0 4px 18px rgba(0,169,206,0.35)); }
+  .node-circle {
+    cursor: pointer;
+    transition: filter 0.2s;
+  }
+  .node-circle:hover { filter: brightness(1.12) drop-shadow(0 3px 10px rgba(0,0,0,0.25)); }
+  .node-label { font-size: 13px; font-weight: 700; pointer-events: none; }
+  .hub-label { font-size: 22px; font-weight: 900; fill: #fff; text-anchor: middle; }
+  .hub-sub   { font-size: 11px; fill: rgba(255,255,255,0.78); text-anchor: middle; letter-spacing: 1px; }
+
+  /* ── SECTION TITLE ───────────────────────────────────────────────────── */
+  .section-title {
+    text-align: center;
+    padding: 52px 24px 8px;
+  }
+  .section-title h3 { font-size: 26px; font-weight: 800; color: #0a2342; }
+  .section-title p  { font-size: 15px; color: #718096; margin-top: 8px; }
+
+  /* ── CARDS GRID ──────────────────────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 22px;
+    max-width: 1100px;
+    margin: 28px auto 0;
+    padding: 0 28px 64px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    overflow: hidden;
+    border: 1px solid #e9eef5;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .card:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.12); transform: translateY(-2px); }
+  .card-header {
+    padding: 20px 22px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .card-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .card-title { font-size: 16px; font-weight: 800; line-height: 1.3; }
+  .card-sub   { font-size: 12px; opacity: 0.7; margin-top: 2px; font-weight: 500; }
+  .card-body  { padding: 0 22px 22px; }
+  .card-body p { font-size: 14px; color: #4a5568; line-height: 1.65; margin-bottom: 12px; }
+  .card-body ul { list-style: none; padding: 0; }
+  .card-body ul li {
+    font-size: 13.5px; color: #2d3748;
+    padding: 5px 0 5px 20px;
+    position: relative;
+    line-height: 1.5;
+    border-bottom: 1px solid #f0f4f8;
+  }
+  .card-body ul li:last-child { border-bottom: none; }
+  .card-body ul li::before {
+    content: '✓';
+    position: absolute; left: 0;
+    font-weight: 700;
+  }
+
+  /* ── FOOTER ──────────────────────────────────────────────────────────── */
+  footer {
+    background: #0a2342;
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 28px 24px;
+    font-size: 13px;
+  }
+  footer strong { color: #fff; }
+
+  /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
+  @media (max-width: 600px) {
+    header { padding: 24px 20px; }
+    .hero h2 { font-size: 26px; }
+    .cards-grid { padding: 0 16px 48px; }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .card { box-shadow: none; border: 1px solid #ddd; }
+    header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════ HEADER -->
+<header>
+  <div class="logo-block">
+    <div class="logo-icon">MB</div>
+    <div class="logo-text">
+      <h1>MB PSA</h1>
+      <p>Professional Services Automation Platform</p>
+    </div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-pill"><span class="num">7</span> Business Pillars</div>
+    <div class="stat-pill"><span class="num">1</span> Connected Platform</div>
+    <div class="stat-pill"><span class="num">360°</span> Business View</div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════ HERO -->
+<section class="hero">
+  <div class="hero-tag">Platform Overview</div>
+  <h2>One platform. Every corner of your <span>services business.</span></h2>
+  <p>
+    MB PSA connects all the moving parts of a professional services organisation —
+    from winning new clients to delivering projects, tracking time, managing people,
+    and closing invoices. Everything speaks to everything else.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ WHEEL -->
+<section class="wheel-section">
+  <div class="wheel-wrap">
+    <svg viewBox="0 0 900 680" xmlns="http://www.w3.org/2000/svg" aria-label="MB PSA business pillars wheel diagram">
+      <defs>
+        <!-- Hub gradient -->
+        <radialGradient id="hubGrad" cx="50%" cy="40%" r="60%">
+          <stop offset="0%"   stop-color="#1a6fa8"/>
+          <stop offset="100%" stop-color="#0a2342"/>
+        </radialGradient>
+        <!-- Node gradients -->
+        <radialGradient id="g0" cx="40%" cy="35%" r="70%">
+          <stop offset="0%" stop-color="#4a9fe8"/>
+          <stop offset="100%" stop-color="#2b6cb0"/>
+        </radialGradient>
+        <radialGradient id="g1" cx="40%" cy="35%" r="70%">
+          <stop offset="0%" stop-color="#26bfd9"/>
+          <stop offset="100%" stop-color="#007a99"/>
+        </radialGradient>
+        <radialGradient id="g2" cx="40%" cy="35%" r="70%">
+          <stop offset="0%" stop-color="#52c57f"/>
+          <stop offset="100%" stop-color="#276749"/>
+        </radialGradient>
+        <radialGradient id="g3" cx="40%" cy="35%" r="70%">
+          <stop offset="0%" stop-color="#9b6ff5"/>
+          <stop offset="100%" stop-color="#5a2da8"/>
+        </radialGradient>
+        <radialGradient id="g4" cx="40%" cy="35%" r="70%">
+          <stop offset="0%" stop-color="#f6ad55"/>
+          <stop offset="100%" stop-color="#b7620a"/>
+        </radialGradient>
+        <radialGradient id="g5" cx="40%" cy="35%" r="70%">
+          <stop offset="0%" stop-color="#f87171"/>
+          <stop offset="100%" stop-color="#9b1c1c"/>
+        </radialGradient>
+        <radialGradient id="g6" cx="40%" cy="35%" r="70%">
+          <stop offset="0%" stop-color="#818cf8"/>
+          <stop offset="100%" stop-color="#3730a3"/>
+        </radialGradient>
+        <!-- Glow filter -->
+        <filter id="hubGlow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="8" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Background ring (decorative) -->
+      <circle cx="450" cy="335" r="235" fill="none" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4 6"/>
+      <circle cx="450" cy="335" r="185" fill="none" stroke="#edf2f7" stroke-width="1"/>
+
+      <!-- ── SPOKES ── -->
+      <!-- Node 0: Portfolio & Delivery  top-centre  (450, 100) -->
+      <line class="spoke-line" x1="450" y1="335" x2="450" y2="145"/>
+      <!-- Node 1: Time & Resources  upper-right  (649, 205) -->
+      <line class="spoke-line" x1="450" y1="335" x2="644" y2="210"/>
+      <!-- Node 2: Finance & Billing  lower-right  (688, 425) -->
+      <line class="spoke-line" x1="450" y1="335" x2="683" y2="430"/>
+      <!-- Node 3: Client Management  bottom-right  (582, 565) -->
+      <line class="spoke-line" x1="450" y1="335" x2="577" y2="560"/>
+      <!-- Node 4: Reporting & Insights  bottom-left  (318, 565) -->
+      <line class="spoke-line" x1="450" y1="335" x2="323" y2="560"/>
+      <!-- Node 5: People & HR  lower-left  (212, 425) -->
+      <line class="spoke-line" x1="450" y1="335" x2="217" y2="430"/>
+      <!-- Node 6: AI & Automation  upper-left  (251, 205) -->
+      <line class="spoke-line" x1="450" y1="335" x2="256" y2="210"/>
+
+      <!-- ── HUB ── -->
+      <circle class="hub-glow" cx="450" cy="335" r="82" fill="url(#hubGrad)" filter="url(#hubGlow)"/>
+      <circle cx="450" cy="335" r="82" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+      <text class="hub-label" x="450" y="325">MB PSA</text>
+      <text class="hub-sub"   x="450" y="343">PLATFORM</text>
+      <text class="hub-sub"   x="450" y="359">CORE</text>
+
+      <!-- ── NODE 0: Portfolio & Delivery (top) ── -->
+      <g class="node-circle" transform="translate(450,100)">
+        <circle cx="0" cy="0" r="58" fill="url(#g0)"/>
+        <circle cx="0" cy="0" r="58" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <text font-size="24" fill="#fff" text-anchor="middle" dominant-baseline="central" dy="-8">📋</text>
+        <text class="node-label" fill="#fff" text-anchor="middle" dy="14">Portfolio</text>
+        <text class="node-label" fill="rgba(255,255,255,0.85)" font-size="11" font-weight="600" text-anchor="middle" dy="28">&amp; Delivery</text>
+      </g>
+
+      <!-- ── NODE 1: Time & Resources (upper-right) ── -->
+      <g class="node-circle" transform="translate(649,205)">
+        <circle cx="0" cy="0" r="52" fill="url(#g1)"/>
+        <circle cx="0" cy="0" r="52" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <text font-size="22" fill="#fff" text-anchor="middle" dominant-baseline="central" dy="-8">⏱</text>
+        <text class="node-label" fill="#fff" text-anchor="middle" dy="13">Time &amp;</text>
+        <text class="node-label" fill="rgba(255,255,255,0.85)" font-size="11" font-weight="600" text-anchor="middle" dy="26">Resources</text>
+      </g>
+
+      <!-- ── NODE 2: Finance & Billing (lower-right) ── -->
+      <g class="node-circle" transform="translate(688,430)">
+        <circle cx="0" cy="0" r="52" fill="url(#g2)"/>
+        <circle cx="0" cy="0" r="52" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <text font-size="22" fill="#fff" text-anchor="middle" dominant-baseline="central" dy="-8">💰</text>
+        <text class="node-label" fill="#fff" text-anchor="middle" dy="13">Finance</text>
+        <text class="node-label" fill="rgba(255,255,255,0.85)" font-size="11" font-weight="600" text-anchor="middle" dy="26">&amp; Billing</text>
+      </g>
+
+      <!-- ── NODE 3: Client Management (bottom-right) ── -->
+      <g class="node-circle" transform="translate(577,560)">
+        <circle cx="0" cy="0" r="52" fill="url(#g3)"/>
+        <circle cx="0" cy="0" r="52" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <text font-size="22" fill="#fff" text-anchor="middle" dominant-baseline="central" dy="-8">🤝</text>
+        <text class="node-label" fill="#fff" text-anchor="middle" dy="13">Client</text>
+        <text class="node-label" fill="rgba(255,255,255,0.85)" font-size="11" font-weight="600" text-anchor="middle" dy="26">Management</text>
+      </g>
+
+      <!-- ── NODE 4: Reporting & Insights (bottom-left) ── -->
+      <g class="node-circle" transform="translate(323,560)">
+        <circle cx="0" cy="0" r="52" fill="url(#g4)"/>
+        <circle cx="0" cy="0" r="52" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <text font-size="22" fill="#fff" text-anchor="middle" dominant-baseline="central" dy="-8">📊</text>
+        <text class="node-label" fill="#fff" text-anchor="middle" dy="13">Reporting</text>
+        <text class="node-label" fill="rgba(255,255,255,0.85)" font-size="11" font-weight="600" text-anchor="middle" dy="26">&amp; Insights</text>
+      </g>
+
+      <!-- ── NODE 5: People & HR (lower-left) ── -->
+      <g class="node-circle" transform="translate(212,430)">
+        <circle cx="0" cy="0" r="52" fill="url(#g5)"/>
+        <circle cx="0" cy="0" r="52" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <text font-size="22" fill="#fff" text-anchor="middle" dominant-baseline="central" dy="-8">👥</text>
+        <text class="node-label" fill="#fff" text-anchor="middle" dy="13">People</text>
+        <text class="node-label" fill="rgba(255,255,255,0.85)" font-size="11" font-weight="600" text-anchor="middle" dy="26">&amp; HR</text>
+      </g>
+
+      <!-- ── NODE 6: AI & Automation (upper-left) ── -->
+      <g class="node-circle" transform="translate(251,205)">
+        <circle cx="0" cy="0" r="52" fill="url(#g6)"/>
+        <circle cx="0" cy="0" r="52" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <text font-size="22" fill="#fff" text-anchor="middle" dominant-baseline="central" dy="-8">🤖</text>
+        <text class="node-label" fill="#fff" text-anchor="middle" dy="13">AI &amp;</text>
+        <text class="node-label" fill="rgba(255,255,255,0.85)" font-size="11" font-weight="600" text-anchor="middle" dy="26">Automation</text>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ CARDS -->
+<div class="section-title">
+  <h3>What each pillar does for your business</h3>
+  <p>Plain-language explanations — no jargon, no tech-speak.</p>
+</div>
+
+<div class="cards-grid">
+
+  <!-- Card 0: Portfolio & Delivery -->
+  <div class="card">
+    <div class="card-header" style="border-left: 5px solid #3182CE;">
+      <div class="card-icon" style="background:#ebf4ff; color:#2b6cb0;">📋</div>
+      <div>
+        <div class="card-title" style="color:#2b6cb0;">Portfolio &amp; Delivery</div>
+        <div class="card-sub">Projects · Milestones · Delivery</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>
+        Think of this as your master control room for every client project.
+        It shows what's being worked on, who's responsible, and whether
+        things are running on time and on budget — all in one place.
+      </p>
+      <ul>
+        <li>Track every project from kick-off to completion</li>
+        <li>See milestones, deadlines and delivery status at a glance</li>
+        <li>Spot projects that are at risk before they go off the rails</li>
+        <li>Manage multiple projects and programmes simultaneously</li>
+        <li>Give clients transparent progress updates automatically</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Card 1: Time & Resources -->
+  <div class="card">
+    <div class="card-header" style="border-left: 5px solid #00A9CE;">
+      <div class="card-icon" style="background:#e6f9fd; color:#007a99;">⏱</div>
+      <div>
+        <div class="card-title" style="color:#007a99;">Time &amp; Resources</div>
+        <div class="card-sub">Timesheets · Allocation · Capacity</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>
+        Knowing where your people's time goes is the heartbeat of any
+        services firm. This pillar tracks hours, matches the right
+        people to the right work, and prevents your best talent from
+        being over-committed or sitting idle.
+      </p>
+      <ul>
+        <li>Simple mobile-friendly timesheets staff actually complete</li>
+        <li>See who's available and who's fully booked in real time</li>
+        <li>Match skills and seniority to project requirements</li>
+        <li>Manage leave, public holidays and part-time contracts</li>
+        <li>Forecast future capacity so you can plan ahead confidently</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Card 2: Finance & Billing -->
+  <div class="card">
+    <div class="card-header" style="border-left: 5px solid #38A169;">
+      <div class="card-icon" style="background:#e6f7ee; color:#276749;">💰</div>
+      <div>
+        <div class="card-title" style="color:#276749;">Finance &amp; Billing</div>
+        <div class="card-sub">Invoicing · Revenue · Margins</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>
+        Turn the work your team has done directly into accurate invoices —
+        no manual spreadsheets, no hours lost chasing timesheet data.
+        Keep a clear picture of revenue, costs and profitability across
+        every engagement.
+      </p>
+      <ul>
+        <li>Auto-generate invoices from approved timesheets and expenses</li>
+        <li>Support fixed-fee, time &amp; materials, and milestone billing</li>
+        <li>Track revenue recognised vs. revenue invoiced</li>
+        <li>Monitor project margins and flag when costs run over</li>
+        <li>Sync with accounting systems (Xero, Sage, QuickBooks)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Card 3: Client Management -->
+  <div class="card">
+    <div class="card-header" style="border-left: 5px solid #7B3FE4;">
+      <div class="card-icon" style="background:#f0eaff; color:#5a2da8;">🤝</div>
+      <div>
+        <div class="card-title" style="color:#5a2da8;">Client Management</div>
+        <div class="card-sub">CRM · Relationships · Pipeline</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>
+        Everything about your clients — contacts, history, active work,
+        upcoming opportunities — lives in one connected place. So whoever
+        is speaking to a client is always up to speed, and no relationship
+        ever slips through the cracks.
+      </p>
+      <ul>
+        <li>Full view of every client: contacts, contracts and history</li>
+        <li>Track sales pipeline from first conversation to signed deal</li>
+        <li>Link opportunities directly to delivered projects</li>
+        <li>Log calls, emails and meeting notes in one place</li>
+        <li>Identify upsell and renewal opportunities early</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Card 4: Reporting & Insights -->
+  <div class="card">
+    <div class="card-header" style="border-left: 5px solid #D97706;">
+      <div class="card-icon" style="background:#fff8e6; color:#b7620a;">📊</div>
+      <div>
+        <div class="card-title" style="color:#b7620a;">Reporting &amp; Insights</div>
+        <div class="card-sub">Dashboards · Status · Analytics</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>
+        Stop spending Friday afternoons building status reports in
+        PowerPoint. MB PSA generates live dashboards and automated
+        reports — for clients, for your leadership team, and for the
+        people doing the work.
+      </p>
+      <ul>
+        <li>Weekly status reports created automatically from live data</li>
+        <li>Executive dashboards for leadership with KPIs at a glance</li>
+        <li>Client-facing portals showing project health transparently</li>
+        <li>Drill down from summary view to individual tasks and hours</li>
+        <li>Export to PDF or share via secure link</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Card 5: People & HR -->
+  <div class="card">
+    <div class="card-header" style="border-left: 5px solid #E53E3E;">
+      <div class="card-icon" style="background:#fff0f0; color:#9b1c1c;">👥</div>
+      <div>
+        <div class="card-title" style="color:#9b1c1c;">People &amp; HR</div>
+        <div class="card-sub">Leave · Expenses · Wellbeing</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>
+        Your consultants and staff are your most valuable asset. This
+        pillar handles the day-to-day people operations — leave requests,
+        expense claims, performance check-ins — so managers can focus on
+        leading rather than administrating.
+      </p>
+      <ul>
+        <li>Leave requests approved in seconds, calendars updated instantly</li>
+        <li>Expense claims submitted from a phone, approved in the platform</li>
+        <li>Track utilisation and flag when people are burning out</li>
+        <li>Personal dashboards for each team member to see their work</li>
+        <li>Onboarding checklists for new starters</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Card 6: AI & Automation -->
+  <div class="card">
+    <div class="card-header" style="border-left: 5px solid #4C51BF;">
+      <div class="card-icon" style="background:#eef0ff; color:#3730a3;">🤖</div>
+      <div>
+        <div class="card-title" style="color:#3730a3;">AI &amp; Automation</div>
+        <div class="card-sub">Agents · Workflows · Intelligence</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>
+        MB PSA uses AI to do the repetitive work — so your team doesn't
+        have to. From chasing overdue timesheets to surfacing project
+        risks before they become problems, automation keeps the business
+        running smoothly in the background.
+      </p>
+      <ul>
+        <li>AI agents nudge staff to submit timesheets automatically</li>
+        <li>Smart risk scoring flags projects likely to overrun</li>
+        <li>Automated approval workflows (expenses, leave, invoices)</li>
+        <li>Natural language Q&amp;A: "How are we tracking against budget?"</li>
+        <li>AI-assisted proposal writing and scope estimation</li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- /cards-grid -->
+
+<!-- ═══════════════════════════════════════════════════════════ FOOTER -->
+<footer>
+  <strong>MB PSA</strong> — Professional Services Automation Platform &nbsp;|&nbsp;
+  Built for consultancies, agencies &amp; technology services firms &nbsp;|&nbsp;
+  <span style="color:#00A9CE">mbpsa.io</span>
+</footer>
+
+</body>
+</html>
