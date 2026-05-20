@@ -1553,12 +1553,15 @@ function checkPassword(){
   }
 }
 
-// Auto-login if already authenticated this session
-window.addEventListener('DOMContentLoaded', () => {
-  if(sessionStorage.getItem('mb-auth') === '1') showApp();
-});
+// Clear any stale session on every fresh page load — password always required
+sessionStorage.removeItem('mb-auth');
 
 function showApp(){
+  // Guard: must have valid auth token set by checkPassword()
+  if(sessionStorage.getItem('mb-auth') !== '1'){
+    console.warn('Access denied.');
+    return;
+  }
   document.getElementById('pg-login').style.display='none';
   document.getElementById('app-shell').style.display='block';
   buildHeatmap();
