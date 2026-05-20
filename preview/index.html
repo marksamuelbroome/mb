@@ -240,6 +240,7 @@
   /* ── Inline edit ── */
   .editable-input{border:1.5px solid var(--teal);border-radius:6px;
     padding:4px 8px;font-size:.83rem;width:90px;font-family:inherit;}
+  @keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-8px);}40%{transform:translateX(8px);}60%{transform:translateX(-5px);}80%{transform:translateX(5px);}}
 </style>
 </head>
 <body>
@@ -250,8 +251,29 @@
     <div class="login-card">
       <div class="login-logo">C</div>
       <div class="login-title">MB PSA</div>
-      <div class="login-sub">Professional Services Accounting<br/>Sign in with your MB Microsoft account</div>
-      <button class="ms-btn" onclick="showApp()">
+      <div class="login-sub">Professional Services Accounting<br/>Enter your access code to continue</div>
+
+      <!-- Password gate -->
+      <div style="width:100%;margin:20px 0 8px;">
+        <label style="font-size:.68rem;font-weight:700;letter-spacing:.1em;color:#a0aec0;display:block;margin-bottom:7px;text-align:left;">ACCESS CODE</label>
+        <div style="position:relative;">
+          <input type="password" id="login-password"
+            placeholder="Enter access code…"
+            style="width:100%;padding:11px 42px 11px 14px;border:2px solid #e2e8f0;border-radius:9px;font-size:.92rem;outline:none;box-sizing:border-box;font-family:inherit;color:#2d3748;transition:border-color .2s;"
+            onkeydown="if(event.key==='Enter')checkPassword()"
+            oninput="document.getElementById('login-error').style.display='none';this.style.borderColor='#e2e8f0';"
+            onfocus="this.style.borderColor='#00A9CE';"
+            onblur="this.style.borderColor='#e2e8f0';"
+          />
+          <span style="position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.4;cursor:pointer;"
+            onclick="var i=document.getElementById('login-password');i.type=i.type==='password'?'text':'password';">👁</span>
+        </div>
+        <div id="login-error" style="display:none;color:#E53E3E;font-size:.75rem;margin-top:7px;text-align:left;font-weight:500;">
+          ❌ Incorrect access code. Please try again.
+        </div>
+      </div>
+
+      <button class="ms-btn" onclick="checkPassword()" style="margin-top:4px;">
         <div class="ms-squares">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;">
             <div class="ms-sq" style="background:#f25022;"></div>
@@ -260,7 +282,7 @@
             <div class="ms-sq" style="background:#ffb900;"></div>
           </div>
         </div>
-        Sign in with Microsoft
+        Sign In
       </button>
       <p style="color:#cbd5e0;font-size:.72rem;margin-top:24px;">© 2026 MB. All rights reserved.</p>
     </div>
@@ -1319,6 +1341,31 @@ function toggleSidebar(){
   d.classList.toggle('collapsed');
   btn.textContent=d.classList.contains('collapsed')?'→':'☰';
 }
+
+function checkPassword(){
+  const input = document.getElementById('login-password');
+  const error = document.getElementById('login-error');
+  // Access code — change the value in quotes to update the password
+  const correct = atob('TUIyMDI2');
+  if(input.value === correct){
+    sessionStorage.setItem('mb-auth','1');
+    showApp();
+  } else {
+    error.style.display = 'block';
+    input.style.borderColor = '#E53E3E';
+    input.value = '';
+    input.focus();
+    // Shake animation
+    input.style.animation = 'none';
+    input.offsetHeight;
+    input.style.animation = 'shake .35s ease';
+  }
+}
+
+// Auto-login if already authenticated this session
+window.addEventListener('DOMContentLoaded', () => {
+  if(sessionStorage.getItem('mb-auth') === '1') showApp();
+});
 
 function showApp(){
   document.getElementById('pg-login').style.display='none';
