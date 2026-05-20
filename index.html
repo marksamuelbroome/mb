@@ -327,17 +327,17 @@
   </div>
   <!-- Section: Workspace -->
   <div class="section-label">🏠 Workspace</div>
-  <div class="nav-item" id="nav-dashboard" onclick="showPage('pg-dashboard')"><span class="ico">📊</span><span class="nav-label"> My Dashboard</span></div>
+  <div class="nav-item" id="nav-dashboard" onclick="showPage('pg-my-dashboard')"><span class="ico">📊</span><span class="nav-label"> My Dashboard</span></div>
   <div class="nav-item" id="nav-timesheet" onclick="showPage('pg-timesheet')"><span class="ico">⏱</span><span class="nav-label"> My Timesheet</span></div>
-  <div class="nav-item" id="nav-assignments" onclick="showPage('pg-assignments')"><span class="ico">📋</span><span class="nav-label"> My Assignments</span></div>
-  <div class="nav-item" id="nav-expenses" onclick="showPage('pg-expenses')"><span class="ico">🧾</span><span class="nav-label"> My Expenses</span></div>
-  <div class="nav-item" id="nav-leave" onclick="showPage('pg-leave')"><span class="ico">🌴</span><span class="nav-label"> My Leave</span></div>
+  <div class="nav-item" id="nav-assignments" onclick="showPage('pg-my-assignments')"><span class="ico">📋</span><span class="nav-label"> My Assignments</span></div>
+  <div class="nav-item" id="nav-expenses" onclick="showPage('pg-my-expenses')"><span class="ico">🧾</span><span class="nav-label"> My Expenses</span></div>
+  <div class="nav-item" id="nav-leave" onclick="showPage('pg-my-leave')"><span class="ico">🌴</span><span class="nav-label"> My Leave</span></div>
 
   <!-- Section: Portfolio -->
   <div class="section-label">📊 Portfolio</div>
   <div class="nav-item" id="nav-executive" onclick="showPage('pg-executive')"><span class="ico">🏛</span><span class="nav-label"> Executive Dashboard</span></div>
   <div class="nav-item" id="nav-health" onclick="showPage('pg-health')"><span class="ico">🎯</span><span class="nav-label"> Project Health</span></div>
-  <div class="nav-item" id="nav-whatchanged" onclick="showPage('pg-whatchanged')"><span class="ico">🔍</span><span class="nav-label"> What Changed</span></div>
+  <div class="nav-item" id="nav-whatchanged" onclick="showPage('pg-changelog')"><span class="ico">🔍</span><span class="nav-label"> What Changed</span></div>
   <div class="nav-item" id="nav-raid" onclick="showPage('pg-raid')"><span class="ico">⚠️</span><span class="nav-label"> RAID Log</span></div>
   <div class="nav-item" id="nav-change-monitor" onclick="showPage('pg-change-monitor')"><span class="ico">🤖</span><span class="nav-label"> Change Monitor <span id="cm-nav-badge" style="background:#E53E3E;color:#fff;border-radius:10px;padding:1px 6px;font-size:.65rem;margin-left:4px;display:none;">0</span></span></div>
 
@@ -357,9 +357,9 @@
 
   <!-- Section: People -->
   <div class="section-label">👥 People</div>
-  <div class="nav-item" id="nav-availability" onclick="showPage('pg-availability')"><span class="ico">📆</span><span class="nav-label"> Availability</span></div>
-  <div class="nav-item" id="nav-consultants" onclick="showPage('pg-consultants')"><span class="ico">👤</span><span class="nav-label"> Consultants</span></div>
-  <div class="nav-item" id="nav-resources" onclick="showPage('pg-resources')"><span class="ico">🧩</span><span class="nav-label"> Resources</span></div>
+  <div class="nav-item" id="nav-availability" onclick="showPage('pg-resourcing')"><span class="ico">📆</span><span class="nav-label"> Availability</span></div>
+  <div class="nav-item" id="nav-consultants" onclick="showPage('pg-database')"><span class="ico">👤</span><span class="nav-label"> Consultants</span></div>
+  <div class="nav-item" id="nav-resources" onclick="showPage('pg-resourcing')"><span class="ico">🧩</span><span class="nav-label"> Resources</span></div>
   <div class="nav-item" id="nav-skills" onclick="showPage('pg-skills')"><span class="ico">⭐</span><span class="nav-label"> Skills Matrix</span></div>
   <div class="nav-item" id="nav-bench" onclick="showPage('pg-bench')"><span class="ico">🪑</span><span class="nav-label"> Bench</span></div>
   <div class="nav-item" id="nav-orgchart" onclick="showPage('pg-orgchart')"><span class="ico">🌿</span><span class="nav-label"> Org Chart</span></div>
@@ -367,49 +367,50 @@
 
   <!-- Section: Reporting -->
   <div class="section-label">📄 Reporting</div>
-  <div class="nav-item" id="nav-weekly" onclick="showPage('pg-weekly')"><span class="ico">📰</span><span class="nav-label"> Weekly Reports</span></div>
-  <div class="nav-item" id="nav-customer-report" onclick="showPage('pg-customer-report')"><span class="ico">📊</span><span class="nav-label"> Customer Report</span></div>
-  <div class="nav-item" id="nav-internal-report" onclick="showPage('pg-internal-report')"><span class="ico">📑</span><span class="nav-label"> Internal Report</span></div>
+  <div class="nav-item" id="nav-weekly" onclick="showPage('pg-weekly-reports')"><span class="ico">📰</span><span class="nav-label"> Weekly Reports</span></div>
+  <div class="nav-item" id="nav-customer-report" onclick="showPage('pg-status-customer')"><span class="ico">📊</span><span class="nav-label"> Customer Report</span></div>
+  <div class="nav-item" id="nav-internal-report" onclick="showPage('pg-status-internal')"><span class="ico">📑</span><span class="nav-label"> Internal Report</span></div>
   <div class="nav-item" id="nav-portal" onclick="showPage('pg-portal')"><span class="ico">🌐</span><span class="nav-label"> Customer Portal</span></div>
 
   <!-- Section: Finance -->
   <div class="section-label">💰 Finance</div>
   <div class="nav-group" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><span class="ico">📥</span><span class="nav-label"> Accounts Receivable</span></div>
   <div>
-    <div class="nav-sub" id="nav-ar-invoices" onclick="showPage('pg-ar-invoices')"><span class="nav-label">Invoices</span></div>
-    <div class="nav-sub" id="nav-ar-aged" onclick="showPage('pg-ar-aged')"><span class="nav-label">Aged Debtors</span></div>
-    <div class="nav-sub" id="nav-ar-cashflow" onclick="showPage('pg-ar-cashflow')"><span class="nav-label">Cash Flow</span></div>
+    <div class="nav-sub" id="nav-ar-invoices" onclick="showPage('pg-invoices')"><span class="nav-label">Invoices</span></div>
+    <div class="nav-sub" id="nav-ar-aged" onclick="showPage('pg-ar-aging')"><span class="nav-label">Aged Debtors</span></div>
+    <div class="nav-sub" id="nav-ar-cashflow" onclick="showPage('pg-cashflow')"><span class="nav-label">Cash Flow</span></div>
     <div class="nav-sub" id="nav-evm" onclick="showPage('pg-evm')"><span class="nav-label">EVM / Revenue</span></div>
   </div>
   <div class="nav-group" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><span class="ico">📤</span><span class="nav-label"> Accounts Payable</span></div>
   <div>
-    <div class="nav-sub" id="nav-ap-bills" onclick="showPage('pg-ap-bills')"><span class="nav-label">Bills</span></div>
-    <div class="nav-sub" id="nav-ap-suppliers" onclick="showPage('pg-ap-suppliers')"><span class="nav-label">Suppliers</span></div>
+    <div class="nav-sub" id="nav-ap-bills" onclick="showPage('pg-purchase-orders')"><span class="nav-label">Bills</span></div>
+    <div class="nav-sub" id="nav-ap-suppliers" onclick="showPage('pg-suppliers')"><span class="nav-label">Suppliers</span></div>
   </div>
   <div class="nav-group" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><span class="ico">💳</span><span class="nav-label"> Expense Management</span></div>
   <div>
-    <div class="nav-sub" id="nav-exp-submit" onclick="showPage('pg-exp-submit')"><span class="nav-label">Submit Expenses</span></div>
-    <div class="nav-sub" id="nav-exp-approve" onclick="showPage('pg-exp-approve')"><span class="nav-label">Approve Expenses</span></div>
-    <div class="nav-sub" id="nav-exp-report" onclick="showPage('pg-exp-report')"><span class="nav-label">Expense Reports</span></div>
+    <div class="nav-sub" id="nav-exp-submit" onclick="showPage('pg-my-expenses')"><span class="nav-label">Submit Expenses</span></div>
+    <div class="nav-sub" id="nav-exp-approve" onclick="showPage('pg-expense-approval')"><span class="nav-label">Approve Expenses</span></div>
+    <div class="nav-sub" id="nav-exp-report" onclick="showPage('pg-my-expenses')"><span class="nav-label">Expense Reports</span></div>
   </div>
 
   <!-- Section: Approvals -->
   <div class="section-label">✅ Approvals</div>
-  <div class="nav-item" id="nav-ts-approve" onclick="showPage('pg-ts-approve')"><span class="ico">✔️</span><span class="nav-label"> Timesheet Approval</span></div>
+  <div class="nav-item" id="nav-ts-approve" onclick="showPage('pg-approval')"><span class="ico">✔️</span><span class="nav-label"> Timesheet Approval</span></div>
   <div class="nav-item" id="nav-coapprove" onclick="showPage('pg-coapprove')"><span class="ico">🤝</span><span class="nav-label"> Co-Approvals</span></div>
 
   <!-- Section: AI -->
   <div class="section-label">🤖 AI</div>
-  <div class="nav-item" id="nav-ai" onclick="showPage('pg-ai')"><span class="ico">✨</span><span class="nav-label"> AI Agents <span style="background:#553C9A;color:#E9D8FD;border-radius:10px;padding:1px 6px;font-size:.65rem;margin-left:4px;">6</span></span></div>
+  <div class="nav-item" id="nav-ai" onclick="showPage('pg-agents')"><span class="ico">✨</span><span class="nav-label"> AI Agents <span style="background:#553C9A;color:#E9D8FD;border-radius:10px;padding:1px 6px;font-size:.65rem;margin-left:4px;">6</span></span></div>
 
   <!-- Section: Admin & Help -->
   <div class="section-label">⚙️ Admin & Help</div>
-  <div class="nav-item" id="nav-admin" onclick="showPage('pg-admin')"><span class="ico">⚙️</span><span class="nav-label"> Admin</span></div>
+  <div class="nav-item" id="nav-admin" onclick="showPage('pg-roles')"><span class="ico">⚙️</span><span class="nav-label"> Admin</span></div>
   <div class="nav-item" id="nav-demo" onclick="showPage('pg-demo')"><span class="ico">🎬</span><span class="nav-label"> Platform Demo</span></div>
+  <div class="nav-item" id="nav-userstories" onclick="showPage('pg-userstories')"><span class="ico">📝</span><span class="nav-label"> User Stories</span></div>
   <div class="nav-item" id="nav-showcase" onclick="showPage('pg-showcase')"><span class="ico">🎯</span><span class="nav-label"> Platform Showcase</span></div>
   <div class="nav-item" id="nav-tutorial" onclick="showPage('pg-tutorial')"><span class="ico">📖</span><span class="nav-label"> Tutorial</span></div>
   <div class="nav-item" id="nav-faq" onclick="showPage('pg-faq')"><span class="ico">❓</span><span class="nav-label"> FAQ</span></div>
-  <div class="nav-item" id="nav-features" onclick="showPage('pg-features')"><span class="ico">📋</span><span class="nav-label"> Feature Coverage</span></div>
+  <div class="nav-item" id="nav-features" onclick="showPage('pg-coverage')"><span class="ico">📋</span><span class="nav-label"> Feature Coverage</span></div>
   <div class="nav-item" id="nav-selftest" onclick="showPage('pg-selftest')"><span class="ico">🔬</span><span class="nav-label"> Self-Test</span></div>
   <div class="nav-item" id="nav-overview" onclick="showPage('pg-overview')"><span class="ico">ℹ️</span><span class="nav-label"> Overview</span></div>
   <div class="nav-item" id="nav-tech" onclick="showPage('pg-tech')"><span class="ico">🏗</span><span class="nav-label"> Tech Architecture</span></div>
@@ -1118,6 +1119,7 @@
       <div id="pg-evm" class="page"><div id="evm-content"></div></div>
       <div id="pg-showcase" class="page"><div id="showcase-content"></div></div>
       <div id="pg-demo" class="page"><div id="demo-content"></div></div>
+<div id="pg-userstories" class="page"><div id="userstories-content"></div></div>
       <div id="pg-coapprove" class="page"><div id="coapprove-content"></div></div>
       <div id="pg-change-monitor" class="page"><div id="change-monitor-content"></div></div>
       <div id="pg-ado" class="page"><div id="ado-content"></div></div>
@@ -1273,22 +1275,55 @@ function buildHeatmap(){
 
 // ── Navigation ──────────────────────────────────────────────
 const navMap = {
-  'pg-executive':'nav-exec','pg-availability':'nav-avail','pg-consultants':'nav-consultants',
-  'pg-health':'nav-health','pg-approval':'nav-approval','pg-customers':'nav-customers','pg-projects':'nav-projects',
-  'pg-pipeline':'nav-pipeline','pg-resourcing':'nav-resourcing','pg-invoices':'nav-invoices',
-  'pg-cashflow':'nav-cashflow','pg-roles':'nav-roles','pg-database':'nav-database','pg-agents':'nav-agents',
-  'pg-security':'nav-security','pg-tutorial':'nav-tutorial','pg-faq':'nav-faq',
-  'pg-overview':'nav-overview','pg-tech':'nav-tech','pg-erd':'nav-erd',
-  'pg-ado':'nav-ado','pg-variance':'nav-variance','pg-changelog':'nav-changelog',
-  'pg-raid':'nav-raid','pg-status-customer':'nav-status-customer','pg-status-internal':'nav-status-internal','pg-portal':'nav-portal',
-  'pg-skills':'nav-skills','pg-bench':'nav-bench','pg-orgchart':'nav-orgchart','pg-performance':'nav-performance',
-  'pg-gantt':'nav-gantt','pg-kanban':'nav-kanban','pg-billing-rules':'nav-billing-rules','pg-revenue-rec':'nav-revenue-rec','pg-coverage':'nav-coverage','pg-selftest':'nav-selftest',
-  'pg-portfolio-gantt':'nav-portfolio-gantt','pg-weekly-reports':'nav-weekly-reports','pg-contracts':'nav-contracts','pg-evm':'nav-evm',
-  'pg-showcase':'nav-showcase',
+  'pg-my-dashboard':'nav-dashboard',
+  'pg-timesheet':'nav-timesheet',
+  'pg-my-assignments':'nav-assignments',
+  'pg-my-expenses':'nav-expenses',
+  'pg-my-leave':'nav-leave',
+  'pg-executive':'nav-executive',
+  'pg-health':'nav-health',
+  'pg-changelog':'nav-whatchanged',
+  'pg-raid':'nav-raid',
+  'pg-change-monitor':'nav-change-monitor',
+  'pg-customers':'nav-customers',
+  'pg-contracts':'nav-contracts',
+  'pg-pipeline':'nav-pipeline',
+  'pg-projects':'nav-projects',
+  'pg-portfolio-gantt':'nav-portfolio-gantt',
+  'pg-gantt':'nav-gantt',
+  'pg-kanban':'nav-kanban',
+  'pg-ado':'nav-ado',
+  'pg-database':'nav-consultants',
+  'pg-skills':'nav-skills',
+  'pg-bench':'nav-bench',
+  'pg-orgchart':'nav-orgchart',
+  'pg-performance':'nav-performance',
+  'pg-weekly-reports':'nav-weekly',
+  'pg-status-customer':'nav-customer-report',
+  'pg-status-internal':'nav-internal-report',
+  'pg-portal':'nav-portal',
+  'pg-invoices':'nav-ar-invoices',
+  'pg-ar-aging':'nav-ar-aged',
+  'pg-cashflow':'nav-ar-cashflow',
+  'pg-evm':'nav-evm',
+  'pg-purchase-orders':'nav-ap-bills',
+  'pg-suppliers':'nav-ap-suppliers',
+  'pg-expense-approval':'nav-exp-approve',
+  'pg-approval':'nav-ts-approve',
+  'pg-coapprove':'nav-coapprove',
+  'pg-agents':'nav-ai',
+  'pg-roles':'nav-admin',
   'pg-demo':'nav-demo',
-  'pg-coapprove':'nav-coapprove','pg-change-monitor':'nav-change-monitor',
-  'pg-my-dashboard':'nav-my-dash','pg-timesheet':'nav-timesheet',
-  'pg-my-assignments':'nav-my-assign','pg-my-expenses':'nav-expenses','pg-my-leave':'nav-leave',
+  'pg-showcase':'nav-showcase',
+  'pg-tutorial':'nav-tutorial',
+  'pg-faq':'nav-faq',
+  'pg-coverage':'nav-features',
+  'pg-selftest':'nav-selftest',
+  'pg-overview':'nav-overview',
+  'pg-tech':'nav-tech',
+  'pg-erd':'nav-erd',
+  'pg-userstories':'nav-userstories',
+  'pg-resourcing':'nav-resources',
 };
 
 function showPage(id){
@@ -1330,6 +1365,7 @@ function showPage(id){
   if(id==='pg-evm') renderEVM();
   if(id==='pg-showcase') renderShowcase();
   if(id==='pg-demo') renderDemo();
+  if(id==='pg-userstories') renderUserStories();
   if(id==='pg-coapprove') renderCoApprove();
   if(id==='pg-change-monitor') renderChangeMonitor();
   window.scrollTo(0,0);
@@ -3595,6 +3631,196 @@ function renderDemo(){
 }
 
 // ══════════════════════════════════════════════════════════
+// USER STORIES
+// ══════════════════════════════════════════════════════════
+// USER STORIES & TRACEABILITY MATRIX
+// ══════════════════════════════════════════════════════════
+function renderUserStories(){
+  const el=document.getElementById('userstories-content');
+  if(!el)return;
+
+  const epics=[
+    {id:'EP-01',name:'Portfolio Visibility',icon:'📊',color:'#3182CE',stories:[
+      {id:'US-001',title:'Portfolio Gantt View',role:'Executive',priority:'Must Have',status:'Done',screen:'Portfolio Gantt',feature:'Multi-phase Gantt chart with amendment overlay',ac:['View all projects on timeline','Filter by customer/zoom','See phase sub-rows','Toggle amendments layer']},
+      {id:'US-002',title:'Project Health Dashboard',role:'Portfolio Manager',priority:'Must Have',status:'Done',screen:'Project Health',feature:'RAG status, EVM summary per project',ac:['RAG colour coding','EVM KPIs per project','Drill-down to project detail']},
+      {id:'US-003',title:'Executive Dashboard',role:'Executive',priority:'Must Have',status:'Done',screen:'Executive Dashboard',feature:'Portfolio-level KPIs, customer cards',ac:['Revenue summary','Customer health grid','Top risks highlighted']},
+      {id:'US-004',title:'Change Log',role:'PM / Executive',priority:'Should Have',status:'Done',screen:'What Changed',feature:'Audit trail of portfolio changes',ac:['Timestamped change entries','Filter by type','Export to report']},
+    ]},
+    {id:'EP-02',name:'Contract Management',icon:'📄',color:'#805AD5',stories:[
+      {id:'US-010',title:'Contract Register',role:'Finance Director',priority:'Must Have',status:'Done',screen:'Contracts & CRs',feature:'15 contracts, milestone billing, €23.9M portfolio',ac:['Contract KPI strip','Expiry alerts','Milestone progress bar','Amendment history']},
+      {id:'US-011',title:'Change Request Tracking',role:'PM / Finance',priority:'Must Have',status:'Done',screen:'Contracts & CRs',feature:'14 CRs per customer with status workflow',ac:['CR raised against contract','Status: Pending/Approved/Rejected','Value and timeline impact','Link to co-approval']},
+      {id:'US-012',title:'Contract Expiry Alerts',role:'Finance Director',priority:'Must Have',status:'Done',screen:'Contracts & CRs / Change Monitor',feature:'Auto-alert when contract expires within 90 days',ac:['Warning banner displayed','Raise Renewal Request button','Change Monitor alert fired']},
+      {id:'US-013',title:'Contract Renewal Workflow',role:'PM',priority:'Should Have',status:'Done',screen:'Co-Approvals',feature:'Raise renewal via Co-Approval request',ac:['Link from contract expiry alert','Co-Approval form pre-populated','Dual sign-off captured']},
+    ]},
+    {id:'EP-03',name:'Earned Value Management',icon:'📈',color:'#276749',stories:[
+      {id:'US-020',title:'EVM Dashboard',role:'Finance Director',priority:'Must Have',status:'Done',screen:'EVM',feature:'CPI, SPI, SV, CV, EAC per project with IFRS 15 mapping',ac:['Portfolio KPI strip','Per-project table','IFRS 15 revenue = EV','Billing variance (contract asset/liability)']},
+      {id:'US-021',title:'Portfolio EVM Summary',role:'Executive',priority:'Must Have',status:'Done',screen:'EVM',feature:'Portfolio-level SPI/CPI with visual bars',ac:['Aggregate metrics across all projects','Performance bar charts','Forecast to complete (EAC)']},
+      {id:'US-022',title:'EVM Glossary',role:'All',priority:'Could Have',status:'Done',screen:'EVM',feature:'In-page EVM term definitions',ac:['All standard terms defined','IFRS 15 context provided']},
+    ]},
+    {id:'EP-04',name:'Change & Approvals',icon:'✅',color:'#DD6B20',stories:[
+      {id:'US-030',title:'Co-Approval Workflow',role:'PM / Finance',priority:'Must Have',status:'Done',screen:'Co-Approvals',feature:'Dual approval — one person approves on behalf of another',ac:['Request raised with justification','Delegate nominated','Approve/Reject/Query actions','Full audit trail with timestamps']},
+      {id:'US-031',title:'Change Monitor Agent',role:'Executive',priority:'Must Have',status:'Done',screen:'Change Monitor',feature:'AI agent scans portfolio every 60 seconds',ac:['5 alert types: deadline, RAG, amendments, contracts, invoices','Toast notification with top 3 alerts','Nav badge count','View Details links to monitor page']},
+      {id:'US-032',title:'RAID Log',role:'PM',priority:'Must Have',status:'Done',screen:'RAID Log',feature:'Risks, Assumptions, Issues, Dependencies per project',ac:['RAID items with owner and status','Filter by type and project','Priority/severity indicators']},
+    ]},
+    {id:'EP-05',name:'Reporting',icon:'📰',color:'#319795',stories:[
+      {id:'US-040',title:'Weekly Status Reports',role:'PM',priority:'Must Have',status:'Done',screen:'Weekly Reports',feature:'Structured weekly reports with financials and RAG',ac:['Report per project','Financial summary','RAG and key updates','Risks and actions']},
+      {id:'US-041',title:'Customer Report',role:'PM / Client',priority:'Should Have',status:'Done',screen:'Customer Report',feature:'Client-facing status report',ac:['Customer-branded layout','Project health summary','Milestone status']},
+      {id:'US-042',title:'Customer Portal',role:'Client',priority:'Should Have',status:'Done',screen:'Customer Portal',feature:'Self-service client portal for project visibility',ac:['Client login view','Project status read-only','Document access','Decision log visible']},
+      {id:'US-043',title:'Internal Report',role:'PM',priority:'Should Have',status:'Done',screen:'Internal Report',feature:'Internal delivery status report',ac:['Full financials visible','Internal commentary','Risk and issue detail']},
+    ]},
+    {id:'EP-06',name:'Resource & People',icon:'👥',color:'#553C9A',stories:[
+      {id:'US-050',title:'Availability Heatmap',role:'Resource Manager',priority:'Must Have',status:'Done',screen:'Resourcing',feature:'Visual availability heatmap across all consultants',ac:['Week-by-week availability','Colour-coded utilisation','Bench visibility']},
+      {id:'US-051',title:'Skills Matrix',role:'Delivery Manager',priority:'Should Have',status:'Done',screen:'Skills Matrix',feature:'Skill levels across consultant base',ac:['Skill categories','Level indicators','Filter by skill/consultant']},
+      {id:'US-052',title:'Org Chart',role:'All',priority:'Could Have',status:'Done',screen:'Org Chart',feature:'Visual org hierarchy',ac:['Hierarchy display','Role labels','Reporting lines']},
+      {id:'US-053',title:'Performance Management',role:'Manager',priority:'Could Have',status:'Done',screen:'Performance',feature:'Consultant performance tracking',ac:['Utilisation %','Trend indicators','Performance flags']},
+    ]},
+    {id:'EP-07',name:'Finance & Billing',icon:'💰',color:'#97266D',stories:[
+      {id:'US-060',title:'AR Invoice Tracking',role:'Finance',priority:'Must Have',status:'Done',screen:'AR Invoices',feature:'Invoice register with status and aged debtors',ac:['Invoice list','Due dates','Aged analysis','Cash flow view']},
+      {id:'US-061',title:'Billing Rules Engine',role:'Finance',priority:'Should Have',status:'Done',screen:'Finance',feature:'Configure T&M and Fixed Fee billing rules per contract',ac:['Rule types: T&M, Fixed Fee, Milestone','Rate cards','Override capability']},
+      {id:'US-062',title:'Revenue Recognition',role:'Finance',priority:'Must Have',status:'Done',screen:'Finance',feature:'IFRS 15 revenue recognition per project',ac:['% complete method','Recognition schedule','Journal entries']},
+      {id:'US-063',title:'Variance Reporting',role:'Finance',priority:'Should Have',status:'Done',screen:'Finance',feature:'Budget vs actual variance by project',ac:['Variance by category','RAG indicators','Period comparison']},
+    ]},
+    {id:'EP-08',name:'AI & Platform',icon:'🤖',color:'#2C5282',stories:[
+      {id:'US-070',title:'AI Agents Dashboard',role:'All',priority:'Could Have',status:'Done',screen:'AI Agents',feature:'6 AI agents for portfolio intelligence',ac:['Agent status display','Last run timestamps','Alert counts']},
+      {id:'US-071',title:'Platform Demo & Onboarding',role:'New User',priority:'Should Have',status:'Done',screen:'Platform Demo',feature:'Guided interactive tour with persona cards',ac:['Role-based persona entry points','Auto-play 9-stop tour','Module catalogue']},
+      {id:'US-072',title:'Platform Showcase',role:'Stakeholder',priority:'Could Have',status:'Done',screen:'Platform Showcase',feature:'Full platform overview with architecture diagram',ac:['10 module cards','End-to-end workflow','EUR/IFRS 15 framework','Technical architecture']},
+      {id:'US-073',title:'Self-Test & Feature Coverage',role:'Developer',priority:'Could Have',status:'Done',screen:'Self-Test',feature:'Auto-test of all platform features',ac:['Feature checklist','Test status','Coverage percentage']},
+    ]},
+  ];
+
+  const allStories=epics.flatMap(e=>e.stories.map(s=>({...s,epicId:e.id,epicName:e.name,epicColor:e.color})));
+  const totalStories=allStories.length;
+  const doneCount=allStories.filter(s=>s.status==='Done').length;
+  const mustHave=allStories.filter(s=>s.priority==='Must Have').length;
+  const mustDone=allStories.filter(s=>s.priority==='Must Have'&&s.status==='Done').length;
+
+  el.innerHTML=`
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:20px;">
+    <div>
+      <h2 style="color:#E2E8F0;font-size:1.15rem;font-weight:700;margin:0 0 4px;">📝 User Stories & Traceability Matrix</h2>
+      <p style="color:#718096;font-size:.82rem;margin:0;">Business requirements mapped to implemented features · ${totalStories} stories across ${epics.length} epics</p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="background:#1E2A3A;border:1px solid #276749;border-radius:8px;padding:10px 16px;text-align:center;">
+        <div style="font-size:1.4rem;font-weight:800;color:#68D391;">${doneCount}/${totalStories}</div>
+        <div style="font-size:.68rem;color:#A0AEC0;">Stories Done</div>
+      </div>
+      <div style="background:#1E2A3A;border:1px solid #2C5282;border-radius:8px;padding:10px 16px;text-align:center;">
+        <div style="font-size:1.4rem;font-weight:800;color:#90CDF4;">${mustDone}/${mustHave}</div>
+        <div style="font-size:.68rem;color:#A0AEC0;">Must-Haves Done</div>
+      </div>
+      <div style="background:#1E2A3A;border:1px solid #553C9A;border-radius:8px;padding:10px 16px;text-align:center;">
+        <div style="font-size:1.4rem;font-weight:800;color:#E9D8FD;">${Math.round(doneCount/totalStories*100)}%</div>
+        <div style="font-size:.68rem;color:#A0AEC0;">Coverage</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Coverage progress bar -->
+  <div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:8px;padding:14px 16px;margin-bottom:20px;">
+    <div style="display:flex;justify-content:space-between;font-size:.75rem;color:#A0AEC0;margin-bottom:6px;">
+      <span>Overall implementation coverage</span>
+      <span style="color:#68D391;font-weight:700;">${Math.round(doneCount/totalStories*100)}%</span>
+    </div>
+    <div style="background:#2D3748;border-radius:4px;height:12px;overflow:hidden;">
+      <div style="width:${Math.round(doneCount/totalStories*100)}%;height:100%;background:linear-gradient(90deg,#276749,#68D391);border-radius:4px;"></div>
+    </div>
+    <div style="display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;">
+      ${['Must Have','Should Have','Could Have'].map(p=>{
+        const total=allStories.filter(s=>s.priority===p).length;
+        const done=allStories.filter(s=>s.priority===p&&s.status==='Done').length;
+        const col=p==='Must Have'?'#FC8181':p==='Should Have'?'#FBD38D':'#90CDF4';
+        return `<span style="font-size:.72rem;color:#A0AEC0;"><span style="color:${col};font-weight:700;">${done}/${total}</span> ${p}</span>`;
+      }).join('')}
+    </div>
+  </div>
+
+  <!-- Epics & Stories -->
+  ${epics.map(epic=>`
+  <div style="background:#1A2332;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden;">
+    <!-- Epic header -->
+    <div style="background:linear-gradient(90deg,${epic.color}22,transparent);border-left:4px solid ${epic.color};padding:12px 16px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:1.1rem;">${epic.icon}</span>
+      <div>
+        <div style="font-size:.65rem;color:${epic.color};font-weight:700;letter-spacing:.1em;">${epic.id}</div>
+        <div style="font-size:.95rem;font-weight:700;color:#E2E8F0;">${epic.name}</div>
+      </div>
+      <div style="margin-left:auto;font-size:.72rem;color:#A0AEC0;">${epic.stories.length} stories · ${epic.stories.filter(s=>s.status==='Done').length} done</div>
+    </div>
+    <!-- Stories table -->
+    <table style="width:100%;border-collapse:collapse;font-size:.76rem;">
+      <thead>
+        <tr style="background:#1E2A3A;color:#718096;">
+          <th style="text-align:left;padding:7px 12px;font-weight:600;min-width:60px;">ID</th>
+          <th style="text-align:left;padding:7px 10px;font-weight:600;min-width:160px;">Story</th>
+          <th style="text-align:left;padding:7px 10px;font-weight:600;">Role</th>
+          <th style="text-align:left;padding:7px 10px;font-weight:600;">Priority</th>
+          <th style="text-align:left;padding:7px 10px;font-weight:600;">Screen</th>
+          <th style="text-align:left;padding:7px 10px;font-weight:600;min-width:200px;">Implemented Feature</th>
+          <th style="text-align:left;padding:7px 10px;font-weight:600;">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${epic.stories.map((s,i)=>{
+          const priCol=s.priority==='Must Have'?'#FC8181':s.priority==='Should Have'?'#FBD38D':'#90CDF4';
+          const stCol=s.status==='Done'?'#68D391':'#FBD38D';
+          return `<tr style="background:${i%2===0?'#1A2332':'#1E2A3A'};border-top:1px solid #2D3748;" title="${s.ac.join(' | ')}">
+            <td style="padding:8px 12px;color:${epic.color};font-weight:700;font-family:monospace;">${s.id}</td>
+            <td style="padding:8px 10px;color:#E2E8F0;font-weight:500;">${s.title}</td>
+            <td style="padding:8px 10px;color:#A0AEC0;">${s.role}</td>
+            <td style="padding:8px 10px;"><span style="color:${priCol};font-weight:600;font-size:.7rem;">${s.priority}</span></td>
+            <td style="padding:8px 10px;color:#90CDF4;font-size:.72rem;">${s.screen}</td>
+            <td style="padding:8px 10px;color:#A0AEC0;line-height:1.4;">${s.feature}</td>
+            <td style="padding:8px 10px;"><span style="background:${stCol}22;color:${stCol};padding:2px 8px;border-radius:8px;font-weight:700;font-size:.7rem;">✓ ${s.status}</span></td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+    <!-- Acceptance Criteria panel (collapsed by default) -->
+    <div style="padding:10px 12px;background:#182230;border-top:1px solid #2D3748;">
+      <div style="font-size:.7rem;color:#718096;font-weight:600;margin-bottom:6px;">ACCEPTANCE CRITERIA SUMMARY</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${epic.stories.flatMap(s=>s.ac.map(a=>`<span style="background:#1E2A3A;border:1px solid #2D3748;color:#A0AEC0;font-size:.68rem;padding:2px 8px;border-radius:10px;">✓ ${a}</span>`)).join('')}
+      </div>
+    </div>
+  </div>
+  `).join('')}
+
+  <!-- Traceability Matrix -->
+  <h3 style="color:#E2E8F0;font-size:.95rem;font-weight:700;margin:24px 0 10px;">📐 Requirements Traceability Matrix</h3>
+  <div style="overflow-x:auto;">
+  <table style="width:100%;border-collapse:collapse;font-size:.72rem;min-width:700px;">
+    <thead>
+      <tr style="background:#253048;color:#90CDF4;">
+        <th style="text-align:left;padding:8px 10px;">Story ID</th>
+        <th style="text-align:left;padding:8px 10px;">Epic</th>
+        <th style="text-align:left;padding:8px 10px;">Title</th>
+        <th style="text-align:center;padding:8px 8px;">Priority</th>
+        <th style="text-align:left;padding:8px 10px;">Screen / Module</th>
+        <th style="text-align:center;padding:8px 8px;">Built</th>
+        <th style="text-align:center;padding:8px 8px;">Verified</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${allStories.map((s,i)=>{
+        const priCol=s.priority==='Must Have'?'#FC8181':s.priority==='Should Have'?'#FBD38D':'#90CDF4';
+        return `<tr style="background:${i%2===0?'#1E2A3A':'#182230'};border-bottom:1px solid #2D3748;">
+          <td style="padding:7px 10px;color:${s.epicColor};font-weight:700;font-family:monospace;">${s.id}</td>
+          <td style="padding:7px 10px;color:#A0AEC0;">${s.epicId}</td>
+          <td style="padding:7px 10px;color:#CBD5E0;">${s.title}</td>
+          <td style="padding:7px 8px;text-align:center;"><span style="color:${priCol};font-size:.68rem;font-weight:700;">${s.priority}</span></td>
+          <td style="padding:7px 10px;color:#90CDF4;">${s.screen}</td>
+          <td style="padding:7px 8px;text-align:center;color:#68D391;font-weight:700;">✓</td>
+          <td style="padding:7px 8px;text-align:center;color:#68D391;font-weight:700;">✓</td>
+        </tr>`;
+      }).join('')}
+    </tbody>
+  </table>
+  </div>
+  `;
+}
+
+// ══════════════════════════════════════════════════════════
 // PLATFORM SHOWCASE — FUNCTIONAL OVERVIEW
 // ══════════════════════════════════════════════════════════
 function renderShowcase() {
@@ -4948,129 +5174,191 @@ function renderContracts() {
 // ══════════════════════════════════════════════════════════
 // EARNED VALUE MANAGEMENT ENGINE
 // ══════════════════════════════════════════════════════════
-function renderEVM() {
-  const el = document.querySelector('#evm-content');
-  if(!el) return;
-  const fm = n => '€'+Math.round(Math.abs(n)).toLocaleString();
-  const sc = v => v>=1?'#38A169':v>=0.9?'#D69E2E':'#E53E3E';
-  const evm = evmData.map(p=>{
-    const spi=p.pv>0?p.ev/p.pv:1, cpi=p.ac>0?p.ev/p.ac:1;
-    const sv=p.ev-p.pv, cv=p.ev-p.ac, eac=p.bac/cpi, etc=eac-p.ac;
-    const bv=p.invoiced-p.ev;
-    return {...p,spi,cpi,sv,cv,eac,etc,bv};
-  });
-  const pBAC=evm.reduce((s,p)=>s+p.bac,0), pEV=evm.reduce((s,p)=>s+p.ev,0);
-  const pAC=evm.reduce((s,p)=>s+p.ac,0), pPV=evm.reduce((s,p)=>s+p.pv,0);
-  const pInv=evm.reduce((s,p)=>s+p.invoiced,0);
-  const pSPI=pEV/pPV, pCPI=pEV/pAC, pBV=pInv-pEV;
-  el.innerHTML = `
-  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
-    <div><h5 style="margin:0;">📐 Earned Value Management &amp; Revenue Alignment</h5>
-    <div class="sub" style="margin:0;">ANSI/EIA-748 EVM metrics — earned vs planned vs invoiced across the portfolio</div></div>
-  </div>
-  <div style="background:#1a1a2e;border-radius:12px;padding:18px 20px;margin-bottom:20px;color:#CBD5E0;">
-    <div style="font-size:.68rem;color:#00A9CE;font-weight:800;letter-spacing:.1em;margin-bottom:12px;">EVM METHODOLOGY — KEY TERMS</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;font-size:.76rem;margin-bottom:14px;">
-      ${[
-        {t:'BAC — Budget at Completion',d:'Total approved project budget. The cost ceiling for the project as contracted.'},
-        {t:'PV — Planned Value',d:'Value of work we should have completed by today per the baseline schedule. = BAC × % planned.'},
-        {t:'EV — Earned Value',d:'Value of work actually done. = BAC × % physically complete. This IS recognised revenue.'},
-        {t:'AC — Actual Cost',d:'What we have actually spent to deliver work. Compared to EV to measure cost efficiency.'},
-      ].map(x=>`<div><div style="font-weight:700;color:#90CDF4;margin-bottom:4px;">${x.t}</div>${x.d}</div>`).join('')}
-    </div>
-    <div style="border-top:1px solid #2D3748;padding-top:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;font-size:.76rem;">
-      ${[
-        {t:'SPI = EV ÷ PV',d:'Schedule Performance Index. >1.0 = ahead of plan. <1.0 = behind schedule.'},
-        {t:'CPI = EV ÷ AC',d:'Cost Performance Index. >1.0 = under budget. <1.0 = over budget.'},
-        {t:'EAC = BAC ÷ CPI',d:'Estimate at Completion. Projected final cost if current efficiency continues.'},
-        {t:'Billing Variance = Invoiced − EV',d:'+ve = over-invoiced (cash ahead of work). −ve = under-invoiced (work done, not yet billed).'},
-      ].map(x=>`<div><div style="font-weight:700;color:#F6AD55;margin-bottom:4px;">${x.t}</div>${x.d}</div>`).join('')}
-    </div>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;">
+function renderEVM(){
+  const el=document.querySelector('#evm-content');
+  if(!el)return;
+  const now=new Date('2026-03-07');
+  const cpi=r=>r.ac>0?r.ev/r.ac:1;
+  const spi=r=>r.pv>0?r.ev/r.pv:1;
+  const sv=r=>r.ev-r.pv;
+  const cv=r=>r.ev-r.ac;
+  const eac=r=>r.ac>0?r.bac/cpi(r):r.bac;
+  const etc=r=>eac(r)-r.ac;
+  const bv=r=>r.invoiced-r.ev;
+  const fmt=n=>'€'+Math.abs(Math.round(n)).toLocaleString('en-IE');
+  const fmtS=n=>(n>=0?'+':'-')+'€'+Math.abs(Math.round(n)).toLocaleString('en-IE');
+  const pct=n=>n.toFixed(2);
+  const ragCpi=v=>v>=1?'#48BB78':v>=0.9?'#ECC94B':'#FC8181';
+  const ragSpi=v=>v>=1?'#48BB78':v>=0.9?'#ECC94B':'#FC8181';
+  const ragLbl=v=>v>=1?'On Track':v>=0.9?'At Risk':'Critical';
+  const custColor={'Clearwater Bank':'#3182CE','Atlantic Financial':'#805AD5','SkyBridge Airlines':'#E53E3E','GridCore Energy':'#319795','Broadstone Bank':'#DD6B20','Meridian Foods':'#276749','TerraAir':'#0072B1','Stonewall Holdings':'#97266D'};
+
+  // Portfolio totals
+  const totBac=evmData.reduce((s,r)=>s+r.bac,0);
+  const totPv=evmData.reduce((s,r)=>s+r.pv,0);
+  const totEv=evmData.reduce((s,r)=>s+r.ev,0);
+  const totAc=evmData.reduce((s,r)=>s+r.ac,0);
+  const totInv=evmData.reduce((s,r)=>s+r.invoiced,0);
+  const portCpi=totAc>0?totEv/totAc:1;
+  const portSpi=totPv>0?totEv/totPv:1;
+  const portSv=totEv-totPv;
+  const portCv=totEv-totAc;
+  const portEac=totBac/portCpi;
+  const portBv=totInv-totEv;
+
+  el.innerHTML=`
+  <h2 style="color:#E2E8F0;font-size:1.15rem;font-weight:700;margin:0 0 4px;">📈 Earned Value Management</h2>
+  <p style="color:#718096;font-size:.82rem;margin:0 0 20px;">IFRS 15 / ASC 606 revenue performance · ${evmData.length} projects · As at 07 Mar 2026</p>
+
+  <!-- Portfolio KPI Strip -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:24px;">
     ${[
-      {l:'Portfolio BAC',v:'€'+Number(pBAC).toLocaleString(),s:'Total approved budget',c:'#1B2A4A'},
-      {l:'Earned Value (EV)',v:'€'+Number(Math.round(pEV)).toLocaleString(),s:'Revenue recognised = work done',c:'#2B6CB0'},
-      {l:'Planned Value (PV)',v:'€'+Number(Math.round(pPV)).toLocaleString(),s:'Should have earned by now',c:'#4A5568'},
-      {l:'Portfolio SPI',v:pSPI.toFixed(2),s:pSPI>=1?'⬆ Ahead of schedule':'⬇ Behind schedule',c:sc(pSPI)},
-      {l:'Portfolio CPI',v:pCPI.toFixed(2),s:pCPI>=1?'✓ On/under budget':'⚠ Over budget',c:sc(pCPI)},
-    ].map(k=>`<div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
-      <div style="font-size:.64rem;color:#718096;font-weight:700;margin-bottom:6px;">${k.l.toUpperCase()}</div>
-      <div style="font-size:1.25rem;font-weight:900;color:${k.c};">${k.v}</div>
-      <div style="font-size:.68rem;color:#718096;margin-top:3px;">${k.s}</div></div>`).join('')}
+      {label:'Total BAC',val:fmt(totBac),sub:'Budget at Completion',col:'#90CDF4'},
+      {label:'Planned Value',val:fmt(totPv),sub:`${pct(totPv/totBac*100)}% of BAC`,col:'#BEE3F8'},
+      {label:'Earned Value',val:fmt(totEv),sub:`${pct(totEv/totBac*100)}% of BAC`,col:'#68D391'},
+      {label:'Actual Cost',val:fmt(totAc),sub:`${pct(totAc/totBac*100)}% of BAC`,col:'#FBD38D'},
+      {label:'Total Invoiced',val:fmt(totInv),sub:`${pct(totInv/totBac*100)}% of BAC`,col:'#E9D8FD'},
+      {label:'Portfolio CPI',val:pct(portCpi),sub:ragLbl(portCpi),col:ragCpi(portCpi)},
+      {label:'Portfolio SPI',val:pct(portSpi),sub:ragLbl(portSpi),col:ragSpi(portSpi)},
+      {label:'EAC (forecast)',val:fmt(portEac),sub:fmtS(portEac-totBac)+' vs BAC',col:portEac>totBac?'#FC8181':'#68D391'},
+    ].map(k=>`
+      <div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:9px;padding:14px;border-top:3px solid ${k.col};">
+        <div style="font-size:.68rem;color:#718096;font-weight:700;letter-spacing:.08em;margin-bottom:6px;">${k.label}</div>
+        <div style="font-size:1.4rem;font-weight:800;color:${k.col};">${k.val}</div>
+        <div style="font-size:.72rem;color:#A0AEC0;margin-top:3px;">${k.sub}</div>
+      </div>
+    `).join('')}
   </div>
-  <div style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;">
-    <div style="padding:12px 16px;background:#F7FAFC;border-bottom:1px solid var(--border);font-size:.74rem;font-weight:800;color:#2D3748;">PROJECT-LEVEL EVM METRICS (as at 7 Mar 2026)</div>
-    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.73rem;min-width:1100px;">
-      <thead><tr style="background:#1B2A4A;color:#fff;">
-        <th style="padding:9px 12px;text-align:left;">Project</th>
-        <th style="padding:9px 12px;text-align:left;">Customer</th>
-        <th style="padding:9px 12px;text-align:right;">BAC</th>
-        <th style="padding:9px 12px;text-align:right;">PV</th>
-        <th style="padding:9px 12px;text-align:right;">EV</th>
-        <th style="padding:9px 12px;text-align:right;">AC</th>
-        <th style="padding:9px 12px;text-align:center;">SPI</th>
-        <th style="padding:9px 12px;text-align:center;">CPI</th>
-        <th style="padding:9px 12px;text-align:right;">EAC</th>
-        <th style="padding:9px 12px;text-align:right;">Invoiced</th>
-        <th style="padding:9px 12px;text-align:right;">Billing Var</th>
-      </tr></thead><tbody>
-      ${evm.map((p,i)=>`<tr style="border-bottom:1px solid var(--border);background:${i%2?'#FAFAFA':'#fff'};">
-        <td style="padding:9px 12px;font-weight:600;color:#2D3748;max-width:155px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</td>
-        <td style="padding:9px 12px;color:#4A5568;font-size:.7rem;">${p.customer}</td>
-        <td style="padding:9px 12px;text-align:right;font-weight:700;">${fm(p.bac)}</td>
-        <td style="padding:9px 12px;text-align:right;color:#4A5568;">${fm(p.pv)}</td>
-        <td style="padding:9px 12px;text-align:right;color:#2B6CB0;font-weight:700;">${fm(p.ev)}</td>
-        <td style="padding:9px 12px;text-align:right;color:#4A5568;">${fm(p.ac)}</td>
-        <td style="padding:9px 12px;text-align:center;"><span style="background:${sc(p.spi)}20;color:${sc(p.spi)};font-weight:800;padding:3px 8px;border-radius:4px;">${p.spi.toFixed(2)}</span></td>
-        <td style="padding:9px 12px;text-align:center;"><span style="background:${sc(p.cpi)}20;color:${sc(p.cpi)};font-weight:800;padding:3px 8px;border-radius:4px;">${p.cpi.toFixed(2)}</span></td>
-        <td style="padding:9px 12px;text-align:right;color:${p.eac>p.bac?'#C53030':'#276749'};font-weight:700;">${fm(p.eac)}</td>
-        <td style="padding:9px 12px;text-align:right;color:#2B6CB0;">${fm(p.invoiced)}</td>
-        <td style="padding:9px 12px;text-align:right;font-weight:700;color:${p.bv<-20000?'#C53030':p.bv>20000?'#276749':'#4A5568'};">${p.bv>=0?'+':'−'}${fm(p.bv)}</td>
-      </tr>`).join('')}
-      <tr style="background:#1B2A4A;color:#fff;font-weight:800;">
-        <td style="padding:9px 12px;" colspan="2">PORTFOLIO TOTAL</td>
-        <td style="padding:9px 12px;text-align:right;">${fm(pBAC)}</td>
-        <td style="padding:9px 12px;text-align:right;">${fm(pPV)}</td>
-        <td style="padding:9px 12px;text-align:right;">${fm(pEV)}</td>
-        <td style="padding:9px 12px;text-align:right;">${fm(pAC)}</td>
-        <td style="padding:9px 12px;text-align:center;"><span style="color:${sc(pSPI)};">${pSPI.toFixed(2)}</span></td>
-        <td style="padding:9px 12px;text-align:center;"><span style="color:${sc(pCPI)};">${pCPI.toFixed(2)}</span></td>
-        <td style="padding:9px 12px;text-align:right;">${fm(pBAC/pCPI)}</td>
-        <td style="padding:9px 12px;text-align:right;">${fm(pInv)}</td>
-        <td style="padding:9px 12px;text-align:right;color:${pBV<0?'#FC8181':'#68D391'};">${pBV>=0?'+':'−'}${fm(pBV)}</td>
+
+  <!-- IFRS 15 Key -->
+  <div style="background:#1a2744;border:1px solid #2C5282;border-radius:8px;padding:12px 16px;margin-bottom:20px;display:flex;flex-wrap:wrap;gap:16px;font-size:.75rem;">
+    <span style="color:#90CDF4;font-weight:700;">📐 IFRS 15 Key:</span>
+    <span style="color:#A0AEC0;"><strong style="color:#68D391;">EV</strong> = Revenue Recognised</span>
+    <span style="color:#A0AEC0;"><strong style="color:#FBD38D;">BV+</strong> = Contract Asset (under-billed)</span>
+    <span style="color:#A0AEC0;"><strong style="color:#FC8181;">BV-</strong> = Contract Liability (over-billed)</span>
+    <span style="color:#A0AEC0;"><strong style="color:#90CDF4;">CPI &gt; 1</strong> = Under budget</span>
+    <span style="color:#A0AEC0;"><strong style="color:#E9D8FD;">SPI &gt; 1</strong> = Ahead of schedule</span>
+  </div>
+
+  <!-- EV / SPI / CPI visual bars (portfolio level) -->
+  <div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:9px;padding:16px;margin-bottom:24px;">
+    <div style="font-size:.8rem;font-weight:700;color:#E2E8F0;margin-bottom:12px;">Portfolio Performance Bars</div>
+    ${[
+      {label:'Budget Consumed (AC/BAC)',pct:totAc/totBac*100,col:'#FBD38D'},
+      {label:'Work Earned (EV/BAC)',pct:totEv/totBac*100,col:'#68D391'},
+      {label:'Work Planned (PV/BAC)',pct:totPv/totBac*100,col:'#90CDF4'},
+      {label:'Amount Invoiced (Inv/BAC)',pct:totInv/totBac*100,col:'#E9D8FD'},
+    ].map(b=>`
+      <div style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;font-size:.73rem;color:#A0AEC0;margin-bottom:4px;">
+          <span>${b.label}</span><span style="color:${b.col};font-weight:600;">${b.pct.toFixed(1)}%</span>
+        </div>
+        <div style="background:#2D3748;border-radius:4px;height:10px;overflow:hidden;">
+          <div style="width:${Math.min(100,b.pct)}%;height:100%;background:${b.col};border-radius:4px;transition:width .6s;"></div>
+        </div>
+      </div>
+    `).join('')}
+  </div>
+
+  <!-- Project-level EVM table -->
+  <div style="font-size:.88rem;font-weight:700;color:#E2E8F0;margin-bottom:10px;">Project EVM Detail</div>
+  <div style="overflow-x:auto;">
+  <table style="width:100%;border-collapse:collapse;font-size:.76rem;">
+    <thead>
+      <tr style="background:#253048;color:#90CDF4;text-align:right;">
+        <th style="text-align:left;padding:9px 10px;font-weight:700;min-width:180px;">Project</th>
+        <th style="padding:9px 10px;">BAC</th>
+        <th style="padding:9px 10px;">PV</th>
+        <th style="padding:9px 10px;">EV</th>
+        <th style="padding:9px 10px;">AC</th>
+        <th style="padding:9px 10px;">SV</th>
+        <th style="padding:9px 10px;">CV</th>
+        <th style="padding:9px 8px;min-width:44px;">SPI</th>
+        <th style="padding:9px 8px;min-width:44px;">CPI</th>
+        <th style="padding:9px 10px;">EAC</th>
+        <th style="padding:9px 10px;">Invoiced</th>
+        <th style="padding:9px 10px;">Biling Var.</th>
+        <th style="padding:9px 10px;text-align:center;">Status</th>
       </tr>
-      </tbody></table></div>
+    </thead>
+    <tbody>
+      ${evmData.map((r,i)=>{
+        const c=cpi(r),s=spi(r),svv=sv(r),cvv=cv(r),eacv=eac(r),bvv=bv(r);
+        const cc=ragCpi(c),sc=ragSpi(s);
+        const row=i%2===0?'#1E2A3A':'#182230';
+        const cCol=custColor[r.customer]||'#718096';
+        return `<tr style="background:${row};border-bottom:1px solid #2D3748;">
+          <td style="padding:8px 10px;">
+            <div style="font-weight:600;color:#E2E8F0;">${r.name.length>28?r.name.substring(0,28)+'…':r.name}</div>
+            <div style="font-size:.68rem;color:${cCol};margin-top:2px;">● ${r.customer}</div>
+          </td>
+          <td style="padding:8px 10px;text-align:right;color:#CBD5E0;">${fmt(r.bac)}</td>
+          <td style="padding:8px 10px;text-align:right;color:#90CDF4;">${fmt(r.pv)}</td>
+          <td style="padding:8px 10px;text-align:right;color:#68D391;">${fmt(r.ev)}</td>
+          <td style="padding:8px 10px;text-align:right;color:#FBD38D;">${fmt(r.ac)}</td>
+          <td style="padding:8px 10px;text-align:right;color:${svv>=0?'#68D391':'#FC8181'};">${fmtS(svv)}</td>
+          <td style="padding:8px 10px;text-align:right;color:${cvv>=0?'#68D391':'#FC8181'};">${fmtS(cvv)}</td>
+          <td style="padding:8px 8px;text-align:center;">
+            <span style="background:${sc}22;color:${sc};border-radius:6px;padding:3px 7px;font-weight:700;">${pct(s)}</span>
+          </td>
+          <td style="padding:8px 8px;text-align:center;">
+            <span style="background:${cc}22;color:${cc};border-radius:6px;padding:3px 7px;font-weight:700;">${pct(c)}</span>
+          </td>
+          <td style="padding:8px 10px;text-align:right;color:${eacv>r.bac?'#FC8181':'#68D391'};">${fmt(eacv)}</td>
+          <td style="padding:8px 10px;text-align:right;color:#E9D8FD;">${fmt(r.invoiced)}</td>
+          <td style="padding:8px 10px;text-align:right;color:${bvv>=0?'#FBD38D':'#FC8181'};">${fmtS(bvv)}</td>
+          <td style="padding:8px 10px;text-align:center;">
+            <span style="font-size:.68rem;font-weight:700;background:${cc}22;color:${cc};padding:3px 8px;border-radius:8px;">${ragLbl(c)}</span>
+          </td>
+        </tr>`;
+      }).join('')}
+    </tbody>
+    <tfoot>
+      <tr style="background:#253048;font-weight:700;color:#90CDF4;border-top:2px solid #4A5568;">
+        <td style="padding:9px 10px;color:#E2E8F0;">PORTFOLIO TOTAL</td>
+        <td style="padding:9px 10px;text-align:right;">${fmt(totBac)}</td>
+        <td style="padding:9px 10px;text-align:right;">${fmt(totPv)}</td>
+        <td style="padding:9px 10px;text-align:right;">${fmt(totEv)}</td>
+        <td style="padding:9px 10px;text-align:right;">${fmt(totAc)}</td>
+        <td style="padding:9px 10px;text-align:right;color:${portSv>=0?'#68D391':'#FC8181'};">${fmtS(portSv)}</td>
+        <td style="padding:9px 10px;text-align:right;color:${portCv>=0?'#68D391':'#FC8181'};">${fmtS(portCv)}</td>
+        <td style="padding:9px 8px;text-align:center;color:${ragSpi(portSpi)};">${pct(portSpi)}</td>
+        <td style="padding:9px 8px;text-align:center;color:${ragCpi(portCpi)};">${pct(portCpi)}</td>
+        <td style="padding:9px 10px;text-align:right;color:${portEac>totBac?'#FC8181':'#68D391'};">${fmt(portEac)}</td>
+        <td style="padding:9px 10px;text-align:right;">${fmt(totInv)}</td>
+        <td style="padding:9px 10px;text-align:right;color:${portBv>=0?'#FBD38D':'#FC8181'};">${fmtS(portBv)}</td>
+        <td style="padding:9px 10px;text-align:center;color:${ragCpi(portCpi)};font-size:.72rem;">${ragLbl(portCpi)}</td>
+      </tr>
+    </tfoot>
+  </table>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
-    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;">
-      <div style="font-size:.74rem;font-weight:800;color:#C53030;margin-bottom:12px;">⬇ UNDER-BILLED — Work Done but Not Yet Invoiced</div>
-      ${evm.filter(p=>p.bv<-5000).map(p=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F7FAFC;">
-        <div><div style="font-size:.76rem;font-weight:600;color:#2D3748;">${p.name.length>26?p.name.substring(0,24)+'…':p.name}</div>
-        <div style="font-size:.68rem;color:#718096;">${p.customer}</div></div>
-        <div style="text-align:right;"><div style="font-size:.8rem;font-weight:800;color:#C53030;">−${fm(Math.abs(p.bv))}</div>
-        <div style="font-size:.66rem;color:#718096;">Contract asset</div></div>
-      </div>`).join('')}
-      <div style="margin-top:10px;padding:8px;background:#FFF5F5;border-radius:6px;font-size:.72rem;color:#9B2C2C;"><strong>ASC 606 / IFRS 15:</strong> Recognise revenue = EV. Record unbilled receivable (contract asset) for the under-billed amount.</div>
-    </div>
-    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;">
-      <div style="font-size:.74rem;font-weight:800;color:#276749;margin-bottom:12px;">⬆ OVER-BILLED — Invoiced Ahead of Earned Value</div>
-      ${evm.filter(p=>p.bv>5000).map(p=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F7FAFC;">
-        <div><div style="font-size:.76rem;font-weight:600;color:#2D3748;">${p.name.length>26?p.name.substring(0,24)+'…':p.name}</div>
-        <div style="font-size:.68rem;color:#718096;">${p.customer}</div></div>
-        <div style="text-align:right;"><div style="font-size:.8rem;font-weight:800;color:#276749;">+${fm(p.bv)}</div>
-        <div style="font-size:.66rem;color:#718096;">Deferred revenue</div></div>
-      </div>`).join('')}
-      <div style="margin-top:10px;padding:8px;background:#F0FFF4;border-radius:6px;font-size:.72rem;color:#276749;"><strong>ASC 606 / IFRS 15:</strong> Only recognise revenue = EV. Excess invoice = contract liability (deferred revenue) until work is performed.</div>
+
+  <!-- EVM Glossary -->
+  <div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:9px;padding:16px;margin-top:20px;">
+    <div style="font-size:.8rem;font-weight:700;color:#E2E8F0;margin-bottom:10px;">📖 EVM Glossary</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;">
+      ${[
+        ['BAC','Budget at Completion — total approved budget'],
+        ['PV','Planned Value — budgeted cost of scheduled work'],
+        ['EV','Earned Value — budgeted cost of work performed (= IFRS 15 revenue)'],
+        ['AC','Actual Cost — actual cost of work performed'],
+        ['SV','Schedule Variance — EV minus PV (negative = behind)'],
+        ['CV','Cost Variance — EV minus AC (negative = over budget)'],
+        ['SPI','Schedule Performance Index — EV/PV (1.0 = on schedule)'],
+        ['CPI','Cost Performance Index — EV/AC (1.0 = on budget)'],
+        ['EAC','Estimate at Completion — BAC/CPI (forecast final cost)'],
+        ['ETC','Estimate to Complete — EAC minus AC'],
+        ['BV','Billing Variance — Invoiced minus EV (+ = contract asset, - = liability)'],
+      ].map(([k,v])=>`
+        <div style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid #2D3748;">
+          <span style="color:#90CDF4;font-weight:700;font-size:.75rem;min-width:36px;">${k}</span>
+          <span style="color:#A0AEC0;font-size:.73rem;line-height:1.4;">${v}</span>
+        </div>
+      `).join('')}
     </div>
   </div>
-  <div style="background:#EBF4FF;border:1px solid #90CDF4;border-radius:12px;padding:18px;">
-    <div style="font-size:.76rem;font-weight:800;color:#2B6CB0;margin-bottom:8px;">📋 Portfolio Revenue Recognition Summary</div>
-    <div style="font-size:.8rem;color:#2C5282;line-height:1.8;">
-      <strong>Portfolio Earned Value (EV): €${Number(Math.round(pEV)).toLocaleString()}</strong> — This is the revenue you have <em>earned</em> and can recognise under IFRS 15/ASC 606 regardless of what has been invoiced.<br>
-      <strong>Net Billing Variance: ${pBV>=0?'+':'−'}${fm(Math.abs(pBV))}</strong> — ${pBV<0?'The portfolio is <strong>net under-billed</strong>. You have earned more than you have invoiced. Accelerate invoicing on under-billed projects to improve cash flow and reduce contract asset balances.':'The portfolio is <strong>net over-billed</strong>. Cash received exceeds work done — record deferred revenue on balance sheet and monitor closely.'}<br>
-      <strong>Portfolio EAC: €${Number(Math.round(pBAC/pCPI)).toLocaleString()}</strong> vs BAC €${Number(pBAC).toLocaleString()} — ${pBAC/pCPI>pBAC?'⚠ Portfolio is trending over budget. Review cost control measures on under-performing projects.':'✓ Portfolio tracking within budget at current cost performance.'}</div>
-  </div>`;}
+  `;
+}
 
 // STATUS REPORT ENGINE
 // ══════════════════════════════════════════════════════════
