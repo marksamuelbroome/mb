@@ -407,6 +407,7 @@
   <div class="nav-item" id="nav-admin" onclick="showPage('pg-roles')"><span class="ico">⚙️</span><span class="nav-label"> Admin</span></div>
   <div class="nav-item" id="nav-demo" onclick="showPage('pg-demo')"><span class="ico">🎬</span><span class="nav-label"> Platform Demo</span></div>
   <div class="nav-item" id="nav-userstories" onclick="showPage('pg-userstories')"><span class="ico">📝</span><span class="nav-label"> User Stories</span></div>
+  <div class="nav-item" id="nav-access-log" onclick="showPage('pg-access-log')"><span class="ico">🔐</span><span class="nav-label"> Access Log</span></div>
   <div class="nav-item" id="nav-showcase" onclick="showPage('pg-showcase')"><span class="ico">🎯</span><span class="nav-label"> Platform Showcase</span></div>
   <div class="nav-item" id="nav-tutorial" onclick="showPage('pg-tutorial')"><span class="ico">📖</span><span class="nav-label"> Tutorial</span></div>
   <div class="nav-item" id="nav-faq" onclick="showPage('pg-faq')"><span class="ico">❓</span><span class="nav-label"> FAQ</span></div>
@@ -1120,6 +1121,7 @@
       <div id="pg-showcase" class="page"><div id="showcase-content"></div></div>
       <div id="pg-demo" class="page"><div id="demo-content"></div></div>
 <div id="pg-userstories" class="page"><div id="userstories-content"></div></div>
+<div id="pg-access-log" class="page"><div id="access-log-content"></div></div>
       <div id="pg-coapprove" class="page"><div id="coapprove-content"></div></div>
       <div id="pg-change-monitor" class="page"><div id="change-monitor-content"></div></div>
       <div id="pg-ado" class="page"><div id="ado-content"></div></div>
@@ -1323,6 +1325,7 @@ const navMap = {
   'pg-tech':'nav-tech',
   'pg-erd':'nav-erd',
   'pg-userstories':'nav-userstories',
+  'pg-access-log':'nav-access-log',
   'pg-resourcing':'nav-resources',
 };
 
@@ -1366,6 +1369,7 @@ function showPage(id){
   if(id==='pg-showcase') renderShowcase();
   if(id==='pg-demo') renderDemo();
   if(id==='pg-userstories') renderUserStories();
+  if(id==='pg-access-log') renderAccessLog();
   if(id==='pg-coapprove') renderCoApprove();
   if(id==='pg-change-monitor') renderChangeMonitor();
   window.scrollTo(0,0);
@@ -1378,6 +1382,155 @@ function toggleSidebar(){
   btn.textContent=d.classList.contains('collapsed')?'→':'☰';
 }
 
+// ══════════════════════════════════════════════════════════
+// VISITOR ACCESS LOG
+// ══════════════════════════════════════════════════════════
+// Paste your Discord webhook URL here (see instructions in Access Log page)
+const DISCORD_WEBHOOK = '';
+
+async function logVisit(outcome){
+  const ts = new Date().toISOString();
+  const ua = navigator.userAgent;
+  const ref = document.referrer || 'Direct';
+  const screen = window.screen.width+'×'+window.screen.height;
+  const lang = navigator.language;
+
+  // Get IP + geo (free, no auth, 30K req/month)
+  let ip='unknown', city='?', country='?', org='?';
+  try {
+    const r = await fetch('https://api.ipapi.is/?q&fields=ip,location,company');
+    if(r.ok){
+      const d = await r.json();
+      ip      = d.ip || 'unknown';
+      city    = d.location?.city || '?';
+      country = d.location?.country || '?';
+      org     = d.company?.name || d.location?.org || '?';
+    }
+  } catch(e){}
+
+  const entry = {ts, ip, city, country, org, ua, ref, screen, lang, outcome};
+
+  // Save to localStorage
+  const log = JSON.parse(localStorage.getItem('mb-access-log')||'[]');
+  log.unshift(entry);
+  if(log.length > 200) log.pop();
+  localStorage.setItem('mb-access-log', JSON.stringify(log));
+
+  // Fire Discord webhook if configured
+  if(DISCORD_WEBHOOK){
+    const emoji = outcome==='login' ? '🟢' : outcome==='fail' ? '🔴' : '👁';
+    const label = outcome==='login' ? 'Successful Login' : outcome==='fail' ? 'Failed Login Attempt' : 'Page Visit';
+    const payload = {
+      embeds:[{
+        title: `${emoji} MB PSA — ${label}`,
+        color: outcome==='login' ? 0x48BB78 : outcome==='fail' ? 0xFC8181 : 0x90CDF4,
+        fields:[
+          {name:'🌐 IP Address',  value:'`'+ip+'`',            inline:true},
+          {name:'📍 Location',    value:`${city}, ${country}`, inline:true},
+          {name:'🏢 Organisation',value:org,                   inline:true},
+          {name:'🕐 Timestamp',   value:ts.replace('T',' ').substring(0,19)+' UTC', inline:true},
+          {name:'📱 Screen',      value:screen,                inline:true},
+          {name:'🌍 Language',    value:lang,                  inline:true},
+          {name:'🔗 Referrer',    value:ref.substring(0,100),  inline:false},
+          {name:'🖥 Browser',     value:ua.substring(0,120),   inline:false},
+        ],
+        footer:{text:'MB PSA Access Logger'},
+        timestamp: ts
+      }]
+    };
+    fetch(DISCORD_WEBHOOK, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)}).catch(()=>{});
+  }
+}
+
+// Log page visit on load (before login)
+logVisit('visit');
+
+function renderAccessLog(){
+  const el = document.getElementById('access-log-content');
+  if(!el) return;
+  const log = JSON.parse(localStorage.getItem('mb-access-log')||'[]');
+  const logins = log.filter(e=>e.outcome==='login').length;
+  const fails  = log.filter(e=>e.outcome==='fail').length;
+  const ips    = [...new Set(log.map(e=>e.ip))].length;
+
+  const webhookConfigured = !!DISCORD_WEBHOOK;
+
+  el.innerHTML=`
+  <h2 style="color:#E2E8F0;font-size:1.1rem;font-weight:700;margin:0 0 4px;">🔐 Visitor Access Log</h2>
+  <p style="color:#718096;font-size:.82rem;margin:0 0 18px;">Visitor IPs, locations and login events · stored in browser local storage${webhookConfigured?' · Discord notifications active':''}</p>
+
+  <!-- Discord setup banner (shown if not configured) -->
+  ${!webhookConfigured ? `
+  <div style="background:#1a2744;border:1px solid #2C5282;border-left:4px solid #90CDF4;border-radius:8px;padding:14px 16px;margin-bottom:18px;">
+    <div style="font-size:.82rem;font-weight:700;color:#90CDF4;margin-bottom:8px;">⚙️ Enable Discord Notifications (real-time IP alerts to your phone)</div>
+    <div style="font-size:.78rem;color:#A0AEC0;line-height:1.7;">
+      1. Open <strong style="color:#E2E8F0;">Discord</strong> → Create a free server (or use existing) → any channel → <strong style="color:#E2E8F0;">Edit Channel → Integrations → Webhooks → New Webhook → Copy URL</strong><br/>
+      2. Tell me your webhook URL (starts with <code style="color:#90CDF4;">https://discord.com/api/webhooks/…</code>)<br/>
+      3. I'll add it to the app — you'll get a real-time Discord alert for every visitor 🔔
+    </div>
+  </div>` : `
+  <div style="background:#1a3321;border:1px solid #276749;border-left:4px solid #68D391;border-radius:8px;padding:10px 16px;margin-bottom:18px;font-size:.8rem;color:#68D391;font-weight:600;">
+    ✅ Discord webhook active — real-time notifications enabled
+  </div>`}
+
+  <!-- KPIs -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px;">
+    ${[
+      {label:'Total Events',val:log.length,col:'#90CDF4'},
+      {label:'Unique IPs',val:ips,col:'#68D391'},
+      {label:'Successful Logins',val:logins,col:'#48BB78'},
+      {label:'Failed Attempts',val:fails,col:'#FC8181'},
+    ].map(k=>`
+      <div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:8px;padding:12px;border-top:3px solid ${k.col};text-align:center;">
+        <div style="font-size:1.6rem;font-weight:800;color:${k.col};">${k.val}</div>
+        <div style="font-size:.7rem;color:#718096;margin-top:3px;">${k.label}</div>
+      </div>
+    `).join('')}
+  </div>
+
+  <!-- Log table -->
+  ${log.length===0 ? `<div style="color:#718096;text-align:center;padding:40px;background:#1E2A3A;border-radius:8px;">No visits recorded yet — share the link and check back!</div>` : `
+  <div style="overflow-x:auto;">
+  <table style="width:100%;border-collapse:collapse;font-size:.74rem;">
+    <thead>
+      <tr style="background:#253048;color:#90CDF4;">
+        <th style="text-align:left;padding:8px 10px;">Timestamp (UTC)</th>
+        <th style="text-align:left;padding:8px 10px;">IP Address</th>
+        <th style="text-align:left;padding:8px 10px;">Location</th>
+        <th style="text-align:left;padding:8px 10px;">Organisation</th>
+        <th style="text-align:center;padding:8px 8px;">Event</th>
+        <th style="text-align:left;padding:8px 10px;">Referrer</th>
+        <th style="text-align:left;padding:8px 10px;">Screen</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${log.map((e,i)=>{
+        const evCol=e.outcome==='login'?'#68D391':e.outcome==='fail'?'#FC8181':'#90CDF4';
+        const evLabel=e.outcome==='login'?'✅ Login':e.outcome==='fail'?'❌ Failed':'👁 Visit';
+        const ts=e.ts?e.ts.replace('T',' ').substring(0,19):'?';
+        return `<tr style="background:${i%2===0?'#1E2A3A':'#182230'};border-bottom:1px solid #2D3748;">
+          <td style="padding:7px 10px;color:#A0AEC0;font-family:monospace;">${ts}</td>
+          <td style="padding:7px 10px;color:#E2E8F0;font-family:monospace;">${e.ip||'?'}</td>
+          <td style="padding:7px 10px;color:#CBD5E0;">${e.city||'?'}, ${e.country||'?'}</td>
+          <td style="padding:7px 10px;color:#A0AEC0;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${e.org||'?'}</td>
+          <td style="padding:7px 8px;text-align:center;"><span style="color:${evCol};font-size:.7rem;font-weight:700;">${evLabel}</span></td>
+          <td style="padding:7px 10px;color:#718096;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${(e.ref||'Direct').replace('https://','')}</td>
+          <td style="padding:7px 10px;color:#718096;">${e.screen||'?'}</td>
+        </tr>`;
+      }).join('')}
+    </tbody>
+  </table>
+  </div>
+  <div style="margin-top:10px;text-align:right;">
+    <button onclick="localStorage.removeItem('mb-access-log');renderAccessLog();" style="background:#742A2A;border:none;color:#FED7D7;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.75rem;">🗑 Clear Log</button>
+  </div>`}
+
+  <div style="margin-top:16px;background:#1A2332;border:1px solid #2D3748;border-radius:8px;padding:12px 14px;font-size:.74rem;color:#718096;">
+    ⚠️ <strong style="color:#A0AEC0;">Note:</strong> This log is stored in <em>this browser's</em> local storage. To see all visitors across devices, configure the Discord webhook above — each visitor's IP and details will be sent to your Discord channel in real time.
+  </div>
+  `;
+}
+
 function checkPassword(){
   const input = document.getElementById('login-password');
   const error = document.getElementById('login-error');
@@ -1385,8 +1538,10 @@ function checkPassword(){
   const correct = atob('TUIyMDI2');
   if(input.value === correct){
     sessionStorage.setItem('mb-auth','1');
+    logVisit('login');
     showApp();
   } else {
+    logVisit('fail');
     error.style.display = 'block';
     input.style.borderColor = '#E53E3E';
     input.value = '';
