@@ -1402,10 +1402,30 @@ const NTFY_TOPIC = 'mb-psa-access-mbroome7k2m';
 
 async function logVisit(outcome, visitorName){
   const ts = new Date().toISOString();
-  const ua = navigator.userAgent;
-  const ref = document.referrer || 'Direct';
-  const screen = window.screen.width+'×'+window.screen.height;
-  const lang = navigator.language;
+  const ua       = navigator.userAgent;
+  const ref      = document.referrer || 'Direct';
+  const scr      = window.screen.width+'×'+window.screen.height;
+  const lang     = navigator.language;
+  const tz       = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const platform = navigator.platform || '?';
+  const cores    = navigator.hardwareConcurrency || '?';
+  const mem      = navigator.deviceMemory ? navigator.deviceMemory+'GB RAM' : '?';
+  const conn     = navigator.connection ? (navigator.connection.effectiveType||'?')+' / '+Math.round(navigator.connection.downlink||0)+'Mbps' : '?';
+  const mobile   = /Mobi|Android|iPhone|iPad/i.test(ua) ? 'Mobile' : 'Desktop';
+  // Parse browser name cleanly
+  let browser = 'Unknown';
+  if(/Edg\//.test(ua)) browser='Edge';
+  else if(/Chrome\//.test(ua)) browser='Chrome';
+  else if(/Safari\//.test(ua)&&!/Chrome/.test(ua)) browser='Safari';
+  else if(/Firefox\//.test(ua)) browser='Firefox';
+  // Parse OS
+  let os = 'Unknown';
+  if(/Windows NT/.test(ua)) os='Windows';
+  else if(/Mac OS X/.test(ua)) os='macOS';
+  else if(/iPhone|iPad/.test(ua)) os='iOS';
+  else if(/Android/.test(ua)) os='Android';
+  else if(/Linux/.test(ua)) os='Linux';
+  const screen = scr;
 
   // Get IP + geo (free, no auth, 30K req/month)
   let ip='unknown', city='?', country='?', org='?';
@@ -1421,7 +1441,7 @@ async function logVisit(outcome, visitorName){
   } catch(e){}
 
   const name = visitorName || '(page view)';
-  const entry = {ts, ip, city, country, org, ua, ref, screen, lang, outcome, name};
+  const entry = {ts, ip, city, country, org, ua, ref, screen, lang, outcome, name, tz, browser, os, mobile, cores, mem, conn, platform};
 
   // Save to localStorage
   const log = JSON.parse(localStorage.getItem('mb-access-log')||'[]');
@@ -1437,21 +1457,30 @@ async function logVisit(outcome, visitorName){
     if(NTFY_TOPIC){
       fetch(`https://ntfy.sh/${NTFY_TOPIC}`,{
         method:'POST',
-        headers:{'Title':`MB PSA — ${visName} just accessed the site`,'Priority':'default','Tags':'wave'},
-        body:`IP: ${ip} · ${city}, ${country}\nOrg: ${org.substring(0,60)}\nTime: ${ts.replace('T',' ').substring(0,19)} UTC`
+        headers:{'Title':`👤 ${visName} just opened MB PSA`,'Priority':'default','Tags':'wave'},
+        body:[
+          `📍 ${city}, ${country}  •  IP: ${ip}`,
+          `🏢 ${org.substring(0,60)}`,
+          `💻 ${browser} on ${os} (${mobile})`,
+          `🌐 ${tz}  •  ${cores} cores  •  ${mem}`,
+          `🔗 Via: ${ref.replace('https://','').substring(0,60)}`,
+          `🕐 ${ts.replace('T',' ').substring(0,19)} UTC`
+        ].join('\n')
       }).catch(()=>{});
     }
 
-    // Email alert via EmailJS (free, 200/month)
-    if(window.emailjs){
+    // Email alert via EmailJS (free, 200/month — see Access Log page to set up)
+    if(window.emailjs && window.emailjs._userID !== 'YOUR_PUBLIC_KEY'){
       emailjs.send('mb_psa_service','mb_psa_template',{
-        visitor_name: visName,
-        visitor_ip:   ip,
-        visitor_city: city,
-        visitor_country: country,
-        visitor_org:  org,
-        visit_time:   ts.replace('T',' ').substring(0,19)+' UTC',
-        visit_ref:    ref,
+        visitor_name:    visName,
+        visitor_ip:      ip,
+        visitor_city:    `${city}, ${country}`,
+        visitor_org:     org,
+        visitor_device:  `${browser} on ${os} (${mobile})`,
+        visitor_tz:      tz,
+        visitor_hw:      `${cores} cores · ${mem} · ${conn}`,
+        visit_time:      ts.replace('T',' ').substring(0,19)+' UTC',
+        visit_ref:       ref,
       }).catch(()=>{});
     }
   }
