@@ -142,14 +142,17 @@
 
   /* ── Login ── */
   .login-bg{min-height:100vh;background:linear-gradient(135deg,var(--navy) 0%,#2a3f6e 50%,var(--teal) 100%);
-    display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;box-sizing:border-box;}
-  .login-card{background:#fff;border-radius:16px;padding:28px 36px;text-align:center;
-    box-shadow:0 24px 60px rgba(0,0,0,.3);width:100%;max-width:580px;}
-  .login-logo{width:48px;height:48px;background:linear-gradient(135deg,var(--navy),var(--teal));
-    border-radius:12px;display:flex;align-items:center;justify-content:center;
-    color:#fff;font-size:22px;font-weight:700;margin:0 auto 12px;}
-  .login-title{font-size:1.3rem;font-weight:700;color:var(--navy);margin-bottom:4px;}
-  .login-sub{color:var(--muted);font-size:.82rem;margin-bottom:0;}
+    display:flex;align-items:center;justify-content:center;padding:20px 16px;box-sizing:border-box;}
+  .login-card{background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.3);
+    width:95%;max-width:900px;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;}
+  .login-left{background:linear-gradient(160deg,#0f2044 0%,#1a3a6b 60%,#0e7490 100%);
+    padding:36px 32px;color:#fff;text-align:left;display:flex;flex-direction:column;justify-content:space-between;}
+  .login-right{padding:32px 36px;display:flex;flex-direction:column;justify-content:center;}
+  .login-logo{width:44px;height:44px;background:rgba(255,255,255,.15);border-radius:10px;
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:700;margin-bottom:16px;}
+  .login-title{font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:4px;}
+  .login-sub{color:rgba(255,255,255,.65);font-size:.82rem;margin-bottom:0;}
+  @media(max-width:640px){.login-card{grid-template-columns:1fr;}.login-left{padding:24px;}.login-right{padding:24px;}}
   .ms-btn{width:100%;padding:14px;background:var(--teal);color:#fff;border:none;
     border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer;
     display:flex;align-items:center;justify-content:center;gap:12px;transition:background .2s;}
@@ -254,68 +257,75 @@
 <body>
 
 <!-- ═══════════════════════════════════════════════════ LOGIN ═══ -->
-<div id="pg-login" class="page active" style="position:fixed;inset:0;z-index:999;background:#fff;">
+<div id="pg-login" class="page active" style="position:fixed;inset:0;z-index:999;background:#0f2044;">
   <div class="login-bg" style="min-height:100vh;">
     <div class="login-card">
-      <div class="login-logo">C</div>
-      <div class="login-title">MB PSA</div>
-      <div class="login-sub">Professional Services Accounting</div>
 
-      <!-- About blurb -->
-      <div style="width:100%;margin:14px 0 0;text-align:left;">
-        <div style="font-size:.82rem;font-weight:700;color:#2d3748;margin-bottom:6px;display:flex;align-items:center;gap:7px;">
-          <span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:#00A9CE;border-radius:50%;color:#fff;font-size:.68rem;font-weight:800;flex-shrink:0;">MB</span>
-          Built by Mark Broome
+      <!-- LEFT COLUMN — about -->
+      <div class="login-left">
+        <div>
+          <div class="login-logo">C</div>
+          <div class="login-title">MB PSA</div>
+          <div class="login-sub" style="margin-bottom:20px;">Professional Services Accounting</div>
+
+          <div style="font-size:.75rem;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.08em;margin-bottom:10px;">BUILT BY MARK BROOME</div>
+          <p style="font-size:.82rem;color:rgba(255,255,255,.85);line-height:1.7;margin:0 0 12px;">
+            With over 25 years in professional services delivery — ERP implementations, programme management and finance transformation — I built this platform to demonstrate what <strong style="color:#67e8f9;">modern AI tooling can produce</strong> in a fraction of traditional development time.
+          </p>
+          <p style="font-size:.82rem;color:rgba(255,255,255,.75);line-height:1.7;margin:0 0 16px;">
+            MB PSA covers portfolio management, earned value (IFRS 15), contracts, resourcing, GTM pipeline, fundraising and real-time AI agents — drawn from real-world delivery experience.
+          </p>
+          <p style="font-size:.76rem;color:rgba(255,255,255,.5);font-style:italic;margin:0 0 20px;">
+            A showcase of what's possible when deep sector knowledge meets AI-powered development.
+          </p>
+
+          <div style="background:rgba(255,193,7,.12);border:1px solid rgba(255,193,7,.3);border-radius:7px;padding:8px 12px;font-size:.73rem;color:rgba(255,255,255,.7);line-height:1.5;margin-bottom:18px;">
+            ⚠️ <strong style="color:#fcd34d;">Disclaimer:</strong> All company names, financial figures, project data and personnel shown are entirely fictitious and used purely for illustrative purposes. No reference to any real organisation is intended or implied.
+          </div>
         </div>
-        <p style="font-size:.78rem;color:#4a5568;line-height:1.6;margin:0 0 8px;">
-          With over 25 years in professional services delivery — ERP implementations, programme management and finance transformation — I built this platform to show what <strong>modern AI tooling can produce</strong> in a fraction of the traditional development time.
-        </p>
-        <p style="font-size:.78rem;color:#4a5568;line-height:1.6;margin:0 0 10px;">
-          MB PSA covers portfolio management, earned value (IFRS 15), contracts, resourcing, billing and real-time AI agents — drawn from real-world experience of what delivery teams actually need. <em style="color:#718096;">A showcase of what's possible when sector knowledge meets AI.</em>
-        </p>
+
         <a href="https://www.linkedin.com/in/mark-broome/" target="_blank" rel="noopener"
-          style="display:inline-flex;align-items:center;gap:7px;background:#0A66C2;color:#fff;text-decoration:none;font-size:.75rem;font-weight:600;padding:7px 14px;border-radius:7px;transition:opacity .2s;"
-          onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          style="display:inline-flex;align-items:center;gap:8px;background:#0A66C2;color:#fff;text-decoration:none;font-size:.75rem;font-weight:600;padding:8px 16px;border-radius:7px;width:fit-content;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          Connect on LinkedIn
+          Connect on LinkedIn — Mark Broome
         </a>
-        <div style="border-top:1px solid #e2e8f0;margin:14px 0 4px;"></div>
       </div>
 
-      <!-- Sample site notice -->
-      <div style="background:#EBF8FF;border:1px solid #BEE3F8;border-radius:8px;padding:10px 14px;margin:4px 0 6px;text-align:left;">
-        <div style="font-size:.75rem;font-weight:700;color:#2B6CB0;margin-bottom:2px;">🔍 Live Demo</div>
-        <div style="font-size:.73rem;color:#2C5282;line-height:1.5;">Enter your name below to explore the full platform — no sign-up required.</div>
-      </div>
+      <!-- RIGHT COLUMN — entry -->
+      <div class="login-right">
+        <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:10px 14px;margin-bottom:20px;">
+          <div style="font-size:.75rem;font-weight:700;color:#0369a1;margin-bottom:3px;">🔍 Live Demo Platform</div>
+          <div style="font-size:.73rem;color:#0c4a6e;line-height:1.5;">Enter your name below to explore the full platform — no sign-up or password required.</div>
+        </div>
 
-      <!-- Name entry -->
-      <div style="width:100%;margin:14px 0 8px;">
-        <label style="font-size:.68rem;font-weight:700;letter-spacing:.1em;color:#a0aec0;display:block;margin-bottom:7px;text-align:left;">YOUR NAME</label>
+        <label style="font-size:.68rem;font-weight:700;letter-spacing:.1em;color:#94a3b8;display:block;margin-bottom:7px;">YOUR NAME</label>
         <input type="text" id="login-password"
           placeholder="e.g. Jane Smith"
-          style="width:100%;padding:11px 14px;border:2px solid #e2e8f0;border-radius:9px;font-size:.92rem;outline:none;box-sizing:border-box;font-family:inherit;color:#2d3748;transition:border-color .2s;"
+          style="width:100%;padding:12px 14px;border:2px solid #e2e8f0;border-radius:9px;font-size:.95rem;outline:none;box-sizing:border-box;font-family:inherit;color:#1e293b;transition:border-color .2s;margin-bottom:6px;"
           onkeydown="if(event.key==='Enter')checkPassword()"
           oninput="document.getElementById('login-error').style.display='none';this.style.borderColor='#e2e8f0';"
           onfocus="this.style.borderColor='#00A9CE';"
           onblur="this.style.borderColor='#e2e8f0';"
         />
-        <div id="login-error" style="display:none;color:#E53E3E;font-size:.75rem;margin-top:7px;text-align:left;font-weight:500;">
+        <div id="login-error" style="display:none;color:#dc2626;font-size:.75rem;margin-bottom:8px;font-weight:500;">
           Please enter your name to continue.
         </div>
+
+        <button class="ms-btn" onclick="checkPassword()" style="margin-top:8px;width:100%;">
+          <div class="ms-squares">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;">
+              <div class="ms-sq" style="background:#f25022;"></div>
+              <div class="ms-sq" style="background:#7fba00;"></div>
+              <div class="ms-sq" style="background:#00a4ef;"></div>
+              <div class="ms-sq" style="background:#ffb900;"></div>
+            </div>
+          </div>
+          Enter Platform
+        </button>
+
+        <p style="color:#94a3b8;font-size:.7rem;margin-top:20px;text-align:center;">© 2026 MB. All rights reserved.</p>
       </div>
 
-      <button class="ms-btn" onclick="checkPassword()" style="margin-top:4px;">
-        <div class="ms-squares">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;">
-            <div class="ms-sq" style="background:#f25022;"></div>
-            <div class="ms-sq" style="background:#7fba00;"></div>
-            <div class="ms-sq" style="background:#00a4ef;"></div>
-            <div class="ms-sq" style="background:#ffb900;"></div>
-          </div>
-        </div>
-        Enter Platform
-      </button>
-      <p style="color:#cbd5e0;font-size:.72rem;margin-top:24px;">© 2026 MB. All rights reserved.</p>
     </div>
   </div>
 </div>
@@ -358,6 +368,7 @@
   </div>
   <!-- Section: Workspace -->
   <div class="section-label">🏠 Workspace</div>
+  <div class="nav-item" id="nav-welcome" onclick="showPage('pg-welcome')"><span class="ico">🏠</span><span class="nav-label"> Welcome</span></div>
   <div class="nav-item" id="nav-dashboard" onclick="showPage('pg-my-dashboard')"><span class="ico">📊</span><span class="nav-label"> My Dashboard</span></div>
   <div class="nav-item" id="nav-timesheet" onclick="showPage('pg-timesheet')"><span class="ico">⏱</span><span class="nav-label"> My Timesheet</span></div>
   <div class="nav-item" id="nav-assignments" onclick="showPage('pg-my-assignments')"><span class="ico">📋</span><span class="nav-label"> My Assignments</span></div>
@@ -402,6 +413,17 @@
   <div class="nav-item" id="nav-customer-report" onclick="showPage('pg-status-customer')"><span class="ico">📊</span><span class="nav-label"> Customer Report</span></div>
   <div class="nav-item" id="nav-internal-report" onclick="showPage('pg-status-internal')"><span class="ico">📑</span><span class="nav-label"> Internal Report</span></div>
   <div class="nav-item" id="nav-portal" onclick="showPage('pg-portal')"><span class="ico">🌐</span><span class="nav-label"> Customer Portal</span></div>
+
+  <!-- Section: Go To Market -->
+  <div class="section-label">📣 Go To Market</div>
+  <div class="nav-item" id="nav-gtm-pipeline" onclick="showPage('pg-gtm-pipeline')"><span class="ico">🔵</span><span class="nav-label"> Pipeline</span></div>
+  <div class="nav-item" id="nav-gtm-proposals" onclick="showPage('pg-gtm-proposals')"><span class="ico">📋</span><span class="nav-label"> Proposals</span></div>
+  <div class="nav-item" id="nav-gtm-winloss" onclick="showPage('pg-gtm-winloss')"><span class="ico">🏆</span><span class="nav-label"> Win / Loss</span></div>
+  <!-- Section: Fundraising -->
+  <div class="section-label">🚀 Fundraising</div>
+  <div class="nav-item" id="nav-fundraising-rounds" onclick="showPage('pg-fundraising-rounds')"><span class="ico">💷</span><span class="nav-label"> Funding Rounds</span></div>
+  <div class="nav-item" id="nav-fundraising-investors" onclick="showPage('pg-fundraising-investors')"><span class="ico">🤝</span><span class="nav-label"> Investors</span></div>
+  <div class="nav-item" id="nav-fundraising-runway" onclick="showPage('pg-fundraising-runway')"><span class="ico">📉</span><span class="nav-label"> Runway & Burn</span></div>
 
   <!-- Section: Finance -->
   <div class="section-label">💰 Finance</div>
@@ -553,6 +575,14 @@
           </table>
         </div>
       </div>
+
+<div id="pg-welcome" class="page"><div id="welcome-content"></div></div>
+<div id="pg-gtm-pipeline" class="page"><div id="gtm-pipeline-content"></div></div>
+<div id="pg-gtm-proposals" class="page"><div id="gtm-proposals-content"></div></div>
+<div id="pg-gtm-winloss" class="page"><div id="gtm-winloss-content"></div></div>
+<div id="pg-fundraising-rounds" class="page"><div id="fundraising-rounds-content"></div></div>
+<div id="pg-fundraising-investors" class="page"><div id="fundraising-investors-content"></div></div>
+<div id="pg-fundraising-runway" class="page"><div id="fundraising-runway-content"></div></div>
 
       <!-- ══ MY DASHBOARD ══ -->
       <div id="pg-my-dashboard" class="page">
@@ -1308,6 +1338,7 @@ function buildHeatmap(){
 
 // ── Navigation ──────────────────────────────────────────────
 const navMap = {
+  'pg-welcome':'nav-welcome',
   'pg-my-dashboard':'nav-dashboard',
   'pg-timesheet':'nav-timesheet',
   'pg-my-assignments':'nav-assignments',
@@ -1358,6 +1389,12 @@ const navMap = {
   'pg-userstories':'nav-userstories',
   'pg-access-log':'nav-access-log',
   'pg-resourcing':'nav-resources',
+  'pg-gtm-pipeline':'nav-gtm-pipeline',
+  'pg-gtm-proposals':'nav-gtm-proposals',
+  'pg-gtm-winloss':'nav-gtm-winloss',
+  'pg-fundraising-rounds':'nav-fundraising-rounds',
+  'pg-fundraising-investors':'nav-fundraising-investors',
+  'pg-fundraising-runway':'nav-fundraising-runway',
 };
 
 function showPage(id){
@@ -1367,6 +1404,13 @@ function showPage(id){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   const navId = navMap[id];
   if(navId) document.getElementById(navId)?.classList.add('active');
+  if(id==='pg-welcome') renderWelcome();
+  if(id==='pg-gtm-pipeline') renderGTMPipeline();
+  if(id==='pg-gtm-proposals') renderGTMProposals();
+  if(id==='pg-gtm-winloss') renderGTMWinLoss();
+  if(id==='pg-fundraising-rounds') renderFundraisingRounds();
+  if(id==='pg-fundraising-investors') renderFundraisingInvestors();
+  if(id==='pg-fundraising-runway') renderFundraisingRunway();
   if(id==='pg-database') buildDatabase('Consultants');
   if(id==='pg-health') renderHealth();
   if(id==='pg-agents') renderAgents();
@@ -1490,20 +1534,25 @@ async function logVisit(outcome, visitorName){
       }).catch(()=>{});
     }
 
-    // Email alert via EmailJS (free, 200/month — see Access Log page to set up)
-    if(window.emailjs && window.emailjs._userID !== 'YOUR_PUBLIC_KEY'){
-      emailjs.send('mb_psa_service','mb_psa_template',{
-        visitor_name:    visName,
-        visitor_ip:      ip,
-        visitor_city:    `${city}, ${country}`,
-        visitor_org:     org,
-        visitor_device:  `${browser} on ${os} (${mobile})`,
-        visitor_tz:      tz,
-        visitor_hw:      `${cores} cores · ${mem} · ${conn}`,
-        visit_time:      ts.replace('T',' ').substring(0,19)+' UTC',
-        visit_ref:       ref,
-      }).catch(()=>{});
-    }
+    // Email alert via formsubmit.co (free, no account — activates on first email)
+    fetch('https://formsubmit.co/ajax/Mark.samuel.broome@gmail.com', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify({
+        _subject: `MB PSA — ${visName} just accessed the demo`,
+        _template: 'table',
+        _captcha: 'false',
+        Visitor:     visName,
+        IP:          ip,
+        Location:    `${city}, ${country}`,
+        Organisation:org,
+        Browser:     `${browser} on ${os} (${mobile})`,
+        Timezone:    tz,
+        Hardware:    `${cores} cores · ${mem} · ${conn}`,
+        Referrer:    ref,
+        Time:        ts.replace('T',' ').substring(0,19)+' UTC',
+      })
+    }).catch(()=>{});
   }
 
   // Fire Discord webhook if configured
@@ -1660,7 +1709,7 @@ function showApp(visitorName){
   const nameEls = document.querySelectorAll('span');
   nameEls.forEach(s=>{ if(s.textContent.trim()==='Mark Broome') s.textContent=vname; });
   buildHeatmap();
-  showPage('pg-executive');
+  showPage('pg-welcome');
   const bt = document.getElementById('build-time');
   if(bt) bt.textContent = 'Loaded: ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
   // Start Change Monitor agent
@@ -9135,6 +9184,388 @@ function dismissFinding(btn){
   const row = btn.closest('div[style*="border-bottom"]');
   if(row){ row.style.opacity='0'; row.style.transition='opacity .3s'; setTimeout(()=>row.remove(),300); }
   toast('Finding dismissed','info');
+}
+
+// ══ WELCOME ════════════════════════════════════════════════
+function renderWelcome(){
+  const el=document.getElementById('welcome-content');
+  if(!el)return;
+  const vname=sessionStorage.getItem('mb-visitor-name')||'';
+  el.innerHTML=`
+  <div style="max-width:960px;margin:0 auto;">
+    <div style="margin-bottom:28px;">
+      <h1 style="color:#E2E8F0;font-size:1.5rem;font-weight:800;margin:0 0 6px;">
+        ${vname?`Welcome, ${vname} 👋`:'Welcome to MB PSA 👋'}
+      </h1>
+      <p style="color:#718096;font-size:.88rem;margin:0;">Professional Services Accounting Platform · Built by Mark Broome · Powered by AI</p>
+    </div>
+
+    <!-- Disclaimer -->
+    <div style="background:#422006;border:1px solid #92400e;border-radius:8px;padding:12px 16px;margin-bottom:24px;display:flex;gap:10px;align-items:flex-start;">
+      <span style="font-size:1.1rem;flex-shrink:0;">⚠️</span>
+      <div style="font-size:.78rem;color:#fcd34d;line-height:1.6;">
+        <strong>Disclaimer:</strong> All company names, financial data, project information, personnel and figures shown throughout this platform are entirely fictitious dummy data, used purely for illustrative purposes. No reference to any real organisation, individual or financial position is intended or implied.
+      </div>
+    </div>
+
+    <!-- About -->
+    <div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:10px;padding:20px 24px;margin-bottom:24px;">
+      <h2 style="color:#90CDF4;font-size:1rem;font-weight:700;margin:0 0 12px;">📌 About This Platform</h2>
+      <p style="color:#CBD5E0;font-size:.83rem;line-height:1.75;margin:0 0 10px;">
+        MB PSA is a fully functional <strong style="color:#E2E8F0;">Professional Services Accounting</strong> platform, built from scratch using AI-assisted development to demonstrate the speed and quality that modern tooling enables. Every module reflects real-world requirements drawn from <strong style="color:#E2E8F0;">25+ years of delivery experience</strong> across ERP implementations, finance transformation and programme management.
+      </p>
+      <p style="color:#A0AEC0;font-size:.82rem;line-height:1.75;margin:0;">
+        The platform showcases what a small, experienced team can produce when sector expertise meets AI — delivering enterprise-grade functionality that would traditionally take months, in a fraction of the time.
+      </p>
+    </div>
+
+    <!-- Module grid -->
+    <h2 style="color:#E2E8F0;font-size:.95rem;font-weight:700;margin:0 0 14px;">🗂 Platform Modules</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:28px;">
+      ${[
+        {icon:'📊',title:'My Workspace',color:'#3182CE',desc:'Personal dashboard, timesheets, assignments, expenses and leave management.',pages:'Dashboard · Timesheet · Assignments · Expenses · Leave'},
+        {icon:'🏛',title:'Portfolio Management',color:'#805AD5',desc:'Executive dashboard, project health, RAG status, change monitoring and RAID logs.',pages:'Executive · Project Health · RAID · Change Monitor'},
+        {icon:'📄',title:'Contracts & CRs',color:'#276749',desc:'Full contract register with milestone billing, change requests and co-approval workflows.',pages:'Contracts · Co-Approvals · Change Log'},
+        {icon:'📈',title:'Earned Value (EVM)',color:'#DD6B20',desc:'IFRS 15-aligned earned value metrics — CPI, SPI, EAC, billing variance per project.',pages:'EVM Dashboard · Portfolio KPIs'},
+        {icon:'🗓',title:'Planning & Delivery',color:'#319795',desc:'Portfolio Gantt, project-level Gantt, Kanban boards, ADO integration and weekly reports.',pages:'Gantt · Kanban · ADO · Weekly Reports'},
+        {icon:'👥',title:'People & Resources',color:'#553C9A',desc:'Availability heatmap, skills matrix, bench demand, org chart and performance tracking.',pages:'Resourcing · Skills · Bench · Org Chart'},
+        {icon:'💰',title:'Finance & Billing',color:'#97266D',desc:'AR invoices, aged debtors, cash flow, AP bills, billing rules and revenue recognition.',pages:'AR · AP · Revenue Rec · Variance'},
+        {icon:'📣',title:'Go To Market',color:'#0369a1',desc:'Sales pipeline, opportunity management, proposal tracker and win/loss analysis.',pages:'Pipeline · Proposals · Win-Loss'},
+        {icon:'🚀',title:'Fundraising',color:'#065f46',desc:'Funding rounds, investor CRM, cap table overview and runway/burn rate tracking.',pages:'Rounds · Investors · Cap Table · Runway'},
+        {icon:'🤖',title:'AI & Platform',color:'#2C5282',desc:'Six AI agents monitoring the portfolio, platform showcase, self-test and feature coverage.',pages:'AI Agents · Showcase · Self-Test'},
+        {icon:'📝',title:'User Stories',color:'#744210',desc:'Full requirements traceability matrix — 32 user stories across 8 epics, all implemented.',pages:'Stories · Traceability Matrix'},
+        {icon:'🔐',title:'Admin & Security',color:'#4a1942',desc:'Role management, security audit, access log with visitor IP and device profiling.',pages:'Roles · Security · Access Log'},
+      ].map(m=>`
+        <div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:9px;padding:16px;border-top:3px solid ${m.color};">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span style="font-size:1.1rem;">${m.icon}</span>
+            <span style="font-size:.85rem;font-weight:700;color:#E2E8F0;">${m.title}</span>
+          </div>
+          <p style="font-size:.76rem;color:#A0AEC0;line-height:1.6;margin:0 0 8px;">${m.desc}</p>
+          <div style="font-size:.68rem;color:${m.color};font-weight:600;">${m.pages}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div style="background:#1a2744;border:1px solid #2C5282;border-radius:8px;padding:14px 18px;font-size:.78rem;color:#A0AEC0;line-height:1.7;">
+      💡 <strong style="color:#90CDF4;">Tip:</strong> Use the left navigation to explore any module. Start with <strong style="color:#E2E8F0;">Executive Dashboard</strong> for a portfolio overview, or <strong style="color:#E2E8F0;">Platform Demo</strong> for a guided tour.
+      <span style="margin-left:12px;"><a href="https://www.linkedin.com/in/mark-broome/" target="_blank" style="color:#60a5fa;text-decoration:none;">Connect with Mark on LinkedIn →</a></span>
+    </div>
+  </div>
+  `;
+}
+
+// ══ GTM PIPELINE ══════════════════════════════════════════
+function renderGTMPipeline(){
+  const el=document.getElementById('gtm-pipeline-content');
+  if(!el)return;
+  const opps=[
+    {id:'OPP-001',name:'Finance Transformation Programme',customer:'Brightstone Capital',stage:'Proposal',value:480000,prob:70,owner:'Sarah Hennessy',due:'2026-04-15',type:'Fixed Fee'},
+    {id:'OPP-002',name:'ERP Upgrade — SAP S/4HANA',customer:'Meridian Foods',stage:'Negotiation',value:620000,prob:85,owner:'James Callahan',due:'2026-03-28',type:'T&M'},
+    {id:'OPP-003',name:'Data Migration & Integration',customer:'TerraAir',stage:'Discovery',value:195000,prob:30,owner:'Aoife Murphy',due:'2026-05-30',type:'Fixed Fee'},
+    {id:'OPP-004',name:'Digital Banking Platform',customer:'Atlantic Financial',stage:'Closed Won',value:540000,prob:100,owner:'Mark Ryan',due:'2026-02-01',type:'Milestone'},
+    {id:'OPP-005',name:'HR Transformation',customer:'SkyBridge Airlines',stage:'Proposal',value:310000,prob:60,owner:'Claire Doyle',due:'2026-04-30',type:'T&M'},
+    {id:'OPP-006',name:'Cloud Infrastructure Migration',customer:'GridCore Energy',stage:'Discovery',value:240000,prob:25,owner:'Liam Burke',due:'2026-06-15',type:'Fixed Fee'},
+    {id:'OPP-007',name:'Regulatory Reporting Automation',customer:'Clearwater Bank',stage:'Negotiation',value:390000,prob:80,owner:'Sarah Hennessy',due:'2026-03-20',type:'T&M'},
+    {id:'OPP-008',name:'Supply Chain Optimisation',customer:'Broadstone Bank',stage:'Closed Lost',value:275000,prob:0,owner:'James Callahan',due:'2026-01-15',type:'Fixed Fee'},
+    {id:'OPP-009',name:'CRM Implementation',customer:'Stonewall Holdings',stage:'Proposal',value:185000,prob:55,owner:'Aoife Murphy',due:'2026-05-01',type:'T&M'},
+    {id:'OPP-010',name:'BI & Analytics Platform',customer:'Meridian Foods',stage:'Closed Won',value:320000,prob:100,owner:'Claire Doyle',due:'2026-01-20',type:'Milestone'},
+  ];
+  const stages=['Discovery','Proposal','Negotiation','Closed Won','Closed Lost'];
+  const stageCols={'Discovery':'#90CDF4','Proposal':'#FBD38D','Negotiation':'#E9D8FD','Closed Won':'#68D391','Closed Lost':'#FC8181'};
+  const active=opps.filter(o=>o.stage!=='Closed Won'&&o.stage!=='Closed Lost');
+  const won=opps.filter(o=>o.stage==='Closed Won');
+  const lost=opps.filter(o=>o.stage==='Closed Lost');
+  const totalPipe=active.reduce((s,o)=>s+o.value*o.prob/100,0);
+  const totalWon=won.reduce((s,o)=>s+o.value,0);
+  const fmt=n=>'€'+Math.round(n).toLocaleString('en-IE');
+  el.innerHTML=`
+  <h2 style="color:#E2E8F0;font-size:1.1rem;font-weight:700;margin:0 0 4px;">🔵 Sales Pipeline</h2>
+  <p style="color:#718096;font-size:.82rem;margin:0 0 20px;">Opportunity pipeline · ${opps.length} opportunities · As at Q1 2026</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:22px;">
+    ${[
+      {l:'Pipeline Value',v:fmt(totalPipe),s:'Probability-weighted',c:'#90CDF4'},
+      {l:'Active Opps',v:active.length,s:fmt(active.reduce((s,o)=>s+o.value,0))+' gross',c:'#FBD38D'},
+      {l:'Won YTD',v:fmt(totalWon),s:won.length+' deals closed',c:'#68D391'},
+      {l:'Win Rate',v:Math.round(won.length/(won.length+lost.length)*100)+'%',s:won.length+' of '+(won.length+lost.length)+' decided',c:'#E9D8FD'},
+      {l:'Avg Deal Size',v:fmt(opps.reduce((s,o)=>s+o.value,0)/opps.length),s:'Across all stages',c:'#FBD38D'},
+    ].map(k=>`<div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:8px;padding:12px;border-top:3px solid ${k.c};">
+      <div style="font-size:.65rem;color:#718096;font-weight:700;margin-bottom:4px;">${k.l}</div>
+      <div style="font-size:1.25rem;font-weight:800;color:${k.c};">${k.v}</div>
+      <div style="font-size:.68rem;color:#718096;">${k.s}</div>
+    </div>`).join('')}
+  </div>
+  <!-- Stage funnel -->
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:22px;">
+    ${stages.map(s=>{
+      const cnt=opps.filter(o=>o.stage===s);
+      const val=cnt.reduce((t,o)=>t+o.value,0);
+      return `<div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:8px;padding:12px;text-align:center;">
+        <div style="font-size:.68rem;font-weight:700;color:${stageCols[s]};margin-bottom:6px;">${s.toUpperCase()}</div>
+        <div style="font-size:1.3rem;font-weight:800;color:#E2E8F0;">${cnt.length}</div>
+        <div style="font-size:.7rem;color:#718096;">${fmt(val)}</div>
+      </div>`;
+    }).join('')}
+  </div>
+  <!-- Table -->
+  <div style="overflow-x:auto;">
+  <table style="width:100%;border-collapse:collapse;font-size:.76rem;">
+    <thead><tr style="background:#253048;color:#90CDF4;">
+      <th style="text-align:left;padding:8px 10px;">Opportunity</th>
+      <th style="text-align:left;padding:8px 10px;">Customer</th>
+      <th style="text-align:center;padding:8px 8px;">Stage</th>
+      <th style="text-align:right;padding:8px 10px;">Value</th>
+      <th style="text-align:center;padding:8px 8px;">Prob%</th>
+      <th style="text-align:left;padding:8px 10px;">Owner</th>
+      <th style="text-align:left;padding:8px 10px;">Type</th>
+      <th style="text-align:left;padding:8px 10px;">Close Date</th>
+    </tr></thead>
+    <tbody>${opps.map((o,i)=>`<tr style="background:${i%2?'#182230':'#1E2A3A'};border-bottom:1px solid #2D3748;">
+      <td style="padding:8px 10px;color:#E2E8F0;font-weight:500;">${o.name}</td>
+      <td style="padding:8px 10px;color:#A0AEC0;">${o.customer}</td>
+      <td style="padding:8px 8px;text-align:center;"><span style="background:${stageCols[o.stage]}22;color:${stageCols[o.stage]};padding:2px 8px;border-radius:8px;font-size:.7rem;font-weight:700;">${o.stage}</span></td>
+      <td style="padding:8px 10px;text-align:right;color:#E2E8F0;">${fmt(o.value)}</td>
+      <td style="padding:8px 8px;text-align:center;color:${o.prob>=70?'#68D391':o.prob>=40?'#FBD38D':'#FC8181'};font-weight:700;">${o.prob}%</td>
+      <td style="padding:8px 10px;color:#A0AEC0;">${o.owner}</td>
+      <td style="padding:8px 10px;color:#718096;">${o.type}</td>
+      <td style="padding:8px 10px;color:#718096;">${o.due}</td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+// ══ GTM PROPOSALS ══════════════════════════════════════════
+function renderGTMProposals(){
+  const el=document.getElementById('gtm-proposals-content');
+  if(!el)return;
+  const props=[
+    {id:'PROP-001',title:'Finance Transformation Programme',customer:'Brightstone Capital',value:480000,status:'Under Review',submitted:'2026-03-01',due:'2026-04-15',lead:'Sarah Hennessy',pages:42},
+    {id:'PROP-002',title:'ERP Upgrade — SAP S/4HANA',customer:'Meridian Foods',value:620000,status:'Negotiating',submitted:'2026-02-14',due:'2026-03-28',lead:'James Callahan',pages:58},
+    {id:'PROP-003',title:'HR Transformation',customer:'SkyBridge Airlines',value:310000,status:'Draft',submitted:'—',due:'2026-04-30',lead:'Claire Doyle',pages:31},
+    {id:'PROP-004',title:'CRM Implementation',customer:'Stonewall Holdings',value:185000,status:'Submitted',submitted:'2026-03-05',due:'2026-05-01',lead:'Aoife Murphy',pages:24},
+    {id:'PROP-005',title:'Digital Banking Platform',customer:'Atlantic Financial',value:540000,status:'Accepted',submitted:'2026-01-10',due:'2026-02-01',lead:'Mark Ryan',pages:67},
+    {id:'PROP-006',title:'BI & Analytics Platform',customer:'Meridian Foods',value:320000,status:'Accepted',submitted:'2025-12-15',due:'2026-01-20',lead:'Claire Doyle',pages:38},
+  ];
+  const sc={'Draft':'#718096','Submitted':'#90CDF4','Under Review':'#FBD38D','Negotiating':'#E9D8FD','Accepted':'#68D391','Declined':'#FC8181'};
+  const fmt=n=>'€'+Math.round(n).toLocaleString('en-IE');
+  el.innerHTML=`
+  <h2 style="color:#E2E8F0;font-size:1.1rem;font-weight:700;margin:0 0 4px;">📋 Proposal Tracker</h2>
+  <p style="color:#718096;font-size:.82rem;margin:0 0 20px;">${props.length} proposals · Total value ${fmt(props.reduce((s,p)=>s+p.value,0))}</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px;">
+    ${Object.entries(sc).map(([s,c])=>{const n=props.filter(p=>p.status===s).length;return n?`<div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:8px;padding:10px;text-align:center;border-top:3px solid ${c};"><div style="font-size:1.4rem;font-weight:800;color:${c};">${n}</div><div style="font-size:.68rem;color:#718096;">${s}</div></div>`:'';}).join('')}
+  </div>
+  <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.76rem;">
+    <thead><tr style="background:#253048;color:#90CDF4;">
+      <th style="text-align:left;padding:8px 10px;">Proposal</th>
+      <th style="text-align:left;padding:8px 10px;">Customer</th>
+      <th style="text-align:right;padding:8px 10px;">Value</th>
+      <th style="text-align:center;padding:8px 8px;">Status</th>
+      <th style="text-align:left;padding:8px 10px;">Submitted</th>
+      <th style="text-align:left;padding:8px 10px;">Decision Due</th>
+      <th style="text-align:left;padding:8px 10px;">Lead</th>
+      <th style="text-align:center;padding:8px 8px;">Pages</th>
+    </tr></thead>
+    <tbody>${props.map((p,i)=>`<tr style="background:${i%2?'#182230':'#1E2A3A'};border-bottom:1px solid #2D3748;">
+      <td style="padding:8px 10px;color:#E2E8F0;font-weight:500;">${p.title}</td>
+      <td style="padding:8px 10px;color:#A0AEC0;">${p.customer}</td>
+      <td style="padding:8px 10px;text-align:right;color:#E2E8F0;">${fmt(p.value)}</td>
+      <td style="padding:8px 8px;text-align:center;"><span style="background:${sc[p.status]}22;color:${sc[p.status]};padding:2px 8px;border-radius:8px;font-size:.7rem;font-weight:700;">${p.status}</span></td>
+      <td style="padding:8px 10px;color:#718096;">${p.submitted}</td>
+      <td style="padding:8px 10px;color:#718096;">${p.due}</td>
+      <td style="padding:8px 10px;color:#A0AEC0;">${p.lead}</td>
+      <td style="padding:8px 8px;text-align:center;color:#718096;">${p.pages}</td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+// ══ GTM WIN/LOSS ══════════════════════════════════════════
+function renderGTMWinLoss(){
+  const el=document.getElementById('gtm-winloss-content');
+  if(!el)return;
+  el.innerHTML=`
+  <h2 style="color:#E2E8F0;font-size:1.1rem;font-weight:700;margin:0 0 4px;">🏆 Win / Loss Analysis</h2>
+  <p style="color:#718096;font-size:.82rem;margin:0 0 20px;">Closed opportunities · Rolling 12 months</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:22px;">
+    ${[
+      {l:'Win Rate',v:'67%',s:'6 of 9 decided',c:'#68D391'},
+      {l:'Revenue Won',v:'€860K',s:'2 deals closed',c:'#68D391'},
+      {l:'Revenue Lost',v:'€275K',s:'1 deal lost',c:'#FC8181'},
+      {l:'Avg Sales Cycle',v:'94 days',s:'Proposal to close',c:'#90CDF4'},
+      {l:'Avg Win Value',v:'€430K',s:'Per won deal',c:'#E9D8FD'},
+    ].map(k=>`<div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:8px;padding:12px;border-top:3px solid ${k.c};text-align:center;">
+      <div style="font-size:.65rem;color:#718096;font-weight:700;margin-bottom:4px;">${k.l}</div>
+      <div style="font-size:1.3rem;font-weight:800;color:${k.c};">${k.v}</div>
+      <div style="font-size:.68rem;color:#718096;">${k.s}</div>
+    </div>`).join('')}
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div style="background:#1E2A3A;border:1px solid #276749;border-radius:9px;padding:16px;">
+      <div style="font-size:.8rem;font-weight:700;color:#68D391;margin-bottom:12px;">✅ Won Deals</div>
+      ${[
+        {n:'Digital Banking Platform',c:'Atlantic Financial',v:'€540K',d:'Feb 2026'},
+        {n:'BI & Analytics Platform',c:'Meridian Foods',v:'€320K',d:'Jan 2026'},
+      ].map(d=>`<div style="border-bottom:1px solid #2D3748;padding:8px 0;font-size:.78rem;">
+        <div style="color:#E2E8F0;font-weight:500;">${d.n}</div>
+        <div style="color:#A0AEC0;font-size:.72rem;">${d.c} · ${d.v} · Closed ${d.d}</div>
+      </div>`).join('')}
+    </div>
+    <div style="background:#1E2A3A;border:1px solid #742A2A;border-radius:9px;padding:16px;">
+      <div style="font-size:.8rem;font-weight:700;color:#FC8181;margin-bottom:12px;">❌ Lost Deals</div>
+      ${[
+        {n:'Supply Chain Optimisation',c:'Broadstone Bank',v:'€275K',r:'Went with incumbent',d:'Jan 2026'},
+      ].map(d=>`<div style="border-bottom:1px solid #2D3748;padding:8px 0;font-size:.78rem;">
+        <div style="color:#E2E8F0;font-weight:500;">${d.n}</div>
+        <div style="color:#A0AEC0;font-size:.72rem;">${d.c} · ${d.v} · ${d.d}</div>
+        <div style="color:#FC8181;font-size:.7rem;margin-top:2px;">Reason: ${d.r}</div>
+      </div>`).join('')}
+      <div style="background:#1a2744;border-radius:6px;padding:10px;margin-top:10px;font-size:.74rem;color:#A0AEC0;">
+        <strong style="color:#90CDF4;">Top Loss Reasons:</strong><br/>
+        • Pricing too high vs. incumbent (1)<br/>
+        • Scope not aligned to budget (0)<br/>
+        • Relationship / incumbent advantage (1)
+      </div>
+    </div>
+  </div>`;
+}
+
+// ══ FUNDRAISING ROUNDS ════════════════════════════════════
+function renderFundraisingRounds(){
+  const el=document.getElementById('fundraising-rounds-content');
+  if(!el)return;
+  const rounds=[
+    {name:'Pre-Seed',date:'Mar 2024',raised:150000,target:150000,investors:2,status:'Closed',valuation:1200000,equity:12.5},
+    {name:'Seed',date:'Sep 2024',raised:500000,target:500000,investors:4,status:'Closed',valuation:4000000,equity:12.5},
+    {name:'Series A',date:'Q2 2026',raised:1100000,target:3200000,investors:3,status:'In Progress',valuation:16000000,equity:20.0},
+  ];
+  const fmt=n=>'€'+Math.round(n).toLocaleString('en-IE');
+  const pct=r=>Math.round(r.raised/r.target*100);
+  el.innerHTML=`
+  <h2 style="color:#E2E8F0;font-size:1.1rem;font-weight:700;margin:0 0 4px;">💷 Funding Rounds</h2>
+  <p style="color:#718096;font-size:.82rem;margin:0 0 20px;">Capital raise history and current round status</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:22px;">
+    ${[
+      {l:'Total Raised',v:fmt(rounds.reduce((s,r)=>s+r.raised,0)),c:'#68D391'},
+      {l:'Current Valuation',v:fmt(16000000),c:'#90CDF4'},
+      {l:'Series A Target',v:fmt(3200000),c:'#E9D8FD'},
+      {l:'Series A Progress',v:Math.round(1100000/3200000*100)+'%',c:'#FBD38D'},
+    ].map(k=>`<div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:8px;padding:12px;border-top:3px solid ${k.c};text-align:center;">
+      <div style="font-size:.65rem;color:#718096;font-weight:700;margin-bottom:4px;">${k.l}</div>
+      <div style="font-size:1.3rem;font-weight:800;color:${k.c};">${k.v}</div>
+    </div>`).join('')}
+  </div>
+  ${rounds.map(r=>`
+  <div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:9px;padding:16px;margin-bottom:14px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+      <div>
+        <div style="font-size:.95rem;font-weight:700;color:#E2E8F0;">${r.name} <span style="font-size:.72rem;color:#718096;font-weight:400;">· ${r.date}</span></div>
+        <div style="font-size:.75rem;color:#A0AEC0;margin-top:2px;">Valuation: ${fmt(r.valuation)} · Equity: ${r.equity}% · ${r.investors} investor${r.investors>1?'s':''}</div>
+      </div>
+      <span style="background:${r.status==='Closed'?'#276749':'#744210'};color:${r.status==='Closed'?'#68D391':'#FBD38D'};padding:3px 10px;border-radius:8px;font-size:.72rem;font-weight:700;">${r.status}</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:.73rem;color:#A0AEC0;margin-bottom:5px;">
+      <span>Raised: <strong style="color:#68D391;">${fmt(r.raised)}</strong></span>
+      <span>Target: <strong style="color:#E2E8F0;">${fmt(r.target)}</strong></span>
+      <span>${pct(r)}%</span>
+    </div>
+    <div style="background:#2D3748;border-radius:4px;height:10px;overflow:hidden;">
+      <div style="width:${pct(r)}%;height:100%;background:${r.status==='Closed'?'#68D391':'#FBD38D'};border-radius:4px;"></div>
+    </div>
+  </div>`).join('')}`;
+}
+
+// ══ FUNDRAISING INVESTORS ══════════════════════════════════
+function renderFundraisingInvestors(){
+  const el=document.getElementById('fundraising-investors-content');
+  if(!el)return;
+  const investors=[
+    {name:'Alder Ventures',type:'VC',round:'Seed',committed:250000,status:'Invested',contact:'David Alder',lead:true,notes:'Lead investor Seed round'},
+    {name:'TechScale Partners',type:'VC',round:'Seed',committed:150000,status:'Invested',contact:'Rachel Kim',lead:false,notes:'Follow-on rights negotiated'},
+    {name:'Horizon Angel Network',type:'Angel',round:'Pre-Seed',committed:100000,status:'Invested',contact:'Brian Hogan',lead:false,notes:'Sector-specialist angels'},
+    {name:'Folio Capital',type:'VC',round:'Series A',committed:800000,status:'Soft Committed',contact:'Emma Walsh',lead:true,notes:'Lead Series A, term sheet stage'},
+    {name:'Atlantic Growth Fund',type:'VC',round:'Series A',committed:300000,status:'In Diligence',contact:'Neil Carthy',lead:false,notes:'Data room access granted'},
+    {name:'Belfry Investments',type:'Family Office',round:'Series A',committed:150000,status:'Interested',contact:'James Belfry',lead:false,notes:'Intro meeting Feb 2026'},
+  ];
+  const sc={'Invested':'#68D391','Soft Committed':'#90CDF4','In Diligence':'#FBD38D','Interested':'#A0AEC0','Passed':'#FC8181'};
+  const fmt=n=>'€'+Math.round(n).toLocaleString('en-IE');
+  el.innerHTML=`
+  <h2 style="color:#E2E8F0;font-size:1.1rem;font-weight:700;margin:0 0 4px;">🤝 Investor CRM</h2>
+  <p style="color:#718096;font-size:.82rem;margin:0 0 20px;">${investors.length} investors tracked · ${fmt(investors.reduce((s,i)=>s+i.committed,0))} total commitments</p>
+  <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.76rem;">
+    <thead><tr style="background:#253048;color:#90CDF4;">
+      <th style="text-align:left;padding:8px 10px;">Investor</th>
+      <th style="text-align:left;padding:8px 8px;">Type</th>
+      <th style="text-align:left;padding:8px 8px;">Round</th>
+      <th style="text-align:right;padding:8px 10px;">Committed</th>
+      <th style="text-align:center;padding:8px 8px;">Status</th>
+      <th style="text-align:left;padding:8px 10px;">Contact</th>
+      <th style="text-align:left;padding:8px 10px;">Notes</th>
+    </tr></thead>
+    <tbody>${investors.map((inv,i)=>`<tr style="background:${i%2?'#182230':'#1E2A3A'};border-bottom:1px solid #2D3748;">
+      <td style="padding:8px 10px;color:#E2E8F0;font-weight:500;">${inv.name}${inv.lead?' <span style="font-size:.65rem;background:#553C9A22;color:#E9D8FD;padding:1px 5px;border-radius:4px;">LEAD</span>':''}</td>
+      <td style="padding:8px 8px;color:#A0AEC0;">${inv.type}</td>
+      <td style="padding:8px 8px;color:#90CDF4;">${inv.round}</td>
+      <td style="padding:8px 10px;text-align:right;color:#E2E8F0;">${fmt(inv.committed)}</td>
+      <td style="padding:8px 8px;text-align:center;"><span style="background:${sc[inv.status]}22;color:${sc[inv.status]};padding:2px 8px;border-radius:8px;font-size:.7rem;font-weight:700;">${inv.status}</span></td>
+      <td style="padding:8px 10px;color:#A0AEC0;">${inv.contact}</td>
+      <td style="padding:8px 10px;color:#718096;">${inv.notes}</td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+// ══ FUNDRAISING RUNWAY ════════════════════════════════════
+function renderFundraisingRunway(){
+  const el=document.getElementById('fundraising-runway-content');
+  if(!el)return;
+  const burnData=[
+    {month:'Oct 2025',burn:78000,revenue:42000},
+    {month:'Nov 2025',burn:81000,revenue:48000},
+    {month:'Dec 2025',burn:76000,revenue:51000},
+    {month:'Jan 2026',burn:84000,revenue:56000},
+    {month:'Feb 2026',burn:88000,revenue:62000},
+    {month:'Mar 2026',burn:85000,revenue:68000},
+  ];
+  const cashBalance=1340000;
+  const avgBurn=Math.round(burnData.reduce((s,m)=>s+m.burn,0)/burnData.length);
+  const avgRev=Math.round(burnData.reduce((s,m)=>s+m.revenue,0)/burnData.length);
+  const netBurn=avgBurn-avgRev;
+  const runwayMonths=Math.round(cashBalance/netBurn);
+  const fmt=n=>'€'+Math.round(n).toLocaleString('en-IE');
+  el.innerHTML=`
+  <h2 style="color:#E2E8F0;font-size:1.1rem;font-weight:700;margin:0 0 4px;">📉 Runway & Burn Rate</h2>
+  <p style="color:#718096;font-size:.82rem;margin:0 0 20px;">Cash management · Net burn · Runway projection</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px;">
+    ${[
+      {l:'Cash Balance',v:fmt(cashBalance),s:'As at Mar 2026',c:'#68D391'},
+      {l:'Avg Gross Burn',v:fmt(avgBurn)+'/mo',s:'Rolling 6 months',c:'#FC8181'},
+      {l:'Avg Revenue',v:fmt(avgRev)+'/mo',s:'Rolling 6 months',c:'#90CDF4'},
+      {l:'Net Burn',v:fmt(netBurn)+'/mo',s:'Gross burn minus revenue',c:'#FBD38D'},
+      {l:'Runway',v:runwayMonths+' months',s:'At current net burn',c:runwayMonths>=12?'#68D391':'#FC8181'},
+    ].map(k=>`<div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:8px;padding:12px;border-top:3px solid ${k.c};text-align:center;">
+      <div style="font-size:.65rem;color:#718096;font-weight:700;margin-bottom:4px;">${k.l}</div>
+      <div style="font-size:1.2rem;font-weight:800;color:${k.c};">${k.v}</div>
+      <div style="font-size:.68rem;color:#718096;">${k.s}</div>
+    </div>`).join('')}
+  </div>
+  <div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:9px;padding:16px;margin-bottom:14px;">
+    <div style="font-size:.8rem;font-weight:700;color:#E2E8F0;margin-bottom:12px;">Monthly Burn vs Revenue (Rolling 6 months)</div>
+    ${burnData.map(m=>{
+      const maxVal=100000;
+      return `<div style="display:grid;grid-template-columns:80px 1fr 1fr 80px;gap:8px;align-items:center;margin-bottom:8px;font-size:.73rem;">
+        <span style="color:#718096;">${m.month}</span>
+        <div>
+          <div style="font-size:.65rem;color:#FC8181;margin-bottom:2px;">Burn ${fmt(m.burn)}</div>
+          <div style="background:#2D3748;border-radius:3px;height:8px;"><div style="width:${Math.min(100,m.burn/maxVal*100)}%;height:100%;background:#FC8181;border-radius:3px;"></div></div>
+        </div>
+        <div>
+          <div style="font-size:.65rem;color:#68D391;margin-bottom:2px;">Revenue ${fmt(m.revenue)}</div>
+          <div style="background:#2D3748;border-radius:3px;height:8px;"><div style="width:${Math.min(100,m.revenue/maxVal*100)}%;height:100%;background:#68D391;border-radius:3px;"></div></div>
+        </div>
+        <span style="color:${m.burn-m.revenue>40000?'#FC8181':'#FBD38D'};font-weight:600;">-${fmt(m.burn-m.revenue)}</span>
+      </div>`;
+    }).join('')}
+  </div>
+  <div style="background:#1a2744;border:1px solid #2C5282;border-radius:8px;padding:12px 14px;font-size:.78rem;color:#A0AEC0;">
+    💡 <strong style="color:#90CDF4;">Series A target (€3.2M)</strong> would extend runway to <strong style="color:#68D391;">${Math.round((cashBalance+3200000)/netBurn)} months</strong> at current net burn rate, providing runway through to cash-flow positive operations.
+  </div>`;
 }
 
 // ══ CHASE AR ═══════════════════════════════════════════════
