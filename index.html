@@ -9195,66 +9195,81 @@ function renderWelcome(){
   const el=document.getElementById('welcome-content');
   if(!el)return;
   const vname=sessionStorage.getItem('mb-visitor-name')||'';
+  const modules=[
+    {icon:'📊',title:'My Workspace',color:'#3182CE',desc:'Timesheets, expenses & personal dashboard'},
+    {icon:'🏛',title:'Portfolio Management',color:'#805AD5',desc:'Executive view, RAG status & RAID logs'},
+    {icon:'📄',title:'Contracts & CRs',color:'#38a169',desc:'Contract register, milestones & change requests'},
+    {icon:'📈',title:'Earned Value (EVM)',color:'#DD6B20',desc:'IFRS 15 metrics — CPI, SPI, EAC & billing variance'},
+    {icon:'🗓',title:'Planning & Delivery',color:'#319795',desc:'Gantt, Kanban, ADO integration & weekly reports'},
+    {icon:'👥',title:'People & Resources',color:'#7c3aed',desc:'Skills matrix, bench demand & org chart'},
+    {icon:'💰',title:'Finance & Billing',color:'#db2777',desc:'AR/AP, revenue recognition & cash flow'},
+    {icon:'📣',title:'Go To Market',color:'#0284c7',desc:'Sales pipeline, proposals & win/loss analysis'},
+    {icon:'🚀',title:'Fundraising',color:'#059669',desc:'Funding rounds, investor CRM & runway tracking'},
+    {icon:'🤖',title:'AI & Platform',color:'#2C5282',desc:'Six AI agents monitoring the live portfolio'},
+    {icon:'📝',title:'User Stories',color:'#b45309',desc:'32 stories across 8 epics with traceability matrix'},
+    {icon:'🔐',title:'Admin & Security',color:'#6b21a8',desc:'Roles, audit log & visitor access tracking'},
+  ];
   el.innerHTML=`
-  <div style="max-width:960px;margin:0 auto;">
-    <div style="margin-bottom:28px;">
-      <h1 style="color:#E2E8F0;font-size:1.5rem;font-weight:800;margin:0 0 6px;">
-        ${vname?`Welcome, ${vname} 👋`:'Welcome to MB PSA 👋'}
+  <div style="max-width:980px;margin:0 auto;">
+
+    <!-- Header -->
+    <div style="margin-bottom:24px;">
+      <h1 style="color:#ffffff;font-size:1.6rem;font-weight:800;margin:0 0 6px;letter-spacing:-.3px;">
+        ${vname?`Welcome, ${vname}`:'Welcome to MB PSA'} 👋
       </h1>
-      <p style="color:#718096;font-size:.88rem;margin:0;">Professional Services Accounting Platform · Built by Mark Broome · Powered by AI</p>
+      <p style="color:#94a3b8;font-size:.9rem;margin:0;">
+        Professional Services Accounting · Built by <a href="https://www.linkedin.com/in/mark-broome/" target="_blank" style="color:#60a5fa;text-decoration:none;">Mark Broome</a> · Powered by AI
+      </p>
+    </div>
+
+    <!-- Stats strip -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:24px;">
+      ${[
+        {n:'12',l:'Modules',c:'#60a5fa'},
+        {n:'25+',l:'Years Experience',c:'#a78bfa'},
+        {n:'€23.9M',l:'Portfolio BAC',c:'#34d399'},
+        {n:'32',l:'User Stories',c:'#fb923c'},
+      ].map(s=>`<div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 16px;text-align:center;">
+        <div style="font-size:1.5rem;font-weight:800;color:${s.c};line-height:1;">${s.n}</div>
+        <div style="font-size:.72rem;color:#94a3b8;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">${s.l}</div>
+      </div>`).join('')}
+    </div>
+
+    <!-- About strip -->
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-left:3px solid #60a5fa;border-radius:8px;padding:14px 18px;margin-bottom:24px;">
+      <p style="color:#e2e8f0;font-size:.88rem;line-height:1.7;margin:0;">
+        MB PSA demonstrates enterprise-grade Professional Services Accounting built entirely with AI tooling — showcasing what <strong style="color:#fff;">25+ years delivering and operating across multiple industries</strong> — from financial services and energy to technology and the public sector — combined with modern AI can deliver in a fraction of traditional build time.
+      </p>
     </div>
 
     <!-- Disclaimer -->
-    <div style="background:#422006;border:1px solid #92400e;border-radius:8px;padding:12px 16px;margin-bottom:24px;display:flex;gap:10px;align-items:flex-start;">
-      <span style="font-size:1.1rem;flex-shrink:0;">⚠️</span>
-      <div style="font-size:.78rem;color:#fcd34d;line-height:1.6;">
-        <strong>Disclaimer:</strong> All company names, financial data, project information, personnel and figures shown throughout this platform are entirely fictitious dummy data, used purely for illustrative purposes. No reference to any real organisation, individual or financial position is intended or implied.
-      </div>
-    </div>
-
-    <!-- About -->
-    <div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:10px;padding:20px 24px;margin-bottom:24px;">
-      <h2 style="color:#90CDF4;font-size:1rem;font-weight:700;margin:0 0 12px;">📌 About This Platform</h2>
-      <p style="color:#CBD5E0;font-size:.83rem;line-height:1.75;margin:0 0 10px;">
-        MB PSA is a fully functional <strong style="color:#E2E8F0;">Professional Services Accounting</strong> platform, built from scratch using AI-assisted development to demonstrate the speed and quality that modern tooling enables. Every module reflects real-world requirements drawn from <strong style="color:#E2E8F0;">25+ years of delivery experience</strong> across ERP implementations, finance transformation and programme management.
-      </p>
-      <p style="color:#A0AEC0;font-size:.82rem;line-height:1.75;margin:0;">
-        The platform showcases what a small, experienced team can produce when sector expertise meets AI — delivering enterprise-grade functionality that would traditionally take months, in a fraction of the time.
+    <div style="background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);border-radius:8px;padding:10px 16px;margin-bottom:24px;display:flex;gap:10px;align-items:center;">
+      <span style="font-size:1rem;flex-shrink:0;">⚠️</span>
+      <p style="font-size:.78rem;color:#fbbf24;margin:0;line-height:1.5;">
+        <strong>Illustrative data only.</strong> All company names, figures and personnel shown are entirely fictitious dummy data for demonstration purposes.
       </p>
     </div>
 
     <!-- Module grid -->
-    <h2 style="color:#E2E8F0;font-size:.95rem;font-weight:700;margin:0 0 14px;">🗂 Platform Modules</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:28px;">
-      ${[
-        {icon:'📊',title:'My Workspace',color:'#3182CE',desc:'Personal dashboard, timesheets, assignments, expenses and leave management.',pages:'Dashboard · Timesheet · Assignments · Expenses · Leave'},
-        {icon:'🏛',title:'Portfolio Management',color:'#805AD5',desc:'Executive dashboard, project health, RAG status, change monitoring and RAID logs.',pages:'Executive · Project Health · RAID · Change Monitor'},
-        {icon:'📄',title:'Contracts & CRs',color:'#276749',desc:'Full contract register with milestone billing, change requests and co-approval workflows.',pages:'Contracts · Co-Approvals · Change Log'},
-        {icon:'📈',title:'Earned Value (EVM)',color:'#DD6B20',desc:'IFRS 15-aligned earned value metrics — CPI, SPI, EAC, billing variance per project.',pages:'EVM Dashboard · Portfolio KPIs'},
-        {icon:'🗓',title:'Planning & Delivery',color:'#319795',desc:'Portfolio Gantt, project-level Gantt, Kanban boards, ADO integration and weekly reports.',pages:'Gantt · Kanban · ADO · Weekly Reports'},
-        {icon:'👥',title:'People & Resources',color:'#553C9A',desc:'Availability heatmap, skills matrix, bench demand, org chart and performance tracking.',pages:'Resourcing · Skills · Bench · Org Chart'},
-        {icon:'💰',title:'Finance & Billing',color:'#97266D',desc:'AR invoices, aged debtors, cash flow, AP bills, billing rules and revenue recognition.',pages:'AR · AP · Revenue Rec · Variance'},
-        {icon:'📣',title:'Go To Market',color:'#0369a1',desc:'Sales pipeline, opportunity management, proposal tracker and win/loss analysis.',pages:'Pipeline · Proposals · Win-Loss'},
-        {icon:'🚀',title:'Fundraising',color:'#065f46',desc:'Funding rounds, investor CRM, cap table overview and runway/burn rate tracking.',pages:'Rounds · Investors · Cap Table · Runway'},
-        {icon:'🤖',title:'AI & Platform',color:'#2C5282',desc:'Six AI agents monitoring the portfolio, platform showcase, self-test and feature coverage.',pages:'AI Agents · Showcase · Self-Test'},
-        {icon:'📝',title:'User Stories',color:'#744210',desc:'Full requirements traceability matrix — 32 user stories across 8 epics, all implemented.',pages:'Stories · Traceability Matrix'},
-        {icon:'🔐',title:'Admin & Security',color:'#4a1942',desc:'Role management, security audit, access log with visitor IP and device profiling.',pages:'Roles · Security · Access Log'},
-      ].map(m=>`
-        <div style="background:#1E2A3A;border:1px solid #2D3748;border-radius:9px;padding:16px;border-top:3px solid ${m.color};">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-            <span style="font-size:1.1rem;">${m.icon}</span>
-            <span style="font-size:.85rem;font-weight:700;color:#E2E8F0;">${m.title}</span>
-          </div>
-          <p style="font-size:.76rem;color:#A0AEC0;line-height:1.6;margin:0 0 8px;">${m.desc}</p>
-          <div style="font-size:.68rem;color:${m.color};font-weight:600;">${m.pages}</div>
+    <h2 style="color:#e2e8f0;font-size:.85rem;font-weight:700;margin:0 0 12px;text-transform:uppercase;letter-spacing:.8px;">Platform Modules</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:24px;">
+      ${modules.map(m=>`
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:16px;border-left:3px solid ${m.color};cursor:default;transition:background .15s;"
+             onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
+          <div style="font-size:1.5rem;margin-bottom:8px;">${m.icon}</div>
+          <div style="font-size:.88rem;font-weight:700;color:#ffffff;margin-bottom:4px;">${m.title}</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.5;">${m.desc}</div>
         </div>
       `).join('')}
     </div>
 
-    <div style="background:#1a2744;border:1px solid #2C5282;border-radius:8px;padding:14px 18px;font-size:.78rem;color:#A0AEC0;line-height:1.7;">
-      💡 <strong style="color:#90CDF4;">Tip:</strong> Use the left navigation to explore any module. Start with <strong style="color:#E2E8F0;">Executive Dashboard</strong> for a portfolio overview, or <strong style="color:#E2E8F0;">Platform Demo</strong> for a guided tour.
-      <span style="margin-left:12px;"><a href="https://www.linkedin.com/in/mark-broome/" target="_blank" style="color:#60a5fa;text-decoration:none;">Connect with Mark on LinkedIn →</a></span>
+    <!-- Footer tip -->
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:8px;font-size:.8rem;color:#cbd5e1;">
+      <span style="font-size:1rem;">💡</span>
+      <span>Use the left navigation to explore modules. Start with <strong style="color:#fff;">Executive Dashboard</strong> for a portfolio overview.</span>
+      <a href="https://www.linkedin.com/in/mark-broome/" target="_blank" style="margin-left:auto;white-space:nowrap;color:#60a5fa;text-decoration:none;font-weight:600;">LinkedIn →</a>
     </div>
+
   </div>
   `;
 }
