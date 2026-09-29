@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MB PSA — Preview</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  // EmailJS — initialise with your public key (sign up free at emailjs.com)
+  // Replace 'YOUR_PUBLIC_KEY' after creating your account + template
+  (function(){
+    if(window.emailjs) emailjs.init({publicKey:'YOUR_PUBLIC_KEY'});
+  })();
+</script>
 <style>
   :root {
     --navy:#1B2A4A; --teal:#00A9CE; --teal-light:#e6f7fb;
@@ -251,25 +259,27 @@
     <div class="login-card">
       <div class="login-logo">C</div>
       <div class="login-title">MB PSA</div>
-      <div class="login-sub">Professional Services Accounting<br/>Enter your access code to continue</div>
+      <div class="login-sub">Professional Services Accounting</div>
 
-      <!-- Password gate -->
-      <div style="width:100%;margin:20px 0 8px;">
-        <label style="font-size:.68rem;font-weight:700;letter-spacing:.1em;color:#a0aec0;display:block;margin-bottom:7px;text-align:left;">ACCESS CODE</label>
-        <div style="position:relative;">
-          <input type="password" id="login-password"
-            placeholder="Enter access code…"
-            style="width:100%;padding:11px 42px 11px 14px;border:2px solid #e2e8f0;border-radius:9px;font-size:.92rem;outline:none;box-sizing:border-box;font-family:inherit;color:#2d3748;transition:border-color .2s;"
-            onkeydown="if(event.key==='Enter')checkPassword()"
-            oninput="document.getElementById('login-error').style.display='none';this.style.borderColor='#e2e8f0';"
-            onfocus="this.style.borderColor='#00A9CE';"
-            onblur="this.style.borderColor='#e2e8f0';"
-          />
-          <span style="position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.4;cursor:pointer;"
-            onclick="var i=document.getElementById('login-password');i.type=i.type==='password'?'text':'password';">👁</span>
-        </div>
+      <!-- Sample site notice -->
+      <div style="background:#EBF8FF;border:1px solid #BEE3F8;border-radius:8px;padding:10px 14px;margin:16px 0 6px;text-align:left;">
+        <div style="font-size:.78rem;font-weight:700;color:#2B6CB0;margin-bottom:3px;">🔍 Sample / Demo Site</div>
+        <div style="font-size:.74rem;color:#2C5282;line-height:1.5;">This is a live demonstration of the MB Professional Services Accounting platform. Enter your name below to explore.</div>
+      </div>
+
+      <!-- Name entry -->
+      <div style="width:100%;margin:14px 0 8px;">
+        <label style="font-size:.68rem;font-weight:700;letter-spacing:.1em;color:#a0aec0;display:block;margin-bottom:7px;text-align:left;">YOUR NAME</label>
+        <input type="text" id="login-password"
+          placeholder="e.g. Jane Smith"
+          style="width:100%;padding:11px 14px;border:2px solid #e2e8f0;border-radius:9px;font-size:.92rem;outline:none;box-sizing:border-box;font-family:inherit;color:#2d3748;transition:border-color .2s;"
+          onkeydown="if(event.key==='Enter')checkPassword()"
+          oninput="document.getElementById('login-error').style.display='none';this.style.borderColor='#e2e8f0';"
+          onfocus="this.style.borderColor='#00A9CE';"
+          onblur="this.style.borderColor='#e2e8f0';"
+        />
         <div id="login-error" style="display:none;color:#E53E3E;font-size:.75rem;margin-top:7px;text-align:left;font-weight:500;">
-          ❌ Incorrect access code. Please try again.
+          Please enter your name to continue.
         </div>
       </div>
 
@@ -282,7 +292,7 @@
             <div class="ms-sq" style="background:#ffb900;"></div>
           </div>
         </div>
-        Sign In
+        Enter Platform
       </button>
       <p style="color:#cbd5e0;font-size:.72rem;margin-top:24px;">© 2026 MB. All rights reserved.</p>
     </div>
@@ -1385,10 +1395,12 @@ function toggleSidebar(){
 // ══════════════════════════════════════════════════════════
 // VISITOR ACCESS LOG
 // ══════════════════════════════════════════════════════════
-// Paste your Discord webhook URL here (see instructions in Access Log page)
+// Paste your Discord webhook URL here (optional)
 const DISCORD_WEBHOOK = '';
+// Unique ntfy.sh topic for instant phone push alerts
+const NTFY_TOPIC = 'mb-psa-access-mbroome7k2m';
 
-async function logVisit(outcome){
+async function logVisit(outcome, visitorName){
   const ts = new Date().toISOString();
   const ua = navigator.userAgent;
   const ref = document.referrer || 'Direct';
@@ -1408,13 +1420,41 @@ async function logVisit(outcome){
     }
   } catch(e){}
 
-  const entry = {ts, ip, city, country, org, ua, ref, screen, lang, outcome};
+  const name = visitorName || '(page view)';
+  const entry = {ts, ip, city, country, org, ua, ref, screen, lang, outcome, name};
 
   // Save to localStorage
   const log = JSON.parse(localStorage.getItem('mb-access-log')||'[]');
   log.unshift(entry);
   if(log.length > 200) log.pop();
   localStorage.setItem('mb-access-log', JSON.stringify(log));
+
+  // Only alert on actual logins (someone entered their name), not raw page views
+  if(outcome === 'login'){
+    const visName = name || 'Unknown';
+
+    // ntfy.sh instant push notification
+    if(NTFY_TOPIC){
+      fetch(`https://ntfy.sh/${NTFY_TOPIC}`,{
+        method:'POST',
+        headers:{'Title':`MB PSA — ${visName} just accessed the site`,'Priority':'default','Tags':'wave'},
+        body:`IP: ${ip} · ${city}, ${country}\nOrg: ${org.substring(0,60)}\nTime: ${ts.replace('T',' ').substring(0,19)} UTC`
+      }).catch(()=>{});
+    }
+
+    // Email alert via EmailJS (free, 200/month)
+    if(window.emailjs){
+      emailjs.send('mb_psa_service','mb_psa_template',{
+        visitor_name: visName,
+        visitor_ip:   ip,
+        visitor_city: city,
+        visitor_country: country,
+        visitor_org:  org,
+        visit_time:   ts.replace('T',' ').substring(0,19)+' UTC',
+        visit_ref:    ref,
+      }).catch(()=>{});
+    }
+  }
 
   // Fire Discord webhook if configured
   if(DISCORD_WEBHOOK){
@@ -1534,19 +1574,16 @@ function renderAccessLog(){
 function checkPassword(){
   const input = document.getElementById('login-password');
   const error = document.getElementById('login-error');
-  // Access code — change the value in quotes to update the password
-  const correct = atob('TUIyMDI2');
-  if(input.value === correct){
+  const name  = input.value.trim();
+  if(name.length >= 2){
     sessionStorage.setItem('mb-auth','1');
-    logVisit('login');
-    showApp();
+    sessionStorage.setItem('mb-visitor-name', name);
+    logVisit('login', name);
+    showApp(name);
   } else {
-    logVisit('fail');
     error.style.display = 'block';
     input.style.borderColor = '#E53E3E';
-    input.value = '';
     input.focus();
-    // Shake animation
     input.style.animation = 'none';
     input.offsetHeight;
     input.style.animation = 'shake .35s ease';
@@ -1556,7 +1593,7 @@ function checkPassword(){
 // Clear any stale session on every fresh page load — password always required
 sessionStorage.removeItem('mb-auth');
 
-function showApp(){
+function showApp(visitorName){
   // Guard: must have valid auth token set by checkPassword()
   if(sessionStorage.getItem('mb-auth') !== '1'){
     console.warn('Access denied.');
@@ -1564,6 +1601,14 @@ function showApp(){
   }
   document.getElementById('pg-login').style.display='none';
   document.getElementById('app-shell').style.display='block';
+  // Show visitor name in appbar
+  const vname = visitorName || sessionStorage.getItem('mb-visitor-name') || 'Guest';
+  const userBtn = document.querySelector('.user-btn');
+  const userSpan = document.querySelector('.user-btn + span, span[style*="Mark Broome"]');
+  document.querySelectorAll('.user-btn').forEach(b=>b.title=vname);
+  // Update the name label next to user button
+  const nameEls = document.querySelectorAll('span');
+  nameEls.forEach(s=>{ if(s.textContent.trim()==='Mark Broome') s.textContent=vname; });
   buildHeatmap();
   showPage('pg-executive');
   const bt = document.getElementById('build-time');
