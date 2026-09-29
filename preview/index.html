@@ -142,17 +142,17 @@
 
   /* ── Login ── */
   .login-bg{min-height:100vh;background:linear-gradient(135deg,var(--navy) 0%,#2a3f6e 50%,var(--teal) 100%);
-    display:flex;align-items:center;justify-content:center;padding:20px 16px;box-sizing:border-box;}
-  .login-card{background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.3);
-    width:95%;max-width:900px;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;}
+    display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;}
+  .login-card{background:#fff;border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.3);
+    width:98%;max-width:1000px;display:grid;grid-template-columns:3fr 2fr;overflow:hidden;}
   .login-left{background:linear-gradient(160deg,#0f2044 0%,#1a3a6b 60%,#0e7490 100%);
-    padding:36px 32px;color:#fff;text-align:left;display:flex;flex-direction:column;justify-content:space-between;}
-  .login-right{padding:32px 36px;display:flex;flex-direction:column;justify-content:center;}
-  .login-logo{width:44px;height:44px;background:rgba(255,255,255,.15);border-radius:10px;
-    display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:700;margin-bottom:16px;}
-  .login-title{font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:4px;}
-  .login-sub{color:rgba(255,255,255,.65);font-size:.82rem;margin-bottom:0;}
-  @media(max-width:640px){.login-card{grid-template-columns:1fr;}.login-left{padding:24px;}.login-right{padding:24px;}}
+    padding:28px 30px;color:#fff;text-align:left;display:flex;flex-direction:column;gap:10px;}
+  .login-right{padding:28px 30px;display:flex;flex-direction:column;justify-content:center;gap:12px;}
+  .login-logo{width:36px;height:36px;background:rgba(255,255,255,.15);border-radius:8px;
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;font-weight:700;}
+  .login-title{font-size:1.25rem;font-weight:800;color:#fff;margin:0;}
+  .login-sub{color:rgba(255,255,255,.6);font-size:.78rem;margin:0;}
+  @media(max-width:560px){.login-card{grid-template-columns:1fr;}.login-left{padding:20px;}.login-right{padding:20px;}}
   .ms-btn{width:100%;padding:14px;background:var(--teal);color:#fff;border:none;
     border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer;
     display:flex;align-items:center;justify-content:center;gap:12px;transition:background .2s;}
@@ -263,42 +263,46 @@
 
       <!-- LEFT COLUMN — about -->
       <div class="login-left">
-        <div>
+        <div style="display:flex;align-items:center;gap:10px;">
           <div class="login-logo">C</div>
-          <div class="login-title">MB PSA</div>
-          <div class="login-sub" style="margin-bottom:20px;">Professional Services Accounting</div>
-
-          <div style="font-size:.75rem;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.08em;margin-bottom:10px;">BUILT BY MARK BROOME</div>
-          <p style="font-size:.82rem;color:rgba(255,255,255,.85);line-height:1.7;margin:0 0 12px;">
-            With over 25 years in professional services delivery — ERP implementations, programme management and finance transformation — I built this platform to demonstrate what <strong style="color:#67e8f9;">modern AI tooling can produce</strong> in a fraction of traditional development time.
-          </p>
-          <p style="font-size:.82rem;color:rgba(255,255,255,.75);line-height:1.7;margin:0 0 16px;">
-            MB PSA covers portfolio management, earned value (IFRS 15), contracts, resourcing, GTM pipeline, fundraising and real-time AI agents — drawn from real-world delivery experience.
-          </p>
-          <p style="font-size:.76rem;color:rgba(255,255,255,.5);font-style:italic;margin:0 0 20px;">
-            A showcase of what's possible when deep sector knowledge meets AI-powered development.
-          </p>
-
-          <div style="background:rgba(255,193,7,.12);border:1px solid rgba(255,193,7,.3);border-radius:7px;padding:8px 12px;font-size:.73rem;color:rgba(255,255,255,.7);line-height:1.5;margin-bottom:18px;">
-            ⚠️ <strong style="color:#fcd34d;">Disclaimer:</strong> All company names, financial figures, project data and personnel shown are entirely fictitious and used purely for illustrative purposes. No reference to any real organisation is intended or implied.
+          <div>
+            <div class="login-title">MB PSA</div>
+            <div class="login-sub">Professional Services Accounting</div>
           </div>
         </div>
 
+        <div>
+          <div style="font-size:.68rem;font-weight:700;color:rgba(255,255,255,.45);letter-spacing:.09em;margin-bottom:7px;">BUILT BY MARK BROOME</div>
+          <p style="font-size:.79rem;color:rgba(255,255,255,.88);line-height:1.6;margin:0 0 8px;">
+            With over 25 years in professional services delivery — ERP, programme management and finance transformation — I built this to show what <strong style="color:#67e8f9;">modern AI tooling can produce</strong> in a fraction of traditional development time.
+          </p>
+          <p style="font-size:.76rem;color:rgba(255,255,255,.65);line-height:1.55;margin:0 0 10px;">
+            MB PSA covers portfolio management, EVM (IFRS 15), contracts, resourcing, GTM pipeline, fundraising and real-time AI agents — all from real-world delivery experience.
+          </p>
+          <p style="font-size:.72rem;color:rgba(255,255,255,.45);font-style:italic;margin:0;">
+            Deep sector knowledge meets AI-powered development.
+          </p>
+        </div>
+
+        <div style="background:rgba(255,193,7,.1);border:1px solid rgba(255,193,7,.25);border-radius:6px;padding:7px 10px;font-size:.7rem;color:rgba(255,255,255,.65);line-height:1.45;">
+          ⚠️ <strong style="color:#fcd34d;">Disclaimer:</strong> All company names, figures and data shown are entirely fictitious — purely illustrative. No real organisation is referenced.
+        </div>
+
         <a href="https://www.linkedin.com/in/mark-broome/" target="_blank" rel="noopener"
-          style="display:inline-flex;align-items:center;gap:8px;background:#0A66C2;color:#fff;text-decoration:none;font-size:.75rem;font-weight:600;padding:8px 16px;border-radius:7px;width:fit-content;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          style="display:inline-flex;align-items:center;gap:7px;background:#0A66C2;color:#fff;text-decoration:none;font-size:.73rem;font-weight:600;padding:7px 14px;border-radius:6px;width:fit-content;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           Connect on LinkedIn — Mark Broome
         </a>
       </div>
 
       <!-- RIGHT COLUMN — entry -->
       <div class="login-right">
-        <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:10px 14px;margin-bottom:20px;">
-          <div style="font-size:.75rem;font-weight:700;color:#0369a1;margin-bottom:3px;">🔍 Live Demo Platform</div>
-          <div style="font-size:.73rem;color:#0c4a6e;line-height:1.5;">Enter your name below to explore the full platform — no sign-up or password required.</div>
+        <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:7px;padding:9px 12px;">
+          <div style="font-size:.73rem;font-weight:700;color:#0369a1;margin-bottom:2px;">🔍 Live Demo</div>
+          <div style="font-size:.71rem;color:#0c4a6e;line-height:1.45;">Enter your name to explore — no sign-up or password needed.</div>
         </div>
 
-        <label style="font-size:.68rem;font-weight:700;letter-spacing:.1em;color:#94a3b8;display:block;margin-bottom:7px;">YOUR NAME</label>
+        <label style="font-size:.67rem;font-weight:700;letter-spacing:.1em;color:#94a3b8;display:block;margin-bottom:6px;">YOUR NAME</label>
         <input type="text" id="login-password"
           placeholder="e.g. Jane Smith"
           style="width:100%;padding:12px 14px;border:2px solid #e2e8f0;border-radius:9px;font-size:.95rem;outline:none;box-sizing:border-box;font-family:inherit;color:#1e293b;transition:border-color .2s;margin-bottom:6px;"
