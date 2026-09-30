@@ -1503,12 +1503,14 @@ async function logVisit(outcome, visitorName){
     const visName = name || 'Unknown';
     fetch(`https://ntfy.sh/${NTFY_TOPIC}`,{
       method:'POST',
-      headers:{'Title':`👤 ${visName} just opened MB PSA`,'Priority':'high','Tags':'wave'},
+      headers:{'Title':`${visName} just opened MB PSA`,'Priority':'high','Tags':'wave'},
       body:[
-        `💻 ${browser} on ${os} (${mobile})`,
-        `🌐 ${tz}  •  ${cores} cores  •  ${mem}`,
-        `🔗 Via: ${ref.replace('https://','').substring(0,60)}`,
-        `🕐 ${ts.replace('T',' ').substring(0,19)} UTC`
+        `Visitor: ${visName}`,
+        `Browser: ${browser} on ${os} (${mobile})`,
+        `Timezone: ${tz}`,
+        `Hardware: ${cores} cores / ${mem}`,
+        `Via: ${ref.replace('https://','').substring(0,60)}`,
+        `Time: ${ts.replace('T',' ').substring(0,19)} UTC`
       ].join('\n')
     }).catch(()=>{});
   }
@@ -1542,8 +1544,8 @@ async function logVisit(outcome, visitorName){
     const visName = name || 'Unknown';
     fetch(`https://ntfy.sh/${NTFY_TOPIC}`,{
       method:'POST',
-      headers:{'Title':`📍 ${visName} — ${city}, ${country}`,'Priority':'default','Tags':'round_pushpin'},
-      body:`🏢 ${org}\n🌐 IP: ${ip}`
+      headers:{'Title':`${visName} - ${city}, ${country}`,'Priority':'default','Tags':'pushpin'},
+      body:`Org: ${org}\nIP: ${ip}`
     }).catch(()=>{});
 
 
