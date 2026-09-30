@@ -1473,65 +1473,83 @@ const DISCORD_WEBHOOK = '';
 const NTFY_TOPIC = 'mb-psa-access-mbroome7k2m';
 
 async function logVisit(outcome, visitorName){
-  const ts = new Date().toISOString();
-  const ua       = navigator.userAgent;
-  const ref      = document.referrer || 'Direct';
-  const scr      = window.screen.width+'×'+window.screen.height;
-  const lang     = navigator.language;
-  const tz       = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const platform = navigator.platform || '?';
-  const cores    = navigator.hardwareConcurrency || '?';
-  const mem      = navigator.deviceMemory ? navigator.deviceMemory+'GB RAM' : '?';
-  const conn     = navigator.connection ? (navigator.connection.effectiveType||'?')+' / '+Math.round(navigator.connection.downlink||0)+'Mbps' : '?';
-  const mobile   = /Mobi|Android|iPhone|iPad/i.test(ua) ? 'Mobile' : 'Desktop';
-  let browser = 'Unknown';
-  if(/Edg\//.test(ua)) browser='Edge';
-  else if(/Chrome\//.test(ua)) browser='Chrome';
+  const ts  = new Date().toISOString();
+  const ua  = navigator.userAgent;
+  const ref = document.referrer || 'Direct';
+  const tz  = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const lang= navigator.language || '?';
+  const scr = `${window.screen.width}x${window.screen.height} @${window.devicePixelRatio||1}x`;
+  const cores = navigator.hardwareConcurrency || '?';
+  const mem   = navigator.deviceMemory ? navigator.deviceMemory+'GB' : '?';
+  const conn  = navigator.connection ? (navigator.connection.effectiveType||'?')+' '+Math.round(navigator.connection.downlink||0)+'Mbps' : '?';
+  const dnt   = navigator.doNotTrack === '1' ? 'DNT on' : 'DNT off';
+  const touch = navigator.maxTouchPoints > 0 ? `touch(${navigator.maxTouchPoints})` : 'no touch';
+  const mobile= /Mobi|Android|iPhone|iPad/i.test(ua) ? 'Mobile' : 'Desktop';
+  // Local time in visitor's own timezone
+  const localTime = new Date().toLocaleTimeString('en-GB',{timeZone:tz,hour:'2-digit',minute:'2-digit',hour12:false})+' '+tz;
+  let browser='Unknown';
+  if(/Edg\//.test(ua))                          browser='Edge';
+  else if(/Chrome\//.test(ua))                  browser='Chrome';
   else if(/Safari\//.test(ua)&&!/Chrome/.test(ua)) browser='Safari';
-  else if(/Firefox\//.test(ua)) browser='Firefox';
-  let os = 'Unknown';
-  if(/Windows NT/.test(ua)) os='Windows';
+  else if(/Firefox\//.test(ua))                 browser='Firefox';
+  let os='Unknown';
+  if(/Windows NT/.test(ua))    os='Windows';
   else if(/Mac OS X/.test(ua)) os='macOS';
   else if(/iPhone|iPad/.test(ua)) os='iOS';
-  else if(/Android/.test(ua)) os='Android';
-  else if(/Linux/.test(ua)) os='Linux';
+  else if(/Android/.test(ua))  os='Android';
+  else if(/Linux/.test(ua))    os='Linux';
 
   const name = visitorName || '(page view)';
 
-  // Fire ntfy IMMEDIATELY on login — before the IP lookup so it never blocks
+  // Fire ntfy IMMEDIATELY — before IP lookup so nothing blocks it
   if(outcome === 'login' && NTFY_TOPIC){
     const visName = name || 'Unknown';
     fetch(`https://ntfy.sh/${NTFY_TOPIC}`,{
       method:'POST',
       headers:{'Title':`${visName} just opened MB PSA`,'Priority':'high','Tags':'wave'},
       body:[
-        `Visitor: ${visName}`,
-        `Browser: ${browser} on ${os} (${mobile})`,
-        `Timezone: ${tz}`,
-        `Hardware: ${cores} cores / ${mem}`,
-        `Via: ${ref.replace('https://','').substring(0,60)}`,
-        `Time: ${ts.replace('T',' ').substring(0,19)} UTC`
+        `Device:   ${browser} on ${os} (${mobile})`,
+        `Screen:   ${scr}  ${touch}`,
+        `Language: ${lang}  |  ${dnt}`,
+        `Hardware: ${cores} cores / ${mem} / ${conn}`,
+        `Local:    ${localTime}`,
+        `Via:      ${ref.replace('https://','').substring(0,60)}`,
+        `UTC:      ${ts.replace('T',' ').substring(0,19)}`
       ].join('\n')
     }).catch(()=>{});
   }
 
-  // Get IP + geo (3s timeout so it never hangs)
-  let ip='unknown', city='?', country='?', org='?';
+  // Get full IP profile (5s timeout)
+  let ip='unknown', city='?', region='?', country='?', org='?', isp='?',
+      lat='?', lon='?', isVpn=false, isProxy=false, isTor=false, isDC=false;
   try {
     const ctrl = new AbortController();
-    const tid  = setTimeout(()=>ctrl.abort(), 3000);
-    const r = await fetch('https://api.ipapi.is/?q&fields=ip,location,company',{signal:ctrl.signal});
+    const tid  = setTimeout(()=>ctrl.abort(), 5000);
+    const r = await fetch('https://api.ipapi.is/?q',{signal:ctrl.signal});
     clearTimeout(tid);
     if(r.ok){
       const d = await r.json();
       ip      = d.ip || 'unknown';
       city    = d.location?.city || '?';
+      region  = d.location?.state || d.location?.region || '?';
       country = d.location?.country || '?';
-      org     = d.company?.name || d.location?.org || '?';
+      lat     = d.location?.latitude  != null ? d.location.latitude.toFixed(4)  : '?';
+      lon     = d.location?.longitude != null ? d.location.longitude.toFixed(4) : '?';
+      org     = d.company?.name || d.asn?.org || '?';
+      isp     = d.asn?.org || org;
+      isVpn   = d.is_vpn   || false;
+      isProxy = d.is_proxy || false;
+      isTor   = d.is_tor   || false;
+      isDC    = d.is_datacenter || false;
     }
   } catch(e){}
 
-  const entry = {ts, ip, city, country, org, ua, ref, screen:scr, lang, outcome, name, tz, browser, os, mobile, cores, mem, conn, platform};
+  const flags = [isVpn&&'VPN', isProxy&&'PROXY', isTor&&'TOR', isDC&&'DATACENTER'].filter(Boolean);
+  const flagStr = flags.length ? ' ['+flags.join('/')+']' : '';
+
+  const entry = {ts, ip, city, region, country, lat, lon, org, isp, flags:flagStr,
+                 ua, ref, screen:scr, lang, dnt, touch, outcome, name,
+                 tz, localTime, browser, os, mobile, cores, mem, conn};
 
   // Save to localStorage
   const log = JSON.parse(localStorage.getItem('mb-access-log')||'[]');
@@ -1539,17 +1557,22 @@ async function logVisit(outcome, visitorName){
   if(log.length > 200) log.pop();
   localStorage.setItem('mb-access-log', JSON.stringify(log));
 
-  // Send a follow-up ntfy with geo details once IP lookup completes
-  if(outcome === 'login' && NTFY_TOPIC && ip !== 'unknown'){
+  // Follow-up ntfy with full geo + privacy flags
+  if(outcome === 'login' && NTFY_TOPIC){
     const visName = name || 'Unknown';
-    fetch(`https://ntfy.sh/${NTFY_TOPIC}`,{
-      method:'POST',
-      headers:{'Title':`${visName} - ${city}, ${country}`,'Priority':'default','Tags':'pushpin'},
-      body:`Org: ${org}\nIP: ${ip}`
-    }).catch(()=>{});
-
-
-
+    if(ip !== 'unknown'){
+      fetch(`https://ntfy.sh/${NTFY_TOPIC}`,{
+        method:'POST',
+        headers:{'Title':`${visName} - ${city}, ${region}, ${country}${flagStr}`,'Priority':'default','Tags':'pushpin'},
+        body:[
+          `IP:  ${ip}${flagStr}`,
+          `Org: ${org}`,
+          `ISP: ${isp}`,
+          `Geo: ${lat}, ${lon}`,
+          `Map: https://maps.google.com/?q=${lat},${lon}`
+        ].join('\n')
+      }).catch(()=>{});
+    }
   }
 
   // Fire Discord webhook if configured
