@@ -1538,25 +1538,8 @@ async function logVisit(outcome, visitorName){
       }).catch(()=>{});
     }
 
-    // Email alert via formsubmit.co (free, no account — activates on first email)
-    fetch('https://formsubmit.co/ajax/Mark.samuel.broome@gmail.com', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json','Accept':'application/json'},
-      body: JSON.stringify({
-        _subject: `MB PSA — ${visName} just accessed the demo`,
-        _template: 'table',
-        _captcha: 'false',
-        Visitor:     visName,
-        IP:          ip,
-        Location:    `${city}, ${country}`,
-        Organisation:org,
-        Browser:     `${browser} on ${os} (${mobile})`,
-        Timezone:    tz,
-        Hardware:    `${cores} cores · ${mem} · ${conn}`,
-        Referrer:    ref,
-        Time:        ts.replace('T',' ').substring(0,19)+' UTC',
-      })
-    }).catch(()=>{});
+
+
   }
 
   // Fire Discord webhook if configured
