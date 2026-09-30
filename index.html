@@ -1403,6 +1403,9 @@ const navMap = {
 
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  // Reset welcome page background when leaving it
+  const wp=document.getElementById('pg-welcome');
+  if(wp && id!=='pg-welcome') wp.style.cssText='';
   const page = document.getElementById(id);
   if(page){ page.classList.add('active'); page.scrollTop=0; }
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -9177,6 +9180,9 @@ function dismissFinding(btn){
 function renderWelcome(){
   const el=document.getElementById('welcome-content');
   if(!el)return;
+  // Give the welcome page a dark background by pulling it out of the light .main area
+  const pgEl=document.getElementById('pg-welcome');
+  if(pgEl){pgEl.style.cssText='display:block;margin:-24px;padding:32px 24px;background:linear-gradient(160deg,#0d1b2e 0%,#0f2044 55%,#0e4f6e 100%);min-height:100vh;box-sizing:border-box;';}
   const vname=sessionStorage.getItem('mb-visitor-name')||'';
   const modules=[
     {icon:'📊',title:'My Workspace',color:'#3182CE',desc:'Timesheets, expenses & personal dashboard'},
