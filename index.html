@@ -1484,25 +1484,42 @@ async function logVisit(outcome, visitorName){
   const mem      = navigator.deviceMemory ? navigator.deviceMemory+'GB RAM' : '?';
   const conn     = navigator.connection ? (navigator.connection.effectiveType||'?')+' / '+Math.round(navigator.connection.downlink||0)+'Mbps' : '?';
   const mobile   = /Mobi|Android|iPhone|iPad/i.test(ua) ? 'Mobile' : 'Desktop';
-  // Parse browser name cleanly
   let browser = 'Unknown';
   if(/Edg\//.test(ua)) browser='Edge';
   else if(/Chrome\//.test(ua)) browser='Chrome';
   else if(/Safari\//.test(ua)&&!/Chrome/.test(ua)) browser='Safari';
   else if(/Firefox\//.test(ua)) browser='Firefox';
-  // Parse OS
   let os = 'Unknown';
   if(/Windows NT/.test(ua)) os='Windows';
   else if(/Mac OS X/.test(ua)) os='macOS';
   else if(/iPhone|iPad/.test(ua)) os='iOS';
   else if(/Android/.test(ua)) os='Android';
   else if(/Linux/.test(ua)) os='Linux';
-  const screen = scr;
 
-  // Get IP + geo (free, no auth, 30K req/month)
+  const name = visitorName || '(page view)';
+
+  // Fire ntfy IMMEDIATELY on login — before the IP lookup so it never blocks
+  if(outcome === 'login' && NTFY_TOPIC){
+    const visName = name || 'Unknown';
+    fetch(`https://ntfy.sh/${NTFY_TOPIC}`,{
+      method:'POST',
+      headers:{'Title':`👤 ${visName} just opened MB PSA`,'Priority':'high','Tags':'wave'},
+      body:[
+        `💻 ${browser} on ${os} (${mobile})`,
+        `🌐 ${tz}  •  ${cores} cores  •  ${mem}`,
+        `🔗 Via: ${ref.replace('https://','').substring(0,60)}`,
+        `🕐 ${ts.replace('T',' ').substring(0,19)} UTC`
+      ].join('\n')
+    }).catch(()=>{});
+  }
+
+  // Get IP + geo (3s timeout so it never hangs)
   let ip='unknown', city='?', country='?', org='?';
   try {
-    const r = await fetch('https://api.ipapi.is/?q&fields=ip,location,company');
+    const ctrl = new AbortController();
+    const tid  = setTimeout(()=>ctrl.abort(), 3000);
+    const r = await fetch('https://api.ipapi.is/?q&fields=ip,location,company',{signal:ctrl.signal});
+    clearTimeout(tid);
     if(r.ok){
       const d = await r.json();
       ip      = d.ip || 'unknown';
@@ -1512,8 +1529,7 @@ async function logVisit(outcome, visitorName){
     }
   } catch(e){}
 
-  const name = visitorName || '(page view)';
-  const entry = {ts, ip, city, country, org, ua, ref, screen, lang, outcome, name, tz, browser, os, mobile, cores, mem, conn, platform};
+  const entry = {ts, ip, city, country, org, ua, ref, screen:scr, lang, outcome, name, tz, browser, os, mobile, cores, mem, conn, platform};
 
   // Save to localStorage
   const log = JSON.parse(localStorage.getItem('mb-access-log')||'[]');
@@ -1521,25 +1537,14 @@ async function logVisit(outcome, visitorName){
   if(log.length > 200) log.pop();
   localStorage.setItem('mb-access-log', JSON.stringify(log));
 
-  // Only alert on actual logins (someone entered their name), not raw page views
-  if(outcome === 'login'){
+  // Send a follow-up ntfy with geo details once IP lookup completes
+  if(outcome === 'login' && NTFY_TOPIC && ip !== 'unknown'){
     const visName = name || 'Unknown';
-
-    // ntfy.sh instant push notification
-    if(NTFY_TOPIC){
-      fetch(`https://ntfy.sh/${NTFY_TOPIC}`,{
-        method:'POST',
-        headers:{'Title':`👤 ${visName} just opened MB PSA`,'Priority':'default','Tags':'wave'},
-        body:[
-          `📍 ${city}, ${country}  •  IP: ${ip}`,
-          `🏢 ${org.substring(0,60)}`,
-          `💻 ${browser} on ${os} (${mobile})`,
-          `🌐 ${tz}  •  ${cores} cores  •  ${mem}`,
-          `🔗 Via: ${ref.replace('https://','').substring(0,60)}`,
-          `🕐 ${ts.replace('T',' ').substring(0,19)} UTC`
-        ].join('\n')
-      }).catch(()=>{});
-    }
+    fetch(`https://ntfy.sh/${NTFY_TOPIC}`,{
+      method:'POST',
+      headers:{'Title':`📍 ${visName} — ${city}, ${country}`,'Priority':'default','Tags':'round_pushpin'},
+      body:`🏢 ${org}\n🌐 IP: ${ip}`
+    }).catch(()=>{});
 
 
 
